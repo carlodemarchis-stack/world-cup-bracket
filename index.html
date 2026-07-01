@@ -1069,8 +1069,9 @@ function openScorersModal(){
   const pal = dark
     ? { panel: '#1b1a12', text: '#f4efe2', sub: 'rgba(228,222,206,.6)', line: 'rgba(255,255,255,.12)' }
     : { panel: '#ffffff', text: '#1c1813', sub: 'rgba(70,62,48,.7)', line: 'rgba(0,0,0,.1)' };
-  // Walk every played match in tournament order, tallying goals (with per-goal
-  // context: round, opponent, minute, match score) and assists.
+  // Walk every played match in tournament order, tallying goals and assists —
+  // each with its match context (round, opponent, minute, running + final score,
+  // and the linked player: the assister for a goal, the scorer for an assist).
   const gmap = new Map(), amap = new Map();
   const stageOf = id => id[0] === 'G' ? 'GRP' : id === 'final' ? 'FINAL' : id === 'third' ? '3RD'
     : ({ '1': 'R32', '2': 'R16', '3': 'QF', '4': 'SF' })[id.split(':')[1]];
@@ -1089,18 +1090,22 @@ function openScorersModal(){
     (m.goals || []).forEach(g => {
       if (g.t in cnt) cnt[g.t]++;
       if (g.p && g.p.indexOf('(o.g.)') < 0){   // own goals don't count toward a scorer
-        const key = g.p + '|' + g.t, e = gmap.get(key) || { name: g.p, team: g.t, goals: [] };
         const opp = g.t === m.a ? m.b : m.a;
         const score = g.t === m.a ? (m.aGoals + '–' + m.bGoals) : (m.bGoals + '–' + m.aGoals);
         const run = cnt[g.t] + '–' + cnt[opp];   // scoreline this goal made it (scorer first)
-        e.goals.push({ min: g.m, opp, score, run, stage });
-        gmap.set(key, e);
+        const gk = g.p + '|' + g.t, ge = gmap.get(gk) || { name: g.p, team: g.t, rows: [] };
+        ge.rows.push({ stage, opp, min: g.m, run, score, note: g.a || null });   // note = assister
+        gmap.set(gk, ge);
+        if (g.a){
+          const ak = g.a + '|' + g.t, ae = amap.get(ak) || { name: g.a, team: g.t, rows: [] };
+          ae.rows.push({ stage, opp, min: g.m, run, score, note: g.p });   // note = scorer set up
+          amap.set(ak, ae);
+        }
       }
-      if (g.a){ const k = g.a + '|' + g.t, e = amap.get(k) || { name: g.a, team: g.t, n: 0 }; e.n++; amap.set(k, e); }
     });
   });
-  const scorers = [...gmap.values()].map(e => (e.n = e.goals.length, e)).sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
-  const assisters = [...amap.values()].sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
+  const ranked = (map) => [...map.values()].map(e => (e.n = e.rows.length, e)).sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
+  const scorers = ranked(gmap), assisters = ranked(amap);
 
   const overlay = el('div', 'position:fixed;left:0;top:0;width:100%;height:100vh;height:100dvh;z-index:100;display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;background:rgba(6,6,8,.55);');
   overlay.id = 'team-modal';
@@ -1112,53 +1117,68 @@ function openScorersModal(){
   x.onclick = closeTeamModal;
   panel.appendChild(x);
   panel.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:13px;color:" + accent + ';margin:0 24px 0 0;', 'Golden Boot'));
-  panel.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:2px;', 'Top scorers so far — every goal in the tournament'));
 
-  const list = (items, max, expandable) => {
-    const box = el('div', 'margin-top:12px;');
+  // A ranked, expandable leaderboard. kind 'goals' shows the assister after the
+  // opponent; kind 'assists' shows the scorer that was set up.
+  const list = (items, max, kind) => {
+    const box = el('div', 'margin-top:6px;');
     let prev = null, rk = 0;
     items.slice(0, max).forEach((e, idx) => {
       rk = (e.n === prev) ? rk : idx + 1; prev = e.n;
       const info = TEAMDIR[e.team] || { name: e.team, iso: '' };
       const wrap = el('div', 'border-bottom:1px solid ' + pal.line + ';');
-      const row = el('div', 'display:flex;align-items:center;gap:10px;padding:7px 0;' + (expandable ? 'cursor:pointer;' : ''));
+      const row = el('div', 'display:flex;align-items:center;gap:10px;padding:7px 0;cursor:pointer;');
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:" + pal.sub + ';width:16px;flex:none;text-align:right;', String(rk)));
       if (info.iso) row.appendChild(flagImg(info.iso, 22)); else row.appendChild(el('div', 'width:22px;flex:none;'));
       row.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;font-weight:600;', e.name));
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;color:" + pal.sub + ';flex:none;', e.team));
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;flex:none;width:26px;text-align:right;", String(e.n)));
-      if (expandable){
-        const plus = el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;width:16px;flex:none;text-align:center;color:" + pal.sub + ';', '+');
-        row.appendChild(plus);
-        const detail = el('div', 'display:none;padding:2px 0 9px 42px;');
-        e.goals.forEach(gg => {
-          const oi = TEAMDIR[gg.opp] || { iso: '' };
-          const d = el('div', 'display:flex;align-items:center;gap:6px;font-size:12px;color:' + pal.sub + ';padding:2px 0;');
-          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:30px;flex:none;', gg.stage));
-          d.appendChild(el('span', 'flex:none;', 'v'));
-          if (oi.iso) d.appendChild(flagImg(oi.iso, 13));
-          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;flex:1;", gg.opp));
-          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';flex:none;width:42px;text-align:right;', gg.min));
-          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';flex:none;width:34px;text-align:right;', gg.run));
-          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;flex:none;width:42px;text-align:right;", '(' + gg.score + ')'));
-          detail.appendChild(d);
-        });
-        row.addEventListener('click', () => { const open = detail.style.display === 'none'; detail.style.display = open ? 'block' : 'none'; plus.textContent = open ? '–' : '+'; });
-        wrap.appendChild(row); wrap.appendChild(detail);
-      } else {
-        wrap.appendChild(row);
-      }
+      const plus = el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;width:16px;flex:none;text-align:center;color:" + pal.sub + ';', '+');
+      row.appendChild(plus);
+      const detail = el('div', 'display:none;padding:2px 0 9px 42px;');
+      e.rows.forEach(en => {
+        const oi = TEAMDIR[en.opp] || { iso: '' };
+        const d = el('div', 'display:flex;align-items:center;gap:6px;font-size:12px;color:' + pal.sub + ';padding:2px 0;');
+        d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:30px;flex:none;', en.stage));
+        d.appendChild(el('span', 'flex:none;', 'v'));
+        if (oi.iso) d.appendChild(flagImg(oi.iso, 13));
+        const mid = el('span', "font-family:'Barlow Condensed',sans-serif;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
+        mid.appendChild(el('span', '', en.opp));
+        if (kind === 'assists') mid.appendChild(el('span', 'opacity:.7;', '  → ' + en.note));
+        else if (en.note) mid.appendChild(el('span', 'opacity:.7;', '  · ' + en.note));
+        d.appendChild(mid);
+        d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';flex:none;width:44px;text-align:right;', en.min));
+        d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';flex:none;width:32px;text-align:right;', en.run));
+        d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;flex:none;width:40px;text-align:right;", '(' + en.score + ')'));
+        detail.appendChild(d);
+      });
+      row.addEventListener('click', () => { const open = detail.style.display === 'none'; detail.style.display = open ? 'block' : 'none'; plus.textContent = open ? '–' : '+'; });
+      wrap.appendChild(row); wrap.appendChild(detail);
       box.appendChild(wrap);
     });
     return box;
   };
 
-  if (scorers.length) panel.appendChild(list(scorers, 15, true));
-  else panel.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'No goals recorded yet.'));
-  if (assisters.length){
-    panel.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:12px;color:" + accent + ';margin-top:18px;', 'Most assists'));
-    panel.appendChild(list(assisters, 6, false));
-  }
+  const tabBar = el('div', 'display:flex;margin-top:12px;border-bottom:1px solid ' + pal.line + ';');
+  const content = el('div', '');
+  const tabCss = on => 'border:none;background:transparent;cursor:pointer;padding:9px 2px 10px;margin-right:20px;' +
+    "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.7px;text-transform:uppercase;font-size:12px;" +
+    'color:' + (on ? accent : pal.sub) + ';border-bottom:2px solid ' + (on ? accent : 'transparent') + ';margin-bottom:-1px;';
+  const btns = {};
+  const show = key => {
+    Object.keys(btns).forEach(k => { btns[k].style.cssText = tabCss(k === key); });
+    content.textContent = '';
+    const items = key === 'goals' ? scorers : assisters;
+    if (items.length) content.appendChild(list(items, 15, key));
+    else content.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
+  };
+  [['goals', 'Goals'], ['assists', 'Assists']].forEach(([k, lbl]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl;
+    b.onclick = () => show(k); btns[k] = b; tabBar.appendChild(b);
+  });
+  panel.appendChild(tabBar);
+  panel.appendChild(content);
+  show('goals');
   overlay.appendChild(panel);
   modalEl = overlay;
   document.body.appendChild(overlay);
