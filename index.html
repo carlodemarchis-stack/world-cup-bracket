@@ -82,6 +82,28 @@
 // Produces arrays of {style,...} descriptors; the DOM builder below mirrors the
 // original <x-dc> template exactly.
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Timezone — stored kickoff times are CEST (UTC+2), fixed across the tournament
+// (Jun 11 – Jul 19 2026 is entirely in CEST). Convert to the chosen IANA zone.
+// ---------------------------------------------------------------------------
+const MONTHS = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
+const SRC_OFFSET_MIN = 120;
+let tz = Intl.DateTimeFormat().resolvedOptions().timeZone;   // client-local, user-selectable
+function kickoffInstant(dateStr, timeStr){
+  const dm = String(dateStr).split(' '), t = String(timeStr).split(':');
+  if (dm.length < 2 || t.length < 2 || !(dm[0] in MONTHS)) return null;
+  return new Date(Date.UTC(2026, MONTHS[dm[0]], +dm[1], +t[0], +t[1]) - SRC_OFFSET_MIN * 60000);
+}
+function fmtKickoff(dateStr, timeStr){
+  const inst = (dateStr && timeStr) ? kickoffInstant(dateStr, timeStr) : null;
+  if (!inst || isNaN(inst)) return { date: dateStr, time: timeStr, zone: '' };
+  const p = {};
+  new Intl.DateTimeFormat('en-US', { timeZone: tz, month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false, timeZoneName:'short' })
+    .formatToParts(inst).forEach(x => { p[x.type] = x.value; });
+  const hh = (p.hour === '24') ? '00' : p.hour;
+  return { date: p.month + ' ' + p.day, time: hh + ':' + p.minute, zone: p.timeZoneName };
+}
+
 function renderVals(P, DATA) {
   P = P || {};
   const accent = P.accentColor || '#d6b04a';
@@ -206,7 +228,7 @@ function renderVals(P, DATA) {
   }
   // a card at a node = the match that fills it: a date while pending, a score once played
   function makeInnerCard(px, py, o){
-    const hasScore = !!o.score, hasPhase = !!o.phase, hasDate = (!!o.date && !hasScore);
+    const hasScore = !!o.score, hasPhase = !!o.phase, k = fmtKickoff(o.date, o.time), hasDate = (!!k.date && !hasScore);
     return {
       boxStyle:'position:absolute;left:'+(px/12)+'%;top:'+(py/12)+'%;transform:translate(-50%,-50%);z-index:7;'+
         'background:'+T.chipBg+';border:1px solid '+T.chipBorder+';border-radius:5px;padding:2px 7px 3px;'+
@@ -216,8 +238,8 @@ function renderVals(P, DATA) {
       // feeding teams' 3-letter codes flank the round label: "BRA  R16  NOR"
       ta:o.ta||null, tb:o.tb||null,
       score:o.score, hasScore:hasScore, showScore:(hasScore && !o.pens), pens:!!o.pens, showEt:(!!o.et && !o.pens),
-      date:o.date, hasDate:hasDate,
-      time:o.time, hasTime:(!!o.time && !hasScore),
+      date:k.date, hasDate:hasDate,
+      time:k.time, hasTime:(!!k.time && !hasScore), tzLabel:k.zone,
       phaseStyle:'font-family:Barlow,sans-serif;font-weight:700;font-size:7.5px;letter-spacing:.8px;text-transform:uppercase;line-height:1;color:'+accent+';',
       teamStyle:"font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.3px;line-height:1;color:"+T.chipScore+';',
       scoreStyle:"font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.4px;line-height:1.05;color:"+T.chipScore+';',
@@ -437,7 +459,7 @@ function buildBracket(v){
     if (c.showEt)    box.appendChild(el('div', c.etStyle, 'Extra Time'));
     if (c.pens)      box.appendChild(el('div', c.pensStyle, 'Penalties'));
     if (c.hasDate)   box.appendChild(el('div', c.dateStyle, c.date));
-    if (c.hasTime)   box.appendChild(el('div', c.timeStyle, c.time + ' CET'));
+    if (c.hasTime)   box.appendChild(el('div', c.timeStyle, c.time + ' ' + (c.tzLabel || '')));
     if (c.match){ box.dataset.match = c.match; box.style.pointerEvents = 'auto'; box.style.cursor = 'pointer'; box.onclick = () => openMatchModal(c.match); }
     art.appendChild(box);
   });
@@ -513,6 +535,19 @@ function buildBracket(v){
   emilio.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:2px;';
   credit.appendChild(emilio);
   footer.appendChild(credit);
+
+  // Timezone selector — kickoff times shown in this zone (defaults to the client's).
+  const tzSel = document.createElement('select');
+  tzSel.title = 'Show kickoff times in this timezone';
+  tzSel.setAttribute('aria-label', 'Timezone');
+  tzSel.style.cssText = 'font:inherit;font-size:10px;text-transform:none;letter-spacing:normal;color:inherit;background:transparent;border:1px solid currentColor;border-radius:6px;padding:2px 5px;cursor:pointer;opacity:.7;';
+  const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const zones = [[localZone, 'Your time']];
+  [['Europe/London','UK'],['Europe/Rome','Central Europe'],['America/New_York','US East'],['America/Chicago','US Central'],['America/Denver','US Mountain'],['America/Los_Angeles','US Pacific'],['America/Mexico_City','Mexico City'],['America/Sao_Paulo','Brazil'],['Africa/Johannesburg','South Africa'],['Asia/Tokyo','Japan'],['Australia/Sydney','Sydney']]
+    .forEach(z => { if (z[0] !== localZone) zones.push(z); });
+  zones.forEach(([z, label]) => { const o = document.createElement('option'); o.value = z; o.textContent = label; if (z === tz) o.selected = true; tzSel.appendChild(o); });
+  tzSel.onchange = () => { tz = tzSel.value; render(); };
+  footer.appendChild(tzSel);
   const gear = document.createElement('button');
   gear.id = 'settings-toggle';
   gear.type = 'button';
@@ -717,8 +752,9 @@ function buildMatchList(code, pal, accent){
   const wrap = el('div', 'display:flex;flex-direction:column;gap:5px;');
   teamMatches(code).forEach(r => {
     const opp = TEAMDIR[r.opp] || { name: r.opp || 'TBD', iso: '' };
+    const k = (r.upcoming && r.date && r.time) ? fmtKickoff(r.date, r.time) : null;
     const row = el('div', 'display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid ' + pal.line + ';border-radius:8px;');
-    row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:10px;color:" + pal.sub + ';width:38px;flex:none;', r.date || ''));
+    row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:10px;color:" + pal.sub + ';width:38px;flex:none;', k ? k.date : (r.date || '')));
     row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.5px;color:" + accent + ';width:26px;flex:none;', r.stage));
     const oppEl = el('div', 'display:flex;align-items:center;gap:7px;flex:1;min-width:0;');
     oppEl.appendChild(el('span', 'font-size:11px;color:' + pal.sub + ';flex:none;', 'vs'));
@@ -729,7 +765,7 @@ function buildMatchList(code, pal, accent){
     // Column 1 — score (with a.e.t./pens) or kickoff time, right-aligned
     const scoreCol = el('div', 'width:60px;flex:none;display:flex;flex-direction:column;align-items:flex-end;line-height:1.05;');
     if (r.upcoming){
-      scoreCol.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;color:" + pal.sub + ';', r.time ? (r.time + ' CET') : 'TBD'));
+      scoreCol.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;color:" + pal.sub + ';', k ? (k.time + ' ' + k.zone) : (r.time ? (r.time + ' CET') : 'TBD')));
     } else {
       scoreCol.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;", r.tg + '–' + r.og));
       if (r.sub) scoreCol.appendChild(el('span', 'font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;color:' + pal.sub + ';margin-top:1px;', r.sub));
@@ -825,7 +861,7 @@ function openMatchModal(id){
 
   panel.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:13px;color:" + accent + ';margin:0 24px 0 0;', m.round));
   const sub = [];
-  if (m.date) sub.push(m.date + (m.time ? (' · ' + m.time + ' CET') : ''));
+  if (m.date){ const kk = fmtKickoff(m.date, m.time); sub.push(kk.date + (kk.time ? (' · ' + kk.time + ' ' + kk.zone) : '')); }
   if (m.venue) sub.push(m.venue);
   if (sub.length) panel.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:3px;', sub.join('  ·  ')));
 
