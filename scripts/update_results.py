@@ -93,6 +93,7 @@ def parse_fifa(matches):
                         if o.get("OfficialType") == 1), None)
             att = m.get("Attendance")
             att = int(att) if att and str(att).isdigit() else None
+            form = {c: t for c, t in ((hc, home.get("Tactics")), (ac, away.get("Tactics"))) if t}
             ko[frozenset((hc, ac))] = {
                 "scores": {hc: int(hs), ac: int(as_)},
                 "pens": {hc: int(hp), ac: int(ap)} if pens else None,
@@ -102,6 +103,7 @@ def parse_fifa(matches):
                 "id2code": id2code,
                 "ref": ref or None,
                 "att": att,
+                "form": form or None,
             }
     return group, ko
 
@@ -214,8 +216,8 @@ def apply_ko(slot, a, b, ko, changes, label):
         if k not in new and k in slot:
             changes.append(f"{label}: drop {k}")
             del slot[k]
-    # Referee + attendance from the feed — fill only when missing.
-    for key in ("ref", "att"):
+    # Referee, attendance and formations from the feed — fill only when missing.
+    for key in ("ref", "att", "form"):
         if res.get(key) and not slot.get(key):
             slot[key] = res[key]
             changes.append(f"{label}: {key}={res[key]}")

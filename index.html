@@ -905,7 +905,7 @@ function playedFrom(round, a, b, s){
   return { round, a, b, played: true, winner: s.winner,
     aGoals: aWon ? g[0] : g[1], bGoals: aWon ? g[1] : g[0], goals: s.goals || [],
     et: s.et, pens: s.pens, penScore: s.penScore, date: s.date, venue: s.venue,
-    highlights: s.highlights, ref: s.ref, att: s.att };
+    highlights: s.highlights, ref: s.ref, att: s.att, form: s.form };
 }
 function sfLoser(side){
   const part = matchParticipants(side, 4, 0), w = winnerOfNode(side, 4, 0);
@@ -970,6 +970,8 @@ function openMatchModal(id){
     const nm = el('div', 'display:flex;align-items:center;gap:6px;');
     nm.appendChild(el('span', 'font-weight:' + (isWinner ? '700' : '600') + ';font-size:15px;' + (code ? '' : 'color:' + pal.sub + ';'), info.name));
     if (isWinner) nm.appendChild(el('span', 'color:' + accent + ';font-size:13px;font-weight:700;', '✓'));
+    const form = code && m.form && m.form[code];
+    if (form) nm.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;color:" + pal.sub + ';', form));
     mid.appendChild(nm);
     if (goalsList && goalsList.length)
       mid.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:3px;line-height:1.5;',
