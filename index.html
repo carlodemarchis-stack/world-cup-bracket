@@ -748,6 +748,19 @@ function matchParticipants(side, L, k){
   if (L === 1){ const off = side === 'R' ? 0 : 16; return [DATA.teams[off + 2 * k].code, DATA.teams[off + 2 * k + 1].code]; }
   return [winnerOfNode(side, L - 1, 2 * k), winnerOfNode(side, L - 1, 2 * k + 1)];
 }
+// Teams still alive that could reach node (side,L,k): a decided R32 contributes only
+// its winner, an undecided one contributes both of its teams.
+function nodeCandidates(side, L, k){
+  const off = side === 'R' ? 0 : 16;
+  if (L === 0) return [DATA.teams[off + k].code];
+  if (L === 1){ const w = winnerOfNode(side, 1, k); return w ? [w] : [DATA.teams[off + 2*k].code, DATA.teams[off + 2*k + 1].code]; }
+  const span = Math.pow(2, L - 1), start = k * span, out = [];
+  for (let ks = start; ks < start + span; ks++){
+    const w = winnerOfNode(side, 1, ks);
+    if (w) out.push(w); else out.push(DATA.teams[off + 2*ks].code, DATA.teams[off + 2*ks + 1].code);
+  }
+  return out;
+}
 const ROUND_NAME = { 1: 'Round of 32', 2: 'Round of 16', 3: 'Quarter-final', 4: 'Semi-final' };
 function resolveMatch(id){
   if (id === 'final') return { round: 'Final', a: winnerOfNode('R', 4, 0), b: winnerOfNode('L', 4, 0), date: (DATA.final || {}).date, venue: (DATA.final || {}).venue, played: false };
@@ -765,7 +778,10 @@ function resolveMatch(id){
     return { round, a: part[0], b: part[1], played: false, date: mm.date, time: mm.time, venue: mm.venue };
   }
   const info = DATA.schedule[id] || {};
-  return { round, a: part[0], b: part[1], played: false, date: info.date, time: info.time, venue: info.venue };
+  const res = { round, a: part[0], b: part[1], played: false, date: info.date, time: info.time, venue: info.venue };
+  // For R16 and QF, list each slot's possible teams (until QF only — not SF/final/3rd).
+  if (L === 2 || L === 3){ res.candA = nodeCandidates(side, L - 1, 2 * k); res.candB = nodeCandidates(side, L - 1, 2 * k + 1); }
+  return res;
 }
 function openMatchModal(id){
   if (!DATA) return;
@@ -809,9 +825,41 @@ function openMatchModal(id){
     if (m.played) row.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;flex:none;", String(score)));
     return row;
   };
-  box.appendChild(teamRow(m.a, (m.goals || []).filter(g => g.t === m.a), m.aGoals, m.played && m.winner === m.a));
-  if (!m.played) box.appendChild(el('div', 'text-align:center;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:' + pal.sub + ';padding:6px 0;', 'vs'));
-  box.appendChild(teamRow(m.b, (m.goals || []).filter(g => g.t === m.b), m.bGoals, m.played && m.winner === m.b));
+  const vsDiv = () => el('div', 'text-align:center;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:' + pal.sub + ';padding:6px 0;', 'vs');
+  // A slot is either a single known team or a list of possible teams (flag + code).
+  const slotEl = (cands) => {
+    if (cands.length === 1){
+      const info = TEAMDIR[cands[0]] || { name: cands[0], iso: '' };
+      const row = el('div', 'display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid ' + pal.line + ';');
+      if (info.iso) row.appendChild(flagImg(info.iso, 28)); else row.appendChild(el('div', 'width:28px;height:20px;border-radius:2px;flex:none;background:' + pal.line + ';'));
+      row.appendChild(el('div', 'font-weight:600;font-size:15px;', info.name));
+      return row;
+    }
+    const wrap = el('div', 'padding:9px 0;border-bottom:1px solid ' + pal.line + ';');
+    wrap.appendChild(el('div', 'font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:' + pal.sub + ';margin-bottom:7px;', 'One of'));
+    const list = el('div', 'display:flex;flex-wrap:wrap;gap:6px;');
+    cands.forEach(code => {
+      const info = TEAMDIR[code] || { name: code, iso: '' };
+      const chip = el('div', 'display:inline-flex;align-items:center;gap:5px;padding:3px 8px 3px 4px;border:1px solid ' + pal.line + ';border-radius:20px;');
+      if (info.iso) chip.appendChild(flagImg(info.iso, 17));
+      chip.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;", code));
+      list.appendChild(chip);
+    });
+    wrap.appendChild(list);
+    return wrap;
+  };
+  if (m.played){
+    box.appendChild(teamRow(m.a, (m.goals || []).filter(g => g.t === m.a), m.aGoals, m.winner === m.a));
+    box.appendChild(teamRow(m.b, (m.goals || []).filter(g => g.t === m.b), m.bGoals, m.winner === m.b));
+  } else if (m.candA){
+    box.appendChild(slotEl(m.candA));
+    box.appendChild(vsDiv());
+    box.appendChild(slotEl(m.candB));
+  } else {
+    box.appendChild(teamRow(m.a, [], null, false));
+    box.appendChild(vsDiv());
+    box.appendChild(teamRow(m.b, [], null, false));
+  }
   panel.appendChild(box);
 
   if (m.played && (m.pens || m.et)){
@@ -819,7 +867,7 @@ function openMatchModal(id){
     const note = m.pens ? (win + ' won ' + (m.penScore || '') + ' on penalties (a.e.t.)') : 'After extra time';
     panel.appendChild(el('div', 'margin-top:10px;font-size:12px;color:' + pal.sub + ';', note));
   }
-  if (!m.played && (!m.a || !m.b))
+  if (!m.played && !m.candA && (!m.a || !m.b))
     panel.appendChild(el('div', 'margin-top:10px;font-size:12px;color:' + pal.sub + ';', 'Awaiting the results of the previous round.'));
 
   if (m.played && m.highlights){
