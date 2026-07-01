@@ -132,17 +132,18 @@ def _minute_key(mm):
     return int(m) if m.isdigit() else 999
 
 
-def fetch_goals(ids, id2code):
-    """Return the chronological scorer list for a match, or [] on any failure.
+def fetch_timeline(ids, id2code):
+    """Fetch a match timeline once; return (goals, var).
 
-    Format matches data.json: {t: team code, p: surname, m: minute}. Own goals
-    are credited to the opponent and tagged '(o.g.)'.
+    goals: [{t, p, m, a?}] (own goals credited to the opponent, tagged '(o.g.)').
+    var:   [{m, d}] VAR review moments in minute order (blank decisions dropped).
+    Returns ([], []) on any failure — best-effort, never breaks the run.
     """
     stage, match = ids
     try:
         payload = fetch(f"https://api.fifa.com/api/v3/timelines/{COMPETITION}/{SEASON}/{stage}/{match}?language=en")
-    except Exception:  # noqa: BLE001 - scorers are best-effort; never break the run
-        return []
+    except Exception:  # noqa: BLE001
+        return [], []
     codes = list(id2code.values())
     events = payload.get("Event", []) or []
 
@@ -187,7 +188,18 @@ def fetch_goals(ids, id2code):
     goals.sort(key=lambda g: g["_k"])
     for g in goals:
         g.pop("_k", None)
-    return goals
+
+    var = []
+    for e in events:
+        if e.get("Type") == 71:   # VAR review
+            dd = desc(e.get("EventDescription")).strip()
+            mm = (e.get("MatchMinute") or "").strip()
+            if dd and mm:
+                var.append({"m": mm, "d": dd, "_k": _minute_key(mm)})
+    var.sort(key=lambda v: v["_k"])
+    for v in var:
+        v.pop("_k", None)
+    return goals, var
 
 
 def apply_ko(slot, a, b, ko, changes, label):
@@ -240,14 +252,21 @@ def enrich(slot, res, changes, label):
     if not res.get("ids"):
         return
     if not slot.get("goals"):
-        g = fetch_goals(res["ids"], res["id2code"])
+        g, varev = fetch_timeline(res["ids"], res["id2code"])
         if g:
             slot["goals"] = g
             changes.append(f"{label}: +{len(g)} scorer(s)")
+        if varev and not slot.get("var"):
+            slot["var"] = varev
+            changes.append(f"{label}: +{len(varev)} VAR")
     elif REFRESH_GOALS:
-        # Re-fetch and merge: backfill assists and add any goals we were missing
-        # (e.g. penalties FIFA types separately), keeping curated scorer names.
-        fresh = fetch_goals(res["ids"], res["id2code"])
+        # Re-fetch and merge: backfill assists, add any goals we were missing
+        # (e.g. penalties FIFA types separately), and VAR events — keeping
+        # curated scorer names.
+        fresh, varev = fetch_timeline(res["ids"], res["id2code"])
+        if varev and not slot.get("var"):
+            slot["var"] = varev
+            changes.append(f"{label}: +{len(varev)} VAR")
         remaining = list(slot["goals"])
         for fg in fresh:
             fk = _minute_key(fg["m"])   # normalise "90+5'" vs "90'+5'" when matching
