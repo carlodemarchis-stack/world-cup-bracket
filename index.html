@@ -11,8 +11,10 @@
   body { margin: 0; }
   @keyframes wcpulse { 0% { transform: translate(-50%,-50%) scale(1); opacity: .6 } 100% { transform: translate(-50%,-50%) scale(2.5); opacity: 0 } }
 
-  /* Live controls panel — reproduces the design's own editor props */
+  /* Live controls panel — reproduces the design's own editor props.
+     Hidden at start; opened via the gear icon in the footer. */
   #controls {
+    display: none;
     position: fixed; top: 14px; left: 14px; z-index: 50;
     width: 232px; max-height: calc(100vh - 28px); overflow: auto;
     font-family: 'Barlow', system-ui, sans-serif; font-size: 12px; color: #1c1813;
@@ -20,8 +22,20 @@
     border: 1px solid rgba(0,0,0,.12); border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0,0,0,.16); padding: 12px 14px 14px;
   }
+  #controls.open { display: block; }
   #controls.dark { color: #f4efe2; background: rgba(20,19,14,.82); border-color: rgba(255,255,255,.14); }
-  #controls h2 { margin: 0 0 10px; font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; opacity: .8; }
+  #controls .hd { display: flex; align-items: center; justify-content: space-between; margin: 0 0 10px; }
+  #controls h2 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; opacity: .8; }
+  #controls .close { border: none; background: transparent; color: inherit; cursor: pointer; font-size: 20px; line-height: 1; opacity: .55; padding: 0 2px; }
+  #controls .close:hover { opacity: 1; }
+  /* Standard settings (gear) icon in the footer */
+  #settings-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; padding: 0; border-radius: 50%;
+    border: 1px solid currentColor; background: transparent; color: inherit;
+    cursor: pointer; opacity: .85; transition: opacity .15s, background .15s;
+  }
+  #settings-toggle:hover, #settings-toggle.on { opacity: 1; background: rgba(128,128,128,.16); }
   #controls .grp { margin-bottom: 12px; }
   #controls .grp:last-child { margin-bottom: 0; }
   #controls label.f { display: block; font-weight: 600; margin-bottom: 4px; letter-spacing: .3px; }
@@ -376,7 +390,24 @@ function buildBracket(v){
   }
 
   root.appendChild(stage);
-  root.appendChild(el('div', v.footerStyle, '48 teams · 32 reach the knockout · 1 lifts the trophy'));
+
+  const footer = el('div', v.footerStyle);
+  footer.style.display = 'flex';
+  footer.style.alignItems = 'center';
+  footer.style.justifyContent = 'center';
+  footer.style.gap = '10px';
+  footer.appendChild(el('span', null, '48 teams · 32 reach the knockout · 1 lifts the trophy'));
+  const gear = document.createElement('button');
+  gear.id = 'settings-toggle';
+  gear.type = 'button';
+  gear.title = 'Settings';
+  gear.setAttribute('aria-label', 'Settings');
+  gear.setAttribute('aria-expanded', String(controlsOpen));
+  gear.classList.toggle('on', controlsOpen);
+  gear.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>';
+  gear.onclick = () => setControls(!controlsOpen);
+  footer.appendChild(gear);
+  root.appendChild(footer);
   return root;
 }
 
@@ -398,6 +429,14 @@ const ACCENTS = ['#d6b04a','#d23b3b','#2f9e6b','#3b82d2'];
 
 const app = document.getElementById('app');
 let DATA = null; // schedule + results, loaded from data.json
+let controlsOpen = false; // settings panel starts hidden, toggled by the footer gear
+function setControls(open){
+  controlsOpen = open;
+  document.getElementById('controls').classList.toggle('open', open);
+  const g = document.getElementById('settings-toggle');
+  if (g){ g.classList.toggle('on', open); g.setAttribute('aria-expanded', String(open)); }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && controlsOpen) setControls(false); });
 function render(){
   if (!DATA) return;
   const props = {
@@ -472,7 +511,15 @@ function renderControls(){
   const c = document.getElementById('controls');
   c.classList.toggle('dark', state.bgTheme === 'Dark');
   c.replaceChildren();
-  c.appendChild(el('h2', null, 'World Cup Bracket'));
+  const hd = el('div'); hd.className = 'hd';
+  hd.appendChild(el('h2', null, 'World Cup Bracket'));
+  const close = document.createElement('button');
+  close.className = 'close'; close.type = 'button';
+  close.setAttribute('aria-label', 'Close settings');
+  close.textContent = '×';
+  close.onclick = () => setControls(false);
+  hd.appendChild(close);
+  c.appendChild(hd);
   c.appendChild(group('Title', textField(state.title, v => { state.title = v; render(); })));
   c.appendChild(group('Kicker', textField(state.kicker, v => { state.kicker = v; render(); })));
   c.appendChild(group('Node style', seg(state.nodeStyle, ['Flag','Ring'], v => { state.nodeStyle = v; rerender(); })));
@@ -498,7 +545,6 @@ fetch('data.json', { cache: 'no-store' })
     render();
   })
   .catch(err => {
-    document.getElementById('controls').style.display = 'none';
     app.innerHTML =
       '<div style="max-width:640px;margin:80px auto;padding:0 24px;font-family:Barlow,system-ui,sans-serif;color:#1c1813;line-height:1.55;">' +
         '<h1 style="font-size:22px;margin:0 0 10px;">Couldn’t load <code>data.json</code></h1>' +
