@@ -200,8 +200,8 @@ function renderVals(P, DATA) {
     const hasScore = !!o.score, hasPhase = !!o.phase, hasDate = (!!o.date && !hasScore);
     return {
       boxStyle:'position:absolute;left:'+(px/12)+'%;top:'+(py/12)+'%;transform:translate(-50%,-50%);z-index:7;'+
-        'background:'+T.chipBg+';border:1px solid '+T.chipBorder+';border-radius:5px;padding:2px 6px 3px;'+
-        'text-align:center;white-space:nowrap;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none;',
+        'background:'+T.chipBg+';border:1px solid '+T.chipBorder+';border-radius:5px;padding:3px 6px 3px;'+
+        'text-align:center;white-space:nowrap;line-height:1.15;box-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none;',
       match:o.match,
       phase:o.phase, hasPhase:hasPhase,
       // feeding teams' 3-letter codes flank the round label: "BRA  R16  NOR"
@@ -387,7 +387,7 @@ function buildBracket(v){
   v.innerCards.forEach(c=>{
     const box = el('div', c.boxStyle);
     if (c.hasPhase || c.ta || c.tb){
-      const head = el('div', 'white-space:nowrap;line-height:1;margin-top:-1px;');
+      const head = el('div', 'white-space:nowrap;line-height:1.15;');
       const showTeams = !!(c.ta || c.tb);
       if (showTeams) head.appendChild(el('span', c.teamStyle, c.ta || '?'));
       if (c.hasPhase){
