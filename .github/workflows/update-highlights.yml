@@ -1,0 +1,51 @@
+name: Update highlights
+
+# Fill in highlight links from the FIFA YouTube playlist as videos are posted.
+# Offset to :30 so it never races the results cron (:00) on git push.
+on:
+  schedule:
+    - cron: '30 * * * *'   # half past every hour (UTC)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: update-highlights
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yt-dlp
+        run: pip install --quiet yt-dlp
+
+      - name: Sync highlights from the FIFA playlist
+        run: python3 scripts/update_highlights.py
+
+      - name: Commit & push if changed
+        id: commit
+        run: |
+          if [ -z "$(git status --porcelain data.json)" ]; then
+            echo "No highlight changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name  "wc26-results-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Auto-update highlights from FIFA playlist"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Request Pages rebuild
+        if: steps.commit.outputs.changed == 'true'
+        run: |
+          curl -sf -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages/builds"
