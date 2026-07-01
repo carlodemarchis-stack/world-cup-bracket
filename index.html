@@ -442,7 +442,7 @@ function buildBracket(v){
   const hintWrap = el('div', 'text-align:center;');
   const hint = document.createElement('span');
   hint.style.cssText = v.hintStyle;
-  hint.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="flex:none;"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>Tap any team or match for details';
+  hint.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="flex:none;"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>Tap any team or match for details — and the ball for more';
   hintWrap.appendChild(hint);
   head.appendChild(hintWrap);
   root.appendChild(head);
@@ -1117,7 +1117,6 @@ function openScorersModal(){
   x.style.cssText = 'position:absolute;top:8px;right:12px;border:none;background:transparent;color:' + pal.text + ';font-size:24px;line-height:1;cursor:pointer;opacity:.5;';
   x.onclick = closeTeamModal;
   panel.appendChild(x);
-  panel.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:13px;color:" + accent + ';margin:0 24px 0 0;', 'Golden Boot'));
 
   // A ranked, expandable leaderboard. kind 'goals' shows the assister after the
   // opponent; kind 'assists' shows the scorer that was set up.
@@ -1179,7 +1178,7 @@ function openScorersModal(){
     return box;
   };
 
-  const tabBar = el('div', 'display:flex;margin-top:12px;border-bottom:1px solid ' + pal.line + ';');
+  const tabBar = el('div', 'display:flex;margin:2px 24px 0 0;border-bottom:1px solid ' + pal.line + ';');
   const content = el('div', '');
   const tabCss = on => 'border:none;background:transparent;cursor:pointer;padding:9px 2px 10px;margin-right:18px;' +
     "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.7px;text-transform:uppercase;font-size:12px;" +
