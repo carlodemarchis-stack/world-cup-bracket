@@ -328,6 +328,20 @@ function renderVals(P, DATA) {
         }
       }
     }
+    // Crest radius (viewBox units) at a node, so links can start at the crest's
+    // edge instead of its centre — otherwise the line shows through a crest that
+    // has transparency (e.g. the dimmed loser flags). 0 = no crest there.
+    const PX2VB = 1200 / 820;
+    const crestVB = (L, k) => {
+      if (L === 0) return 26 * PX2VB;                       // leaf crest (52px)
+      return wonAt(side, L, k) ? (L === 1 ? 22 : 20) * PX2VB : 0;
+    };
+    const trimmed = (c, par, rC, rP, extra) => {
+      const dx = par.x - c.x, dy = par.y - c.y, len = Math.hypot(dx, dy) || 1;
+      const ux = dx / len, uy = dy / len;
+      return Object.assign({ x1: c.x + ux * rC, y1: c.y + uy * rC,
+        x2: par.x - ux * rP, y2: par.y - uy * rP }, extra);
+    };
     for (let L=0;L<=3;L++){
       const cnt = 16/Math.pow(2,L);
       for (let k=0;k<cnt;k++){
@@ -342,14 +356,14 @@ function renderVals(P, DATA) {
           const advanced = parentWin === occ, col = advanced ? accent : elimColor;
           stroke = col; w = 3; lstyle = 'filter:drop-shadow(0 0 5px '+col+'aa)';
         }
-        links.push({ x1:c.x, y1:c.y, x2:par.x, y2:par.y, stroke, w, lstyle });
+        links.push(trimmed(c, par, crestVB(L, k), crestVB(L+1, Math.floor(k/2)), { stroke, w, lstyle }));
       }
     }
     const fin = nodePos(side,4,0);
     const champ = (DATA.final||{}).winner, sfWin = wonAt(side,4,0);
     const finLit = !!champ && !!sfWin && champ === sfWin;
-    links.push({ x1:fin.x, y1:fin.y, x2:C, y2:C, stroke: finLit?accent:T.linkColor, w: finLit?3:1.8,
-      lstyle: finLit?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'' });
+    links.push(trimmed(fin, { x:C, y:C }, crestVB(4, 0), 0, { stroke: finLit?accent:T.linkColor, w: finLit?3:1.8,
+      lstyle: finLit?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'' }));
   });
 
   const rootStyle = 'min-height:100vh;background:'+T.rootBg+';padding:30px 16px 44px;font-family:Barlow,system-ui,sans-serif;box-sizing:border-box;';
