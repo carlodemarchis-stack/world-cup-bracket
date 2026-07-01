@@ -531,7 +531,7 @@ function teamMatches(code){
     .map(m => {
       const p = m.s.split('–').map(Number), isA = m.a === code;
       const tg = isA ? p[0] : p[1], og = isA ? p[1] : p[0];
-      return { stage: 'GRP', date: m.d, opp: isA ? m.b : m.a, tg, og, result: tg > og ? 'W' : (tg < og ? 'L' : 'D'), upcoming: false };
+      return { stage: 'GRP', date: m.d, opp: isA ? m.b : m.a, tg, og, result: tg > og ? 'W' : (tg < og ? 'L' : 'D'), upcoming: false, hl: m.h ? ('https://www.youtube.com/watch?v=' + m.h + '&list=PLBRLtDhTHh5o') : null };
     });
   const idx = (DATA.teams || []).findIndex(t => t.code === code);
   if (idx >= 0){
@@ -540,7 +540,7 @@ function teamMatches(code){
     const opp = DATA.teams[off + 2 * k].code === code ? DATA.teams[off + 2 * k + 1].code : DATA.teams[off + 2 * k].code;
     if (m.score){
       const p = m.score.split('–').map(Number), win = m.winner === code;
-      rows.push({ stage: 'R32', date: m.date, opp, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', note: m.pens ? 'pens' : (m.et ? 'aet' : ''), upcoming: false });
+      rows.push({ stage: 'R32', date: m.date, opp, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', note: m.pens ? 'pens' : (m.et ? 'aet' : ''), upcoming: false, hl: m.highlights || null });
     } else {
       rows.push({ stage: 'R32', opp, date: m.date, time: m.time, upcoming: true });
     }
@@ -658,6 +658,14 @@ function buildMatchList(code, pal, accent){
       box.appendChild(el('span', 'width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex:none;background:' + col + ';', r.result));
       if (r.note) box.appendChild(el('span', 'font-size:9px;text-transform:uppercase;letter-spacing:.3px;color:' + pal.sub + ';', r.note));
       row.appendChild(box);
+    }
+    if (r.hl){
+      const yt = document.createElement('a');
+      yt.href = r.hl; yt.target = '_blank'; yt.rel = 'noopener noreferrer';
+      yt.title = 'Watch highlights'; yt.setAttribute('aria-label', 'Watch highlights');
+      yt.style.cssText = 'flex:none;display:inline-flex;align-items:center;justify-content:center;width:24px;height:17px;border-radius:4px;background:#ff0000;';
+      yt.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="#fff" style="display:block;"><path d="M8 5v14l11-7z"/></svg>';
+      row.appendChild(yt);
     }
     wrap.appendChild(row);
   });

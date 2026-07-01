@@ -97,12 +97,12 @@
         { "code": "CZE", "name": "Czech Republic",  "iso": "cz",     "w": 0, "d": 1, "l": 2, "gf": 2, "ga": 6 }
       ],
       "matches": [
-        { "d": "Jun 11", "a": "MEX", "b": "RSA", "s": "2–0" },
-        { "d": "Jun 11", "a": "KOR", "b": "CZE", "s": "2–1" },
-        { "d": "Jun 18", "a": "CZE", "b": "RSA", "s": "1–1" },
-        { "d": "Jun 18", "a": "MEX", "b": "KOR", "s": "1–0" },
-        { "d": "Jun 24", "a": "CZE", "b": "MEX", "s": "0–3" },
-        { "d": "Jun 24", "a": "RSA", "b": "KOR", "s": "1–0" }
+        { "d": "Jun 11", "a": "MEX", "b": "RSA", "s": "2–0", "h": "PmevGCkUtM8" },
+        { "d": "Jun 11", "a": "KOR", "b": "CZE", "s": "2–1", "h": "6k18EJY8zIc" },
+        { "d": "Jun 18", "a": "CZE", "b": "RSA", "s": "1–1", "h": "C_2Lx8Wg1kg" },
+        { "d": "Jun 18", "a": "MEX", "b": "KOR", "s": "1–0", "h": "o_AAtfdVp3Y" },
+        { "d": "Jun 24", "a": "CZE", "b": "MEX", "s": "0–3", "h": "h9wH7diGNC0" },
+        { "d": "Jun 24", "a": "RSA", "b": "KOR", "s": "1–0", "h": "cZoaEEYtKhE" }
       ]
     },
     "B": {
@@ -113,12 +113,12 @@
         { "code": "QAT", "name": "Qatar",           "iso": "qa",     "w": 0, "d": 1, "l": 2, "gf": 2, "ga": 10 }
       ],
       "matches": [
-        { "d": "Jun 12", "a": "CAN", "b": "BIH", "s": "1–1" },
-        { "d": "Jun 13", "a": "QAT", "b": "SUI", "s": "1–1" },
-        { "d": "Jun 18", "a": "SUI", "b": "BIH", "s": "4–1" },
-        { "d": "Jun 18", "a": "CAN", "b": "QAT", "s": "6–0" },
-        { "d": "Jun 24", "a": "SUI", "b": "CAN", "s": "2–1" },
-        { "d": "Jun 24", "a": "BIH", "b": "QAT", "s": "3–1" }
+        { "d": "Jun 12", "a": "CAN", "b": "BIH", "s": "1–1", "h": "w-_rY5morQY" },
+        { "d": "Jun 13", "a": "QAT", "b": "SUI", "s": "1–1", "h": "KVz43-eddIQ" },
+        { "d": "Jun 18", "a": "SUI", "b": "BIH", "s": "4–1", "h": "c9wbxaKBu2E" },
+        { "d": "Jun 18", "a": "CAN", "b": "QAT", "s": "6–0", "h": "HTR0DIvBYlg" },
+        { "d": "Jun 24", "a": "SUI", "b": "CAN", "s": "2–1", "h": "C4XX3Crp5Uk" },
+        { "d": "Jun 24", "a": "BIH", "b": "QAT", "s": "3–1", "h": "-E4Mtblw9es" }
       ]
     },
     "C": {
@@ -129,12 +129,12 @@
         { "code": "HAI", "name": "Haiti",           "iso": "ht",     "w": 0, "d": 0, "l": 3, "gf": 2, "ga": 8 }
       ],
       "matches": [
-        { "d": "Jun 13", "a": "BRA", "b": "MAR", "s": "1–1" },
-        { "d": "Jun 13", "a": "HAI", "b": "SCO", "s": "0–1" },
-        { "d": "Jun 19", "a": "SCO", "b": "MAR", "s": "0–1" },
-        { "d": "Jun 19", "a": "BRA", "b": "HAI", "s": "3–0" },
-        { "d": "Jun 24", "a": "SCO", "b": "BRA", "s": "0–3" },
-        { "d": "Jun 24", "a": "MAR", "b": "HAI", "s": "4–2" }
+        { "d": "Jun 13", "a": "BRA", "b": "MAR", "s": "1–1", "h": "ECnK7UzAjIs" },
+        { "d": "Jun 13", "a": "HAI", "b": "SCO", "s": "0–1", "h": "TcCufmPCsu4" },
+        { "d": "Jun 19", "a": "SCO", "b": "MAR", "s": "0–1", "h": "ACKeXJdm5us" },
+        { "d": "Jun 19", "a": "BRA", "b": "HAI", "s": "3–0", "h": "lz3_atghfmY" },
+        { "d": "Jun 24", "a": "SCO", "b": "BRA", "s": "0–3", "h": "oj5LlMvV0qk" },
+        { "d": "Jun 24", "a": "MAR", "b": "HAI", "s": "4–2", "h": "ZU2ssk6Bmg8" }
       ]
     },
     "D": {
@@ -145,12 +145,12 @@
         { "code": "TUR", "name": "Turkey",          "iso": "tr",     "w": 1, "d": 0, "l": 2, "gf": 3, "ga": 5 }
       ],
       "matches": [
-        { "d": "Jun 12", "a": "USA", "b": "PAR", "s": "4–1" },
-        { "d": "Jun 13", "a": "AUS", "b": "TUR", "s": "2–0" },
-        { "d": "Jun 19", "a": "USA", "b": "AUS", "s": "2–0" },
-        { "d": "Jun 19", "a": "TUR", "b": "PAR", "s": "0–1" },
-        { "d": "Jun 25", "a": "TUR", "b": "USA", "s": "3–2" },
-        { "d": "Jun 25", "a": "PAR", "b": "AUS", "s": "0–0" }
+        { "d": "Jun 12", "a": "USA", "b": "PAR", "s": "4–1", "h": "0PVo3bk-TMk" },
+        { "d": "Jun 13", "a": "AUS", "b": "TUR", "s": "2–0", "h": "5eqzEDe8wHs" },
+        { "d": "Jun 19", "a": "USA", "b": "AUS", "s": "2–0", "h": "tXxvgvgMiRg" },
+        { "d": "Jun 19", "a": "TUR", "b": "PAR", "s": "0–1", "h": "atWtyemTWQ0" },
+        { "d": "Jun 25", "a": "TUR", "b": "USA", "s": "3–2", "h": "XnDs5rgXgFM" },
+        { "d": "Jun 25", "a": "PAR", "b": "AUS", "s": "0–0", "h": "wZVzHTl__ck" }
       ]
     },
     "E": {
@@ -161,12 +161,12 @@
         { "code": "CUW", "name": "Curaçao",         "iso": "cw",     "w": 0, "d": 1, "l": 2, "gf": 1, "ga": 9 }
       ],
       "matches": [
-        { "d": "Jun 14", "a": "GER", "b": "CUW", "s": "7–1" },
-        { "d": "Jun 14", "a": "CIV", "b": "ECU", "s": "1–0" },
-        { "d": "Jun 20", "a": "GER", "b": "CIV", "s": "2–1" },
-        { "d": "Jun 20", "a": "ECU", "b": "CUW", "s": "0–0" },
-        { "d": "Jun 25", "a": "CUW", "b": "CIV", "s": "0–2" },
-        { "d": "Jun 25", "a": "ECU", "b": "GER", "s": "2–1" }
+        { "d": "Jun 14", "a": "GER", "b": "CUW", "s": "7–1", "h": "B6-Z5ul2ccQ" },
+        { "d": "Jun 14", "a": "CIV", "b": "ECU", "s": "1–0", "h": "84xvEwRc0iQ" },
+        { "d": "Jun 20", "a": "GER", "b": "CIV", "s": "2–1", "h": "_3PYS5oCgvQ" },
+        { "d": "Jun 20", "a": "ECU", "b": "CUW", "s": "0–0", "h": "nYoSztBShPE" },
+        { "d": "Jun 25", "a": "CUW", "b": "CIV", "s": "0–2", "h": "vDLtuaCoIb0" },
+        { "d": "Jun 25", "a": "ECU", "b": "GER", "s": "2–1", "h": "TImmPYoLE-8" }
       ]
     },
     "F": {
@@ -177,12 +177,12 @@
         { "code": "TUN", "name": "Tunisia",         "iso": "tn",     "w": 0, "d": 0, "l": 3, "gf": 2, "ga": 12 }
       ],
       "matches": [
-        { "d": "Jun 14", "a": "NED", "b": "JPN", "s": "2–2" },
-        { "d": "Jun 14", "a": "SWE", "b": "TUN", "s": "5–1" },
-        { "d": "Jun 20", "a": "NED", "b": "SWE", "s": "5–1" },
+        { "d": "Jun 14", "a": "NED", "b": "JPN", "s": "2–2", "h": "r8SvHZxALQs" },
+        { "d": "Jun 14", "a": "SWE", "b": "TUN", "s": "5–1", "h": "MM5hUuEzH3g" },
+        { "d": "Jun 20", "a": "NED", "b": "SWE", "s": "5–1", "h": "tm1PRvtp1PM" },
         { "d": "Jun 20", "a": "TUN", "b": "JPN", "s": "0–4" },
-        { "d": "Jun 25", "a": "JPN", "b": "SWE", "s": "1–1" },
-        { "d": "Jun 25", "a": "TUN", "b": "NED", "s": "1–3" }
+        { "d": "Jun 25", "a": "JPN", "b": "SWE", "s": "1–1", "h": "BppGXEZbiy4" },
+        { "d": "Jun 25", "a": "TUN", "b": "NED", "s": "1–3", "h": "oHYtLWbrwUo" }
       ]
     },
     "G": {
@@ -193,12 +193,12 @@
         { "code": "NZL", "name": "New Zealand",     "iso": "nz",     "w": 0, "d": 1, "l": 2, "gf": 4, "ga": 10 }
       ],
       "matches": [
-        { "d": "Jun 15", "a": "BEL", "b": "EGY", "s": "1–1" },
-        { "d": "Jun 15", "a": "IRN", "b": "NZL", "s": "2–2" },
-        { "d": "Jun 21", "a": "BEL", "b": "IRN", "s": "0–0" },
-        { "d": "Jun 21", "a": "NZL", "b": "EGY", "s": "1–3" },
-        { "d": "Jun 26", "a": "EGY", "b": "IRN", "s": "1–1" },
-        { "d": "Jun 26", "a": "NZL", "b": "BEL", "s": "1–5" }
+        { "d": "Jun 15", "a": "BEL", "b": "EGY", "s": "1–1", "h": "i8sD2Aea9_M" },
+        { "d": "Jun 15", "a": "IRN", "b": "NZL", "s": "2–2", "h": "memCfdob60w" },
+        { "d": "Jun 21", "a": "BEL", "b": "IRN", "s": "0–0", "h": "4zYJyJY57i8" },
+        { "d": "Jun 21", "a": "NZL", "b": "EGY", "s": "1–3", "h": "8OYG-yIFbFI" },
+        { "d": "Jun 26", "a": "EGY", "b": "IRN", "s": "1–1", "h": "EeLUP57yMn4" },
+        { "d": "Jun 26", "a": "NZL", "b": "BEL", "s": "1–5", "h": "zpWO1X2yFjY" }
       ]
     },
     "H": {
@@ -209,12 +209,12 @@
         { "code": "KSA", "name": "Saudi Arabia",    "iso": "sa",     "w": 0, "d": 2, "l": 1, "gf": 1, "ga": 5 }
       ],
       "matches": [
-        { "d": "Jun 15", "a": "ESP", "b": "CPV", "s": "0–0" },
-        { "d": "Jun 15", "a": "KSA", "b": "URU", "s": "1–1" },
-        { "d": "Jun 21", "a": "ESP", "b": "KSA", "s": "4–0" },
-        { "d": "Jun 21", "a": "URU", "b": "CPV", "s": "2–2" },
-        { "d": "Jun 26", "a": "CPV", "b": "KSA", "s": "0–0" },
-        { "d": "Jun 26", "a": "URU", "b": "ESP", "s": "0–1" }
+        { "d": "Jun 15", "a": "ESP", "b": "CPV", "s": "0–0", "h": "W9Z4ER9oX0k" },
+        { "d": "Jun 15", "a": "KSA", "b": "URU", "s": "1–1", "h": "XrDExPcLCXY" },
+        { "d": "Jun 21", "a": "ESP", "b": "KSA", "s": "4–0", "h": "j0BQN0nJ7mM" },
+        { "d": "Jun 21", "a": "URU", "b": "CPV", "s": "2–2", "h": "eh20EVuWFFI" },
+        { "d": "Jun 26", "a": "CPV", "b": "KSA", "s": "0–0", "h": "JE0dqNUIOg4" },
+        { "d": "Jun 26", "a": "URU", "b": "ESP", "s": "0–1", "h": "Petu_ouNzr4" }
       ]
     },
     "I": {
@@ -225,12 +225,12 @@
         { "code": "IRQ", "name": "Iraq",            "iso": "iq",     "w": 0, "d": 0, "l": 3, "gf": 1, "ga": 12 }
       ],
       "matches": [
-        { "d": "Jun 16", "a": "FRA", "b": "SEN", "s": "3–1" },
-        { "d": "Jun 16", "a": "IRQ", "b": "NOR", "s": "1–4" },
-        { "d": "Jun 22", "a": "FRA", "b": "IRQ", "s": "3–0" },
-        { "d": "Jun 22", "a": "NOR", "b": "SEN", "s": "3–2" },
-        { "d": "Jun 26", "a": "NOR", "b": "FRA", "s": "1–4" },
-        { "d": "Jun 26", "a": "SEN", "b": "IRQ", "s": "5–0" }
+        { "d": "Jun 16", "a": "FRA", "b": "SEN", "s": "3–1", "h": "n3JDGlOwMJ4" },
+        { "d": "Jun 16", "a": "IRQ", "b": "NOR", "s": "1–4", "h": "UzSswKnmpgk" },
+        { "d": "Jun 22", "a": "FRA", "b": "IRQ", "s": "3–0", "h": "XejscwNpvLU" },
+        { "d": "Jun 22", "a": "NOR", "b": "SEN", "s": "3–2", "h": "nlghqbCqbe0" },
+        { "d": "Jun 26", "a": "NOR", "b": "FRA", "s": "1–4", "h": "ABdniNBWtRs" },
+        { "d": "Jun 26", "a": "SEN", "b": "IRQ", "s": "5–0", "h": "6N2BzwoMrCw" }
       ]
     },
     "J": {
@@ -241,12 +241,12 @@
         { "code": "JOR", "name": "Jordan",          "iso": "jo",     "w": 0, "d": 0, "l": 3, "gf": 3, "ga": 8 }
       ],
       "matches": [
-        { "d": "Jun 16", "a": "ARG", "b": "ALG", "s": "3–0" },
-        { "d": "Jun 16", "a": "AUT", "b": "JOR", "s": "3–1" },
-        { "d": "Jun 22", "a": "ARG", "b": "AUT", "s": "2–0" },
-        { "d": "Jun 22", "a": "JOR", "b": "ALG", "s": "1–2" },
-        { "d": "Jun 27", "a": "ALG", "b": "AUT", "s": "3–3" },
-        { "d": "Jun 27", "a": "JOR", "b": "ARG", "s": "1–3" }
+        { "d": "Jun 16", "a": "ARG", "b": "ALG", "s": "3–0", "h": "JH_WRKTCPK4" },
+        { "d": "Jun 16", "a": "AUT", "b": "JOR", "s": "3–1", "h": "pU-mPZcuENY" },
+        { "d": "Jun 22", "a": "ARG", "b": "AUT", "s": "2–0", "h": "M4Ccsmk3gcE" },
+        { "d": "Jun 22", "a": "JOR", "b": "ALG", "s": "1–2", "h": "Ydxmm_-PUo0" },
+        { "d": "Jun 27", "a": "ALG", "b": "AUT", "s": "3–3", "h": "5Mvh0mqY8ik" },
+        { "d": "Jun 27", "a": "JOR", "b": "ARG", "s": "1–3", "h": "M6mpXtMm93M" }
       ]
     },
     "K": {
@@ -257,12 +257,12 @@
         { "code": "UZB", "name": "Uzbekistan",      "iso": "uz",     "w": 0, "d": 0, "l": 3, "gf": 2, "ga": 11 }
       ],
       "matches": [
-        { "d": "Jun 17", "a": "POR", "b": "COD", "s": "1–1" },
-        { "d": "Jun 17", "a": "UZB", "b": "COL", "s": "1–3" },
-        { "d": "Jun 23", "a": "POR", "b": "UZB", "s": "5–0" },
-        { "d": "Jun 23", "a": "COL", "b": "COD", "s": "1–0" },
-        { "d": "Jun 27", "a": "COL", "b": "POR", "s": "0–0" },
-        { "d": "Jun 27", "a": "COD", "b": "UZB", "s": "3–1" }
+        { "d": "Jun 17", "a": "POR", "b": "COD", "s": "1–1", "h": "fJrctBM0poE" },
+        { "d": "Jun 17", "a": "UZB", "b": "COL", "s": "1–3", "h": "cjsFUxVHAX0" },
+        { "d": "Jun 23", "a": "POR", "b": "UZB", "s": "5–0", "h": "kwbH2dm1AXo" },
+        { "d": "Jun 23", "a": "COL", "b": "COD", "s": "1–0", "h": "JTGXHmxlXHc" },
+        { "d": "Jun 27", "a": "COL", "b": "POR", "s": "0–0", "h": "QhI0dUq1FKY" },
+        { "d": "Jun 27", "a": "COD", "b": "UZB", "s": "3–1", "h": "_effg5dZWZc" }
       ]
     },
     "L": {
@@ -273,12 +273,12 @@
         { "code": "PAN", "name": "Panama",          "iso": "pa",     "w": 0, "d": 0, "l": 3, "gf": 0, "ga": 4 }
       ],
       "matches": [
-        { "d": "Jun 17", "a": "ENG", "b": "CRO", "s": "4–2" },
-        { "d": "Jun 17", "a": "GHA", "b": "PAN", "s": "1–0" },
-        { "d": "Jun 23", "a": "ENG", "b": "GHA", "s": "0–0" },
-        { "d": "Jun 23", "a": "PAN", "b": "CRO", "s": "0–1" },
-        { "d": "Jun 27", "a": "PAN", "b": "ENG", "s": "0–2" },
-        { "d": "Jun 27", "a": "CRO", "b": "GHA", "s": "2–1" }
+        { "d": "Jun 17", "a": "ENG", "b": "CRO", "s": "4–2", "h": "ynqGWHJPkuQ" },
+        { "d": "Jun 17", "a": "GHA", "b": "PAN", "s": "1–0", "h": "gy8h5JJ2b_E" },
+        { "d": "Jun 23", "a": "ENG", "b": "GHA", "s": "0–0", "h": "Qe-fptt6wXs" },
+        { "d": "Jun 23", "a": "PAN", "b": "CRO", "s": "0–1", "h": "Y5PJGL-8qyM" },
+        { "d": "Jun 27", "a": "PAN", "b": "ENG", "s": "0–2", "h": "FHcXnueraKc" },
+        { "d": "Jun 27", "a": "CRO", "b": "GHA", "s": "2–1", "h": "D1wfxmJhA04" }
       ]
     }
   }
