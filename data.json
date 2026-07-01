@@ -327,6 +327,11 @@
       "highlights": "https://www.youtube.com/watch?v=Fd_KYjbmws4&list=PLBRLtDhTHh5o",
       "goals": [
         {
+          "t": "JPN",
+          "p": "Sano",
+          "m": "29'"
+        },
+        {
           "t": "BRA",
           "p": "Casemiro",
           "m": "56'",
@@ -335,12 +340,8 @@
         {
           "t": "BRA",
           "p": "Martinelli",
-          "m": "90+5'"
-        },
-        {
-          "t": "JPN",
-          "p": "Sano",
-          "m": "29'"
+          "m": "90+5'",
+          "a": "Bruno Guimaraes"
         }
       ],
       "ref": "Maurizio Mariani",
@@ -363,16 +364,16 @@
           "a": "Odegaard"
         },
         {
-          "t": "NOR",
-          "p": "Haaland",
-          "m": "86'",
-          "a": "Berg"
-        },
-        {
           "t": "CIV",
           "p": "Diallo",
           "m": "74'",
           "a": "Pepe"
+        },
+        {
+          "t": "NOR",
+          "p": "Haaland",
+          "m": "86'",
+          "a": "Berg"
         }
       ],
       "highlights": "https://www.youtube.com/watch?v=ATzmoebQMj0&list=PLBRLtDhTHh5o",
@@ -500,7 +501,8 @@
         {
           "t": "MAR",
           "p": "Diop",
-          "m": "90+1'"
+          "m": "90+1'",
+          "a": "Talbi"
         }
       ],
       "ref": "Wilton SAMPAIO",
@@ -802,6 +804,11 @@
               "p": "Sadilek",
               "m": "6'",
               "a": "Sojka"
+            },
+            {
+              "t": "RSA",
+              "p": "Mokoena",
+              "m": "83'"
             }
           ]
         },
@@ -966,6 +973,11 @@
           },
           "goals": [
             {
+              "t": "SUI",
+              "p": "Embolo",
+              "m": "17'"
+            },
+            {
               "t": "QAT",
               "p": "Muheim (o.g.)",
               "m": "90'+4'"
@@ -1006,6 +1018,11 @@
               "t": "BIH",
               "p": "Mahmic",
               "m": "90'+3'"
+            },
+            {
+              "t": "SUI",
+              "p": "Xhaka",
+              "m": "90'+7'"
             }
           ]
         },
@@ -1645,6 +1662,11 @@
               "p": "Schlotterbeck",
               "m": "38'",
               "a": "Brown"
+            },
+            {
+              "t": "GER",
+              "p": "Havertz",
+              "m": "45'+5'"
             },
             {
               "t": "GER",
@@ -2913,6 +2935,11 @@
               "t": "AUT",
               "p": "Yazan Alarab (o.g.)",
               "m": "76'"
+            },
+            {
+              "t": "AUT",
+              "p": "Arnautovic",
+              "m": "90'+12'"
             }
           ]
         },
@@ -3041,6 +3068,11 @@
               "t": "ARG",
               "p": "Lo Celso",
               "m": "19'"
+            },
+            {
+              "t": "ARG",
+              "p": "Martinez",
+              "m": "31'"
             },
             {
               "t": "JOR",
@@ -3263,6 +3295,11 @@
             },
             {
               "t": "COD",
+              "p": "Wissa",
+              "m": "68'"
+            },
+            {
+              "t": "COD",
               "p": "Mayele",
               "m": "78'"
             },
@@ -3333,6 +3370,11 @@
             "CRO": "3-4-3"
           },
           "goals": [
+            {
+              "t": "ENG",
+              "p": "Kane",
+              "m": "12'"
+            },
             {
               "t": "CRO",
               "p": "Baturina",

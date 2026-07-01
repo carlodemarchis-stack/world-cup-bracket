@@ -158,7 +158,12 @@ def fetch_goals(ids, id2code):
         tl = desc(e.get("TypeLocalized")).strip().lower()
         ed = desc(e.get("EventDescription"))
         own = "own goal" in tl or "own goal" in ed.lower()
-        if tl != "goal!" and not own:
+        # Count real goals: open play, in-play penalties, and own goals — but not
+        # penalty-shootout attempts (Period 11, no match minute).
+        if tl not in ("goal!", "penalty goal") and not own:
+            continue
+        mm = e.get("MatchMinute") or ""
+        if e.get("Period") == 11 or not mm.strip():
             continue
         scorer_team = id2code.get(str(e.get("IdTeam")))
         if not scorer_team:
@@ -168,7 +173,6 @@ def fetch_goals(ids, id2code):
             other = [c for c in codes if c != scorer_team]
             if other:
                 team = other[0]
-        mm = e.get("MatchMinute") or ""
         g = {"t": team, "p": _surname(ed) + (" (o.g.)" if own else ""),
              "m": mm, "_k": _minute_key(mm)}
         if not own:  # pair with an unused assist from the same team + minute
@@ -233,18 +237,24 @@ def enrich(slot, res, changes, label):
         if g:
             slot["goals"] = g
             changes.append(f"{label}: +{len(g)} scorer(s)")
-    elif REFRESH_GOALS and any("a" not in g for g in slot["goals"]):
-        # Backfill assists onto existing goals (keeps curated scorer names).
+    elif REFRESH_GOALS:
+        # Re-fetch and merge: backfill assists and add any goals we were missing
+        # (e.g. penalties FIFA types separately), keeping curated scorer names.
         fresh = fetch_goals(res["ids"], res["id2code"])
-        pool = {}
+        remaining = list(slot["goals"])
         for fg in fresh:
-            if fg.get("a"):
-                pool.setdefault((fg["m"], fg["t"]), []).append(fg["a"])
-        for g in slot["goals"]:
-            lst = pool.get((g.get("m"), g.get("t")))
-            if "a" not in g and lst:
-                g["a"] = lst.pop(0)
-                changes.append(f"{label}: assist {g['p']} <- {g['a']}")
+            fk = _minute_key(fg["m"])   # normalise "90+5'" vs "90'+5'" when matching
+            match = next((ex for ex in remaining
+                          if _minute_key(ex.get("m", "")) == fk and ex.get("t") == fg["t"]), None)
+            if match is not None:
+                remaining.remove(match)
+                if "a" not in match and fg.get("a"):
+                    match["a"] = fg["a"]
+                    changes.append(f"{label}: assist {match['p']} <- {fg['a']}")
+            else:
+                slot["goals"].append(fg)
+                changes.append(f"{label}: +goal {fg['p']} {fg['m']}")
+        slot["goals"].sort(key=lambda g: _minute_key(g.get("m", "")))
 
 
 def winner_of(slot_dict, key):
