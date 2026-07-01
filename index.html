@@ -335,10 +335,14 @@ function renderVals(P, DATA) {
         const par = nodePos(side,L+1,Math.floor(k/2));
         const occ = (L===0) ? TEAMS[(side==='R'?0:16)+k].code : wonAt(side,L,k);
         const parentWin = wonAt(side, L+1, Math.floor(k/2));
-        const decided = !!occ && !!parentWin && parentWin === occ;
-        links.push({ x1:c.x, y1:c.y, x2:par.x, y2:par.y,
-          stroke: decided?accent:T.linkColor, w: decided?3:1.8,
-          lstyle: decided?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'' });
+        // once the parent match is decided, colour this segment: green if the
+        // team here advanced, red if this is where it was knocked out.
+        let stroke = T.linkColor, w = 1.8, lstyle = '';
+        if (occ && parentWin){
+          const advanced = parentWin === occ, col = advanced ? accent : elimColor;
+          stroke = col; w = 3; lstyle = 'filter:drop-shadow(0 0 5px '+col+'aa)';
+        }
+        links.push({ x1:c.x, y1:c.y, x2:par.x, y2:par.y, stroke, w, lstyle });
       }
     }
     const fin = nodePos(side,4,0);
