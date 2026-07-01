@@ -303,6 +303,28 @@ function renderVals(P, DATA) {
   // disconnected from the main path to the final).
   if (showResults && DATA.thirdPlace) innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:DATA.thirdPlace.date, match:'third' }));
 
+  // ---- Group-stage eliminated teams: two outer side arcs, like parentheses.
+  // The 16 teams that didn't reach the knockout (not among the bracket's 32).
+  const ELIM_COLORS = {
+    KOR:['#ffffff','#cd2e3a','#0047a0'], CZE:['#ffffff','#d7141a','#11457e'], QAT:['#8a1538','#ffffff'],
+    SCO:['#005eb8','#ffffff'], HAI:['#00209f','#d21034'], TUR:['#e30a17','#ffffff'],
+    CUW:['#002b7f','#f9e814'], TUN:['#e70013','#ffffff'], IRN:['#239f40','#ffffff','#da0000'],
+    NZL:['#00247d','#cc142b','#ffffff'], URU:['#0038a8','#ffffff'], KSA:['#006c35','#ffffff'],
+    IRQ:['#ce1126','#ffffff','#000000'], JOR:['#000000','#ffffff','#007a3d'], UZB:['#1eb53a','#0099b5','#ffffff'], PAN:['#da121a','#ffffff','#072357']
+  };
+  const inBr = {}; TEAMS.forEach(t => inBr[t.code] = 1);
+  const elim = [];
+  Object.keys(DATA.groups || {}).forEach(g => {
+    DATA.groups[g].table.forEach(r => { if (!inBr[r.code]) elim.push({ code:r.code, name:r.name, iso:r.iso, colors: ELIM_COLORS[r.code] || ['#888888','#bbbbbb'] }); });
+  });
+  const Re = 560, THe = 48, szE = 40;
+  const arc = (t, aDeg) => {
+    const a = aDeg * DEG, p = { x: C + Re*Math.cos(a), y: C + Re*Math.sin(a), a: aDeg };
+    teamNodes.push(makeTeam(t, p, szE, false, true));   // elim = dimmed crest, still clickable
+  };
+  elim.slice(0, 8).forEach((t, i) => arc(t, -THe + (2*THe)*i/7));         // right ")" arc, top→bottom
+  elim.slice(8, 16).forEach((t, i) => arc(t, 180 + THe - (2*THe)*i/7));   // left "(" arc, top→bottom
+
   return { teamNodes, emptyNodes, links, labels: showNames?labels:[], innerCards, statusDots, title, kicker, rootStyle, kickerStyle, titleStyle, footerStyle, flagMode, ringMode: !flagMode };
 }
 
