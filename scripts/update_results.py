@@ -228,10 +228,15 @@ def apply_ko(slot, a, b, ko, changes, label):
 def enrich(slot, res, changes, label):
     """Fill referee, attendance, formations and scorers/assists onto a match
     slot (group or knockout) — only when missing, so curated data is kept."""
-    for key in ("ref", "att", "form", "venue"):
+    for key in ("ref", "att", "form"):
         if res.get(key) and not slot.get(key):
             slot[key] = res[key]
             changes.append(f"{label}: {key}={res[key]}")
+    # Venue: always use FIFA's tournament stadium name, for consistency across
+    # group and knockout matches (overwrites the earlier curated venues).
+    if res.get("venue") and slot.get("venue") != res["venue"]:
+        slot["venue"] = res["venue"]
+        changes.append(f"{label}: venue={res['venue']}")
     if not res.get("ids"):
         return
     if not slot.get("goals"):
