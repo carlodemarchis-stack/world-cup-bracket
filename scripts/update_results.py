@@ -91,8 +91,63 @@ def parse_fifa(matches):
                 "pens": {hc: int(hp), ac: int(ap)} if pens else None,
                 "winner": wcode,
                 "et": m.get("ResultType") in (2, 3) or pens,
+                "ids": (str(m.get("IdStage")), str(m.get("IdMatch"))),
+                "id2code": id2code,
             }
     return group, ko
+
+
+def _surname(desc_txt):
+    """'Harry KANE (England) scores!!' -> 'Kane' (the ALL-CAPS surname)."""
+    part = desc_txt.split("(")[0].strip()
+    words = part.split()
+    caps = [w for w in words if w == w.upper() and any(c.isalpha() for c in w)]
+    name = " ".join(caps) if caps else (words[-1] if words else part)
+    return name.title()
+
+
+def _minute_key(mm):
+    m = mm.replace("'", "").strip()
+    if "+" in m:
+        base, extra = m.split("+", 1)
+        return (int(base) if base.isdigit() else 999) + (int(extra) / 100 if extra.isdigit() else 0)
+    return int(m) if m.isdigit() else 999
+
+
+def fetch_goals(ids, id2code):
+    """Return the chronological scorer list for a match, or [] on any failure.
+
+    Format matches data.json: {t: team code, p: surname, m: minute}. Own goals
+    are credited to the opponent and tagged '(o.g.)'.
+    """
+    stage, match = ids
+    try:
+        payload = fetch(f"https://api.fifa.com/api/v3/timelines/{COMPETITION}/{SEASON}/{stage}/{match}?language=en")
+    except Exception:  # noqa: BLE001 - scorers are best-effort; never break the run
+        return []
+    codes = list(id2code.values())
+    goals = []
+    for e in payload.get("Event", []) or []:
+        tl = desc(e.get("TypeLocalized")).strip().lower()
+        ed = desc(e.get("EventDescription"))
+        own = "own goal" in tl or "own goal" in ed.lower()
+        if tl != "goal!" and not own:
+            continue
+        scorer_team = id2code.get(str(e.get("IdTeam")))
+        if not scorer_team:
+            continue
+        team = scorer_team
+        if own:  # an own goal counts for the other side
+            other = [c for c in codes if c != scorer_team]
+            if other:
+                team = other[0]
+        mm = e.get("MatchMinute") or ""
+        goals.append({"t": team, "p": _surname(ed) + (" (o.g.)" if own else ""),
+                      "m": mm, "_k": _minute_key(mm)})
+    goals.sort(key=lambda g: g["_k"])
+    for g in goals:
+        g.pop("_k", None)
+    return goals
 
 
 def apply_ko(slot, a, b, ko, changes, label):
@@ -127,6 +182,12 @@ def apply_ko(slot, a, b, ko, changes, label):
         if k not in new and k in slot:
             changes.append(f"{label}: drop {k}")
             del slot[k]
+    # Scorers: fill in only when missing, so hand-curated goals are never lost.
+    if not slot.get("goals") and res.get("ids"):
+        g = fetch_goals(res["ids"], res["id2code"])
+        if g:
+            slot["goals"] = g
+            changes.append(f"{label}: +{len(g)} scorer(s)")
 
 
 def winner_of(slot_dict, key):
