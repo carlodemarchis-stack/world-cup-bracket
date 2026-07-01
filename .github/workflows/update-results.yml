@@ -1,0 +1,49 @@
+name: Update results
+
+# Hourly sync of scores / winners from FIFA's public API into data.json.
+# Commits straight to main only when a result actually changed; the push
+# rebuilds the GitHub Pages site.
+on:
+  schedule:
+    - cron: '0 * * * *'   # top of every hour (UTC); GitHub may delay under load
+  workflow_dispatch: {}    # allow manual runs from the Actions tab
+
+permissions:
+  contents: write          # push the updated data.json
+  pages: write             # request a Pages rebuild after a change
+
+concurrency:
+  group: update-results
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync results from FIFA
+        run: python3 scripts/update_results.py
+
+      - name: Commit & push if changed
+        id: commit
+        run: |
+          if [ -z "$(git status --porcelain data.json)" ]; then
+            echo "No result changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name  "wc26-results-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Auto-update results from FIFA feed"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Request Pages rebuild
+        if: steps.commit.outputs.changed == 'true'
+        run: |
+          curl -sf -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages/builds"
