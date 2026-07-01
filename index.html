@@ -540,7 +540,7 @@ function teamMatches(code){
     const opp = DATA.teams[off + 2 * k].code === code ? DATA.teams[off + 2 * k + 1].code : DATA.teams[off + 2 * k].code;
     if (m.score){
       const p = m.score.split('–').map(Number), win = m.winner === code;
-      rows.push({ stage: 'R32', opp, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', note: m.pens ? 'pens' : (m.et ? 'aet' : ''), upcoming: false });
+      rows.push({ stage: 'R32', date: m.date, opp, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', note: m.pens ? 'pens' : (m.et ? 'aet' : ''), upcoming: false });
     } else {
       rows.push({ stage: 'R32', opp, date: m.date, time: m.time, upcoming: true });
     }
