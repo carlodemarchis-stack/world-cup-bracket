@@ -540,7 +540,10 @@ function teamMatches(code){
     const opp = DATA.teams[off + 2 * k].code === code ? DATA.teams[off + 2 * k + 1].code : DATA.teams[off + 2 * k].code;
     if (m.score){
       const p = m.score.split('–').map(Number), win = m.winner === code;
-      rows.push({ stage: 'R32', date: m.date, opp, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', note: m.pens ? 'pens' : (m.et ? 'aet' : ''), upcoming: false, hl: m.highlights || null });
+      let sub = '';
+      if (m.pens){ let ps = m.penScore || ''; if (ps && !win) ps = ps.split('–').reverse().join('–'); sub = 'pens' + (ps ? ' ' + ps : ''); }
+      else if (m.et){ sub = 'a.e.t.'; }
+      rows.push({ stage: 'R32', date: m.date, opp, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', sub: sub, upcoming: false, hl: m.highlights || null });
     } else {
       rows.push({ stage: 'R32', opp, date: m.date, time: m.time, upcoming: true });
     }
@@ -641,32 +644,44 @@ function buildMatchList(code, pal, accent){
   teamMatches(code).forEach(r => {
     const opp = TEAMDIR[r.opp] || { name: r.opp || 'TBD', iso: '' };
     const row = el('div', 'display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid ' + pal.line + ';border-radius:8px;');
-    row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:10px;color:" + pal.sub + ';width:40px;flex:none;', r.date || ''));
-    row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.5px;color:" + accent + ';width:28px;flex:none;', r.stage));
+    row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:10px;color:" + pal.sub + ';width:38px;flex:none;', r.date || ''));
+    row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.5px;color:" + accent + ';width:26px;flex:none;', r.stage));
     const oppEl = el('div', 'display:flex;align-items:center;gap:7px;flex:1;min-width:0;');
     oppEl.appendChild(el('span', 'font-size:11px;color:' + pal.sub + ';flex:none;', 'vs'));
     if (opp.iso) oppEl.appendChild(flagImg(opp.iso, 18));
     oppEl.appendChild(el('span', 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;', opp.name));
     row.appendChild(oppEl);
+
+    // Column 1 — score (with a.e.t./pens) or kickoff time, right-aligned
+    const scoreCol = el('div', 'width:60px;flex:none;display:flex;flex-direction:column;align-items:flex-end;line-height:1.05;');
     if (r.upcoming){
-      const dt = r.time ? (r.time + ' CET') : 'Upcoming';
-      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;color:" + pal.sub + ';flex:none;', dt));
+      scoreCol.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;color:" + pal.sub + ';', r.time ? (r.time + ' CET') : 'TBD'));
     } else {
-      const box = el('div', 'display:flex;align-items:center;gap:6px;flex:none;');
-      box.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;", r.tg + '–' + r.og));
-      const col = r.result === 'W' ? '#37b56a' : (r.result === 'L' ? '#e0463f' : '#9a9488');
-      box.appendChild(el('span', 'width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex:none;background:' + col + ';', r.result));
-      if (r.note) box.appendChild(el('span', 'font-size:9px;text-transform:uppercase;letter-spacing:.3px;color:' + pal.sub + ';', r.note));
-      row.appendChild(box);
+      scoreCol.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;", r.tg + '–' + r.og));
+      if (r.sub) scoreCol.appendChild(el('span', 'font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;color:' + pal.sub + ';margin-top:1px;', r.sub));
     }
+    row.appendChild(scoreCol);
+
+    // Column 2 — W/D/L result symbol, centered
+    const resCol = el('div', 'width:18px;flex:none;display:flex;justify-content:center;');
+    if (!r.upcoming && r.result){
+      const col = r.result === 'W' ? '#37b56a' : (r.result === 'L' ? '#e0463f' : '#9a9488');
+      resCol.appendChild(el('span', 'width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;background:' + col + ';', r.result));
+    }
+    row.appendChild(resCol);
+
+    // Column 3 — highlights button (empty slot keeps alignment when absent)
+    const hlCol = el('div', 'width:26px;flex:none;display:flex;justify-content:center;');
     if (r.hl){
       const yt = document.createElement('a');
       yt.href = r.hl; yt.target = '_blank'; yt.rel = 'noopener noreferrer';
       yt.title = 'Watch highlights'; yt.setAttribute('aria-label', 'Watch highlights');
       yt.style.cssText = 'flex:none;display:inline-flex;align-items:center;justify-content:center;width:24px;height:17px;border-radius:4px;background:#ff0000;';
       yt.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="#fff" style="display:block;"><path d="M8 5v14l11-7z"/></svg>';
-      row.appendChild(yt);
+      hlCol.appendChild(yt);
     }
+    row.appendChild(hlCol);
+
     wrap.appendChild(row);
   });
   return wrap;
