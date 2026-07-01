@@ -395,8 +395,21 @@ function buildBracket(v){
   footer.style.display = 'flex';
   footer.style.alignItems = 'center';
   footer.style.justifyContent = 'center';
+  footer.style.flexWrap = 'wrap';
   footer.style.gap = '10px';
-  footer.appendChild(el('span', null, '48 teams · 32 reach the knockout · 1 lifts the trophy'));
+  footer.style.textTransform = 'none';   // credit reads better in normal case
+  footer.style.letterSpacing = 'normal';
+  const credit = el('span');
+  credit.appendChild(document.createTextNode('Produced with passion by '));
+  const link = document.createElement('a');
+  link.href = 'https://aguywithascarf.substack.com/';
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.textContent = 'A guy with a scarf';
+  link.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:2px;';
+  credit.appendChild(link);
+  credit.appendChild(document.createTextNode(' (Carlo De Marchis) from the original design by Emilio Sansolini'));
+  footer.appendChild(credit);
   const gear = document.createElement('button');
   gear.id = 'settings-toggle';
   gear.type = 'button';
