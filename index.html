@@ -198,21 +198,19 @@ function renderVals(P, DATA) {
   // a card at a node = the match that fills it: a date while pending, a score once played
   function makeInnerCard(px, py, o){
     const hasScore = !!o.score, hasPhase = !!o.phase, hasDate = (!!o.date && !hasScore);
-    // Feeding teams: show 3-letter codes once known ("BRA v NOR" / "MEX v ?"),
-    // in dark text on the same line as the round label.
-    const teams = (o.ta || o.tb) ? ((o.ta || '?') + ' v ' + (o.tb || '?')) : '';
     return {
       boxStyle:'position:absolute;left:'+(px/12)+'%;top:'+(py/12)+'%;transform:translate(-50%,-50%);z-index:7;'+
         'background:'+T.chipBg+';border:1px solid '+T.chipBorder+';border-radius:5px;padding:2px 6px 3px;'+
         'text-align:center;white-space:nowrap;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none;',
       match:o.match,
       phase:o.phase, hasPhase:hasPhase,
-      teams:teams,
+      // feeding teams' 3-letter codes flank the round label: "BRA  R16  NOR"
+      ta:o.ta||null, tb:o.tb||null,
       score:o.score, hasScore:hasScore, showScore:(hasScore && !o.pens), pens:!!o.pens, showEt:(!!o.et && !o.pens),
       date:o.date, hasDate:hasDate,
       time:o.time, hasTime:(!!o.time && !hasScore),
-      phaseStyle:'font-family:Barlow,sans-serif;font-weight:700;font-size:7.5px;letter-spacing:.8px;text-transform:uppercase;line-height:1.25;color:'+accent+';',
-      teamsStyle:"font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:7.5px;letter-spacing:.3px;line-height:1.25;color:"+T.chipScore+';',
+      phaseStyle:'font-family:Barlow,sans-serif;font-weight:700;font-size:7.5px;letter-spacing:.8px;text-transform:uppercase;line-height:1;color:'+accent+';',
+      teamStyle:"font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.3px;line-height:1;color:"+T.chipScore+';',
       scoreStyle:"font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.4px;line-height:1.05;color:"+T.chipScore+';',
       etStyle:'font-family:Barlow,sans-serif;font-weight:600;font-size:7px;letter-spacing:.5px;text-transform:uppercase;line-height:1.3;color:'+T.chipDate+';',
       pensStyle:'font-family:Barlow,sans-serif;font-weight:700;font-size:7px;letter-spacing:.5px;text-transform:uppercase;line-height:1.3;color:'+accent+';',
@@ -372,7 +370,12 @@ function buildBracket(v){
   });
   bsvg.appendChild(svg('circle', { cx:50, cy:50, r:6, fill:'#ffffff' }));
   bsvg.appendChild(svg('ellipse', { cx:35, cy:29, rx:12, ry:7, fill:'rgba(255,255,255,.5)' }));
-  ball.appendChild(bsvg);
+  // Use ball.png if present (drop your own ball photo in), else the stylized SVG.
+  const bimg = document.createElement('img');
+  bimg.src = 'ball.png'; bimg.alt = '';
+  bimg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+  bimg.onerror = () => { bimg.remove(); ball.appendChild(bsvg); };
+  ball.appendChild(bimg);
   art.appendChild(ball);
 
   // empty nodes
@@ -383,13 +386,19 @@ function buildBracket(v){
   // inner cards (match chips)
   v.innerCards.forEach(c=>{
     const box = el('div', c.boxStyle);
-    if (c.hasPhase || c.teams){
+    if (c.hasPhase || c.ta || c.tb){
       const head = el('div', 'white-space:nowrap;line-height:1;margin-top:-1px;');
-      if (c.hasPhase) head.appendChild(el('span', c.phaseStyle, c.phase));
-      if (c.teams){
-        const ts = el('span', c.teamsStyle, c.teams);
-        if (c.hasPhase) ts.style.marginLeft = '4px';
-        head.appendChild(ts);
+      const showTeams = !!(c.ta || c.tb);
+      if (showTeams) head.appendChild(el('span', c.teamStyle, c.ta || '?'));
+      if (c.hasPhase){
+        const ps = el('span', c.phaseStyle, c.phase);
+        if (showTeams) ps.style.margin = '0 4px';
+        head.appendChild(ps);
+      }
+      if (showTeams){
+        const tb = el('span', c.teamStyle, c.tb || '?');
+        if (!c.hasPhase) tb.style.marginLeft = '4px';
+        head.appendChild(tb);
       }
       box.appendChild(head);
     }
