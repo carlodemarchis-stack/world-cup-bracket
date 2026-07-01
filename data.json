@@ -751,7 +751,8 @@
               "m": "67'",
               "a": "Alvarado"
             }
-          ]
+          ],
+          "venue": "Mexico City Stadium"
         },
         {
           "d": "Jun 11",
@@ -784,7 +785,8 @@
               "m": "80'",
               "a": "Hwang"
             }
-          ]
+          ],
+          "venue": "Guadalajara Stadium"
         },
         {
           "d": "Jun 18",
@@ -810,7 +812,8 @@
               "p": "Mokoena",
               "m": "83'"
             }
-          ]
+          ],
+          "venue": "Atlanta Stadium"
         },
         {
           "d": "Jun 18",
@@ -830,7 +833,8 @@
               "p": "Romo",
               "m": "50'"
             }
-          ]
+          ],
+          "venue": "Guadalajara Stadium"
         },
         {
           "d": "Jun 24",
@@ -863,7 +867,8 @@
               "m": "90'+4'",
               "a": "Alvarado"
             }
-          ]
+          ],
+          "venue": "Mexico City Stadium"
         },
         {
           "d": "Jun 24",
@@ -884,7 +889,8 @@
               "m": "63'",
               "a": "Moremi"
             }
-          ]
+          ],
+          "venue": "Monterrey Stadium"
         }
       ]
     },
@@ -957,7 +963,8 @@
               "m": "78'",
               "a": "David"
             }
-          ]
+          ],
+          "venue": "Toronto Stadium"
         },
         {
           "d": "Jun 13",
@@ -982,7 +989,8 @@
               "p": "Muheim (o.g.)",
               "m": "90'+4'"
             }
-          ]
+          ],
+          "venue": "San Francisco Bay Area Stadium"
         },
         {
           "d": "Jun 18",
@@ -1024,7 +1032,8 @@
               "p": "Xhaka",
               "m": "90'+7'"
             }
-          ]
+          ],
+          "venue": "Los Angeles Stadium"
         },
         {
           "d": "Jun 18",
@@ -1070,7 +1079,8 @@
               "m": "90'+2'",
               "a": "Saliba"
             }
-          ]
+          ],
+          "venue": "BC Place Vancouver"
         },
         {
           "d": "Jun 24",
@@ -1103,7 +1113,8 @@
               "m": "76'",
               "a": "Saliba"
             }
-          ]
+          ],
+          "venue": "BC Place Vancouver"
         },
         {
           "d": "Jun 24",
@@ -1141,7 +1152,8 @@
               "m": "80'",
               "a": "Hadzikadunic"
             }
-          ]
+          ],
+          "venue": "Seattle Stadium"
         }
       ]
     },
@@ -1214,7 +1226,8 @@
               "m": "32'",
               "a": "Bruno Guimaraes"
             }
-          ]
+          ],
+          "venue": "New York/New Jersey Stadium"
         },
         {
           "d": "Jun 13",
@@ -1234,7 +1247,8 @@
               "p": "Mcginn",
               "m": "28'"
             }
-          ]
+          ],
+          "venue": "Boston Stadium"
         },
         {
           "d": "Jun 19",
@@ -1255,7 +1269,8 @@
               "m": "2'",
               "a": "Diaz"
             }
-          ]
+          ],
+          "venue": "Boston Stadium"
         },
         {
           "d": "Jun 19",
@@ -1287,7 +1302,8 @@
               "m": "45'+3'",
               "a": "Lucas Paqueta"
             }
-          ]
+          ],
+          "venue": "Philadelphia Stadium"
         },
         {
           "d": "Jun 24",
@@ -1320,7 +1336,8 @@
               "m": "60'",
               "a": "Bruno Guimaraes"
             }
-          ]
+          ],
+          "venue": "Miami Stadium"
         },
         {
           "d": "Jun 24",
@@ -1368,7 +1385,8 @@
               "m": "89'",
               "a": "Rahimi"
             }
-          ]
+          ],
+          "venue": "Atlanta Stadium"
         }
       ]
     },
@@ -1457,7 +1475,8 @@
               "m": "90'+8'",
               "a": "Freeman"
             }
-          ]
+          ],
+          "venue": "Los Angeles Stadium"
         },
         {
           "d": "Jun 13",
@@ -1483,7 +1502,8 @@
               "p": "Metcalfe",
               "m": "75'"
             }
-          ]
+          ],
+          "venue": "BC Place Vancouver"
         },
         {
           "d": "Jun 19",
@@ -1508,7 +1528,8 @@
               "p": "Freeman",
               "m": "43'"
             }
-          ]
+          ],
+          "venue": "Seattle Stadium"
         },
         {
           "d": "Jun 19",
@@ -1529,7 +1550,8 @@
               "m": "2'",
               "a": "Enciso"
             }
-          ]
+          ],
+          "venue": "San Francisco Bay Area Stadium"
         },
         {
           "d": "Jun 25",
@@ -1572,7 +1594,8 @@
               "p": "Ayhan",
               "m": "90'+8'"
             }
-          ]
+          ],
+          "venue": "Los Angeles Stadium"
         },
         {
           "d": "Jun 25",
@@ -1585,7 +1608,8 @@
           "form": {
             "PAR": "5-3-2",
             "AUS": "3-4-3"
-          }
+          },
+          "venue": "San Francisco Bay Area Stadium"
         }
       ]
     },
@@ -1692,7 +1716,8 @@
               "m": "88'",
               "a": "Undav"
             }
-          ]
+          ],
+          "venue": "Houston Stadium"
         },
         {
           "d": "Jun 14",
@@ -1713,7 +1738,8 @@
               "m": "90'",
               "a": "Singo"
             }
-          ]
+          ],
+          "venue": "Philadelphia Stadium"
         },
         {
           "d": "Jun 20",
@@ -1745,7 +1771,8 @@
               "m": "90'+4'",
               "a": "Nmecha"
             }
-          ]
+          ],
+          "venue": "Toronto Stadium"
         },
         {
           "d": "Jun 20",
@@ -1758,7 +1785,8 @@
           "form": {
             "ECU": "3-5-2",
             "CUW": "5-3-2"
-          }
+          },
+          "venue": "Kansas City Stadium"
         },
         {
           "d": "Jun 25",
@@ -1785,7 +1813,8 @@
               "m": "64'",
               "a": "Sangare"
             }
-          ]
+          ],
+          "venue": "Philadelphia Stadium"
         },
         {
           "d": "Jun 25",
@@ -1818,7 +1847,8 @@
               "m": "77'",
               "a": "Rodriguez"
             }
-          ]
+          ],
+          "venue": "New York/New Jersey Stadium"
         }
       ]
     },
@@ -1903,7 +1933,8 @@
               "m": "88'",
               "a": "Ogawa"
             }
-          ]
+          ],
+          "venue": "Dallas Stadium"
         },
         {
           "d": "Jun 14",
@@ -1953,7 +1984,8 @@
               "m": "90'+6'",
               "a": "Bergvall"
             }
-          ]
+          ],
+          "venue": "Monterrey Stadium"
         },
         {
           "d": "Jun 20",
@@ -2004,7 +2036,8 @@
               "m": "89'",
               "a": "Depay"
             }
-          ]
+          ],
+          "venue": "Houston Stadium"
         },
         {
           "d": "Jun 20",
@@ -2041,7 +2074,8 @@
               "m": "83'",
               "a": "Sano"
             }
-          ]
+          ],
+          "venue": "Monterrey Stadium"
         },
         {
           "d": "Jun 25",
@@ -2068,7 +2102,8 @@
               "m": "62'",
               "a": "Gyokeres"
             }
-          ]
+          ],
+          "venue": "Dallas Stadium"
         },
         {
           "d": "Jun 25",
@@ -2106,7 +2141,8 @@
               "m": "62'",
               "a": "Reijnders"
             }
-          ]
+          ],
+          "venue": "Kansas City Stadium"
         }
       ]
     },
@@ -2178,7 +2214,8 @@
               "p": "Mohamed Hany (o.g.)",
               "m": "66'"
             }
-          ]
+          ],
+          "venue": "Seattle Stadium"
         },
         {
           "d": "Jun 15",
@@ -2216,7 +2253,8 @@
               "m": "64'",
               "a": "Rezaeian"
             }
-          ]
+          ],
+          "venue": "Los Angeles Stadium"
         },
         {
           "d": "Jun 21",
@@ -2229,7 +2267,8 @@
           "form": {
             "BEL": "4-2-3-1",
             "IRN": "5-2-3"
-          }
+          },
+          "venue": "Los Angeles Stadium"
         },
         {
           "d": "Jun 21",
@@ -2268,7 +2307,8 @@
               "m": "82'",
               "a": "Mohamed Salah"
             }
-          ]
+          ],
+          "venue": "BC Place Vancouver"
         },
         {
           "d": "Jun 26",
@@ -2294,7 +2334,8 @@
               "p": "Rezaeian",
               "m": "14'"
             }
-          ]
+          ],
+          "venue": "Seattle Stadium"
         },
         {
           "d": "Jun 26",
@@ -2342,7 +2383,8 @@
               "m": "90'+4'",
               "a": "Lukaku"
             }
-          ]
+          ],
+          "venue": "BC Place Vancouver"
         }
       ]
     },
@@ -2401,7 +2443,8 @@
           "form": {
             "ESP": "4-1-2-3",
             "CPV": "4-1-2-3"
-          }
+          },
+          "venue": "Atlanta Stadium"
         },
         {
           "d": "Jun 15",
@@ -2426,7 +2469,8 @@
               "p": "Araujo",
               "m": "80'"
             }
-          ]
+          ],
+          "venue": "Miami Stadium"
         },
         {
           "d": "Jun 21",
@@ -2463,7 +2507,8 @@
               "p": "Hassan Altambakti (o.g.)",
               "m": "49'"
             }
-          ]
+          ],
+          "venue": "Atlanta Stadium"
         },
         {
           "d": "Jun 21",
@@ -2499,7 +2544,8 @@
               "p": "Helio Varela",
               "m": "61'"
             }
-          ]
+          ],
+          "venue": "Miami Stadium"
         },
         {
           "d": "Jun 26",
@@ -2512,7 +2558,8 @@
           "form": {
             "CPV": "4-1-2-3",
             "KSA": "4-4-2"
-          }
+          },
+          "venue": "Houston Stadium"
         },
         {
           "d": "Jun 26",
@@ -2533,7 +2580,8 @@
               "m": "42'",
               "a": "Llorente"
             }
-          ]
+          ],
+          "venue": "Guadalajara Stadium"
         }
       ]
     },
@@ -2617,7 +2665,8 @@
               "p": "Mbappe",
               "m": "90'+6'"
             }
-          ]
+          ],
+          "venue": "New York/New Jersey Stadium"
         },
         {
           "d": "Jun 16",
@@ -2660,7 +2709,8 @@
               "p": "Aymen Hussein (o.g.)",
               "m": "90'+6'"
             }
-          ]
+          ],
+          "venue": "Boston Stadium"
         },
         {
           "d": "Jun 22",
@@ -2693,7 +2743,8 @@
               "m": "66'",
               "a": "Olise"
             }
-          ]
+          ],
+          "venue": "Philadelphia Stadium"
         },
         {
           "d": "Jun 22",
@@ -2737,7 +2788,8 @@
               "m": "90'+3'",
               "a": "Jackson"
             }
-          ]
+          ],
+          "venue": "New York/New Jersey Stadium"
         },
         {
           "d": "Jun 26",
@@ -2781,7 +2833,8 @@
               "m": "90'+4'",
               "a": "Barcola"
             }
-          ]
+          ],
+          "venue": "Boston Stadium"
         },
         {
           "d": "Jun 26",
@@ -2826,7 +2879,8 @@
               "m": "82'",
               "a": "Gueye"
             }
-          ]
+          ],
+          "venue": "Toronto Stadium"
         }
       ]
     },
@@ -2904,7 +2958,8 @@
               "m": "76'",
               "a": "Gonzalez"
             }
-          ]
+          ],
+          "venue": "Kansas City Stadium"
         },
         {
           "d": "Jun 16",
@@ -2941,7 +2996,8 @@
               "p": "Arnautovic",
               "m": "90'+12'"
             }
-          ]
+          ],
+          "venue": "San Francisco Bay Area Stadium"
         },
         {
           "d": "Jun 22",
@@ -2967,7 +3023,8 @@
               "p": "Messi",
               "m": "90'+5'"
             }
-          ]
+          ],
+          "venue": "Dallas Stadium"
         },
         {
           "d": "Jun 22",
@@ -2999,7 +3056,8 @@
               "p": "Gouiri",
               "m": "82'"
             }
-          ]
+          ],
+          "venue": "San Francisco Bay Area Stadium"
         },
         {
           "d": "Jun 27",
@@ -3049,7 +3107,8 @@
               "m": "90'+6'",
               "a": "Gregoritsch"
             }
-          ]
+          ],
+          "venue": "Kansas City Stadium"
         },
         {
           "d": "Jun 27",
@@ -3085,7 +3144,8 @@
               "p": "Messi",
               "m": "80'"
             }
-          ]
+          ],
+          "venue": "Dallas Stadium"
         }
       ]
     },
@@ -3158,7 +3218,8 @@
               "m": "45'+5'",
               "a": "Masuaku"
             }
-          ]
+          ],
+          "venue": "Houston Stadium"
         },
         {
           "d": "Jun 17",
@@ -3196,7 +3257,8 @@
               "m": "90'+9'",
               "a": "Hernandez"
             }
-          ]
+          ],
+          "venue": "Mexico City Stadium"
         },
         {
           "d": "Jun 23",
@@ -3238,7 +3300,8 @@
               "p": "Rafael Leao",
               "m": "87'"
             }
-          ]
+          ],
+          "venue": "Houston Stadium"
         },
         {
           "d": "Jun 23",
@@ -3259,7 +3322,8 @@
               "m": "76'",
               "a": "Quintero"
             }
-          ]
+          ],
+          "venue": "Guadalajara Stadium"
         },
         {
           "d": "Jun 27",
@@ -3272,7 +3336,8 @@
           "form": {
             "COL": "4-1-2-3",
             "POR": "4-2-3-1"
-          }
+          },
+          "venue": "Miami Stadium"
         },
         {
           "d": "Jun 27",
@@ -3309,7 +3374,8 @@
               "m": "90'+1'",
               "a": "Elia"
             }
-          ]
+          ],
+          "venue": "Atlanta Stadium"
         }
       ]
     },
@@ -3405,7 +3471,8 @@
               "m": "85'",
               "a": "Saka"
             }
-          ]
+          ],
+          "venue": "Dallas Stadium"
         },
         {
           "d": "Jun 17",
@@ -3425,7 +3492,8 @@
               "p": "Yirenkyi",
               "m": "90'+5'"
             }
-          ]
+          ],
+          "venue": "Toronto Stadium"
         },
         {
           "d": "Jun 23",
@@ -3438,7 +3506,8 @@
           "form": {
             "ENG": "4-2-3-1",
             "GHA": "4-4-2"
-          }
+          },
+          "venue": "Boston Stadium"
         },
         {
           "d": "Jun 23",
@@ -3459,7 +3528,8 @@
               "m": "54'",
               "a": "Stanisic"
             }
-          ]
+          ],
+          "venue": "Toronto Stadium"
         },
         {
           "d": "Jun 27",
@@ -3486,7 +3556,8 @@
               "m": "67'",
               "a": "Bellingham"
             }
-          ]
+          ],
+          "venue": "New York/New Jersey Stadium"
         },
         {
           "d": "Jun 27",
@@ -3519,7 +3590,8 @@
               "m": "83'",
               "a": "Modric"
             }
-          ]
+          ],
+          "venue": "Philadelphia Stadium"
         }
       ]
     }

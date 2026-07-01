@@ -929,7 +929,7 @@ function resolveMatch(id){
     const winner = sc[0] > sc[1] ? gm.a : (sc[1] > sc[0] ? gm.b : null);
     return { round: 'Group ' + p[1], a: gm.a, b: gm.b, played: true, winner,
       aGoals: sc[0], bGoals: sc[1], goals: gm.goals || [], date: gm.d,
-      ref: gm.ref, att: gm.att, form: gm.form,
+      ref: gm.ref, att: gm.att, form: gm.form, venue: gm.venue,
       highlights: gm.h ? ('https://www.youtube.com/watch?v=' + gm.h + '&list=PLBRLtDhTHh5o') : null };
   }
   if (id === 'final'){
@@ -1072,7 +1072,7 @@ function openScorersModal(){
   // Walk every played match in tournament order, tallying goals and assists —
   // each with its match context (round, opponent, minute, running + final score,
   // and the linked player: the assister for a goal, the scorer for an assist).
-  const gmap = new Map(), amap = new Map();
+  const gmap = new Map(), amap = new Map(), matches = [];
   const stageOf = id => id[0] === 'G' ? 'GRP' : id === 'final' ? 'FINAL' : id === 'third' ? '3RD'
     : ({ '1': 'R32', '2': 'R16', '3': 'QF', '4': 'SF' })[id.split(':')[1]];
   const ids = [];
@@ -1086,6 +1086,7 @@ function openScorersModal(){
     const m = resolveMatch(id);
     if (!m || !m.played) return;
     const stage = stageOf(id);
+    if (m.att) matches.push({ id, stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, venue: m.venue, att: +m.att });
     const cnt = { [m.a]: 0, [m.b]: 0 };   // running score as the goals go in
     (m.goals || []).forEach(g => {
       if (g.t in cnt) cnt[g.t]++;
@@ -1159,20 +1160,44 @@ function openScorersModal(){
     return box;
   };
 
+  // Attendance tab: every played match ranked by crowd, with round, score,
+  // stadium — each row drills into the match modal.
+  const attendanceView = () => {
+    const box = el('div', 'margin-top:6px;');
+    matches.slice().sort((a, b) => b.att - a.att).forEach((mt, idx) => {
+      const wrap = el('div', 'border-bottom:1px solid ' + pal.line + ';padding:7px 0;cursor:pointer;');
+      const top = el('div', 'display:flex;align-items:center;gap:9px;');
+      top.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:" + pal.sub + ';width:16px;flex:none;text-align:right;', String(idx + 1)));
+      top.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:34px;flex:none;', mt.stage));
+      top.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:600;', mt.a + ' ' + mt.ag + '–' + mt.bg + ' ' + mt.b));
+      top.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;flex:none;", Number(mt.att).toLocaleString()));
+      wrap.appendChild(top);
+      if (mt.venue) wrap.appendChild(el('div', 'padding-left:59px;font-size:11px;color:' + pal.sub + ';margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', mt.venue));
+      wrap.addEventListener('click', () => openMatchModal(mt.id));
+      box.appendChild(wrap);
+    });
+    return box;
+  };
+
   const tabBar = el('div', 'display:flex;margin-top:12px;border-bottom:1px solid ' + pal.line + ';');
   const content = el('div', '');
-  const tabCss = on => 'border:none;background:transparent;cursor:pointer;padding:9px 2px 10px;margin-right:20px;' +
+  const tabCss = on => 'border:none;background:transparent;cursor:pointer;padding:9px 2px 10px;margin-right:18px;' +
     "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.7px;text-transform:uppercase;font-size:12px;" +
     'color:' + (on ? accent : pal.sub) + ';border-bottom:2px solid ' + (on ? accent : 'transparent') + ';margin-bottom:-1px;';
   const btns = {};
   const show = key => {
     Object.keys(btns).forEach(k => { btns[k].style.cssText = tabCss(k === key); });
     content.textContent = '';
+    if (key === 'attendance'){
+      if (matches.length) content.appendChild(attendanceView());
+      else content.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
+      return;
+    }
     const items = key === 'goals' ? scorers : assisters;
     if (items.length) content.appendChild(list(items, 15, key));
     else content.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
   };
-  [['goals', 'Goals'], ['assists', 'Assists']].forEach(([k, lbl]) => {
+  [['goals', 'Goals'], ['assists', 'Assists'], ['attendance', 'Attendance']].forEach(([k, lbl]) => {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl;
     b.onclick = () => show(k); btns[k] = b; tabBar.appendChild(b);
   });

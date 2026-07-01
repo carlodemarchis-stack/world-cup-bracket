@@ -82,9 +82,11 @@ def parse_fifa(matches):
         att = m.get("Attendance")
         att = int(att) if att and str(att).isdigit() else None
         form = {c: t for c, t in ((hc, home.get("Tactics")), (ac, away.get("Tactics"))) if t}
+        venue = desc((m.get("Stadium") or {}).get("Name")) or None
         meta = {
             "ids": (str(m.get("IdStage")), str(m.get("IdMatch"))),
             "id2code": id2code, "ref": ref or None, "att": att, "form": form or None,
+            "venue": venue,
         }
         stage = desc(m.get("StageName"))
         if "First Stage" in stage:
@@ -226,7 +228,7 @@ def apply_ko(slot, a, b, ko, changes, label):
 def enrich(slot, res, changes, label):
     """Fill referee, attendance, formations and scorers/assists onto a match
     slot (group or knockout) — only when missing, so curated data is kept."""
-    for key in ("ref", "att", "form"):
+    for key in ("ref", "att", "form", "venue"):
         if res.get(key) and not slot.get(key):
             slot[key] = res[key]
             changes.append(f"{label}: {key}={res[key]}")
