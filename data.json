@@ -73,18 +73,18 @@
     "R:2:3": { "date": "Jul 7",  "time": "22:00", "venue": "BC Place, Vancouver" },
     "R:3:0": { "date": "Jul 11", "time": "23:00", "venue": "Hard Rock Stadium, Miami Gardens" },
     "R:3:1": { "date": "Jul 12", "time": "03:00", "venue": "Arrowhead Stadium, Kansas City" },
-    "R:4:0": { "date": "Jul 15", "venue": "Mercedes-Benz Stadium, Atlanta" },
+    "R:4:0": { "date": "Jul 15", "time": "21:00", "venue": "Mercedes-Benz Stadium, Atlanta" },
     "L:2:0": { "date": "Jul 7",  "time": "02:00", "venue": "Lumen Field, Seattle" },
     "L:2:1": { "date": "Jul 6",  "time": "21:00", "venue": "AT&T Stadium, Arlington" },
     "L:2:2": { "date": "Jul 4",  "time": "19:00", "venue": "NRG Stadium, Houston" },
     "L:2:3": { "date": "Jul 4",  "time": "23:00", "venue": "Lincoln Financial Field, Philadelphia" },
     "L:3:0": { "date": "Jul 10", "time": "21:00", "venue": "SoFi Stadium, Inglewood" },
     "L:3:1": { "date": "Jul 9",  "time": "22:00", "venue": "Gillette Stadium, Foxborough" },
-    "L:4:0": { "date": "Jul 14", "venue": "AT&T Stadium, Arlington" }
+    "L:4:0": { "date": "Jul 14", "time": "21:00", "venue": "AT&T Stadium, Arlington" }
   },
 
-  "final": { "date": "Jul 19", "venue": "MetLife Stadium, East Rutherford" },
-  "thirdPlace": { "date": "Jul 18", "venue": "Hard Rock Stadium, Miami Gardens" },
+  "final": { "date": "Jul 19", "time": "21:00", "venue": "MetLife Stadium, East Rutherford" },
+  "thirdPlace": { "date": "Jul 18", "time": "23:00", "venue": "Hard Rock Stadium, Miami Gardens" },
   "highlightsPlaylist": "https://www.youtube.com/playlist?list=PLBRLtDhTHh5o",
 
   "_groups": "Final group-stage standings (finishing order 1-4) and matches, keyed A-L. Table row: {code,name,iso,w,d,l,gf,ga}; played=w+d+l, pts=3w+d, gd=gf-ga are derived. Match: {d,a,b,s} with score s in a-b order. Qualification (winner/runner-up/best third/eliminated) is derived from position + bracket membership.",

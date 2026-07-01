@@ -339,10 +339,10 @@ function renderVals(P, DATA) {
   const footerStyle = "text-align:center;margin-top:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:"+T.footerColor+';';
   const hintStyle = "display:inline-flex;align-items:center;gap:6px;margin:7px 0 0;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;font-size:10px;color:"+T.footerColor+';';
 
-  if (showResults) innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:DATA.final.date, match:'final' }));
+  if (showResults) innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:DATA.final.date, time:DATA.final.time, match:'final' }));
   // Third-place play-off: a standalone chip above the trophy (the two SF losers;
   // disconnected from the main path to the final).
-  if (showResults && DATA.thirdPlace) innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:DATA.thirdPlace.date, match:'third' }));
+  if (showResults && DATA.thirdPlace) innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:DATA.thirdPlace.date, time:DATA.thirdPlace.time, match:'third' }));
 
   // ---- Group-stage eliminated teams: two outer side arcs, like parentheses.
   // The 16 teams that didn't reach the knockout (not among the bracket's 32).
@@ -836,8 +836,8 @@ function nodeCandidates(side, L, k){
 }
 const ROUND_NAME = { 1: 'Round of 32', 2: 'Round of 16', 3: 'Quarter-final', 4: 'Semi-final' };
 function resolveMatch(id){
-  if (id === 'final') return { round: 'Final', a: winnerOfNode('R', 4, 0), b: winnerOfNode('L', 4, 0), date: (DATA.final || {}).date, venue: (DATA.final || {}).venue, played: false };
-  if (id === 'third') return { round: 'Third-place play-off', a: null, b: null, date: (DATA.thirdPlace || {}).date, venue: (DATA.thirdPlace || {}).venue, played: false };
+  if (id === 'final') return { round: 'Final', a: winnerOfNode('R', 4, 0), b: winnerOfNode('L', 4, 0), date: (DATA.final || {}).date, time: (DATA.final || {}).time, venue: (DATA.final || {}).venue, played: false };
+  if (id === 'third') return { round: 'Third-place play-off', a: null, b: null, date: (DATA.thirdPlace || {}).date, time: (DATA.thirdPlace || {}).time, venue: (DATA.thirdPlace || {}).venue, played: false };
   const parts = id.split(':'), side = parts[0], L = +parts[1], k = +parts[2];
   const round = ROUND_NAME[L], part = matchParticipants(side, L, k);
   if (L === 1){
