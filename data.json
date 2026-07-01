@@ -728,42 +728,155 @@
           "a": "MEX",
           "b": "RSA",
           "s": "2–0",
-          "h": "PmevGCkUtM8"
+          "h": "PmevGCkUtM8",
+          "ref": "Wilton SAMPAIO",
+          "att": 80824,
+          "form": {
+            "MEX": "4-1-2-3",
+            "RSA": "5-3-2"
+          },
+          "goals": [
+            {
+              "t": "MEX",
+              "p": "Quinones",
+              "m": "9'",
+              "a": "Lira"
+            },
+            {
+              "t": "MEX",
+              "p": "Jimenez",
+              "m": "67'",
+              "a": "Alvarado"
+            }
+          ]
         },
         {
           "d": "Jun 11",
           "a": "KOR",
           "b": "CZE",
           "s": "2–1",
-          "h": "6k18EJY8zIc"
+          "h": "6k18EJY8zIc",
+          "ref": "Amin Mohamed Omar",
+          "att": 44985,
+          "form": {
+            "KOR": "3-4-3",
+            "CZE": "5-2-3"
+          },
+          "goals": [
+            {
+              "t": "CZE",
+              "p": "Krejci",
+              "m": "59'",
+              "a": "Coufal"
+            },
+            {
+              "t": "KOR",
+              "p": "Hwang",
+              "m": "67'",
+              "a": "Lee"
+            },
+            {
+              "t": "KOR",
+              "p": "Oh",
+              "m": "80'",
+              "a": "Hwang"
+            }
+          ]
         },
         {
           "d": "Jun 18",
           "a": "CZE",
           "b": "RSA",
           "s": "1–1",
-          "h": "C_2Lx8Wg1kg"
+          "h": "C_2Lx8Wg1kg",
+          "ref": "Tori Penso",
+          "att": 67442,
+          "form": {
+            "CZE": "3-5-2",
+            "RSA": "4-3-3"
+          },
+          "goals": [
+            {
+              "t": "CZE",
+              "p": "Sadilek",
+              "m": "6'",
+              "a": "Sojka"
+            }
+          ]
         },
         {
           "d": "Jun 18",
           "a": "MEX",
           "b": "KOR",
           "s": "1–0",
-          "h": "o_AAtfdVp3Y"
+          "h": "o_AAtfdVp3Y",
+          "ref": "Gustavo Tejera",
+          "att": 45522,
+          "form": {
+            "MEX": "4-1-2-3",
+            "KOR": "3-4-3"
+          },
+          "goals": [
+            {
+              "t": "MEX",
+              "p": "Romo",
+              "m": "50'"
+            }
+          ]
         },
         {
           "d": "Jun 24",
           "a": "CZE",
           "b": "MEX",
           "s": "0–3",
-          "h": "h9wH7diGNC0"
+          "h": "h9wH7diGNC0",
+          "ref": "Yael Falcón Pérez",
+          "att": 80824,
+          "form": {
+            "CZE": "5-2-3",
+            "MEX": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "MEX",
+              "p": "Chavez",
+              "m": "55'",
+              "a": "Romo"
+            },
+            {
+              "t": "MEX",
+              "p": "Quinones",
+              "m": "61'",
+              "a": "Sanchez"
+            },
+            {
+              "t": "MEX",
+              "p": "Fidalgo",
+              "m": "90'+4'",
+              "a": "Alvarado"
+            }
+          ]
         },
         {
           "d": "Jun 24",
           "a": "RSA",
           "b": "KOR",
           "s": "1–0",
-          "h": "cZoaEEYtKhE"
+          "h": "cZoaEEYtKhE",
+          "ref": "Facundo TELLO",
+          "att": 51243,
+          "form": {
+            "RSA": "4-2-3-1",
+            "KOR": "3-4-3"
+          },
+          "goals": [
+            {
+              "t": "RSA",
+              "p": "Maseko",
+              "m": "63'",
+              "a": "Moremi"
+            }
+          ]
         }
       ]
     },
@@ -816,42 +929,201 @@
           "a": "CAN",
           "b": "BIH",
           "s": "1–1",
-          "h": "w-_rY5morQY"
+          "h": "w-_rY5morQY",
+          "ref": "Facundo TELLO",
+          "att": 43002,
+          "form": {
+            "CAN": "4-4-2",
+            "BIH": "4-4-2"
+          },
+          "goals": [
+            {
+              "t": "BIH",
+              "p": "Lukic",
+              "m": "21'",
+              "a": "Kolasinac"
+            },
+            {
+              "t": "CAN",
+              "p": "Larin",
+              "m": "78'",
+              "a": "David"
+            }
+          ]
         },
         {
           "d": "Jun 13",
           "a": "QAT",
           "b": "SUI",
           "s": "1–1",
-          "h": "KVz43-eddIQ"
+          "h": "KVz43-eddIQ",
+          "ref": "Said MARTINEZ",
+          "att": 67966,
+          "form": {
+            "QAT": "4-2-3-1",
+            "SUI": "4-3-3"
+          },
+          "goals": [
+            {
+              "t": "QAT",
+              "p": "Muheim (o.g.)",
+              "m": "90'+4'"
+            }
+          ]
         },
         {
           "d": "Jun 18",
           "a": "SUI",
           "b": "BIH",
           "s": "4–1",
-          "h": "c9wbxaKBu2E"
+          "h": "c9wbxaKBu2E",
+          "ref": "João Pedro Silva Pinheiro",
+          "att": 70026,
+          "form": {
+            "SUI": "4-3-3",
+            "BIH": "4-4-2"
+          },
+          "goals": [
+            {
+              "t": "SUI",
+              "p": "Manzambi",
+              "m": "74'"
+            },
+            {
+              "t": "SUI",
+              "p": "Vargas",
+              "m": "84'",
+              "a": "Embolo"
+            },
+            {
+              "t": "SUI",
+              "p": "Manzambi",
+              "m": "90'",
+              "a": "Vargas"
+            },
+            {
+              "t": "BIH",
+              "p": "Mahmic",
+              "m": "90'+3'"
+            }
+          ]
         },
         {
           "d": "Jun 18",
           "a": "CAN",
           "b": "QAT",
           "s": "6–0",
-          "h": "HTR0DIvBYlg"
+          "h": "HTR0DIvBYlg",
+          "ref": "Cristián Marcelo Garay Reyes",
+          "att": 52497,
+          "form": {
+            "CAN": "4-4-2",
+            "QAT": "4-3-3"
+          },
+          "goals": [
+            {
+              "t": "CAN",
+              "p": "Larin",
+              "m": "16'"
+            },
+            {
+              "t": "CAN",
+              "p": "David",
+              "m": "29'"
+            },
+            {
+              "t": "CAN",
+              "p": "David",
+              "m": "45'+3'"
+            },
+            {
+              "t": "CAN",
+              "p": "Saliba",
+              "m": "64'"
+            },
+            {
+              "t": "CAN",
+              "p": "Mohamed Manai (o.g.)",
+              "m": "75'"
+            },
+            {
+              "t": "CAN",
+              "p": "David",
+              "m": "90'+2'",
+              "a": "Saliba"
+            }
+          ]
         },
         {
           "d": "Jun 24",
           "a": "SUI",
           "b": "CAN",
           "s": "2–1",
-          "h": "C4XX3Crp5Uk"
+          "h": "C4XX3Crp5Uk",
+          "ref": "Ramon ABATTI",
+          "att": 52497,
+          "form": {
+            "SUI": "4-4-2",
+            "CAN": "4-4-2"
+          },
+          "goals": [
+            {
+              "t": "SUI",
+              "p": "Vargas",
+              "m": "46'",
+              "a": "Manzambi"
+            },
+            {
+              "t": "SUI",
+              "p": "Manzambi",
+              "m": "57'",
+              "a": "Embolo"
+            },
+            {
+              "t": "CAN",
+              "p": "David",
+              "m": "76'",
+              "a": "Saliba"
+            }
+          ]
         },
         {
           "d": "Jun 24",
           "a": "BIH",
           "b": "QAT",
           "s": "3–1",
-          "h": "-E4Mtblw9es"
+          "h": "-E4Mtblw9es",
+          "ref": "Jesús Valenzuela Sáez",
+          "att": 66925,
+          "form": {
+            "BIH": "4-4-2",
+            "QAT": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "BIH",
+              "p": "Alajbegovic",
+              "m": "29'",
+              "a": "Basic"
+            },
+            {
+              "t": "BIH",
+              "p": "Mahmoud Abunada (o.g.)",
+              "m": "34'"
+            },
+            {
+              "t": "QAT",
+              "p": "Hassan Alhaydos",
+              "m": "42'",
+              "a": "Edmilson Junior"
+            },
+            {
+              "t": "BIH",
+              "p": "Mahmic",
+              "m": "80'",
+              "a": "Hadzikadunic"
+            }
+          ]
         }
       ]
     },
@@ -904,42 +1176,181 @@
           "a": "BRA",
           "b": "MAR",
           "s": "1–1",
-          "h": "ECnK7UzAjIs"
+          "h": "ECnK7UzAjIs",
+          "ref": "Slavko VINCIC",
+          "att": 80663,
+          "form": {
+            "BRA": "4-4-2",
+            "MAR": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "MAR",
+              "p": "Saibari",
+              "m": "21'",
+              "a": "Diaz"
+            },
+            {
+              "t": "BRA",
+              "p": "Vinicius Junior",
+              "m": "32'",
+              "a": "Bruno Guimaraes"
+            }
+          ]
         },
         {
           "d": "Jun 13",
           "a": "HAI",
           "b": "SCO",
           "s": "0–1",
-          "h": "TcCufmPCsu4"
+          "h": "TcCufmPCsu4",
+          "ref": "Mustapha Ghorbal",
+          "att": 64146,
+          "form": {
+            "HAI": "4-4-2",
+            "SCO": "4-4-2"
+          },
+          "goals": [
+            {
+              "t": "SCO",
+              "p": "Mcginn",
+              "m": "28'"
+            }
+          ]
         },
         {
           "d": "Jun 19",
           "a": "SCO",
           "b": "MAR",
           "s": "0–1",
-          "h": "ACKeXJdm5us"
+          "h": "ACKeXJdm5us",
+          "ref": "Ilgiz Tantashev",
+          "att": 64146,
+          "form": {
+            "SCO": "4-4-2",
+            "MAR": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "MAR",
+              "p": "Saibari",
+              "m": "2'",
+              "a": "Diaz"
+            }
+          ]
         },
         {
           "d": "Jun 19",
           "a": "BRA",
           "b": "HAI",
           "s": "3–0",
-          "h": "lz3_atghfmY"
+          "h": "lz3_atghfmY",
+          "ref": "Alejandro José Hernández Hernández",
+          "att": 68324,
+          "form": {
+            "BRA": "4-3-3",
+            "HAI": "5-4-1"
+          },
+          "goals": [
+            {
+              "t": "BRA",
+              "p": "Matheus Cunha",
+              "m": "23'"
+            },
+            {
+              "t": "BRA",
+              "p": "Matheus Cunha",
+              "m": "36'",
+              "a": "Vinicius Junior"
+            },
+            {
+              "t": "BRA",
+              "p": "Vinicius Junior",
+              "m": "45'+3'",
+              "a": "Lucas Paqueta"
+            }
+          ]
         },
         {
           "d": "Jun 24",
           "a": "SCO",
           "b": "BRA",
           "s": "0–3",
-          "h": "oj5LlMvV0qk"
+          "h": "oj5LlMvV0qk",
+          "ref": "César Arturo Ramos Palazuelos",
+          "att": 64478,
+          "form": {
+            "SCO": "4-2-3-1",
+            "BRA": "4-3-3"
+          },
+          "goals": [
+            {
+              "t": "BRA",
+              "p": "Vinicius Junior",
+              "m": "7'",
+              "a": "Rayan"
+            },
+            {
+              "t": "BRA",
+              "p": "Vinicius Junior",
+              "m": "45'+3'",
+              "a": "Bruno Guimaraes"
+            },
+            {
+              "t": "BRA",
+              "p": "Matheus Cunha",
+              "m": "60'",
+              "a": "Bruno Guimaraes"
+            }
+          ]
         },
         {
           "d": "Jun 24",
           "a": "MAR",
           "b": "HAI",
           "s": "4–2",
-          "h": "ZU2ssk6Bmg8"
+          "h": "ZU2ssk6Bmg8",
+          "ref": "Danny Desmond Makkelie",
+          "att": 68239,
+          "form": {
+            "MAR": "4-2-3-1",
+            "HAI": "4-4-2"
+          },
+          "goals": [
+            {
+              "t": "HAI",
+              "p": "Bounou (o.g.)",
+              "m": "10'"
+            },
+            {
+              "t": "MAR",
+              "p": "Hakimi",
+              "m": "39'"
+            },
+            {
+              "t": "HAI",
+              "p": "Isidor",
+              "m": "43'",
+              "a": "Duverne"
+            },
+            {
+              "t": "MAR",
+              "p": "Saibari",
+              "m": "45'+1'"
+            },
+            {
+              "t": "MAR",
+              "p": "Rahimi",
+              "m": "78'",
+              "a": "Riad"
+            },
+            {
+              "t": "MAR",
+              "p": "Yassine",
+              "m": "89'",
+              "a": "Rahimi"
+            }
+          ]
         }
       ]
     },
@@ -992,42 +1403,171 @@
           "a": "USA",
           "b": "PAR",
           "s": "4–1",
-          "h": "0PVo3bk-TMk"
+          "h": "0PVo3bk-TMk",
+          "ref": "Danny Desmond Makkelie",
+          "att": 70492,
+          "form": {
+            "USA": "4-2-3-1",
+            "PAR": "4-4-2"
+          },
+          "goals": [
+            {
+              "t": "USA",
+              "p": "Bobadilla (o.g.)",
+              "m": "7'"
+            },
+            {
+              "t": "USA",
+              "p": "Balogun",
+              "m": "31'",
+              "a": "Pulisic"
+            },
+            {
+              "t": "USA",
+              "p": "Balogun",
+              "m": "45'+5'"
+            },
+            {
+              "t": "PAR",
+              "p": "Mauricio",
+              "m": "73'",
+              "a": "Enciso"
+            },
+            {
+              "t": "USA",
+              "p": "Reyna",
+              "m": "90'+8'",
+              "a": "Freeman"
+            }
+          ]
         },
         {
           "d": "Jun 13",
           "a": "AUS",
           "b": "TUR",
           "s": "2–0",
-          "h": "5eqzEDe8wHs"
+          "h": "5eqzEDe8wHs",
+          "ref": "Jesús Valenzuela Sáez",
+          "att": 52497,
+          "form": {
+            "AUS": "5-4-1",
+            "TUR": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "AUS",
+              "p": "Irankunda",
+              "m": "27'",
+              "a": "Okon-Engstler"
+            },
+            {
+              "t": "AUS",
+              "p": "Metcalfe",
+              "m": "75'"
+            }
+          ]
         },
         {
           "d": "Jun 19",
           "a": "USA",
           "b": "AUS",
           "s": "2–0",
-          "h": "tXxvgvgMiRg"
+          "h": "tXxvgvgMiRg",
+          "ref": "Felix Zwayer",
+          "att": 66925,
+          "form": {
+            "USA": "3-5-2",
+            "AUS": "5-4-1"
+          },
+          "goals": [
+            {
+              "t": "USA",
+              "p": "Burgess (o.g.)",
+              "m": "11'"
+            },
+            {
+              "t": "USA",
+              "p": "Freeman",
+              "m": "43'"
+            }
+          ]
         },
         {
           "d": "Jun 19",
           "a": "TUR",
           "b": "PAR",
           "s": "0–1",
-          "h": "atWtyemTWQ0"
+          "h": "atWtyemTWQ0",
+          "ref": "Ivan Arcides Barton Cisneros",
+          "att": 68827,
+          "form": {
+            "TUR": "4-2-3-1",
+            "PAR": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "PAR",
+              "p": "Galarza",
+              "m": "2'",
+              "a": "Enciso"
+            }
+          ]
         },
         {
           "d": "Jun 25",
           "a": "TUR",
           "b": "USA",
           "s": "3–2",
-          "h": "XnDs5rgXgFM"
+          "h": "XnDs5rgXgFM",
+          "ref": "Mustapha Ghorbal",
+          "att": 70492,
+          "form": {
+            "TUR": "3-4-3",
+            "USA": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "USA",
+              "p": "Trusty",
+              "m": "3'",
+              "a": "Berhalter"
+            },
+            {
+              "t": "TUR",
+              "p": "Guler",
+              "m": "10'",
+              "a": "Yilmaz"
+            },
+            {
+              "t": "TUR",
+              "p": "Yilmaz",
+              "m": "31'",
+              "a": "Kokcu"
+            },
+            {
+              "t": "USA",
+              "p": "Berhalter",
+              "m": "49'"
+            },
+            {
+              "t": "TUR",
+              "p": "Ayhan",
+              "m": "90'+8'"
+            }
+          ]
         },
         {
           "d": "Jun 25",
           "a": "PAR",
           "b": "AUS",
           "s": "0–0",
-          "h": "wZVzHTl__ck"
+          "h": "wZVzHTl__ck",
+          "ref": "Clément Turpin",
+          "att": 68827,
+          "form": {
+            "PAR": "5-3-2",
+            "AUS": "3-4-3"
+          }
         }
       ]
     },
@@ -1080,42 +1620,182 @@
           "a": "GER",
           "b": "CUW",
           "s": "7–1",
-          "h": "B6-Z5ul2ccQ"
+          "h": "B6-Z5ul2ccQ",
+          "ref": "Jalal Jayed",
+          "att": 68021,
+          "form": {
+            "GER": "3-4-3",
+            "CUW": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "GER",
+              "p": "Nmecha",
+              "m": "6'",
+              "a": "Wirtz"
+            },
+            {
+              "t": "CUW",
+              "p": "Comenencia",
+              "m": "21'"
+            },
+            {
+              "t": "GER",
+              "p": "Schlotterbeck",
+              "m": "38'",
+              "a": "Brown"
+            },
+            {
+              "t": "GER",
+              "p": "Musiala",
+              "m": "47'",
+              "a": "Kimmich"
+            },
+            {
+              "t": "GER",
+              "p": "Brown",
+              "m": "68'",
+              "a": "Undav"
+            },
+            {
+              "t": "GER",
+              "p": "Undav",
+              "m": "78'",
+              "a": "Kimmich"
+            },
+            {
+              "t": "GER",
+              "p": "Havertz",
+              "m": "88'",
+              "a": "Undav"
+            }
+          ]
         },
         {
           "d": "Jun 14",
           "a": "CIV",
           "b": "ECU",
           "s": "1–0",
-          "h": "84xvEwRc0iQ"
+          "h": "84xvEwRc0iQ",
+          "ref": "François Letexier",
+          "att": 68274,
+          "form": {
+            "CIV": "4-4-2",
+            "ECU": "4-4-2"
+          },
+          "goals": [
+            {
+              "t": "CIV",
+              "p": "Diallo",
+              "m": "90'",
+              "a": "Singo"
+            }
+          ]
         },
         {
           "d": "Jun 20",
           "a": "GER",
           "b": "CIV",
           "s": "2–1",
-          "h": "_3PYS5oCgvQ"
+          "h": "_3PYS5oCgvQ",
+          "ref": "Juan Gabriel Benítez",
+          "att": 43036,
+          "form": {
+            "GER": "4-2-3-1",
+            "CIV": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "CIV",
+              "p": "Kessie",
+              "m": "30'"
+            },
+            {
+              "t": "GER",
+              "p": "Undav",
+              "m": "68'",
+              "a": "Amiri"
+            },
+            {
+              "t": "GER",
+              "p": "Undav",
+              "m": "90'+4'",
+              "a": "Nmecha"
+            }
+          ]
         },
         {
           "d": "Jun 20",
           "a": "ECU",
           "b": "CUW",
           "s": "0–0",
-          "h": "nYoSztBShPE"
+          "h": "nYoSztBShPE",
+          "ref": "Ning Ma",
+          "att": 68598,
+          "form": {
+            "ECU": "3-5-2",
+            "CUW": "5-3-2"
+          }
         },
         {
           "d": "Jun 25",
           "a": "CUW",
           "b": "CIV",
           "s": "0–2",
-          "h": "vDLtuaCoIb0"
+          "h": "vDLtuaCoIb0",
+          "ref": "Glenn Nyberg",
+          "att": 68324,
+          "form": {
+            "CUW": "5-4-1",
+            "CIV": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "CIV",
+              "p": "Pepe",
+              "m": "7'",
+              "a": "Diomande"
+            },
+            {
+              "t": "CIV",
+              "p": "Pepe",
+              "m": "64'",
+              "a": "Sangare"
+            }
+          ]
         },
         {
           "d": "Jun 25",
           "a": "ECU",
           "b": "GER",
           "s": "2–1",
-          "h": "TImmPYoLE-8"
+          "h": "TImmPYoLE-8",
+          "ref": "Tori Penso",
+          "att": 80663,
+          "form": {
+            "ECU": "4-4-2",
+            "GER": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "GER",
+              "p": "Sane",
+              "m": "2'",
+              "a": "Wirtz"
+            },
+            {
+              "t": "ECU",
+              "p": "Angulo",
+              "m": "9'",
+              "a": "Vite"
+            },
+            {
+              "t": "ECU",
+              "p": "Plata",
+              "m": "77'",
+              "a": "Rodriguez"
+            }
+          ]
         }
       ]
     },
@@ -1168,41 +1848,242 @@
           "a": "NED",
           "b": "JPN",
           "s": "2–2",
-          "h": "r8SvHZxALQs"
+          "h": "r8SvHZxALQs",
+          "ref": "Ismail Elfath",
+          "att": 69285,
+          "form": {
+            "NED": "4-1-2-3",
+            "JPN": "3-4-3"
+          },
+          "goals": [
+            {
+              "t": "NED",
+              "p": "Van Dijk",
+              "m": "50'",
+              "a": "Gravenberch"
+            },
+            {
+              "t": "JPN",
+              "p": "Nakamura",
+              "m": "57'",
+              "a": "Kubo"
+            },
+            {
+              "t": "NED",
+              "p": "Summerville",
+              "m": "64'",
+              "a": "Gravenberch"
+            },
+            {
+              "t": "JPN",
+              "p": "Kamada",
+              "m": "88'",
+              "a": "Ogawa"
+            }
+          ]
         },
         {
           "d": "Jun 14",
           "a": "SWE",
           "b": "TUN",
           "s": "5–1",
-          "h": "MM5hUuEzH3g"
+          "h": "MM5hUuEzH3g",
+          "ref": "Yael Falcón Pérez",
+          "att": 50987,
+          "form": {
+            "SWE": "3-4-1-2",
+            "TUN": "5-3-2"
+          },
+          "goals": [
+            {
+              "t": "SWE",
+              "p": "Ayari",
+              "m": "7'"
+            },
+            {
+              "t": "SWE",
+              "p": "Isak",
+              "m": "30'",
+              "a": "Gyokeres"
+            },
+            {
+              "t": "TUN",
+              "p": "Rekik",
+              "m": "43'",
+              "a": "Mejbri"
+            },
+            {
+              "t": "SWE",
+              "p": "Gyokeres",
+              "m": "59'",
+              "a": "Isak"
+            },
+            {
+              "t": "SWE",
+              "p": "Svanberg",
+              "m": "84'",
+              "a": "Isak"
+            },
+            {
+              "t": "SWE",
+              "p": "Ayari",
+              "m": "90'+6'",
+              "a": "Bergvall"
+            }
+          ]
         },
         {
           "d": "Jun 20",
           "a": "NED",
           "b": "SWE",
           "s": "5–1",
-          "h": "tm1PRvtp1PM"
+          "h": "tm1PRvtp1PM",
+          "ref": "Michael Oliver",
+          "att": 68777,
+          "form": {
+            "NED": "4-3-3",
+            "SWE": "3-5-2"
+          },
+          "goals": [
+            {
+              "t": "NED",
+              "p": "Brobbey",
+              "m": "5'",
+              "a": "Gakpo"
+            },
+            {
+              "t": "NED",
+              "p": "Brobbey",
+              "m": "17'",
+              "a": "Dumfries"
+            },
+            {
+              "t": "NED",
+              "p": "Gakpo",
+              "m": "47'",
+              "a": "Dumfries"
+            },
+            {
+              "t": "NED",
+              "p": "Gakpo",
+              "m": "54'",
+              "a": "Summerville"
+            },
+            {
+              "t": "SWE",
+              "p": "Elanga",
+              "m": "59'",
+              "a": "Isak"
+            },
+            {
+              "t": "NED",
+              "p": "Summerville",
+              "m": "89'",
+              "a": "Depay"
+            }
+          ]
         },
         {
           "d": "Jun 20",
           "a": "TUN",
           "b": "JPN",
-          "s": "0–4"
+          "s": "0–4",
+          "ref": "Istvan Kovacs",
+          "att": 51243,
+          "form": {
+            "TUN": "5-3-2",
+            "JPN": "3-4-3"
+          },
+          "goals": [
+            {
+              "t": "JPN",
+              "p": "Kamada",
+              "m": "4'",
+              "a": "Nakamura"
+            },
+            {
+              "t": "JPN",
+              "p": "Ueda",
+              "m": "31'"
+            },
+            {
+              "t": "JPN",
+              "p": "Ito",
+              "m": "69'",
+              "a": "Ueda"
+            },
+            {
+              "t": "JPN",
+              "p": "Ueda",
+              "m": "83'",
+              "a": "Sano"
+            }
+          ]
         },
         {
           "d": "Jun 25",
           "a": "JPN",
           "b": "SWE",
           "s": "1–1",
-          "h": "BppGXEZbiy4"
+          "h": "BppGXEZbiy4",
+          "ref": "Ivan Arcides Barton Cisneros",
+          "att": 70137,
+          "form": {
+            "JPN": "3-4-3",
+            "SWE": "3-4-3"
+          },
+          "goals": [
+            {
+              "t": "JPN",
+              "p": "Maeda",
+              "m": "56'",
+              "a": "Doan"
+            },
+            {
+              "t": "SWE",
+              "p": "Elanga",
+              "m": "62'",
+              "a": "Gyokeres"
+            }
+          ]
         },
         {
           "d": "Jun 25",
           "a": "TUN",
           "b": "NED",
           "s": "1–3",
-          "h": "oHYtLWbrwUo"
+          "h": "oHYtLWbrwUo",
+          "ref": "Katia Itzel García",
+          "att": 68391,
+          "form": {
+            "TUN": "5-4-1",
+            "NED": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "NED",
+              "p": "Skhiri (o.g.)",
+              "m": "3'"
+            },
+            {
+              "t": "NED",
+              "p": "Brobbey",
+              "m": "7'",
+              "a": "Van Dijk"
+            },
+            {
+              "t": "TUN",
+              "p": "Mastouri",
+              "m": "54'",
+              "a": "Mejbri"
+            },
+            {
+              "t": "NED",
+              "p": "Van Hecke",
+              "m": "62'",
+              "a": "Reijnders"
+            }
+          ]
         }
       ]
     },
@@ -1255,42 +2136,190 @@
           "a": "BEL",
           "b": "EGY",
           "s": "1–1",
-          "h": "i8sD2Aea9_M"
+          "h": "i8sD2Aea9_M",
+          "ref": "Ramon ABATTI",
+          "att": 66775,
+          "form": {
+            "BEL": "4-2-3-1",
+            "EGY": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "EGY",
+              "p": "Emam Ashour",
+              "m": "19'",
+              "a": "Mohamed Salah"
+            },
+            {
+              "t": "BEL",
+              "p": "Mohamed Hany (o.g.)",
+              "m": "66'"
+            }
+          ]
         },
         {
           "d": "Jun 15",
           "a": "IRN",
           "b": "NZL",
           "s": "2–2",
-          "h": "memCfdob60w"
+          "h": "memCfdob60w",
+          "ref": "César Arturo Ramos Palazuelos",
+          "att": 70108,
+          "form": {
+            "IRN": "4-3-3",
+            "NZL": "4-4-2"
+          },
+          "goals": [
+            {
+              "t": "NZL",
+              "p": "Just",
+              "m": "7'",
+              "a": "Wood"
+            },
+            {
+              "t": "IRN",
+              "p": "Rezaeian",
+              "m": "32'"
+            },
+            {
+              "t": "NZL",
+              "p": "Just",
+              "m": "54'",
+              "a": "Wood"
+            },
+            {
+              "t": "IRN",
+              "p": "Mohebbi",
+              "m": "64'",
+              "a": "Rezaeian"
+            }
+          ]
         },
         {
           "d": "Jun 21",
           "a": "BEL",
           "b": "IRN",
           "s": "0–0",
-          "h": "4zYJyJY57i8"
+          "h": "4zYJyJY57i8",
+          "ref": "Darío Herrera",
+          "att": 70317,
+          "form": {
+            "BEL": "4-2-3-1",
+            "IRN": "5-2-3"
+          }
         },
         {
           "d": "Jun 21",
           "a": "NZL",
           "b": "EGY",
           "s": "1–3",
-          "h": "8OYG-yIFbFI"
+          "h": "8OYG-yIFbFI",
+          "ref": "Omar Mohamed Al Ali",
+          "att": 52497,
+          "form": {
+            "NZL": "4-4-2",
+            "EGY": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "NZL",
+              "p": "Surman",
+              "m": "15'",
+              "a": "Payne"
+            },
+            {
+              "t": "EGY",
+              "p": "Mostafa Zico",
+              "m": "58'",
+              "a": "Mohamed Hany"
+            },
+            {
+              "t": "EGY",
+              "p": "Mohamed Salah",
+              "m": "67'",
+              "a": "Mostafa Zico"
+            },
+            {
+              "t": "EGY",
+              "p": "Trezeguet",
+              "m": "82'",
+              "a": "Mohamed Salah"
+            }
+          ]
         },
         {
           "d": "Jun 26",
           "a": "EGY",
           "b": "IRN",
           "s": "1–1",
-          "h": "EeLUP57yMn4"
+          "h": "EeLUP57yMn4",
+          "ref": "Szymon MARCINIAK",
+          "att": 66925,
+          "form": {
+            "EGY": "4-2-3-1",
+            "IRN": "5-4-1"
+          },
+          "goals": [
+            {
+              "t": "EGY",
+              "p": "Mahmoud Saber",
+              "m": "5'",
+              "a": "Trezeguet"
+            },
+            {
+              "t": "IRN",
+              "p": "Rezaeian",
+              "m": "14'"
+            }
+          ]
         },
         {
           "d": "Jun 26",
           "a": "NZL",
           "b": "BEL",
           "s": "1–5",
-          "h": "zpWO1X2yFjY"
+          "h": "zpWO1X2yFjY",
+          "ref": "Adham Mohammad Tumah Makhadmeh",
+          "att": 52497,
+          "form": {
+            "NZL": "4-2-3-1",
+            "BEL": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "BEL",
+              "p": "Trossard",
+              "m": "28'"
+            },
+            {
+              "t": "BEL",
+              "p": "Trossard",
+              "m": "50'",
+              "a": "Vanaken"
+            },
+            {
+              "t": "BEL",
+              "p": "De Bruyne",
+              "m": "66'"
+            },
+            {
+              "t": "NZL",
+              "p": "Just",
+              "m": "84'"
+            },
+            {
+              "t": "BEL",
+              "p": "Lukaku",
+              "m": "86'",
+              "a": "Raskin"
+            },
+            {
+              "t": "BEL",
+              "p": "Saelemaekers",
+              "m": "90'+4'",
+              "a": "Lukaku"
+            }
+          ]
         }
       ]
     },
@@ -1343,42 +2372,145 @@
           "a": "ESP",
           "b": "CPV",
           "s": "0–0",
-          "h": "W9Z4ER9oX0k"
+          "h": "W9Z4ER9oX0k",
+          "ref": "Adham Mohammad Tumah Makhadmeh",
+          "att": 67640,
+          "form": {
+            "ESP": "4-1-2-3",
+            "CPV": "4-1-2-3"
+          }
         },
         {
           "d": "Jun 15",
           "a": "KSA",
           "b": "URU",
           "s": "1–1",
-          "h": "XrDExPcLCXY"
+          "h": "XrDExPcLCXY",
+          "ref": "Maurizio Mariani",
+          "att": 62764,
+          "form": {
+            "KSA": "4-4-2",
+            "URU": "4-4-2"
+          },
+          "goals": [
+            {
+              "t": "KSA",
+              "p": "Abdulelah Alamri",
+              "m": "41'"
+            },
+            {
+              "t": "URU",
+              "p": "Araujo",
+              "m": "80'"
+            }
+          ]
         },
         {
           "d": "Jun 21",
           "a": "ESP",
           "b": "KSA",
           "s": "4–0",
-          "h": "j0BQN0nJ7mM"
+          "h": "j0BQN0nJ7mM",
+          "ref": "Raphael Claus",
+          "att": 68239,
+          "form": {
+            "ESP": "4-1-2-3",
+            "KSA": "5-4-1"
+          },
+          "goals": [
+            {
+              "t": "ESP",
+              "p": "Yamal",
+              "m": "10'",
+              "a": "Oyarzabal"
+            },
+            {
+              "t": "ESP",
+              "p": "Oyarzabal",
+              "m": "21'",
+              "a": "Laporte"
+            },
+            {
+              "t": "ESP",
+              "p": "Oyarzabal",
+              "m": "24'"
+            },
+            {
+              "t": "ESP",
+              "p": "Hassan Altambakti (o.g.)",
+              "m": "49'"
+            }
+          ]
         },
         {
           "d": "Jun 21",
           "a": "URU",
           "b": "CPV",
           "s": "2–2",
-          "h": "eh20EVuWFFI"
+          "h": "eh20EVuWFFI",
+          "ref": "Espen Eskås",
+          "att": 64003,
+          "form": {
+            "URU": "4-1-2-3",
+            "CPV": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "CPV",
+              "p": "Kevin Pina",
+              "m": "21'"
+            },
+            {
+              "t": "URU",
+              "p": "Araujo",
+              "m": "44'"
+            },
+            {
+              "t": "URU",
+              "p": "Canobbio",
+              "m": "45'+6'",
+              "a": "Araujo"
+            },
+            {
+              "t": "CPV",
+              "p": "Helio Varela",
+              "m": "61'"
+            }
+          ]
         },
         {
           "d": "Jun 26",
           "a": "CPV",
           "b": "KSA",
           "s": "0–0",
-          "h": "JE0dqNUIOg4"
+          "h": "JE0dqNUIOg4",
+          "ref": "François Letexier",
+          "att": 68278,
+          "form": {
+            "CPV": "4-1-2-3",
+            "KSA": "4-4-2"
+          }
         },
         {
           "d": "Jun 26",
           "a": "URU",
           "b": "ESP",
           "s": "0–1",
-          "h": "Petu_ouNzr4"
+          "h": "Petu_ouNzr4",
+          "ref": "Ismail Elfath",
+          "att": 45065,
+          "form": {
+            "URU": "4-1-2-3",
+            "ESP": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "ESP",
+              "p": "Baena",
+              "m": "42'",
+              "a": "Llorente"
+            }
+          ]
         }
       ]
     },
@@ -1431,42 +2563,247 @@
           "a": "FRA",
           "b": "SEN",
           "s": "3–1",
-          "h": "n3JDGlOwMJ4"
+          "h": "n3JDGlOwMJ4",
+          "ref": "Alireza FAGHANI",
+          "att": 80545,
+          "form": {
+            "FRA": "4-2-3-1",
+            "SEN": "4-3-3"
+          },
+          "goals": [
+            {
+              "t": "FRA",
+              "p": "Mbappe",
+              "m": "66'",
+              "a": "Olise"
+            },
+            {
+              "t": "FRA",
+              "p": "Barcola",
+              "m": "82'",
+              "a": "Rabiot"
+            },
+            {
+              "t": "SEN",
+              "p": "Mbaye",
+              "m": "90'+5'",
+              "a": "Ndiaye"
+            },
+            {
+              "t": "FRA",
+              "p": "Mbappe",
+              "m": "90'+6'"
+            }
+          ]
         },
         {
           "d": "Jun 16",
           "a": "IRQ",
           "b": "NOR",
           "s": "1–4",
-          "h": "UzSswKnmpgk"
+          "h": "UzSswKnmpgk",
+          "ref": "Pierre Ghislain Atcho",
+          "att": 63106,
+          "form": {
+            "IRQ": "4-4-2",
+            "NOR": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "NOR",
+              "p": "Haaland",
+              "m": "29'",
+              "a": "Moller Wolfe"
+            },
+            {
+              "t": "IRQ",
+              "p": "Aymen Hussein",
+              "m": "39'",
+              "a": "Amir Alammari"
+            },
+            {
+              "t": "NOR",
+              "p": "Haaland",
+              "m": "43'"
+            },
+            {
+              "t": "NOR",
+              "p": "Ostigard",
+              "m": "76'",
+              "a": "Odegaard"
+            },
+            {
+              "t": "NOR",
+              "p": "Aymen Hussein (o.g.)",
+              "m": "90'+6'"
+            }
+          ]
         },
         {
           "d": "Jun 22",
           "a": "FRA",
           "b": "IRQ",
           "s": "3–0",
-          "h": "XejscwNpvLU"
+          "h": "XejscwNpvLU",
+          "ref": "Drew Fischer",
+          "att": 68324,
+          "form": {
+            "FRA": "4-2-3-1",
+            "IRQ": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "FRA",
+              "p": "Mbappe",
+              "m": "14'",
+              "a": "Olise"
+            },
+            {
+              "t": "FRA",
+              "p": "Mbappe",
+              "m": "54'",
+              "a": "Dembele"
+            },
+            {
+              "t": "FRA",
+              "p": "Dembele",
+              "m": "66'",
+              "a": "Olise"
+            }
+          ]
         },
         {
           "d": "Jun 22",
           "a": "NOR",
           "b": "SEN",
           "s": "3–2",
-          "h": "nlghqbCqbe0"
+          "h": "nlghqbCqbe0",
+          "ref": "Wilton SAMPAIO",
+          "att": 80663,
+          "form": {
+            "NOR": "4-1-2-3",
+            "SEN": "4-3-3"
+          },
+          "goals": [
+            {
+              "t": "NOR",
+              "p": "Holmgren Pedersen",
+              "m": "43'"
+            },
+            {
+              "t": "NOR",
+              "p": "Haaland",
+              "m": "48'",
+              "a": "Odegaard"
+            },
+            {
+              "t": "SEN",
+              "p": "Sarr",
+              "m": "53'",
+              "a": "Mane"
+            },
+            {
+              "t": "NOR",
+              "p": "Haaland",
+              "m": "58'",
+              "a": "Berg"
+            },
+            {
+              "t": "SEN",
+              "p": "Sarr",
+              "m": "90'+3'",
+              "a": "Jackson"
+            }
+          ]
         },
         {
           "d": "Jun 26",
           "a": "NOR",
           "b": "FRA",
           "s": "1–4",
-          "h": "ABdniNBWtRs"
+          "h": "ABdniNBWtRs",
+          "ref": "Michael Oliver",
+          "att": 64146,
+          "form": {
+            "NOR": "4-1-2-3",
+            "FRA": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "FRA",
+              "p": "Dembele",
+              "m": "7'"
+            },
+            {
+              "t": "FRA",
+              "p": "Dembele",
+              "m": "20'",
+              "a": "Mbappe"
+            },
+            {
+              "t": "NOR",
+              "p": "Aasgaard",
+              "m": "21'",
+              "a": "Schjelderup"
+            },
+            {
+              "t": "FRA",
+              "p": "Dembele",
+              "m": "32'",
+              "a": "Tchouameni"
+            },
+            {
+              "t": "FRA",
+              "p": "Doue",
+              "m": "90'+4'",
+              "a": "Barcola"
+            }
+          ]
         },
         {
           "d": "Jun 26",
           "a": "SEN",
           "b": "IRQ",
           "s": "5–0",
-          "h": "6N2BzwoMrCw"
+          "h": "6N2BzwoMrCw",
+          "ref": "Anthony Taylor",
+          "att": 43036,
+          "form": {
+            "SEN": "4-1-2-3",
+            "IRQ": "4-4-2"
+          },
+          "goals": [
+            {
+              "t": "SEN",
+              "p": "Diarra",
+              "m": "4'",
+              "a": "Seck"
+            },
+            {
+              "t": "SEN",
+              "p": "Sarr",
+              "m": "56'",
+              "a": "Camara"
+            },
+            {
+              "t": "SEN",
+              "p": "Gueye",
+              "m": "59'",
+              "a": "Sarr"
+            },
+            {
+              "t": "SEN",
+              "p": "Gueye",
+              "m": "71'",
+              "a": "Ndiaye"
+            },
+            {
+              "t": "SEN",
+              "p": "Ndiaye",
+              "m": "82'",
+              "a": "Gueye"
+            }
+          ]
         }
       ]
     },
@@ -1519,42 +2856,203 @@
           "a": "ARG",
           "b": "ALG",
           "s": "3–0",
-          "h": "JH_WRKTCPK4"
+          "h": "JH_WRKTCPK4",
+          "ref": "Szymon MARCINIAK",
+          "att": 69045,
+          "form": {
+            "ARG": "4-3-3",
+            "ALG": "4-3-3"
+          },
+          "goals": [
+            {
+              "t": "ARG",
+              "p": "Messi",
+              "m": "17'",
+              "a": "De Paul"
+            },
+            {
+              "t": "ARG",
+              "p": "Messi",
+              "m": "60'"
+            },
+            {
+              "t": "ARG",
+              "p": "Messi",
+              "m": "76'",
+              "a": "Gonzalez"
+            }
+          ]
         },
         {
           "d": "Jun 16",
           "a": "AUT",
           "b": "JOR",
           "s": "3–1",
-          "h": "pU-mPZcuENY"
+          "h": "pU-mPZcuENY",
+          "ref": "Dahane BEIDA",
+          "att": 68527,
+          "form": {
+            "AUT": "4-2-3-1",
+            "JOR": "3-4-3"
+          },
+          "goals": [
+            {
+              "t": "AUT",
+              "p": "Schmid",
+              "m": "20'",
+              "a": "Schlager"
+            },
+            {
+              "t": "JOR",
+              "p": "Ali Olwan",
+              "m": "50'",
+              "a": "Noor Alrawabdeh"
+            },
+            {
+              "t": "AUT",
+              "p": "Yazan Alarab (o.g.)",
+              "m": "76'"
+            }
+          ]
         },
         {
           "d": "Jun 22",
           "a": "ARG",
           "b": "AUT",
           "s": "2–0",
-          "h": "M4Ccsmk3gcE"
+          "h": "M4Ccsmk3gcE",
+          "ref": "Amin Mohamed Omar",
+          "att": 70649,
+          "form": {
+            "ARG": "4-1-3-2",
+            "AUT": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "ARG",
+              "p": "Messi",
+              "m": "38'",
+              "a": "Medina"
+            },
+            {
+              "t": "ARG",
+              "p": "Messi",
+              "m": "90'+5'"
+            }
+          ]
         },
         {
           "d": "Jun 22",
           "a": "JOR",
           "b": "ALG",
           "s": "1–2",
-          "h": "Ydxmm_-PUo0"
+          "h": "Ydxmm_-PUo0",
+          "ref": "Slavko VINCIC",
+          "att": 68371,
+          "form": {
+            "JOR": "3-4-3",
+            "ALG": "4-2-1-3"
+          },
+          "goals": [
+            {
+              "t": "JOR",
+              "p": "Nizar Alrashdan",
+              "m": "36'",
+              "a": "Mousa Altamari"
+            },
+            {
+              "t": "ALG",
+              "p": "Benbouali",
+              "m": "69'",
+              "a": "Mahrez"
+            },
+            {
+              "t": "ALG",
+              "p": "Gouiri",
+              "m": "82'"
+            }
+          ]
         },
         {
           "d": "Jun 27",
           "a": "ALG",
           "b": "AUT",
           "s": "3–3",
-          "h": "5Mvh0mqY8ik"
+          "h": "5Mvh0mqY8ik",
+          "ref": "Ilgiz Tantashev",
+          "att": 69045,
+          "form": {
+            "ALG": "4-2-3-1",
+            "AUT": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "AUT",
+              "p": "Arnautovic",
+              "m": "28'",
+              "a": "Alaba"
+            },
+            {
+              "t": "ALG",
+              "p": "Belghali",
+              "m": "45'"
+            },
+            {
+              "t": "AUT",
+              "p": "Sabitzer",
+              "m": "55'",
+              "a": "Laimer"
+            },
+            {
+              "t": "ALG",
+              "p": "Mahrez",
+              "m": "60'",
+              "a": "Aouar"
+            },
+            {
+              "t": "ALG",
+              "p": "Mahrez",
+              "m": "90'+3'",
+              "a": "Aouar"
+            },
+            {
+              "t": "AUT",
+              "p": "Kalajdzic",
+              "m": "90'+6'",
+              "a": "Gregoritsch"
+            }
+          ]
         },
         {
           "d": "Jun 27",
           "a": "JOR",
           "b": "ARG",
           "s": "1–3",
-          "h": "M6mpXtMm93M"
+          "h": "M6mpXtMm93M",
+          "ref": "Istvan Kovacs",
+          "att": 70649,
+          "form": {
+            "JOR": "3-4-3",
+            "ARG": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "ARG",
+              "p": "Lo Celso",
+              "m": "19'"
+            },
+            {
+              "t": "JOR",
+              "p": "Mousa Altamari",
+              "m": "55'",
+              "a": "Ehsan Haddad"
+            },
+            {
+              "t": "ARG",
+              "p": "Messi",
+              "m": "80'"
+            }
+          ]
         }
       ]
     },
@@ -1607,42 +3105,173 @@
           "a": "POR",
           "b": "COD",
           "s": "1–1",
-          "h": "fJrctBM0poE"
+          "h": "fJrctBM0poE",
+          "ref": "Abdulrahman AL JASSIM",
+          "att": 68777,
+          "form": {
+            "POR": "4-2-3-1",
+            "COD": "5-3-2"
+          },
+          "goals": [
+            {
+              "t": "POR",
+              "p": "Joao Neves",
+              "m": "6'",
+              "a": "Pedro Neto"
+            },
+            {
+              "t": "COD",
+              "p": "Wissa",
+              "m": "45'+5'",
+              "a": "Masuaku"
+            }
+          ]
         },
         {
           "d": "Jun 17",
           "a": "UZB",
           "b": "COL",
           "s": "1–3",
-          "h": "cjsFUxVHAX0"
+          "h": "cjsFUxVHAX0",
+          "ref": "Anthony Taylor",
+          "att": 80824,
+          "form": {
+            "UZB": "3-4-3",
+            "COL": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "COL",
+              "p": "Munoz",
+              "m": "40'",
+              "a": "Diaz"
+            },
+            {
+              "t": "UZB",
+              "p": "Fayzullaev",
+              "m": "60'"
+            },
+            {
+              "t": "COL",
+              "p": "Diaz",
+              "m": "65'",
+              "a": "Puerta"
+            },
+            {
+              "t": "COL",
+              "p": "Campaz",
+              "m": "90'+9'",
+              "a": "Hernandez"
+            }
+          ]
         },
         {
           "d": "Jun 23",
           "a": "POR",
           "b": "UZB",
           "s": "5–0",
-          "h": "kwbH2dm1AXo"
+          "h": "kwbH2dm1AXo",
+          "ref": "Jalal Jayed",
+          "att": 68777,
+          "form": {
+            "POR": "4-2-3-1",
+            "UZB": "3-4-3"
+          },
+          "goals": [
+            {
+              "t": "POR",
+              "p": "Cristiano Ronaldo",
+              "m": "6'",
+              "a": "Joao Cancelo"
+            },
+            {
+              "t": "POR",
+              "p": "Nuno Mendes",
+              "m": "17'"
+            },
+            {
+              "t": "POR",
+              "p": "Cristiano Ronaldo",
+              "m": "39'",
+              "a": "Bruno Fernandes"
+            },
+            {
+              "t": "POR",
+              "p": "Nematov (o.g.)",
+              "m": "60'"
+            },
+            {
+              "t": "POR",
+              "p": "Rafael Leao",
+              "m": "87'"
+            }
+          ]
         },
         {
           "d": "Jun 23",
           "a": "COL",
           "b": "COD",
           "s": "1–0",
-          "h": "JTGXHmxlXHc"
+          "h": "JTGXHmxlXHc",
+          "ref": "Maurizio Mariani",
+          "att": 45358,
+          "form": {
+            "COL": "4-1-2-3",
+            "COD": "5-3-2"
+          },
+          "goals": [
+            {
+              "t": "COL",
+              "p": "Munoz",
+              "m": "76'",
+              "a": "Quintero"
+            }
+          ]
         },
         {
           "d": "Jun 27",
           "a": "COL",
           "b": "POR",
           "s": "0–0",
-          "h": "QhI0dUq1FKY"
+          "h": "QhI0dUq1FKY",
+          "ref": "Alireza FAGHANI",
+          "att": 64478,
+          "form": {
+            "COL": "4-1-2-3",
+            "POR": "4-2-3-1"
+          }
         },
         {
           "d": "Jun 27",
           "a": "COD",
           "b": "UZB",
           "s": "3–1",
-          "h": "_effg5dZWZc"
+          "h": "_effg5dZWZc",
+          "ref": "Felix Zwayer",
+          "att": 68239,
+          "form": {
+            "COD": "4-4-2",
+            "UZB": "3-4-3"
+          },
+          "goals": [
+            {
+              "t": "UZB",
+              "p": "Shomurodov",
+              "m": "10'",
+              "a": "Mozgovoy"
+            },
+            {
+              "t": "COD",
+              "p": "Mayele",
+              "m": "78'"
+            },
+            {
+              "t": "COD",
+              "p": "Wissa",
+              "m": "90'+1'",
+              "a": "Elia"
+            }
+          ]
         }
       ]
     },
@@ -1695,42 +3324,159 @@
           "a": "ENG",
           "b": "CRO",
           "s": "4–2",
-          "h": "ynqGWHJPkuQ"
+          "h": "ynqGWHJPkuQ",
+          "ref": "Clément Turpin",
+          "att": 70389,
+          "form": {
+            "ENG": "4-2-3-1",
+            "CRO": "3-4-3"
+          },
+          "goals": [
+            {
+              "t": "CRO",
+              "p": "Baturina",
+              "m": "36'",
+              "a": "Sucic"
+            },
+            {
+              "t": "ENG",
+              "p": "Kane",
+              "m": "42'",
+              "a": "Rice"
+            },
+            {
+              "t": "CRO",
+              "p": "Musa",
+              "m": "45'+5'",
+              "a": "Perisic"
+            },
+            {
+              "t": "ENG",
+              "p": "Bellingham",
+              "m": "47'",
+              "a": "Anderson"
+            },
+            {
+              "t": "ENG",
+              "p": "Rashford",
+              "m": "85'",
+              "a": "Saka"
+            }
+          ]
         },
         {
           "d": "Jun 17",
           "a": "GHA",
           "b": "PAN",
           "s": "1–0",
-          "h": "gy8h5JJ2b_E"
+          "h": "gy8h5JJ2b_E",
+          "ref": "Glenn Nyberg",
+          "att": 42942,
+          "form": {
+            "GHA": "4-1-2-3",
+            "PAN": "3-4-3"
+          },
+          "goals": [
+            {
+              "t": "GHA",
+              "p": "Yirenkyi",
+              "m": "90'+5'"
+            }
+          ]
         },
         {
           "d": "Jun 23",
           "a": "ENG",
           "b": "GHA",
           "s": "0–0",
-          "h": "Qe-fptt6wXs"
+          "h": "Qe-fptt6wXs",
+          "ref": "Said MARTINEZ",
+          "att": 63983,
+          "form": {
+            "ENG": "4-2-3-1",
+            "GHA": "4-4-2"
+          }
         },
         {
           "d": "Jun 23",
           "a": "PAN",
           "b": "CRO",
           "s": "0–1",
-          "h": "Y5PJGL-8qyM"
+          "h": "Y5PJGL-8qyM",
+          "ref": "Pierre Ghislain Atcho",
+          "att": 43036,
+          "form": {
+            "PAN": "3-4-3",
+            "CRO": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "CRO",
+              "p": "Budimir",
+              "m": "54'",
+              "a": "Stanisic"
+            }
+          ]
         },
         {
           "d": "Jun 27",
           "a": "PAN",
           "b": "ENG",
           "s": "0–2",
-          "h": "FHcXnueraKc"
+          "h": "FHcXnueraKc",
+          "ref": "Abdulrahman AL JASSIM",
+          "att": 80663,
+          "form": {
+            "PAN": "3-4-3",
+            "ENG": "4-2-3-1"
+          },
+          "goals": [
+            {
+              "t": "ENG",
+              "p": "Bellingham",
+              "m": "62'",
+              "a": "Saka"
+            },
+            {
+              "t": "ENG",
+              "p": "Kane",
+              "m": "67'",
+              "a": "Bellingham"
+            }
+          ]
         },
         {
           "d": "Jun 27",
           "a": "CRO",
           "b": "GHA",
           "s": "2–1",
-          "h": "D1wfxmJhA04"
+          "h": "D1wfxmJhA04",
+          "ref": "Drew Fischer",
+          "att": 68324,
+          "form": {
+            "CRO": "4-2-3-1",
+            "GHA": "4-1-2-3"
+          },
+          "goals": [
+            {
+              "t": "CRO",
+              "p": "Sucic",
+              "m": "31'",
+              "a": "Kovacic"
+            },
+            {
+              "t": "GHA",
+              "p": "Luckassen",
+              "m": "73'",
+              "a": "Nuamah"
+            },
+            {
+              "t": "CRO",
+              "p": "Vlasic",
+              "m": "83'",
+              "a": "Modric"
+            }
+          ]
         }
       ]
     }

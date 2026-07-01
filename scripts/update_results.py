@@ -75,36 +75,36 @@ def parse_fifa(matches):
         hs, as_ = m.get("HomeTeamScore"), m.get("AwayTeamScore")
         if hs is None or as_ is None:
             continue  # not played yet
+        # Metadata available for every match (group or knockout) from the feed.
+        id2code = {str(home.get("IdTeam")): hc, str(away.get("IdTeam")): ac}
+        ref = next((desc(o.get("Name")) for o in (m.get("Officials") or [])
+                    if o.get("OfficialType") == 1), None)
+        att = m.get("Attendance")
+        att = int(att) if att and str(att).isdigit() else None
+        form = {c: t for c, t in ((hc, home.get("Tactics")), (ac, away.get("Tactics"))) if t}
+        meta = {
+            "ids": (str(m.get("IdStage")), str(m.get("IdMatch"))),
+            "id2code": id2code, "ref": ref or None, "att": att, "form": form or None,
+        }
         stage = desc(m.get("StageName"))
         if "First Stage" in stage:
             letter = desc(m.get("GroupName")).replace("Group", "").strip()
             group.setdefault(letter, []).append(
-                {"a": hc, "b": ac, "ha": int(hs), "hb": int(as_)})
+                dict(a=hc, b=ac, ha=int(hs), hb=int(as_), **meta))
         else:
             # Knockout: only accept a settled result (winner assigned).
-            win_id = str(m.get("Winner") or "")
-            id2code = {str(home.get("IdTeam")): hc, str(away.get("IdTeam")): ac}
-            wcode = id2code.get(win_id)
+            wcode = id2code.get(str(m.get("Winner") or ""))
             if not wcode:
                 continue
             hp, ap = m.get("HomeTeamPenaltyScore"), m.get("AwayTeamPenaltyScore")
             pens = hp is not None and ap is not None
-            ref = next((desc(o.get("Name")) for o in (m.get("Officials") or [])
-                        if o.get("OfficialType") == 1), None)
-            att = m.get("Attendance")
-            att = int(att) if att and str(att).isdigit() else None
-            form = {c: t for c, t in ((hc, home.get("Tactics")), (ac, away.get("Tactics"))) if t}
-            ko[frozenset((hc, ac))] = {
-                "scores": {hc: int(hs), ac: int(as_)},
-                "pens": {hc: int(hp), ac: int(ap)} if pens else None,
-                "winner": wcode,
-                "et": m.get("ResultType") in (2, 3) or pens,
-                "ids": (str(m.get("IdStage")), str(m.get("IdMatch"))),
-                "id2code": id2code,
-                "ref": ref or None,
-                "att": att,
-                "form": form or None,
-            }
+            ko[frozenset((hc, ac))] = dict(
+                scores={hc: int(hs), ac: int(as_)},
+                pens={hc: int(hp), ac: int(ap)} if pens else None,
+                winner=wcode,
+                et=m.get("ResultType") in (2, 3) or pens,
+                **meta,
+            )
     return group, ko
 
 
@@ -216,30 +216,35 @@ def apply_ko(slot, a, b, ko, changes, label):
         if k not in new and k in slot:
             changes.append(f"{label}: drop {k}")
             del slot[k]
-    # Referee, attendance and formations from the feed — fill only when missing.
+    enrich(slot, res, changes, label)
+
+
+def enrich(slot, res, changes, label):
+    """Fill referee, attendance, formations and scorers/assists onto a match
+    slot (group or knockout) — only when missing, so curated data is kept."""
     for key in ("ref", "att", "form"):
         if res.get(key) and not slot.get(key):
             slot[key] = res[key]
             changes.append(f"{label}: {key}={res[key]}")
-    # Scorers: fill in only when missing, so hand-curated goals are never lost.
-    if res.get("ids"):
-        if not slot.get("goals"):
-            g = fetch_goals(res["ids"], res["id2code"])
-            if g:
-                slot["goals"] = g
-                changes.append(f"{label}: +{len(g)} scorer(s)")
-        elif REFRESH_GOALS and any("a" not in g for g in slot["goals"]):
-            # Backfill assists onto existing goals (keeps curated scorer names).
-            fresh = fetch_goals(res["ids"], res["id2code"])
-            pool = {}
-            for fg in fresh:
-                if fg.get("a"):
-                    pool.setdefault((fg["m"], fg["t"]), []).append(fg["a"])
-            for g in slot["goals"]:
-                lst = pool.get((g.get("m"), g.get("t")))
-                if "a" not in g and lst:
-                    g["a"] = lst.pop(0)
-                    changes.append(f"{label}: assist {g['p']} <- {g['a']}")
+    if not res.get("ids"):
+        return
+    if not slot.get("goals"):
+        g = fetch_goals(res["ids"], res["id2code"])
+        if g:
+            slot["goals"] = g
+            changes.append(f"{label}: +{len(g)} scorer(s)")
+    elif REFRESH_GOALS and any("a" not in g for g in slot["goals"]):
+        # Backfill assists onto existing goals (keeps curated scorer names).
+        fresh = fetch_goals(res["ids"], res["id2code"])
+        pool = {}
+        for fg in fresh:
+            if fg.get("a"):
+                pool.setdefault((fg["m"], fg["t"]), []).append(fg["a"])
+        for g in slot["goals"]:
+            lst = pool.get((g.get("m"), g.get("t")))
+            if "a" not in g and lst:
+                g["a"] = lst.pop(0)
+                changes.append(f"{label}: assist {g['p']} <- {g['a']}")
 
 
 def winner_of(slot_dict, key):
@@ -274,6 +279,7 @@ def main():
             if mt.get("s") != s:
                 changes.append(f"group {letter} {mt['a']}-{mt['b']}: {mt.get('s')!r} -> {s!r}")
                 mt["s"] = s
+            enrich(mt, r, changes, f"group {letter} {mt['a']}-{mt['b']}")
         _recompute_table(letter, g, changes)
 
     # ---- Knockout: derive participants bottom-up, apply results ----------

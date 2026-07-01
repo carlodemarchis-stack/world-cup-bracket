@@ -698,13 +698,13 @@ function statusOf(code){
 // A team's full match list: 3 group games, then its knockout games (result or upcoming).
 function teamMatches(code){
   const g = GRP_OF[code];
-  const rows = DATA.groups[g].matches
-    .filter(m => m.a === code || m.b === code)
-    .map(m => {
-      const p = m.s.split('–').map(Number), isA = m.a === code;
-      const tg = isA ? p[0] : p[1], og = isA ? p[1] : p[0];
-      return { stage: 'GRP', date: m.d, opp: isA ? m.b : m.a, tg, og, result: tg > og ? 'W' : (tg < og ? 'L' : 'D'), upcoming: false, hl: m.h ? ('https://www.youtube.com/watch?v=' + m.h + '&list=PLBRLtDhTHh5o') : null };
-    });
+  const rows = [];
+  (DATA.groups[g].matches || []).forEach((m, mi) => {
+    if (m.a !== code && m.b !== code) return;
+    const p = m.s.split('–').map(Number), isA = m.a === code;
+    const tg = isA ? p[0] : p[1], og = isA ? p[1] : p[0];
+    rows.push({ stage: 'GRP', date: m.d, opp: isA ? m.b : m.a, tg, og, result: tg > og ? 'W' : (tg < og ? 'L' : 'D'), upcoming: false, hl: m.h ? ('https://www.youtube.com/watch?v=' + m.h + '&list=PLBRLtDhTHh5o') : null, mid: 'G:' + g + ':' + mi });
+  });
   const idx = (DATA.teams || []).findIndex(t => t.code === code);
   if (idx >= 0){
     const side = idx < 16 ? 'R' : 'L', i = idx % 16;
@@ -720,10 +720,10 @@ function teamMatches(code){
       const part = matchParticipants(side, L, kL), opp = part[0] === code ? part[1] : part[0];
       if (slot.score){
         const p = slot.score.split('–').map(Number), win = slot.winner === code;
-        rows.push({ stage: SHORT[L], date: slot.date, opp, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', sub: subOf(slot, win), upcoming: false, hl: slot.highlights || null });
+        rows.push({ stage: SHORT[L], date: slot.date, opp, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', sub: subOf(slot, win), upcoming: false, hl: slot.highlights || null, mid: side + ':' + L + ':' + kL });
         reached = slot.winner === code;
       } else {
-        rows.push({ stage: SHORT[L], opp: opp || null, date: slot.date, time: slot.time, upcoming: true });
+        rows.push({ stage: SHORT[L], opp: opp || null, date: slot.date, time: slot.time, upcoming: true, mid: side + ':' + L + ':' + kL });
         reached = false;
       }
     }
@@ -731,9 +731,9 @@ function teamMatches(code){
       const f = DATA.final || {}, other = winnerOfNode(side === 'R' ? 'L' : 'R', 4, 0);
       if (f.score){
         const p = f.score.split('–').map(Number), win = f.winner === code;
-        rows.push({ stage: 'F', date: f.date, opp: other, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', sub: subOf(f, win), upcoming: false, hl: f.highlights || null });
+        rows.push({ stage: 'F', date: f.date, opp: other, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', sub: subOf(f, win), upcoming: false, hl: f.highlights || null, mid: 'final' });
       } else {
-        rows.push({ stage: 'F', opp: other || null, date: f.date, time: f.time, upcoming: true });
+        rows.push({ stage: 'F', opp: other || null, date: f.date, time: f.time, upcoming: true, mid: 'final' });
       }
     }
   }
@@ -829,7 +829,12 @@ function buildMatchList(code, pal, accent){
   teamMatches(code).forEach(r => {
     const opp = TEAMDIR[r.opp] || { name: r.opp || 'TBD', iso: '' };
     const k = (r.upcoming && r.date && r.time) ? fmtKickoff(r.date, r.time) : null;
-    const row = el('div', 'display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid ' + pal.line + ';border-radius:8px;');
+    const row = el('div', 'display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid ' + pal.line + ';border-radius:8px;' + (r.mid ? 'cursor:pointer;transition:background .12s;' : ''));
+    if (r.mid){
+      row.addEventListener('click', () => openMatchModal(r.mid));
+      row.addEventListener('mouseenter', () => { row.style.background = pal.line; });
+      row.addEventListener('mouseleave', () => { row.style.background = ''; });
+    }
     row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:10px;color:" + pal.sub + ';width:38px;flex:none;', k ? k.date : (r.date || '')));
     row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.5px;color:" + accent + ';width:26px;flex:none;', r.stage));
     const oppEl = el('div', 'display:flex;align-items:center;gap:7px;flex:1;min-width:0;');
@@ -864,6 +869,7 @@ function buildMatchList(code, pal, accent){
       yt.title = 'Watch highlights'; yt.setAttribute('aria-label', 'Watch highlights');
       yt.style.cssText = 'flex:none;display:inline-flex;align-items:center;justify-content:center;width:24px;height:17px;border-radius:4px;background:#ff0000;';
       yt.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="#fff" style="display:block;"><path d="M8 5v14l11-7z"/></svg>';
+      yt.addEventListener('click', e => e.stopPropagation());   // open YouTube, not the match modal
       hlCol.appendChild(yt);
     }
     row.appendChild(hlCol);
@@ -912,6 +918,16 @@ function sfLoser(side){
   return w ? (part[0] === w ? part[1] : part[0]) : null;
 }
 function resolveMatch(id){
+  if (id[0] === 'G'){   // group match: G:<letter>:<index> — score stored a-b order
+    const p = id.split(':'), gm = ((DATA.groups[p[1]] || {}).matches || [])[+p[2]];
+    if (!gm || !gm.s) return null;
+    const sc = gm.s.split('–').map(Number);
+    const winner = sc[0] > sc[1] ? gm.a : (sc[1] > sc[0] ? gm.b : null);
+    return { round: 'Group ' + p[1], a: gm.a, b: gm.b, played: true, winner,
+      aGoals: sc[0], bGoals: sc[1], goals: gm.goals || [], date: gm.d,
+      ref: gm.ref, att: gm.att, form: gm.form,
+      highlights: gm.h ? ('https://www.youtube.com/watch?v=' + gm.h + '&list=PLBRLtDhTHh5o') : null };
+  }
   if (id === 'final'){
     const f = DATA.final || {}, a = winnerOfNode('R', 4, 0), b = winnerOfNode('L', 4, 0);
     if (f.score) return playedFrom('Final', a, b, f);
