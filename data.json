@@ -41,8 +41,8 @@
   "_r32": "The 16 Round-of-32 matches, keyed 'side:1:k' (side R/L, k=0..7). The two teams are teams[off+2k] vs teams[off+2k+1] (off=0 for R, 16 for L). Scheduled match: {date, time}. Played match: {score, winner, et?, pens?} — 'winner' is a team code and drives who advances/who's eliminated.",
   "r32": {
     "R:1:0": { "score": "2–1", "winner": "BRA" },
-    "R:1:1": { "date": "Jun 30", "time": "19:00" },
-    "R:1:2": { "date": "Jul 1",  "time": "03:00" },
+    "R:1:1": { "score": "2–1", "winner": "NOR" },
+    "R:1:2": { "score": "2–0", "winner": "MEX" },
     "R:1:3": { "date": "Jul 1",  "time": "18:00" },
     "R:1:4": { "date": "Jul 4",  "time": "00:00" },
     "R:1:5": { "date": "Jul 3",  "time": "20:00" },
@@ -54,7 +54,7 @@
     "L:1:3": { "date": "Jul 3",  "time": "01:00" },
     "L:1:4": { "score": "1–1", "et": true, "pens": true, "winner": "MAR" },
     "L:1:5": { "score": "1–0", "winner": "CAN" },
-    "L:1:6": { "date": "Jun 30", "time": "23:00" },
+    "L:1:6": { "score": "3–0", "winner": "FRA" },
     "L:1:7": { "score": "1–1", "et": true, "pens": true, "winner": "PAR" }
   },
 
