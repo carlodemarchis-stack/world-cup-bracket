@@ -1036,7 +1036,7 @@ function openMatchModal(id){
   if (m.played && (m.pens || m.et)){
     const win = TEAMDIR[m.winner] ? TEAMDIR[m.winner].name : m.winner;
     const note = m.pens ? (win + ' won ' + (m.penScore || '') + ' on penalties (a.e.t.)') : 'After extra time';
-    panel.appendChild(el('div', 'margin-top:10px;font-size:12px;color:' + pal.sub + ';', note));
+    panel.appendChild(el('div', 'margin-top:10px;font-size:12px;font-weight:700;color:' + pal.text + ';', note));
   }
   if (!m.played && !m.candA && (!m.a || !m.b))
     panel.appendChild(el('div', 'margin-top:10px;font-size:12px;color:' + pal.sub + ';', 'Awaiting the results of the previous round.'));
