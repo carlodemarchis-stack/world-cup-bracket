@@ -165,11 +165,13 @@ function renderVals(P, DATA) {
   }
   function makeTeam(t, p, sz, glow, elim){
     const base = 'position:absolute;left:'+(p.x/12)+'%;top:'+(p.y/12)+'%;width:'+sz+'px;height:'+sz+'px;'+
-      'transform:translate(-50%,-50%);border-radius:50%;z-index:3;';
+      'box-sizing:border-box;transform:translate(-50%,-50%);border-radius:50%;z-index:3;';
     const shadow = glow ? ('0 0 16px '+accent+'cc, 0 2px 6px rgba(0,0,0,.5)') : '0 2px 6px rgba(0,0,0,.4)';
+    // crest border carries status: green = advancing/in-game, red = eliminated, white = yet to play
+    const bord = '3px solid '+(glow ? accent : (elim ? elimColor : 'rgba(255,255,255,.92)'));
     const boxStyle = flagMode
-      ? base+'overflow:hidden;background:'+T.innerBg+';border:'+(glow?('2px solid '+accent):'1.5px solid rgba(255,255,255,.2)')+';box-shadow:'+shadow+';'+(elim?'opacity:.78;':'')
-      : base+'background:'+conic(t.colors)+';box-shadow:'+shadow+';'+(elim?'opacity:.82;':'');
+      ? base+'overflow:hidden;background:'+T.innerBg+';border:'+bord+';box-shadow:'+shadow+';'+(elim?'opacity:.78;':'')
+      : base+'background:'+conic(t.colors)+';border:'+bord+';box-shadow:'+shadow+';'+(elim?'opacity:.82;':'');
     const codeCol = glow ? accent : (elim ? elimColor : null);
     return {
       code: t.code, name: t.name,
@@ -238,13 +240,6 @@ function renderVals(P, DATA) {
         ? common+'right:0;transform-origin:100% 0;transform:translateY(-50%) rotate('+(p.a+180)+'deg);text-align:right;'
         : common+'left:0;transform-origin:0 0;transform:translateY(-50%) rotate('+p.a+'deg);text-align:left;';
       labels.push({ name:t.name, outer, inner });
-      // status dot just outside the flag: green = through, red = eliminated, white = not played
-      const stColor = win ? '#37b56a' : (elim ? elimColor : '#ffffff');
-      const sr = Rr[0] + 48;
-      const sx = C + sr*Math.cos(la), sy = C + sr*Math.sin(la);
-      statusDots.push({ style:'position:absolute;left:'+(sx/12)+'%;top:'+(sy/12)+'%;width:9px;height:9px;'+
-        'transform:translate(-50%,-50%);border-radius:50%;background:'+stColor+';border:1px solid rgba(0,0,0,.3);'+
-        'box-shadow:0 0 5px '+stColor+'66;z-index:4;' });
     }
     for (let L=1;L<=4;L++){
       const cnt = 16/Math.pow(2,L);
