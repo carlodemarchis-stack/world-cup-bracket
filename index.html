@@ -504,7 +504,14 @@ function buildBracket(v){
   link.textContent = 'A guy with a scarf';
   link.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:2px;';
   credit.appendChild(link);
-  credit.appendChild(document.createTextNode(' (Carlo De Marchis) from the original design by Emilio Sansolini'));
+  credit.appendChild(document.createTextNode(' (Carlo De Marchis) from the original design by Emilio Sansolini '));
+  const emilio = document.createElement('a');
+  emilio.href = 'https://x.com/EmilioSansolini/status/2072091332483453026';
+  emilio.target = '_blank';
+  emilio.rel = 'noopener noreferrer';
+  emilio.textContent = '(here)';
+  emilio.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:2px;';
+  credit.appendChild(emilio);
   footer.appendChild(credit);
   const gear = document.createElement('button');
   gear.id = 'settings-toggle';
