@@ -397,6 +397,10 @@ function buildBracket(v){
   footer.style.justifyContent = 'center';
   footer.style.flexWrap = 'wrap';
   footer.style.gap = '10px';
+  // The square bracket box reserves ~9.8% of its width as empty space below the
+  // circle; pull the footer up into it for a consistent ~26px gap at any width
+  // (min(94vw,820px) mirrors the stage width, so it caps with the bracket).
+  footer.style.marginTop = 'calc(26px - 0.098 * min(94vw, 820px))';
   footer.style.textTransform = 'none';   // credit reads better in normal case
   footer.style.letterSpacing = 'normal';
   const credit = el('span');
