@@ -288,6 +288,9 @@ function renderVals(P, DATA) {
   const footerStyle = "text-align:center;margin-top:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:"+T.footerColor+';';
 
   if (showResults) innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:DATA.final.date }));
+  // Third-place play-off: a standalone chip above the trophy (the two SF losers;
+  // disconnected from the main path to the final).
+  if (showResults && DATA.thirdPlace) innerCards.push(makeInnerCard(C, C - 80, { phase:'Third Place', date:DATA.thirdPlace.date }));
 
   return { teamNodes, emptyNodes, links, labels: showNames?labels:[], innerCards, statusDots, title, kicker, rootStyle, kickerStyle, titleStyle, footerStyle, flagMode, ringMode: !flagMode };
 }
