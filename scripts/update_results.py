@@ -268,6 +268,57 @@ def winner_of(slot_dict, key):
     return (slot_dict.get(key) or {}).get("winner")
 
 
+def assign_ko_venues(data, matches, changes):
+    """Set every knockout slot's stadium from FIFA, mapped by bracket topology so
+    even not-yet-played matches get the right (FIFA) venue: R32 by team pair,
+    deeper rounds by matching the winner placeholders (e.g. W73/W75)."""
+    def stadium(m):
+        return desc((m.get("Stadium") or {}).get("Name")) or None
+    by_pair, by_ph = {}, {}
+    for m in matches:
+        h, a = m.get("Home") or {}, m.get("Away") or {}
+        if h.get("Abbreviation") and a.get("Abbreviation"):
+            by_pair[frozenset((h["Abbreviation"], a["Abbreviation"]))] = m
+        pa, pb = m.get("PlaceHolderA"), m.get("PlaceHolderB")
+        if pa and pb:
+            by_ph[frozenset((pa, pb))] = m
+
+    teams = [t["code"] for t in data["teams"]]
+    num, r32, sched = {}, data["r32"], data["schedule"]
+
+    def setv(slot, m, label):
+        v = stadium(m)
+        if v and slot.get("venue") != v:
+            slot["venue"] = v
+            changes.append(f"{label}: venue={v}")
+
+    def place(key, slot, m):
+        if m:
+            num[key] = str(m.get("MatchNumber"))
+            setv(slot, m, key)
+
+    for side, off in (("R", 0), ("L", 16)):
+        for k in range(8):
+            key = f"{side}:1:{k}"
+            place(key, r32[key], by_pair.get(frozenset((teams[off + 2 * k], teams[off + 2 * k + 1]))))
+    # deeper rounds: a match is found by the two feeding winners' placeholders
+    def feeder(side, level, k):
+        a, b = num.get(f"{side}:{level - 1}:{2 * k}"), num.get(f"{side}:{level - 1}:{2 * k + 1}")
+        return by_ph.get(frozenset(("W" + a, "W" + b))) if a and b else None
+    for side in ("R", "L"):
+        for k in range(4):
+            key = f"{side}:2:{k}"; place(key, sched[key], feeder(side, 2, k))
+        for k in range(2):
+            key = f"{side}:3:{k}"; place(key, sched[key], feeder(side, 3, k))
+        place(f"{side}:4:0", sched[f"{side}:4:0"], feeder(side, 4, 0))
+    ra, la = num.get("R:4:0"), num.get("L:4:0")
+    if ra and la:
+        setv(data["final"], by_ph.get(frozenset(("W" + ra, "W" + la))), "final")
+    third = next((m for m in matches if "third" in desc(m.get("StageName")).lower()), None)
+    if third:
+        setv(data["thirdPlace"], third, "third")
+
+
 def main():
     dry = "--dry-run" in sys.argv
     data = json.load(open(DATA_PATH, encoding="utf-8"))
@@ -328,6 +379,9 @@ def main():
     third_a = _loser(sched, "R:4:0")
     third_b = _loser(sched, "L:4:0")
     apply_ko(data["thirdPlace"], third_a, third_b, ko, changes, "third")
+
+    # Stadiums for every knockout slot (incl. not-yet-played), by bracket topology.
+    assign_ko_venues(data, matches, changes)
 
     after = json.dumps(data, ensure_ascii=False, sort_keys=True)
     if after == before:

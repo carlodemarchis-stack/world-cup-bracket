@@ -445,42 +445,42 @@
     "R:1:4": {
       "date": "Jul 4",
       "time": "00:00",
-      "venue": "Hard Rock Stadium, Miami Gardens"
+      "venue": "Miami Stadium"
     },
     "R:1:5": {
       "date": "Jul 3",
       "time": "20:00",
-      "venue": "AT&T Stadium, Arlington"
+      "venue": "Dallas Stadium"
     },
     "R:1:6": {
       "date": "Jul 3",
       "time": "05:00",
-      "venue": "BC Place, Vancouver"
+      "venue": "BC Place Vancouver"
     },
     "R:1:7": {
       "date": "Jul 4",
       "time": "03:30",
-      "venue": "Arrowhead Stadium, Kansas City"
+      "venue": "Kansas City Stadium"
     },
     "L:1:0": {
       "date": "Jul 1",
       "time": "22:00",
-      "venue": "Lumen Field, Seattle"
+      "venue": "Seattle Stadium"
     },
     "L:1:1": {
       "date": "Jul 2",
       "time": "02:00",
-      "venue": "Levi's Stadium, Santa Clara"
+      "venue": "San Francisco Bay Area Stadium"
     },
     "L:1:2": {
       "date": "Jul 2",
       "time": "21:00",
-      "venue": "SoFi Stadium, Inglewood"
+      "venue": "Los Angeles Stadium"
     },
     "L:1:3": {
       "date": "Jul 3",
       "time": "01:00",
-      "venue": "BMO Field, Toronto"
+      "venue": "Toronto Stadium"
     },
     "L:1:4": {
       "score": "1–1",
@@ -601,83 +601,83 @@
     "R:2:0": {
       "date": "Jul 5",
       "time": "22:00",
-      "venue": "MetLife Stadium, East Rutherford"
+      "venue": "New York/New Jersey Stadium"
     },
     "R:2:1": {
       "date": "Jul 6",
       "time": "02:00",
-      "venue": "Estadio Azteca, Mexico City"
+      "venue": "Mexico City Stadium"
     },
     "R:2:2": {
       "date": "Jul 7",
       "time": "18:00",
-      "venue": "Mercedes-Benz Stadium, Atlanta"
+      "venue": "Atlanta Stadium"
     },
     "R:2:3": {
       "date": "Jul 7",
       "time": "22:00",
-      "venue": "BC Place, Vancouver"
+      "venue": "BC Place Vancouver"
     },
     "R:3:0": {
       "date": "Jul 11",
       "time": "23:00",
-      "venue": "Hard Rock Stadium, Miami Gardens"
+      "venue": "Miami Stadium"
     },
     "R:3:1": {
       "date": "Jul 12",
       "time": "03:00",
-      "venue": "Arrowhead Stadium, Kansas City"
+      "venue": "Kansas City Stadium"
     },
     "R:4:0": {
       "date": "Jul 15",
       "time": "21:00",
-      "venue": "Mercedes-Benz Stadium, Atlanta"
+      "venue": "Atlanta Stadium"
     },
     "L:2:0": {
       "date": "Jul 7",
       "time": "02:00",
-      "venue": "Lumen Field, Seattle"
+      "venue": "Seattle Stadium"
     },
     "L:2:1": {
       "date": "Jul 6",
       "time": "21:00",
-      "venue": "AT&T Stadium, Arlington"
+      "venue": "Dallas Stadium"
     },
     "L:2:2": {
       "date": "Jul 4",
       "time": "19:00",
-      "venue": "NRG Stadium, Houston"
+      "venue": "Houston Stadium"
     },
     "L:2:3": {
       "date": "Jul 4",
       "time": "23:00",
-      "venue": "Lincoln Financial Field, Philadelphia"
+      "venue": "Philadelphia Stadium"
     },
     "L:3:0": {
       "date": "Jul 10",
       "time": "21:00",
-      "venue": "SoFi Stadium, Inglewood"
+      "venue": "Los Angeles Stadium"
     },
     "L:3:1": {
       "date": "Jul 9",
       "time": "22:00",
-      "venue": "Gillette Stadium, Foxborough"
+      "venue": "Boston Stadium"
     },
     "L:4:0": {
       "date": "Jul 14",
       "time": "21:00",
-      "venue": "AT&T Stadium, Arlington"
+      "venue": "Dallas Stadium"
     }
   },
   "final": {
     "date": "Jul 19",
     "time": "21:00",
-    "venue": "MetLife Stadium, East Rutherford"
+    "venue": "New York/New Jersey Stadium"
   },
   "thirdPlace": {
     "date": "Jul 18",
     "time": "23:00",
-    "venue": "Hard Rock Stadium, Miami Gardens"
+    "venue": "Miami Stadium"
   },
   "highlightsPlaylist": "https://www.youtube.com/playlist?list=PLBRLtDhTHh5o",
   "_groups": "Final group-stage standings (finishing order 1-4) and matches, keyed A-L. Table row: {code,name,iso,w,d,l,gf,ga}; played=w+d+l, pts=3w+d, gd=gf-ga are derived. Match: {d,a,b,s} with score s in a-b order. Qualification (winner/runner-up/best third/eliminated) is derived from position + bracket membership.",
