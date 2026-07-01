@@ -36,8 +36,15 @@
     cursor: pointer; opacity: .85; transition: opacity .15s, background .15s;
   }
   #settings-toggle:hover, #settings-toggle.on { opacity: 1; background: rgba(128,128,128,.16); }
-  /* Clickable team crests open the group/matches modal */
-  #bracket-art [data-team], #bracket-art [data-match] { cursor: pointer; }
+  /* Clickable team crests / match chips — pointer + subtle hover lift (desktop) */
+  #bracket-art [data-team], #bracket-art [data-match] { cursor: pointer; transition: transform .12s ease, filter .12s ease; }
+  @media (hover: hover) {
+    #bracket-art [data-team]:hover, #bracket-art [data-match]:hover {
+      transform: translate(-50%, -50%) scale(1.09) !important;
+      filter: brightness(1.07);
+      z-index: 20 !important;
+    }
+  }
   #team-modal table td, #team-modal table th { font-variant-numeric: tabular-nums; }
   #controls .grp { margin-bottom: 12px; }
   #controls .grp:last-child { margin-bottom: 0; }
@@ -292,6 +299,7 @@ function renderVals(P, DATA) {
   const kickerStyle = "font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:4px;text-transform:uppercase;font-size:12px;color:"+T.kickerColor+';';
   const titleStyle = 'font-family:Barlow,sans-serif;font-weight:700;font-size:clamp(26px,4.4vw,42px);margin:4px 0 0;line-height:1.05;color:'+T.titleColor+';';
   const footerStyle = "text-align:center;margin-top:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:"+T.footerColor+';';
+  const hintStyle = "display:inline-flex;align-items:center;gap:6px;margin:7px 0 0;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;font-size:10px;color:"+T.footerColor+';';
 
   if (showResults) innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:DATA.final.date, match:'final' }));
   // Third-place play-off: a standalone chip above the trophy (the two SF losers;
@@ -320,7 +328,7 @@ function renderVals(P, DATA) {
   elim.slice(0, 8).forEach((t, i) => arc(t, 180 + THe - (2*THe)*i/7));    // left "(" arc, groups A–F, top→bottom
   elim.slice(8, 16).forEach((t, i) => arc(t, -THe + (2*THe)*i/7));        // right ")" arc, groups G–L, top→bottom
 
-  return { teamNodes, emptyNodes, links, labels: showNames?labels:[], innerCards, statusDots, title, kicker, rootStyle, kickerStyle, titleStyle, footerStyle, flagMode, ringMode: !flagMode };
+  return { teamNodes, emptyNodes, links, labels: showNames?labels:[], innerCards, statusDots, title, kicker, rootStyle, kickerStyle, titleStyle, footerStyle, hintStyle, flagMode, ringMode: !flagMode };
 }
 
 // ---------------------------------------------------------------------------
@@ -346,6 +354,12 @@ function buildBracket(v){
   head.appendChild(el('div', v.kickerStyle, v.kicker));
   const h1 = el('h1', v.titleStyle, v.title);
   head.appendChild(h1);
+  const hintWrap = el('div', 'text-align:center;');
+  const hint = document.createElement('span');
+  hint.style.cssText = v.hintStyle;
+  hint.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="flex:none;"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>Tap any team or match for details';
+  hintWrap.appendChild(hint);
+  head.appendChild(hintWrap);
   root.appendChild(head);
 
   const stage = el('div', 'position:relative;width:min(94vw,820px);aspect-ratio:1/1;margin:0 auto;');
