@@ -684,7 +684,7 @@ function resolveMatch(id){
       const g = mm.score.split('–'), aWon = mm.winner === part[0];
       return { round, a: part[0], b: part[1], played: true, winner: mm.winner,
         aGoals: aWon ? g[0] : g[1], bGoals: aWon ? g[1] : g[0], goals: mm.goals || [],
-        et: mm.et, pens: mm.pens, penScore: mm.penScore, date: mm.date, venue: mm.venue };
+        et: mm.et, pens: mm.pens, penScore: mm.penScore, date: mm.date, venue: mm.venue, highlights: mm.highlights };
     }
     return { round, a: part[0], b: part[1], played: false, date: mm.date, time: mm.time, venue: mm.venue };
   }
@@ -752,7 +752,7 @@ function openMatchModal(id){
     a.target = '_blank'; a.rel = 'noopener noreferrer';
     a.style.cssText = 'display:inline-flex;align-items:center;gap:8px;margin-top:15px;padding:9px 13px;border-radius:9px;text-decoration:none;font-weight:600;font-size:13px;background:#ff0000;color:#fff;';
     a.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="#fff" style="flex:none;"><path d="M10 15l5.19-3L10 9v6zm11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>Watch highlights (FIFA)';
-    a.appendChild(el('span', 'font-weight:400;opacity:.85;font-size:11px;', '· playlist'));
+    if (!m.highlights) a.appendChild(el('span', 'font-weight:400;opacity:.85;font-size:11px;', '· playlist'));
     panel.appendChild(a);
   }
 
