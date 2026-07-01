@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Road to the Final — World Cup 2026 Knockout Bracket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; }
+  @keyframes wcpulse { 0% { transform: translate(-50%,-50%) scale(1); opacity: .6 } 100% { transform: translate(-50%,-50%) scale(2.5); opacity: 0 } }
+
+  /* Live controls panel — reproduces the design's own editor props */
+  #controls {
+    position: fixed; top: 14px; left: 14px; z-index: 50;
+    width: 232px; max-height: calc(100vh - 28px); overflow: auto;
+    font-family: 'Barlow', system-ui, sans-serif; font-size: 12px; color: #1c1813;
+    background: rgba(255,255,255,.86); backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,0,0,.12); border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.16); padding: 12px 14px 14px;
+  }
+  #controls.dark { color: #f4efe2; background: rgba(20,19,14,.82); border-color: rgba(255,255,255,.14); }
+  #controls h2 { margin: 0 0 10px; font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; opacity: .8; }
+  #controls .grp { margin-bottom: 12px; }
+  #controls .grp:last-child { margin-bottom: 0; }
+  #controls label.f { display: block; font-weight: 600; margin-bottom: 4px; letter-spacing: .3px; }
+  #controls input[type=text], #controls select {
+    width: 100%; box-sizing: border-box; font: inherit; padding: 5px 7px;
+    border: 1px solid rgba(0,0,0,.18); border-radius: 6px; background: rgba(255,255,255,.7); color: inherit;
+  }
+  #controls.dark input[type=text], #controls.dark select { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.2); }
+  #controls input[type=range] { width: 100%; }
+  #controls .seg { display: flex; gap: 6px; }
+  #controls .seg button {
+    flex: 1; font: inherit; font-weight: 600; padding: 5px 0; cursor: pointer;
+    border: 1px solid rgba(0,0,0,.18); border-radius: 6px; background: transparent; color: inherit;
+  }
+  #controls .seg button.on { color: #fff; border-color: transparent; }
+  #controls .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #controls .swatches { display: flex; gap: 6px; margin-top: 6px; }
+  #controls .swatches button { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; }
+  #controls .swatches button.on { border-color: currentColor; }
+  #controls .val { opacity: .65; font-variant-numeric: tabular-nums; }
+  #controls .chk { display: flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; }
+  #controls .chk input { width: 15px; height: 15px; }
+</style>
+</head>
+<body>
+<div id="controls"></div>
+<div id="app"></div>
+
+<script>
+"use strict";
+
+// ---------------------------------------------------------------------------
+// Render logic — ported verbatim from World Cup Bracket.dc.html renderVals().
+// Produces arrays of {style,...} descriptors; the DOM builder below mirrors the
+// original <x-dc> template exactly.
+// ---------------------------------------------------------------------------
+function renderVals(P, DATA) {
+  P = P || {};
+  const accent = P.accentColor || '#d6b04a';
+  const showNames = P.showNames === true;
+  const title = P.title || 'Road to the Final';
+  const kicker = P.kicker || 'World Cup 2026 · Knockout Bracket';
+  const light = (P.bgTheme || 'Dark') === 'Light';
+  const flagMode = (P.nodeStyle || 'Flag') === 'Flag';
+  const showResults = P.showResults !== false;
+  const gC = (P.sectionGap == null) ? 12 : P.sectionGap;   // equal gaps between the 4 sections (N/E/S/W)
+  const gQ = (P.quarterGap == null) ? 6 : P.quarterGap;    // gap splitting each 8-section into 4 + 4
+
+  const elimColor = '#e0463f';
+  const T = light ? {
+    rootBg:'radial-gradient(circle at 50% 44%, #fbf7ee 0%, #f1ece1 58%, #e9e3d6 100%)',
+    titleColor:'#1c1813', kickerColor:'rgba(166,124,28,1)', footerColor:'rgba(70,62,48,.55)',
+    labelColor:'rgba(48,42,32,.66)', linkColor:'rgba(58,50,34,0.38)',
+    emptyBg:'rgba(40,34,20,.12)', emptyBorder:'rgba(150,112,30,.6)', emptyText:'rgba(60,52,38,.7)',
+    chipBg:'rgba(255,253,247,.96)', chipBorder:'rgba(150,112,30,.45)', chipDate:'rgba(70,62,48,.75)', chipScore:'#1c1813',
+    innerBg:'#fbf8f1', codeColor:'#1c1813'
+  } : {
+    rootBg:'radial-gradient(circle at 50% 44%, #1a1810 0%, #0c0c0e 58%, #08080a 100%)',
+    titleColor:'#f4efe2', kickerColor:'rgba(214,176,74,.9)', footerColor:'rgba(214,200,170,.42)',
+    labelColor:'rgba(228,222,206,.62)', linkColor:'rgba(216,202,170,0.3)',
+    emptyBg:'rgba(78,74,64,.75)', emptyBorder:'rgba(216,188,128,.45)', emptyText:'rgba(232,226,210,.62)',
+    chipBg:'rgba(18,17,14,.92)', chipBorder:'rgba(216,188,128,.4)', chipDate:'rgba(228,222,206,.6)', chipScore:'#f4efe2',
+    innerBg:'#16150f', codeColor:'#efe9da'
+  };
+
+  const C = 600;
+  const Rr = [440, 345, 250, 165, 85];
+  const DEG = Math.PI / 180;
+
+  const TEAMS = DATA.teams;
+
+  // Round-of-32 matches come straight from the live feed (data.json), keyed
+  // side:level:k (level 1 = an R32 match). Scheduled matches carry {date,time};
+  // played matches carry {score, winner, et?, pens?}.
+  const MATCHES = DATA.r32;
+  // Derive who advanced / who's eliminated from each played match's winner, so
+  // the feed only records a score + winner per result.
+  const decidedR16 = {}, decidedLeafWin = {}, eliminatedLeaf = {};
+  ['R','L'].forEach(side => {
+    const off = side === 'R' ? 0 : 16;
+    for (let k = 0; k < 8; k++) {
+      const m = MATCHES[side+':1:'+k];
+      if (!m || !m.winner) continue;
+      const top = 2*k, bot = 2*k + 1;
+      const winLeaf = (m.winner === TEAMS[off+top].code) ? top : bot;
+      const loseLeaf = (winLeaf === top) ? bot : top;
+      decidedR16[side+':'+k] = m.winner;
+      decidedLeafWin[side+':'+winLeaf] = true;
+      eliminatedLeaf[side+':'+loseLeaf] = true;
+    }
+  });
+  const bridge = accent + '7a';
+
+  // Balanced layout: four 8-team sections evenly around the circle with equal
+  // gaps gC at N/E/S/W; each section split 4+4 by a smaller gap gQ; teams even
+  // within each 4-group. Inner-round angles fall out as means of their children.
+  const GAP = { 3: gQ, 2: 0, 1: 0 };
+  function layout(a0, a1, depth){
+    if (depth === 0) return [(a0 + a1) / 2];
+    const g = GAP[depth] || 0;
+    const each = (a1 - a0 - g) / 2;
+    return layout(a0, a0 + each, depth - 1).concat(layout(a1 - each, a1, depth - 1));
+  }
+  const sec = (a0, a1) => layout(a0, a1, 3);
+  const h = gC / 2;
+  const leafR = sec(-90 + h, -h).concat(sec(h, 90 - h));
+  const leafL = sec(90 + h, 180 - h).concat(sec(180 + h, 270 - h));
+
+  function angleOf(side, L, k){
+    const arr = side === 'R' ? leafR : leafL;
+    const span = Math.pow(2, L), start = k * span;
+    let s = 0; for (let j = start; j < start + span; j++) s += arr[j];
+    return s / span;
+  }
+  function nodePos(side, L, k){
+    const a = angleOf(side, L, k);
+    return { x: C + Rr[L]*Math.cos(a*DEG), y: C + Rr[L]*Math.sin(a*DEG), a };
+  }
+
+  function conic(colors){
+    const n = colors.length, seg = 100 / n, stops = [];
+    for (let i=0;i<n;i++) stops.push(colors[i]+' '+(i*seg)+'% '+((i+1)*seg)+'%');
+    return 'conic-gradient(from 180deg, '+stops.join(', ')+')';
+  }
+  function makeTeam(t, p, sz, glow, elim){
+    const base = 'position:absolute;left:'+(p.x/12)+'%;top:'+(p.y/12)+'%;width:'+sz+'px;height:'+sz+'px;'+
+      'transform:translate(-50%,-50%);border-radius:50%;z-index:3;';
+    const shadow = glow ? ('0 0 16px '+accent+'cc, 0 2px 6px rgba(0,0,0,.5)') : '0 2px 6px rgba(0,0,0,.4)';
+    const boxStyle = flagMode
+      ? base+'overflow:hidden;background:'+T.innerBg+';border:'+(glow?('2px solid '+accent):'1.5px solid rgba(255,255,255,.2)')+';box-shadow:'+shadow+';'+(elim?'opacity:.78;':'')
+      : base+'background:'+conic(t.colors)+';box-shadow:'+shadow+';'+(elim?'opacity:.82;':'');
+    const codeCol = glow ? accent : (elim ? elimColor : null);
+    return {
+      code: t.code, name: t.name,
+      flag: 'https://flagcdn.com/w320/'+t.iso+'.png',
+      boxStyle,
+      chipStyle:'position:absolute;left:50%;bottom:'+Math.round(sz*0.07)+'px;transform:translateX(-50%);pointer-events:none;'+
+        'background:'+(glow?'rgba(8,8,10,.82)':'rgba(8,8,10,.7)')+';color:'+(codeCol||'#ffffff')+';'+
+        "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:"+Math.round(sz*0.22)+'px;'+
+        'letter-spacing:.3px;line-height:1;padding:1px 4px;border-radius:4px;'+(glow?('box-shadow:0 0 0 1px '+accent+'99;'):''),
+      innerStyle:'position:absolute;inset:6px;border-radius:50%;background:'+T.innerBg+';display:flex;'+
+        'align-items:center;justify-content:center;box-shadow:inset 0 1px 2px rgba(0,0,0,'+(light?'.2':'.6')+');'+(glow?('border:1px solid '+accent+';'):''),
+      codeStyle:"font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:"+Math.round(sz*0.30)+'px;'+
+        'letter-spacing:.5px;line-height:1;color:'+(codeCol||T.codeColor)+';'
+    };
+  }
+
+  const teamNodes=[], emptyNodes=[], links=[], labels=[], innerCards=[], statusDots=[];
+  // a box at an inner node = the match between its two children (which feed this slot)
+  const matchRound = { 2:'R16', 3:'QF', 4:'SF' };
+  // exact kickoff date + CET time per inner match node, from the live feed
+  const INNER_INFO = DATA.schedule;
+  function dotStyle(p, sz){
+    return 'position:absolute;left:'+(p.x/12)+'%;top:'+(p.y/12)+'%;width:'+sz+'px;height:'+sz+'px;'+
+      'transform:translate(-50%,-50%);border-radius:50%;background:'+T.emptyBg+';border:1.5px solid '+T.emptyBorder+';box-sizing:border-box;z-index:2;';
+  }
+  // a card at a node = the match that fills it: a date while pending, a score once played
+  function makeInnerCard(px, py, o){
+    const hasScore = !!o.score, hasPhase = !!o.phase, hasDate = (!!o.date && !hasScore);
+    return {
+      boxStyle:'position:absolute;left:'+(px/12)+'%;top:'+(py/12)+'%;transform:translate(-50%,-50%);z-index:7;'+
+        'background:'+T.chipBg+';border:1px solid '+T.chipBorder+';border-radius:5px;padding:1px 6px 2px;'+
+        'text-align:center;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none;',
+      phase:o.phase, hasPhase:hasPhase,
+      score:o.score, hasScore:hasScore, showScore:(hasScore && !o.pens), pens:!!o.pens, showEt:(!!o.et && !o.pens),
+      date:o.date, hasDate:hasDate,
+      time:o.time, hasTime:(!!o.time && !hasScore),
+      phaseStyle:'font-family:Barlow,sans-serif;font-weight:700;font-size:7.5px;letter-spacing:.8px;text-transform:uppercase;line-height:1.25;color:'+accent+';',
+      scoreStyle:"font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.4px;line-height:1.05;color:"+T.chipScore+';',
+      etStyle:'font-family:Barlow,sans-serif;font-weight:600;font-size:7px;letter-spacing:.5px;text-transform:uppercase;line-height:1.3;color:'+T.chipDate+';',
+      pensStyle:'font-family:Barlow,sans-serif;font-weight:700;font-size:7px;letter-spacing:.5px;text-transform:uppercase;line-height:1.3;color:'+accent+';',
+      dateStyle:"font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.4px;text-transform:uppercase;line-height:1.05;color:"+T.chipDate+';',
+      timeStyle:"font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:8px;letter-spacing:.4px;line-height:1.15;color:"+T.chipDate+';opacity:.8;'
+    };
+  }
+
+  ['R','L'].forEach(side=>{
+    for (let i=0;i<16;i++){
+      const t = side==='R' ? TEAMS[i] : TEAMS[16+i];
+      const p = nodePos(side,0,i);
+      const sz = 52;
+      const win = !!decidedLeafWin[side+':'+i];
+      const elim = !!eliminatedLeaf[side+':'+i];
+      teamNodes.push(makeTeam(t,p,sz,win,elim));
+      const lr = Rr[0] + sz/2 + 8;
+      const la = p.a*DEG;
+      const ax = C + lr*Math.cos(la), ay = C + lr*Math.sin(la);
+      const leftSide = Math.cos(la) < 0;
+      const outer = 'position:absolute;left:'+(ax/12)+'%;top:'+(ay/12)+'%;width:0;height:0;z-index:2;pointer-events:none;';
+      const common = "position:absolute;top:0;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;"+
+        'font-weight:600;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:'+(win?accent:T.labelColor)+';';
+      const inner = leftSide
+        ? common+'right:0;transform-origin:100% 0;transform:translateY(-50%) rotate('+(p.a+180)+'deg);text-align:right;'
+        : common+'left:0;transform-origin:0 0;transform:translateY(-50%) rotate('+p.a+'deg);text-align:left;';
+      labels.push({ name:t.name, outer, inner });
+      // status dot just outside the flag: green = through, red = eliminated, white = not played
+      const stColor = win ? '#37b56a' : (elim ? elimColor : '#ffffff');
+      const sr = Rr[0] + 48;
+      const sx = C + sr*Math.cos(la), sy = C + sr*Math.sin(la);
+      statusDots.push({ style:'position:absolute;left:'+(sx/12)+'%;top:'+(sy/12)+'%;width:9px;height:9px;'+
+        'transform:translate(-50%,-50%);border-radius:50%;background:'+stColor+';border:1px solid rgba(0,0,0,.3);'+
+        'box-shadow:0 0 5px '+stColor+'66;z-index:4;' });
+    }
+    for (let L=1;L<=4;L++){
+      const cnt = 16/Math.pow(2,L);
+      for (let k=0;k<cnt;k++){
+        const p = nodePos(side,L,k);
+        if (L===1){
+          // R32 match result lives at its resulting slot (level-1 node)
+          const code = decidedR16[side+':'+k];
+          const m = MATCHES[side+':1:'+k] || {};
+          if (code){
+            teamNodes.push(makeTeam(TEAMS.find(x=>x.code===code), p, 44, true, false));
+            if (showResults && m.score) innerCards.push(makeInnerCard(p.x, p.y - 21, { score:m.score, pens:m.pens }));
+          } else if (showResults){
+            innerCards.push(makeInnerCard(p.x, p.y, { phase:'R32', date:m.date, time:m.time }));
+          } else {
+            emptyNodes.push({ boxStyle: dotStyle(p, 14) });
+          }
+        } else if (showResults){
+          // inner match card on the bridge: round + date/time now, score once played
+          const info = INNER_INFO[side+':'+L+':'+k] || {};
+          innerCards.push(makeInnerCard(p.x, p.y, { phase:matchRound[L], date:info.date, time:info.time }));
+        } else {
+          emptyNodes.push({ boxStyle: dotStyle(p, 16) });
+        }
+      }
+    }
+    for (let L=0;L<=3;L++){
+      const cnt = 16/Math.pow(2,L);
+      for (let k=0;k<cnt;k++){
+        const c = nodePos(side,L,k);
+        const par = nodePos(side,L+1,Math.floor(k/2));
+        const decided = (L===0) && !!decidedLeafWin[side+':'+k];
+        links.push({ x1:c.x, y1:c.y, x2:par.x, y2:par.y,
+          stroke: decided?accent:T.linkColor, w: decided?3:1.8,
+          lstyle: decided?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'' });
+      }
+    }
+    const fin = nodePos(side,4,0);
+    links.push({ x1:fin.x, y1:fin.y, x2:C, y2:C, stroke:T.linkColor, w:1.8, lstyle:'' });
+  });
+
+  const rootStyle = 'min-height:100vh;background:'+T.rootBg+';padding:30px 16px 44px;font-family:Barlow,system-ui,sans-serif;box-sizing:border-box;';
+  const kickerStyle = "font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:4px;text-transform:uppercase;font-size:12px;color:"+T.kickerColor+';';
+  const titleStyle = 'font-family:Barlow,sans-serif;font-weight:700;font-size:clamp(26px,4.4vw,42px);margin:4px 0 0;line-height:1.05;color:'+T.titleColor+';';
+  const footerStyle = "text-align:center;margin-top:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:"+T.footerColor+';';
+
+  if (showResults) innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:DATA.final.date }));
+
+  return { teamNodes, emptyNodes, links, labels: showNames?labels:[], innerCards, statusDots, title, kicker, rootStyle, kickerStyle, titleStyle, footerStyle, flagMode, ringMode: !flagMode };
+}
+
+// ---------------------------------------------------------------------------
+// DOM builder — mirrors the original <x-dc> template node-for-node.
+// ---------------------------------------------------------------------------
+const SVGNS = 'http://www.w3.org/2000/svg';
+function el(tag, style, text){
+  const e = document.createElement(tag);
+  if (style) e.style.cssText = style;
+  if (text != null) e.textContent = text;
+  return e;
+}
+function svg(tag, attrs){
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) if (attrs[k] != null && attrs[k] !== '') e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+function buildBracket(v){
+  const root = el('div', v.rootStyle);
+
+  const head = el('div', 'text-align:center;max-width:820px;margin:0 auto 10px;');
+  head.appendChild(el('div', v.kickerStyle, v.kicker));
+  const h1 = el('h1', v.titleStyle, v.title);
+  head.appendChild(h1);
+  root.appendChild(head);
+
+  const stage = el('div', 'position:relative;width:min(94vw,820px);aspect-ratio:1/1;margin:0 auto;');
+
+  // SVG links layer
+  const s = svg('svg', { viewBox:'0 0 1200 1200', preserveAspectRatio:'xMidYMid meet' });
+  s.setAttribute('style', 'position:absolute;inset:0;width:100%;height:100%;overflow:visible;');
+  const defs = svg('defs');
+  const grad = svg('radialGradient', { id:'wcglow', cx:'50%', cy:'50%', r:'50%' });
+  grad.appendChild(svg('stop', { offset:'0%',   'stop-color':'rgba(214,176,74,0.30)' }));
+  grad.appendChild(svg('stop', { offset:'42%',  'stop-color':'rgba(214,176,74,0.10)' }));
+  grad.appendChild(svg('stop', { offset:'100%', 'stop-color':'rgba(214,176,74,0)' }));
+  defs.appendChild(grad);
+  s.appendChild(defs);
+  s.appendChild(svg('circle', { cx:600, cy:600, r:340, fill:'url(#wcglow)' }));
+  v.links.forEach(l=>{
+    const ln = svg('line', { x1:l.x1, y1:l.y1, x2:l.x2, y2:l.y2, stroke:l.stroke, 'stroke-width':l.w, 'stroke-linecap':'round' });
+    if (l.lstyle) ln.setAttribute('style', l.lstyle);
+    s.appendChild(ln);
+  });
+  stage.appendChild(s);
+
+  // Center: pulse ring + gold ball with star
+  stage.appendChild(el('div', 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;border:1px solid rgba(214,176,74,.5);animation:wcpulse 3.4s ease-out infinite;z-index:4;'));
+  const ball = el('div', 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 50% 34%, #f3d680, #c79a3a 58%, #876621);box-shadow:0 0 34px rgba(214,176,74,.55), inset 0 2px 7px rgba(255,255,255,.45), inset 0 -5px 9px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:5;');
+  const star = svg('svg', { width:36, height:36, viewBox:'0 0 24 24' });
+  star.appendChild(svg('polygon', { points:'12,2.2 14.7,8.9 22,9.3 16.4,13.9 18.4,21 12,16.9 5.6,21 7.6,13.9 2,9.3 9.3,8.9', fill:'#fff8e6', stroke:'#9c7526', 'stroke-width':'0.5' }));
+  ball.appendChild(star);
+  stage.appendChild(ball);
+
+  // empty nodes
+  v.emptyNodes.forEach(e => stage.appendChild(el('div', e.boxStyle)));
+  // status dots
+  v.statusDots.forEach(d => stage.appendChild(el('div', d.style)));
+
+  // inner cards (match chips)
+  v.innerCards.forEach(c=>{
+    const box = el('div', c.boxStyle);
+    if (c.hasPhase)  box.appendChild(el('div', c.phaseStyle, c.phase));
+    if (c.showScore) box.appendChild(el('div', c.scoreStyle, c.score));
+    if (c.showEt)    box.appendChild(el('div', c.etStyle, 'Extra Time'));
+    if (c.pens)      box.appendChild(el('div', c.pensStyle, 'Penalties'));
+    if (c.hasDate)   box.appendChild(el('div', c.dateStyle, c.date));
+    if (c.hasTime)   box.appendChild(el('div', c.timeStyle, c.time + ' CET'));
+    stage.appendChild(box);
+  });
+
+  // labels (team names, when enabled)
+  v.labels.forEach(l=>{
+    const outer = el('div', l.outer);
+    outer.appendChild(el('div', l.inner, l.name));
+    stage.appendChild(outer);
+  });
+
+  // team nodes — flag mode or ring mode
+  if (v.flagMode){
+    v.teamNodes.forEach(n=>{
+      const box = el('div', n.boxStyle);
+      box.title = n.name;
+      const img = document.createElement('img');
+      img.src = n.flag; img.alt = n.name; img.loading = 'lazy';
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;';
+      box.appendChild(img);
+      box.appendChild(el('span', n.chipStyle, n.code));
+      stage.appendChild(box);
+    });
+  } else {
+    v.teamNodes.forEach(n=>{
+      const box = el('div', n.boxStyle);
+      box.title = n.name;
+      const inner = el('div', n.innerStyle);
+      inner.appendChild(el('span', n.codeStyle, n.code));
+      box.appendChild(inner);
+      stage.appendChild(box);
+    });
+  }
+
+  root.appendChild(stage);
+  root.appendChild(el('div', v.footerStyle, '48 teams · 32 reach the knockout · 1 lifts the trophy'));
+  return root;
+}
+
+// ---------------------------------------------------------------------------
+// Live controls — the design's own editor props (data-props defaults).
+// ---------------------------------------------------------------------------
+const state = {
+  title: 'Road to the Final',
+  kicker: 'World Cup 2026 · Knockout Bracket',
+  nodeStyle: 'Flag',
+  bgTheme: 'Light',
+  accentColor: '#2f9e6b',
+  showNames: false,
+  showResults: true,
+  sectionGap: 4,
+  quarterGap: 3
+};
+const ACCENTS = ['#d6b04a','#d23b3b','#2f9e6b','#3b82d2'];
+
+const app = document.getElementById('app');
+let DATA = null; // schedule + results, loaded from data.json
+function render(){
+  if (!DATA) return;
+  const props = {
+    accentColor: state.accentColor, showNames: state.showNames, title: state.title,
+    kicker: state.kicker, bgTheme: state.bgTheme, nodeStyle: state.nodeStyle,
+    showResults: state.showResults, sectionGap: state.sectionGap, quarterGap: state.quarterGap
+  };
+  app.replaceChildren(buildBracket(renderVals(props, DATA)));
+  document.title = state.title + ' — World Cup 2026 Knockout Bracket';
+}
+
+function seg(current, options, onPick){
+  const wrap = el('div'); wrap.className = 'seg';
+  options.forEach(opt=>{
+    const b = document.createElement('button');
+    b.textContent = opt; b.type = 'button';
+    if (opt === current){ b.classList.add('on'); b.style.background = state.accentColor; }
+    b.onclick = () => onPick(opt);
+    wrap.appendChild(b);
+  });
+  return wrap;
+}
+function group(labelText, control){
+  const g = el('div'); g.className = 'grp';
+  if (labelText){ const l = el('label', null, labelText); l.className = 'f'; g.appendChild(l); }
+  g.appendChild(control);
+  return g;
+}
+function textField(value, onInput){
+  const i = document.createElement('input');
+  i.type = 'text'; i.value = value;
+  i.oninput = () => onInput(i.value);
+  return i;
+}
+function checkbox(labelText, checked, onChange){
+  const lab = el('label'); lab.className = 'chk';
+  const c = document.createElement('input');
+  c.type = 'checkbox'; c.checked = checked;
+  c.onchange = () => onChange(c.checked);
+  lab.appendChild(c); lab.appendChild(document.createTextNode(labelText));
+  return lab;
+}
+function rangeField(value, min, max, step, unit, onInput){
+  const wrap = el('div');
+  const row = el('div'); row.className = 'row';
+  const val = el('span', null, value + unit); val.className = 'val';
+  row.appendChild(val);
+  const r = document.createElement('input');
+  r.type = 'range'; r.min = min; r.max = max; r.step = step; r.value = value;
+  r.oninput = () => { val.textContent = r.value + unit; onInput(Number(r.value)); };
+  wrap.appendChild(row); wrap.appendChild(r);
+  return wrap;
+}
+function swatches(current, onPick){
+  const wrap = el('div'); wrap.className = 'swatches';
+  ACCENTS.forEach(col=>{
+    const b = document.createElement('button'); b.type = 'button';
+    b.style.background = col;
+    if (col.toLowerCase() === current.toLowerCase()) b.classList.add('on');
+    b.onclick = () => onPick(col);
+    wrap.appendChild(b);
+  });
+  const picker = document.createElement('input');
+  picker.type = 'color'; picker.value = current;
+  picker.style.cssText = 'width:24px;height:24px;padding:0;border:none;background:none;cursor:pointer;';
+  picker.oninput = () => onPick(picker.value);
+  wrap.appendChild(picker);
+  return wrap;
+}
+
+function renderControls(){
+  const c = document.getElementById('controls');
+  c.classList.toggle('dark', state.bgTheme === 'Dark');
+  c.replaceChildren();
+  c.appendChild(el('h2', null, 'World Cup Bracket'));
+  c.appendChild(group('Title', textField(state.title, v => { state.title = v; render(); })));
+  c.appendChild(group('Kicker', textField(state.kicker, v => { state.kicker = v; render(); })));
+  c.appendChild(group('Node style', seg(state.nodeStyle, ['Flag','Ring'], v => { state.nodeStyle = v; rerender(); })));
+  c.appendChild(group('Background', seg(state.bgTheme, ['Dark','Light'], v => { state.bgTheme = v; rerender(); })));
+  c.appendChild(group('Accent', swatches(state.accentColor, v => { state.accentColor = v; rerender(); })));
+  c.appendChild(group(null, checkbox('Show team names', state.showNames, v => { state.showNames = v; render(); })));
+  c.appendChild(group(null, checkbox('Show results', state.showResults, v => { state.showResults = v; render(); })));
+  c.appendChild(group('Section gap', rangeField(state.sectionGap, 4, 36, 1, '°', v => { state.sectionGap = v; render(); })));
+  c.appendChild(group('Quarter gap', rangeField(state.quarterGap, 0, 24, 1, '°', v => { state.quarterGap = v; render(); })));
+}
+// Controls whose active-state styling depends on theme/accent need a controls rebuild too.
+function rerender(){ render(); renderControls(); }
+
+// Load the schedule + results feed, then build the bracket. Fetched once on load;
+// re-fetch (reload the page) to pick up live updates pushed into data.json.
+fetch('data.json', { cache: 'no-store' })
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(data => {
+    DATA = data;
+    if (data.title)  state.title  = data.title;
+    if (data.kicker) state.kicker = data.kicker;
+    renderControls();
+    render();
+  })
+  .catch(err => {
+    document.getElementById('controls').style.display = 'none';
+    app.innerHTML =
+      '<div style="max-width:640px;margin:80px auto;padding:0 24px;font-family:Barlow,system-ui,sans-serif;color:#1c1813;line-height:1.55;">' +
+        '<h1 style="font-size:22px;margin:0 0 10px;">Couldn’t load <code>data.json</code></h1>' +
+        '<p style="opacity:.75;margin:0 0 10px;">' + String(err) + '</p>' +
+        '<p style="opacity:.75;margin:0 0 10px;">The bracket reads its schedule &amp; results from <code>data.json</code> via <code>fetch()</code>, which browsers block when the page is opened directly from <code>file://</code>. Serve the folder over HTTP:</p>' +
+        '<pre style="background:#f1ece1;padding:12px 14px;border-radius:8px;overflow:auto;margin:0;">python3 world-cup-bracket/server.py\n# then open http://localhost:4173</pre>' +
+      '</div>';
+  });
+</script>
+</body>
+</html>
