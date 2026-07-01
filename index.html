@@ -995,7 +995,7 @@ function openMatchModal(id){
     mid.appendChild(nm);
     if (goalsList && goalsList.length)
       mid.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:3px;line-height:1.5;',
-        goalsList.map(g => g.p + ' ' + g.m + (g.a ? ' — assist ' + g.a : '')).join(', ')));
+        goalsList.map(g => g.p + ' ' + g.m + (g.pen ? ' (pen)' : '') + (g.a ? ' — assist ' + g.a : '')).join(', ')));
     row.appendChild(mid);
     if (m.played) row.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;flex:none;", String(score)));
     return row;
@@ -1052,6 +1052,21 @@ function openMatchModal(id){
     a.style.cssText = 'display:inline-flex;align-items:center;gap:8px;margin-top:15px;padding:9px 13px;border-radius:9px;text-decoration:none;font-weight:600;font-size:13px;background:#ff0000;color:#fff;';
     a.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="#fff" style="flex:none;"><path d="M10 15l5.19-3L10 9v6zm11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>Watch highlights (FIFA)';
     panel.appendChild(a);
+  }
+
+  if (m.played && m.var && m.var.length){
+    const vbox = el('div', 'margin-top:15px;border-top:1px solid ' + pal.line + ';padding-top:10px;');
+    vbox.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:11px;color:" + pal.head + ';margin-bottom:5px;', 'VAR'));
+    m.var.forEach(v => {
+      const r = el('div', 'display:flex;align-items:baseline;gap:9px;font-size:12px;padding:2px 0;');
+      r.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';width:46px;flex:none;', v.m));
+      const t = el('span', 'color:' + pal.text + ';');
+      t.appendChild(document.createTextNode(v.d));
+      if (v.x) t.appendChild(el('span', 'color:' + pal.sub + ';', ' — ' + v.x));
+      r.appendChild(t);
+      vbox.appendChild(r);
+    });
+    panel.appendChild(vbox);
   }
 
   overlay.appendChild(panel);

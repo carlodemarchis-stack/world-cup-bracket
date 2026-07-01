@@ -509,7 +509,8 @@
         {
           "t": "BEL",
           "p": "Tielemans",
-          "m": "120'+5'"
+          "m": "120'+5'",
+          "pen": true
         }
       ],
       "var": [
@@ -876,7 +877,8 @@
             {
               "t": "RSA",
               "p": "Mokoena",
-              "m": "83'"
+              "m": "83'",
+              "pen": true
             }
           ],
           "venue": "Atlanta Stadium"
@@ -1048,7 +1050,8 @@
             {
               "t": "SUI",
               "p": "Embolo",
-              "m": "17'"
+              "m": "17'",
+              "pen": true
             },
             {
               "t": "QAT",
@@ -1096,7 +1099,8 @@
             {
               "t": "SUI",
               "p": "Xhaka",
-              "m": "90'+7'"
+              "m": "90'+7'",
+              "pen": true
             }
           ],
           "venue": "Los Angeles Stadium"
@@ -1789,7 +1793,8 @@
             {
               "t": "GER",
               "p": "Havertz",
-              "m": "45'+5'"
+              "m": "45'+5'",
+              "pen": true
             },
             {
               "t": "GER",
@@ -3149,7 +3154,8 @@
             {
               "t": "AUT",
               "p": "Arnautovic",
-              "m": "90'+12'"
+              "m": "90'+12'",
+              "pen": true
             }
           ],
           "venue": "San Francisco Bay Area Stadium",
@@ -3303,7 +3309,8 @@
             {
               "t": "ARG",
               "p": "Martinez",
-              "m": "31'"
+              "m": "31'",
+              "pen": true
             },
             {
               "t": "JOR",
@@ -3546,7 +3553,8 @@
             {
               "t": "COD",
               "p": "Wissa",
-              "m": "68'"
+              "m": "68'",
+              "pen": true
             },
             {
               "t": "COD",
@@ -3630,7 +3638,8 @@
             {
               "t": "ENG",
               "p": "Kane",
-              "m": "12'"
+              "m": "12'",
+              "pen": true
             },
             {
               "t": "CRO",

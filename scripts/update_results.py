@@ -178,6 +178,8 @@ def fetch_timeline(ids, id2code):
                 team = other[0]
         g = {"t": team, "p": _surname(ed) + (" (o.g.)" if own else ""),
              "m": mm, "_k": _minute_key(mm)}
+        if tl == "penalty goal":
+            g["pen"] = True
         if not own:  # pair with an unused assist from the same team + minute
             lst = assists.get((mm, scorer_team), [])
             i = used.get((mm, scorer_team), 0)
@@ -304,6 +306,9 @@ def enrich(slot, res, changes, label):
                 if "a" not in match and fg.get("a"):
                     match["a"] = fg["a"]
                     changes.append(f"{label}: assist {match['p']} <- {fg['a']}")
+                if fg.get("pen") and not match.get("pen"):
+                    match["pen"] = True
+                    changes.append(f"{label}: {match['p']} (pen)")
             else:
                 slot["goals"].append(fg)
                 changes.append(f"{label}: +goal {fg['p']} {fg['m']}")
