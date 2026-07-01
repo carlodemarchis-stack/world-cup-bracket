@@ -161,20 +161,38 @@ function renderVals(P, DATA) {
   const MATCHES = DATA.r32;
   // Derive who advanced / who's eliminated from each played match's winner, so
   // the feed only records a score + winner per result.
-  const decidedR16 = {}, decidedLeafWin = {}, eliminatedLeaf = {};
+  const decidedR16 = {};
   ['R','L'].forEach(side => {
-    const off = side === 'R' ? 0 : 16;
     for (let k = 0; k < 8; k++) {
       const m = MATCHES[side+':1:'+k];
-      if (!m || !m.winner) continue;
-      const top = 2*k, bot = 2*k + 1;
-      const winLeaf = (m.winner === TEAMS[off+top].code) ? top : bot;
-      const loseLeaf = (winLeaf === top) ? bot : top;
-      decidedR16[side+':'+k] = m.winner;
-      decidedLeafWin[side+':'+winLeaf] = true;
-      eliminatedLeaf[side+':'+loseLeaf] = true;
+      if (m && m.winner) decidedR16[side+':'+k] = m.winner;
     }
   });
+  // Progression for every round (not just R32): the winner advancing to each
+  // node, and every team that has since been knocked out. Winners come from the
+  // feed — r32 for level 1, schedule for levels 2-4, and DATA.final for the tie.
+  function wonAt(side, L, k){
+    if (L === 1) return decidedR16[side + ':' + k] || null;
+    return (DATA.schedule[side + ':' + L + ':' + k] || {}).winner || null;
+  }
+  function feederCode(side, L, childK){
+    const off = side === 'R' ? 0 : 16;
+    return L === 1 ? TEAMS[off + childK].code : wonAt(side, L - 1, childK);
+  }
+  const eliminated = {};
+  ['R','L'].forEach(side => {
+    for (let L = 1; L <= 4; L++){
+      for (let k = 0; k < 16/Math.pow(2,L); k++){
+        const w = wonAt(side, L, k);
+        if (!w) continue;
+        [feederCode(side,L,2*k), feederCode(side,L,2*k+1)].forEach(c => { if (c && c !== w) eliminated[c] = 1; });
+      }
+    }
+  });
+  if (DATA.final && DATA.final.winner){
+    const w = DATA.final.winner;
+    [wonAt('R',4,0), wonAt('L',4,0)].forEach(c => { if (c && c !== w) eliminated[c] = 1; });
+  }
   const bridge = accent + '7a';
 
   // Balanced layout: four 8-team sections evenly around the circle with equal
@@ -235,7 +253,7 @@ function renderVals(P, DATA) {
 
   const teamNodes=[], emptyNodes=[], links=[], labels=[], innerCards=[], statusDots=[];
   // a box at an inner node = the match between its two children (which feed this slot)
-  const matchRound = { 2:'R16', 3:'QF', 4:'SF' };
+  const matchRound = { 1:'R32', 2:'R16', 3:'QF', 4:'SF' };
   // exact kickoff date + CET time per inner match node, from the live feed
   const INNER_INFO = DATA.schedule;
   function dotStyle(p, sz){
@@ -271,8 +289,9 @@ function renderVals(P, DATA) {
       const t = side==='R' ? TEAMS[i] : TEAMS[16+i];
       const p = nodePos(side,0,i);
       const sz = 52;
-      const win = !!decidedLeafWin[side+':'+i];
-      const elim = !!eliminatedLeaf[side+':'+i];
+      const r32done = !!wonAt(side, 1, Math.floor(i/2));
+      const win = r32done && !eliminated[t.code];
+      const elim = r32done && !!eliminated[t.code];
       teamNodes.push(makeTeam(t,p,sz,win,elim));
       const lr = Rr[0] + sz/2 + 8;
       const la = p.a*DEG;
@@ -290,31 +309,22 @@ function renderVals(P, DATA) {
       const cnt = 16/Math.pow(2,L);
       for (let k=0;k<cnt;k++){
         const p = nodePos(side,L,k);
-        if (L===1){
-          // R32 match result lives at its resulting slot (level-1 node)
-          const code = decidedR16[side+':'+k];
-          const m = MATCHES[side+':1:'+k] || {};
-          if (code){
-            const wn = makeTeam(TEAMS.find(x=>x.code===code), p, 44, true, false);
-            wn.match = side+':1:'+k;   // this crest = the R32 match it won
-            teamNodes.push(wn);
-            if (showResults && m.score) innerCards.push(makeInnerCard(p.x, p.y - 21, { score:m.score, pens:m.pens, match:side+':1:'+k }));
-          } else if (showResults){
-            const off2 = side==='R' ? 0 : 16;
-            innerCards.push(makeInnerCard(p.x, p.y, { phase:'R32', date:m.date, time:m.time, match:side+':1:'+k, ta:TEAMS[off2+2*k].code, tb:TEAMS[off2+2*k+1].code }));
-          } else {
-            emptyNodes.push({ boxStyle: dotStyle(p, 14) });
-          }
+        const wc = wonAt(side, L, k);                     // winner advancing to this node
+        const m = (L === 1) ? (MATCHES[side+':1:'+k] || {}) : (INNER_INFO[side+':'+L+':'+k] || {});
+        if (wc){
+          // the winning crest advances inward; dim it (red) if it later went out
+          const wn = makeTeam(TEAMS.find(x=>x.code===wc), p, L===1?44:40, !eliminated[wc], !!eliminated[wc]);
+          wn.match = side+':'+L+':'+k;   // this crest = the match it won
+          teamNodes.push(wn);
+          if (showResults && m.score) innerCards.push(makeInnerCard(p.x, p.y - (L===1?21:19), { score:m.score, pens:m.pens, match:side+':'+L+':'+k }));
         } else if (showResults){
-          // inner match card on the bridge: round + date/time now, score once played.
-          // A feeding team is known only when its previous-round match is decided
-          // (currently that's R16, fed by the two R32 winners).
-          const info = INNER_INFO[side+':'+L+':'+k] || {};
-          const ta = (L===2) ? (decidedR16[side+':'+(2*k)]   || null) : null;
-          const tb = (L===2) ? (decidedR16[side+':'+(2*k+1)] || null) : null;
-          innerCards.push(makeInnerCard(p.x, p.y, { phase:matchRound[L], date:info.date, time:info.time, match:side+':'+L+':'+k, ta, tb }));
+          // pending match card on the bridge: round + date/time, plus the feeding
+          // teams' codes once the previous round decides them.
+          const ta = feederCode(side, L, 2*k)   || null;
+          const tb = feederCode(side, L, 2*k+1) || null;
+          innerCards.push(makeInnerCard(p.x, p.y, { phase:matchRound[L], date:m.date, time:m.time, match:side+':'+L+':'+k, ta, tb }));
         } else {
-          emptyNodes.push({ boxStyle: dotStyle(p, 16) });
+          emptyNodes.push({ boxStyle: dotStyle(p, L===1?14:16) });
         }
       }
     }
@@ -323,14 +333,19 @@ function renderVals(P, DATA) {
       for (let k=0;k<cnt;k++){
         const c = nodePos(side,L,k);
         const par = nodePos(side,L+1,Math.floor(k/2));
-        const decided = (L===0) && !!decidedLeafWin[side+':'+k];
+        const occ = (L===0) ? TEAMS[(side==='R'?0:16)+k].code : wonAt(side,L,k);
+        const parentWin = wonAt(side, L+1, Math.floor(k/2));
+        const decided = !!occ && !!parentWin && parentWin === occ;
         links.push({ x1:c.x, y1:c.y, x2:par.x, y2:par.y,
           stroke: decided?accent:T.linkColor, w: decided?3:1.8,
           lstyle: decided?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'' });
       }
     }
     const fin = nodePos(side,4,0);
-    links.push({ x1:fin.x, y1:fin.y, x2:C, y2:C, stroke:T.linkColor, w:1.8, lstyle:'' });
+    const champ = (DATA.final||{}).winner, sfWin = wonAt(side,4,0);
+    const finLit = !!champ && !!sfWin && champ === sfWin;
+    links.push({ x1:fin.x, y1:fin.y, x2:C, y2:C, stroke: finLit?accent:T.linkColor, w: finLit?3:1.8,
+      lstyle: finLit?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'' });
   });
 
   const rootStyle = 'min-height:100vh;background:'+T.rootBg+';padding:30px 16px 44px;font-family:Barlow,system-ui,sans-serif;box-sizing:border-box;';
@@ -339,10 +354,24 @@ function renderVals(P, DATA) {
   const footerStyle = "text-align:center;margin-top:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:"+T.footerColor+';';
   const hintStyle = "display:inline-flex;align-items:center;gap:6px;margin:7px 0 0;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;font-size:10px;color:"+T.footerColor+';';
 
-  if (showResults) innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:DATA.final.date, time:DATA.final.time, match:'final' }));
+  if (showResults){
+    const f = DATA.final || {};
+    if (f.winner){
+      // champion advances to the final node; the trophy stays dead centre
+      const champT = TEAMS.find(x => x.code === f.winner);
+      if (champT){ const wn = makeTeam(champT, { x:C, y:C + 78, a:0 }, 46, true, false); wn.match = 'final'; teamNodes.push(wn); }
+      if (f.score) innerCards.push(makeInnerCard(C, C + 78 - 24, { score:f.score, pens:f.pens, match:'final' }));
+    } else {
+      innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:f.date, time:f.time, match:'final' }));
+    }
+  }
   // Third-place play-off: a standalone chip above the trophy (the two SF losers;
   // disconnected from the main path to the final).
-  if (showResults && DATA.thirdPlace) innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:DATA.thirdPlace.date, time:DATA.thirdPlace.time, match:'third' }));
+  if (showResults && DATA.thirdPlace){
+    const tp = DATA.thirdPlace;
+    if (tp.winner && tp.score) innerCards.push(makeInnerCard(C, C - 108, { score:tp.score, pens:tp.pens, match:'third' }));
+    else innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:tp.date, time:tp.time, match:'third' }));
+  }
 
   // ---- Group-stage eliminated teams: two outer side arcs, like parentheses.
   // The 16 teams that didn't reach the knockout (not among the bracket's 32).
@@ -660,21 +689,34 @@ function teamMatches(code){
     });
   const idx = (DATA.teams || []).findIndex(t => t.code === code);
   if (idx >= 0){
-    const side = idx < 16 ? 'R' : 'L', off = side === 'R' ? 0 : 16, i = idx % 16, k = Math.floor(i / 2);
-    const m = DATA.r32[side + ':1:' + k] || {};
-    const opp = DATA.teams[off + 2 * k].code === code ? DATA.teams[off + 2 * k + 1].code : DATA.teams[off + 2 * k].code;
-    if (m.score){
-      const p = m.score.split('–').map(Number), win = m.winner === code;
-      let sub = '';
-      if (m.pens){ let ps = m.penScore || ''; if (ps && !win) ps = ps.split('–').reverse().join('–'); sub = 'pens' + (ps ? ' ' + ps : ''); }
-      else if (m.et){ sub = 'a.e.t.'; }
-      rows.push({ stage: 'R32', date: m.date, opp, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', sub: sub, upcoming: false, hl: m.highlights || null });
-    } else {
-      rows.push({ stage: 'R32', opp, date: m.date, time: m.time, upcoming: true });
+    const side = idx < 16 ? 'R' : 'L', i = idx % 16;
+    const SHORT = { 1: 'R32', 2: 'R16', 3: 'QF', 4: 'SF' };
+    const subOf = (s, win) => {
+      if (s.pens){ let ps = s.penScore || ''; if (ps && !win) ps = ps.split('–').reverse().join('–'); return 'pens' + (ps ? ' ' + ps : ''); }
+      return s.et ? 'a.e.t.' : '';
+    };
+    let reached = true;   // every bracket team plays the R32; then only if it keeps winning
+    for (let L = 1; L <= 4 && reached; L++){
+      const kL = Math.floor(i / Math.pow(2, L));
+      const slot = (L === 1) ? (DATA.r32[side + ':1:' + kL] || {}) : (DATA.schedule[side + ':' + L + ':' + kL] || {});
+      const part = matchParticipants(side, L, kL), opp = part[0] === code ? part[1] : part[0];
+      if (slot.score){
+        const p = slot.score.split('–').map(Number), win = slot.winner === code;
+        rows.push({ stage: SHORT[L], date: slot.date, opp, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', sub: subOf(slot, win), upcoming: false, hl: slot.highlights || null });
+        reached = slot.winner === code;
+      } else {
+        rows.push({ stage: SHORT[L], opp: opp || null, date: slot.date, time: slot.time, upcoming: true });
+        reached = false;
+      }
     }
-    if (m.winner === code){
-      const k2 = Math.floor(i / 4), sib = DATA.r32[side + ':1:' + (k ^ 1)] || {}, info = DATA.schedule[side + ':2:' + k2] || {};
-      rows.push({ stage: 'R16', opp: sib.winner || null, date: info.date, time: info.time, upcoming: true });
+    if (reached){   // won the semi-final → the final (cross-side opponent)
+      const f = DATA.final || {}, other = winnerOfNode(side === 'R' ? 'L' : 'R', 4, 0);
+      if (f.score){
+        const p = f.score.split('–').map(Number), win = f.winner === code;
+        rows.push({ stage: 'F', date: f.date, opp: other, tg: win ? p[0] : p[1], og: win ? p[1] : p[0], result: win ? 'W' : 'L', sub: subOf(f, win), upcoming: false, hl: f.highlights || null });
+      } else {
+        rows.push({ stage: 'F', opp: other || null, date: f.date, time: f.time, upcoming: true });
+      }
     }
   }
   return rows;
@@ -816,7 +858,10 @@ function buildMatchList(code, pal, accent){
 // ---------------------------------------------------------------------------
 // Match modal — click a bracket match (crest, chip, final/third) for details.
 // ---------------------------------------------------------------------------
-function winnerOfNode(side, L, k){ return L === 1 ? ((DATA.r32[side + ':1:' + k] || {}).winner || null) : null; }
+function winnerOfNode(side, L, k){
+  if (L === 1) return (DATA.r32[side + ':1:' + k] || {}).winner || null;
+  return (DATA.schedule[side + ':' + L + ':' + k] || {}).winner || null;
+}
 function matchParticipants(side, L, k){
   if (L === 1){ const off = side === 'R' ? 0 : 16; return [DATA.teams[off + 2 * k].code, DATA.teams[off + 2 * k + 1].code]; }
   return [winnerOfNode(side, L - 1, 2 * k), winnerOfNode(side, L - 1, 2 * k + 1)];
@@ -835,23 +880,34 @@ function nodeCandidates(side, L, k){
   return out;
 }
 const ROUND_NAME = { 1: 'Round of 32', 2: 'Round of 16', 3: 'Quarter-final', 4: 'Semi-final' };
+// Build a played-match result object from a slot ({score, winner, ...}); score
+// is winner-first, so goals split by who won.
+function playedFrom(round, a, b, s){
+  const g = String(s.score || '').split('–'), aWon = s.winner === a;
+  return { round, a, b, played: true, winner: s.winner,
+    aGoals: aWon ? g[0] : g[1], bGoals: aWon ? g[1] : g[0], goals: s.goals || [],
+    et: s.et, pens: s.pens, penScore: s.penScore, date: s.date, venue: s.venue, highlights: s.highlights };
+}
+function sfLoser(side){
+  const part = matchParticipants(side, 4, 0), w = winnerOfNode(side, 4, 0);
+  return w ? (part[0] === w ? part[1] : part[0]) : null;
+}
 function resolveMatch(id){
-  if (id === 'final') return { round: 'Final', a: winnerOfNode('R', 4, 0), b: winnerOfNode('L', 4, 0), date: (DATA.final || {}).date, time: (DATA.final || {}).time, venue: (DATA.final || {}).venue, played: false };
-  if (id === 'third') return { round: 'Third-place play-off', a: null, b: null, date: (DATA.thirdPlace || {}).date, time: (DATA.thirdPlace || {}).time, venue: (DATA.thirdPlace || {}).venue, played: false };
+  if (id === 'final'){
+    const f = DATA.final || {}, a = winnerOfNode('R', 4, 0), b = winnerOfNode('L', 4, 0);
+    if (f.score) return playedFrom('Final', a, b, f);
+    return { round: 'Final', a, b, date: f.date, time: f.time, venue: f.venue, played: false };
+  }
+  if (id === 'third'){
+    const tp = DATA.thirdPlace || {}, a = sfLoser('R'), b = sfLoser('L');
+    if (tp.score) return playedFrom('Third-place play-off', a, b, tp);
+    return { round: 'Third-place play-off', a, b, date: tp.date, time: tp.time, venue: tp.venue, played: false };
+  }
   const parts = id.split(':'), side = parts[0], L = +parts[1], k = +parts[2];
   const round = ROUND_NAME[L], part = matchParticipants(side, L, k);
-  if (L === 1){
-    const mm = DATA.r32[id] || {};
-    if (mm.score){
-      const g = mm.score.split('–'), aWon = mm.winner === part[0];
-      return { round, a: part[0], b: part[1], played: true, winner: mm.winner,
-        aGoals: aWon ? g[0] : g[1], bGoals: aWon ? g[1] : g[0], goals: mm.goals || [],
-        et: mm.et, pens: mm.pens, penScore: mm.penScore, date: mm.date, venue: mm.venue, highlights: mm.highlights };
-    }
-    return { round, a: part[0], b: part[1], played: false, date: mm.date, time: mm.time, venue: mm.venue };
-  }
-  const info = DATA.schedule[id] || {};
-  const res = { round, a: part[0], b: part[1], played: false, date: info.date, time: info.time, venue: info.venue };
+  const slot = (L === 1) ? (DATA.r32[id] || {}) : (DATA.schedule[id] || {});
+  if (slot.score) return playedFrom(round, part[0], part[1], slot);
+  const res = { round, a: part[0], b: part[1], played: false, date: slot.date, time: slot.time, venue: slot.venue };
   // For R16 and QF, list each slot's possible teams (until QF only — not SF/final/3rd).
   if (L === 2 || L === 3){ res.candA = nodeCandidates(side, L - 1, 2 * k); res.candB = nodeCandidates(side, L - 1, 2 * k + 1); }
   return res;
