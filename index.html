@@ -176,9 +176,9 @@ function renderVals(P, DATA) {
       flag: 'https://flagcdn.com/w320/'+t.iso+'.png',
       boxStyle,
       chipStyle:'position:absolute;left:50%;bottom:'+Math.round(sz*0.07)+'px;transform:translateX(-50%);pointer-events:none;'+
-        'background:'+(glow?'rgba(8,8,10,.82)':'rgba(8,8,10,.7)')+';color:'+(codeCol||'#ffffff')+';'+
+        'background:'+(glow?accent:(elim?elimColor:'rgba(8,8,10,.7)'))+';color:#ffffff;'+
         "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:"+Math.round(sz*0.22)+'px;'+
-        'letter-spacing:.3px;line-height:1;padding:1px 4px;border-radius:4px;'+(glow?('box-shadow:0 0 0 1px '+accent+'99;'):''),
+        'letter-spacing:.3px;line-height:1;padding:1px 4px;border-radius:4px;',
       innerStyle:'position:absolute;inset:6px;border-radius:50%;background:'+T.innerBg+';display:flex;'+
         'align-items:center;justify-content:center;box-shadow:inset 0 1px 2px rgba(0,0,0,'+(light?'.2':'.6')+');'+(glow?('border:1px solid '+accent+';'):''),
       codeStyle:"font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:"+Math.round(sz*0.30)+'px;'+
@@ -322,8 +322,8 @@ function renderVals(P, DATA) {
     const a = aDeg * DEG, p = { x: C + Re*Math.cos(a), y: C + Re*Math.sin(a), a: aDeg };
     teamNodes.push(makeTeam(t, p, szE, false, true));   // elim = dimmed crest, still clickable
   };
-  elim.slice(0, 8).forEach((t, i) => arc(t, -THe + (2*THe)*i/7));         // right ")" arc, top→bottom
-  elim.slice(8, 16).forEach((t, i) => arc(t, 180 + THe - (2*THe)*i/7));   // left "(" arc, top→bottom
+  elim.slice(0, 8).forEach((t, i) => arc(t, 180 + THe - (2*THe)*i/7));    // left "(" arc, groups A–F, top→bottom
+  elim.slice(8, 16).forEach((t, i) => arc(t, -THe + (2*THe)*i/7));        // right ")" arc, groups G–L, top→bottom
 
   return { teamNodes, emptyNodes, links, labels: showNames?labels:[], innerCards, statusDots, title, kicker, rootStyle, kickerStyle, titleStyle, footerStyle, flagMode, ringMode: !flagMode };
 }
