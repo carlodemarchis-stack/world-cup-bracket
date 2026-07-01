@@ -412,7 +412,8 @@
       "var": [
         {
           "m": "90'+5'",
-          "d": "Red card given"
+          "d": "Red card given",
+          "x": "Hincapie"
         }
       ]
     },
@@ -514,7 +515,8 @@
       "var": [
         {
           "m": "120'",
-          "d": "Penalty given"
+          "d": "Penalty given",
+          "x": "Tielemans"
         }
       ]
     },
@@ -813,7 +815,8 @@
           "var": [
             {
               "m": "82'",
-              "d": "Red card given"
+              "d": "Red card given",
+              "x": "Zwane"
             }
           ]
         },
@@ -1147,7 +1150,8 @@
           "var": [
             {
               "m": "33'",
-              "d": "Red card given"
+              "d": "Red card given",
+              "x": "Homam Ahmed"
             }
           ]
         },
@@ -1614,7 +1618,8 @@
           "var": [
             {
               "m": "45'",
-              "d": "Goal awarded"
+              "d": "Goal awarded",
+              "x": "Freeman"
             }
           ]
         },
@@ -1642,7 +1647,8 @@
           "var": [
             {
               "m": "45'+2'",
-              "d": "Red card given"
+              "d": "Red card given",
+              "x": "Almiron"
             }
           ]
         },
@@ -2088,7 +2094,8 @@
           "var": [
             {
               "m": "86'",
-              "d": "Goal awarded"
+              "d": "Goal awarded",
+              "x": "Svanberg"
             }
           ]
         },
@@ -3019,7 +3026,8 @@
           "var": [
             {
               "m": "12'",
-              "d": "Red card given"
+              "d": "Red card given",
+              "x": "Rebin Sulaka"
             }
           ]
         }
@@ -3152,7 +3160,8 @@
             },
             {
               "m": "90'+10'",
-              "d": "Penalty given"
+              "d": "Penalty given",
+              "x": "Arnautovic"
             }
           ]
         },
@@ -3312,7 +3321,8 @@
           "var": [
             {
               "m": "28'",
-              "d": "Penalty given"
+              "d": "Penalty given",
+              "x": "Martinez"
             }
           ]
         }
@@ -3776,7 +3786,8 @@
           "var": [
             {
               "m": "76'",
-              "d": "Goal awarded"
+              "d": "Goal awarded",
+              "x": "Luckassen"
             }
           ]
         }

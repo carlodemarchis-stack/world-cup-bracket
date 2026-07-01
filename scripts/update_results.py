@@ -190,12 +190,39 @@ def fetch_timeline(ids, id2code):
         g.pop("_k", None)
 
     var = []
-    for e in events:
-        if e.get("Type") == 71:   # VAR review
-            dd = desc(e.get("EventDescription")).strip()
-            mm = (e.get("MatchMinute") or "").strip()
-            if dd and mm:
-                var.append({"m": mm, "d": dd, "_k": _minute_key(mm)})
+    for i, e in enumerate(events):
+        if e.get("Type") != 71:   # VAR review
+            continue
+        dtext = desc(e.get("EventDescription")).strip()
+        mm = (e.get("MatchMinute") or "").strip()
+        if not (dtext and mm):
+            continue
+        vk = _minute_key(mm)
+        # Safe context only: the nearest same-incident event within ~4 minutes
+        # (the player sent off / who scored the awarded goal or converted penalty).
+        def near(pred):
+            best, bd = None, 99
+            for j in range(max(0, i - 3), min(len(events), i + 7)):
+                ee = events[j]
+                if j == i or not pred(ee):
+                    continue
+                d = abs(_minute_key(ee.get("MatchMinute") or "") - vk)
+                if d <= 4 and d < bd:
+                    bd, best = d, ee
+            return best
+        low, ev = dtext.lower(), None
+        if "penalty given" in low:
+            ev = near(lambda x: desc(x.get("TypeLocalized")).strip().lower() == "penalty goal")
+        elif "red card" in low:
+            ev = near(lambda x: "red card" in desc(x.get("TypeLocalized")).strip().lower())
+        elif "goal awarded" in low:
+            ev = near(lambda x: desc(x.get("TypeLocalized")).strip().lower() == "goal!")
+        entry = {"m": mm, "d": dtext, "_k": vk}
+        if ev:
+            nm = _surname(desc(ev.get("EventDescription")))
+            if nm:
+                entry["x"] = nm
+        var.append(entry)
     var.sort(key=lambda v: v["_k"])
     for v in var:
         v.pop("_k", None)
@@ -264,9 +291,9 @@ def enrich(slot, res, changes, label):
         # (e.g. penalties FIFA types separately), and VAR events — keeping
         # curated scorer names.
         fresh, varev = fetch_timeline(res["ids"], res["id2code"])
-        if varev and not slot.get("var"):
+        if varev and slot.get("var") != varev:   # refresh may add adjacent-event context
             slot["var"] = varev
-            changes.append(f"{label}: +{len(varev)} VAR")
+            changes.append(f"{label}: VAR x{len(varev)}")
         remaining = list(slot["goals"])
         for fg in fresh:
             fk = _minute_key(fg["m"])   # normalise "90+5'" vs "90'+5'" when matching

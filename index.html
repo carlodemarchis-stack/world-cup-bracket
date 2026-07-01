@@ -1093,7 +1093,7 @@ function openScorersModal(){
     if (!m || !m.played) return;
     const stage = stageOf(id);
     if (m.att) matches.push({ id, stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, venue: m.venue, att: +m.att });
-    (m.var || []).forEach(v => varEvents.push({ id, stage, a: m.a, b: m.b, date: m.date, min: v.m, dec: v.d }));
+    (m.var || []).forEach(v => varEvents.push({ id, stage, a: m.a, b: m.b, date: m.date, min: v.m, dec: v.d, x: v.x }));
     const cnt = { [m.a]: 0, [m.b]: 0 };   // running score as the goals go in
     (m.goals || []).forEach(g => {
       if (g.t in cnt) cnt[g.t]++;
@@ -1197,7 +1197,10 @@ function openScorersModal(){
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:32px;flex:none;', v.stage));
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;width:66px;flex:none;", v.a + '–' + v.b));
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';width:44px;flex:none;text-align:right;', v.min));
-      row.appendChild(el('span', 'flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', v.dec));
+      const dc = el('div', 'flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;');
+      dc.appendChild(document.createTextNode(v.dec));
+      if (v.x) dc.appendChild(el('span', 'color:' + pal.sub + ';', ' — ' + v.x));
+      row.appendChild(dc);
       row.addEventListener('click', () => openMatchModal(v.id));
       box.appendChild(row);
     });
