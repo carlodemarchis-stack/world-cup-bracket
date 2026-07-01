@@ -1085,12 +1085,15 @@ function openScorersModal(){
     const m = resolveMatch(id);
     if (!m || !m.played) return;
     const stage = stageOf(id);
+    const cnt = { [m.a]: 0, [m.b]: 0 };   // running score as the goals go in
     (m.goals || []).forEach(g => {
+      if (g.t in cnt) cnt[g.t]++;
       if (g.p && g.p.indexOf('(o.g.)') < 0){   // own goals don't count toward a scorer
         const key = g.p + '|' + g.t, e = gmap.get(key) || { name: g.p, team: g.t, goals: [] };
         const opp = g.t === m.a ? m.b : m.a;
         const score = g.t === m.a ? (m.aGoals + '–' + m.bGoals) : (m.bGoals + '–' + m.aGoals);
-        e.goals.push({ min: g.m, opp, score, stage });
+        const run = cnt[g.t] + '–' + cnt[opp];   // scoreline this goal made it (scorer first)
+        e.goals.push({ min: g.m, opp, score, run, stage });
         gmap.set(key, e);
       }
       if (g.a){ const k = g.a + '|' + g.t, e = amap.get(k) || { name: g.a, team: g.t, n: 0 }; e.n++; amap.set(k, e); }
@@ -1130,12 +1133,14 @@ function openScorersModal(){
         const detail = el('div', 'display:none;padding:2px 0 9px 42px;');
         e.goals.forEach(gg => {
           const oi = TEAMDIR[gg.opp] || { iso: '' };
-          const d = el('div', 'display:flex;align-items:center;gap:7px;font-size:12px;color:' + pal.sub + ';padding:2px 0;');
-          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:32px;flex:none;', gg.stage));
+          const d = el('div', 'display:flex;align-items:center;gap:6px;font-size:12px;color:' + pal.sub + ';padding:2px 0;');
+          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:30px;flex:none;', gg.stage));
           d.appendChild(el('span', 'flex:none;', 'v'));
           if (oi.iso) d.appendChild(flagImg(oi.iso, 13));
-          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;flex:1;", gg.opp + ' ' + gg.score));
-          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';flex:none;', gg.min));
+          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;flex:1;", gg.opp));
+          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';flex:none;width:42px;text-align:right;', gg.min));
+          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';flex:none;width:34px;text-align:right;', gg.run));
+          d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;flex:none;width:42px;text-align:right;", '(' + gg.score + ')'));
           detail.appendChild(d);
         });
         row.addEventListener('click', () => { const open = detail.style.display === 'none'; detail.style.display = open ? 'block' : 'none'; plus.textContent = open ? '–' : '+'; });
