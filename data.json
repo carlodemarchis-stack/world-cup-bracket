@@ -465,7 +465,46 @@
     "L:1:0": {
       "date": "Jul 1",
       "time": "22:00",
-      "venue": "Seattle Stadium"
+      "venue": "Seattle Stadium",
+      "score": "3–2",
+      "winner": "BEL",
+      "et": true,
+      "ref": "Said MARTINEZ",
+      "att": 66925,
+      "form": {
+        "BEL": "4-2-3-1",
+        "SEN": "4-3-3"
+      },
+      "goals": [
+        {
+          "t": "SEN",
+          "p": "Diarra",
+          "m": "24'"
+        },
+        {
+          "t": "SEN",
+          "p": "Sarr",
+          "m": "51'",
+          "a": "Niakhate"
+        },
+        {
+          "t": "BEL",
+          "p": "Lukaku",
+          "m": "86'",
+          "a": "Meunier"
+        },
+        {
+          "t": "BEL",
+          "p": "Tielemans",
+          "m": "89'",
+          "a": "Trossard"
+        },
+        {
+          "t": "BEL",
+          "p": "Tielemans",
+          "m": "120'+5'"
+        }
+      ]
     },
     "L:1:1": {
       "date": "Jul 2",
