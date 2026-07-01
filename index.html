@@ -87,6 +87,17 @@
 // (Jun 11 – Jul 19 2026 is entirely in CEST). Convert to the chosen IANA zone.
 // ---------------------------------------------------------------------------
 const MONTHS = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
+// Readable summer-2026 abbreviations where Intl only gives "GMT+x". Central-European
+// zones fall through to the CEST/EEST heuristic below, so they need no entry here.
+const ZONE_ABBR = {
+  'Europe/London':'BST', 'Europe/Dublin':'IST', 'Europe/Lisbon':'WEST',
+  'America/New_York':'EDT', 'America/Toronto':'EDT', 'America/Chicago':'CDT', 'America/Denver':'MDT',
+  'America/Phoenix':'MST', 'America/Los_Angeles':'PDT', 'America/Vancouver':'PDT',
+  'America/Mexico_City':'CST', 'America/Sao_Paulo':'BRT', 'America/Argentina/Buenos_Aires':'ART', 'America/Bogota':'COT',
+  'Africa/Johannesburg':'SAST', 'Africa/Cairo':'EEST', 'Africa/Lagos':'WAT',
+  'Asia/Tokyo':'JST', 'Asia/Seoul':'KST', 'Asia/Shanghai':'CST', 'Asia/Kolkata':'IST', 'Asia/Dubai':'GST', 'Asia/Singapore':'SGT',
+  'Australia/Sydney':'AEST', 'Australia/Perth':'AWST', 'Pacific/Auckland':'NZST'
+};
 const SRC_OFFSET_MIN = 120;
 let tz = Intl.DateTimeFormat().resolvedOptions().timeZone;   // client-local, user-selectable
 function kickoffInstant(dateStr, timeStr){
@@ -100,8 +111,13 @@ function fmtKickoff(dateStr, timeStr){
   const p = {};
   new Intl.DateTimeFormat('en-US', { timeZone: tz, month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false, timeZoneName:'short' })
     .formatToParts(inst).forEach(x => { p[x.type] = x.value; });
+  let zone = ZONE_ABBR[tz] || p.timeZoneName;
+  if (!ZONE_ABBR[tz] && /^Europe\//.test(tz)){
+    if (/\+2$/.test(zone)) zone = 'CEST';
+    else if (/\+3$/.test(zone)) zone = 'EEST';
+  }
   const hh = (p.hour === '24') ? '00' : p.hour;
-  return { date: p.month + ' ' + p.day, time: hh + ':' + p.minute, zone: p.timeZoneName };
+  return { date: p.month + ' ' + p.day, time: hh + ':' + p.minute, zone: zone };
 }
 
 function renderVals(P, DATA) {
