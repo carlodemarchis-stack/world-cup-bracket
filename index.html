@@ -315,6 +315,12 @@ function buildBracket(v){
   root.appendChild(head);
 
   const stage = el('div', 'position:relative;width:min(94vw,820px);aspect-ratio:1/1;margin:0 auto;');
+  stage.id = 'bracket-stage';
+  // All positioned content lives on a fixed 820px artboard that fitArtboard()
+  // scales to the stage width, so every element (crests, chips, dots, text)
+  // shrinks together on narrow screens instead of colliding at full size.
+  const art = el('div', 'position:absolute;left:0;top:0;width:820px;height:820px;transform-origin:top left;');
+  art.id = 'bracket-art';
 
   // SVG links layer
   const s = svg('svg', { viewBox:'0 0 1200 1200', preserveAspectRatio:'xMidYMid meet' });
@@ -332,15 +338,15 @@ function buildBracket(v){
     if (l.lstyle) ln.setAttribute('style', l.lstyle);
     s.appendChild(ln);
   });
-  stage.appendChild(s);
+  art.appendChild(s);
 
   // Center: pulse ring + gold ball with star
-  stage.appendChild(el('div', 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;border:1px solid rgba(214,176,74,.5);animation:wcpulse 3.4s ease-out infinite;z-index:4;'));
+  art.appendChild(el('div', 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;border:1px solid rgba(214,176,74,.5);animation:wcpulse 3.4s ease-out infinite;z-index:4;'));
   const ball = el('div', 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 50% 34%, #f3d680, #c79a3a 58%, #876621);box-shadow:0 0 34px rgba(214,176,74,.55), inset 0 2px 7px rgba(255,255,255,.45), inset 0 -5px 9px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:5;');
   const star = svg('svg', { width:36, height:36, viewBox:'0 0 24 24' });
   star.appendChild(svg('polygon', { points:'12,2.2 14.7,8.9 22,9.3 16.4,13.9 18.4,21 12,16.9 5.6,21 7.6,13.9 2,9.3 9.3,8.9', fill:'#fff8e6', stroke:'#9c7526', 'stroke-width':'0.5' }));
   ball.appendChild(star);
-  stage.appendChild(ball);
+  art.appendChild(ball);
 
   // empty nodes
   v.emptyNodes.forEach(e => stage.appendChild(el('div', e.boxStyle)));
@@ -356,14 +362,14 @@ function buildBracket(v){
     if (c.pens)      box.appendChild(el('div', c.pensStyle, 'Penalties'));
     if (c.hasDate)   box.appendChild(el('div', c.dateStyle, c.date));
     if (c.hasTime)   box.appendChild(el('div', c.timeStyle, c.time + ' CET'));
-    stage.appendChild(box);
+    art.appendChild(box);
   });
 
   // labels (team names, when enabled)
   v.labels.forEach(l=>{
     const outer = el('div', l.outer);
     outer.appendChild(el('div', l.inner, l.name));
-    stage.appendChild(outer);
+    art.appendChild(outer);
   });
 
   // team nodes — flag mode or ring mode
@@ -376,7 +382,7 @@ function buildBracket(v){
       img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;';
       box.appendChild(img);
       box.appendChild(el('span', n.chipStyle, n.code));
-      stage.appendChild(box);
+      art.appendChild(box);
     });
   } else {
     v.teamNodes.forEach(n=>{
@@ -385,10 +391,11 @@ function buildBracket(v){
       const inner = el('div', n.innerStyle);
       inner.appendChild(el('span', n.codeStyle, n.code));
       box.appendChild(inner);
-      stage.appendChild(box);
+      art.appendChild(box);
     });
   }
 
+  stage.appendChild(art);
   root.appendChild(stage);
 
   const footer = el('div', v.footerStyle);
@@ -454,6 +461,17 @@ function setControls(open){
   if (g){ g.classList.toggle('on', open); g.setAttribute('aria-expanded', String(open)); }
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && controlsOpen) setControls(false); });
+
+// Scale the fixed 820px artboard down to the stage width so the whole bracket
+// shrinks uniformly on narrow screens (no overlap), and caps at 1x on desktop.
+const ARTBOARD_BASE = 820;
+function fitArtboard(){
+  const wrap = document.getElementById('bracket-stage');
+  const art = document.getElementById('bracket-art');
+  if (!wrap || !art) return;
+  art.style.transform = 'scale(' + (wrap.clientWidth / ARTBOARD_BASE) + ')';
+}
+window.addEventListener('resize', fitArtboard);
 function render(){
   if (!DATA) return;
   const props = {
@@ -462,6 +480,7 @@ function render(){
     showResults: state.showResults, sectionGap: state.sectionGap, quarterGap: state.quarterGap
   };
   app.replaceChildren(buildBracket(renderVals(props, DATA)));
+  fitArtboard();
   document.title = state.title + ' — World Cup 2026 Knockout Bracket';
 }
 
