@@ -40,9 +40,12 @@
 
   "_r32": "The 16 Round-of-32 matches, keyed 'side:1:k' (side R/L, k=0..7). The two teams are teams[off+2k] vs teams[off+2k+1] (off=0 for R, 16 for L). Scheduled match: {date, time}. Played match: {score, winner, et?, pens?} — 'winner' is a team code and drives who advances/who's eliminated.",
   "r32": {
-    "R:1:0": { "score": "2–1", "winner": "BRA" },
-    "R:1:1": { "score": "2–1", "winner": "NOR" },
-    "R:1:2": { "score": "2–0", "winner": "MEX" },
+    "R:1:0": { "score": "2–1", "winner": "BRA", "date": "Jun 29", "venue": "NRG Stadium, Houston",
+      "goals": [ { "t": "BRA", "p": "Casemiro", "m": "56'" }, { "t": "BRA", "p": "Martinelli", "m": "90+5'" }, { "t": "JPN", "p": "Sano", "m": "29'" } ] },
+    "R:1:1": { "score": "2–1", "winner": "NOR", "date": "Jun 30", "venue": "AT&T Stadium, Arlington",
+      "goals": [ { "t": "NOR", "p": "Nusa", "m": "39'" }, { "t": "NOR", "p": "Haaland", "m": "86'" }, { "t": "CIV", "p": "Diallo", "m": "74'" } ] },
+    "R:1:2": { "score": "2–0", "winner": "MEX", "date": "Jun 30", "venue": "Estadio Azteca, Mexico City",
+      "goals": [ { "t": "MEX", "p": "Quiñones", "m": "22'" }, { "t": "MEX", "p": "Jiménez", "m": "31'" } ] },
     "R:1:3": { "date": "Jul 1",  "time": "18:00" },
     "R:1:4": { "date": "Jul 4",  "time": "00:00" },
     "R:1:5": { "date": "Jul 3",  "time": "20:00" },
@@ -52,32 +55,36 @@
     "L:1:1": { "date": "Jul 2",  "time": "02:00" },
     "L:1:2": { "date": "Jul 2",  "time": "21:00" },
     "L:1:3": { "date": "Jul 3",  "time": "01:00" },
-    "L:1:4": { "score": "1–1", "et": true, "pens": true, "winner": "MAR" },
-    "L:1:5": { "score": "1–0", "winner": "CAN" },
-    "L:1:6": { "score": "3–0", "winner": "FRA" },
-    "L:1:7": { "score": "1–1", "et": true, "pens": true, "winner": "PAR" }
+    "L:1:4": { "score": "1–1", "et": true, "pens": true, "penScore": "3–2", "winner": "MAR", "date": "Jun 29", "venue": "Estadio BBVA, Guadalupe",
+      "goals": [ { "t": "NED", "p": "Gakpo", "m": "72'" }, { "t": "MAR", "p": "Diop", "m": "90+1'" } ] },
+    "L:1:5": { "score": "1–0", "winner": "CAN", "date": "Jun 28", "venue": "SoFi Stadium, Inglewood",
+      "goals": [ { "t": "CAN", "p": "Eustáquio", "m": "90+2'" } ] },
+    "L:1:6": { "score": "3–0", "winner": "FRA", "date": "Jun 30", "venue": "MetLife Stadium, East Rutherford",
+      "goals": [ { "t": "FRA", "p": "Mbappé", "m": "45'" }, { "t": "FRA", "p": "Barcola", "m": "53'" }, { "t": "FRA", "p": "Mbappé", "m": "74'" } ] },
+    "L:1:7": { "score": "1–1", "et": true, "pens": true, "penScore": "4–3", "winner": "PAR", "date": "Jun 29", "venue": "Gillette Stadium, Foxborough",
+      "goals": [ { "t": "PAR", "p": "Enciso", "m": "42'" }, { "t": "GER", "p": "Havertz", "m": "54'" } ] }
   },
 
   "_schedule": "Kickoff date/time for the inner rounds, keyed 'side:L:k' (L=2 R16, L=3 QF, L=4 SF). Add {score, winner} here the same way once these are played to light them up.",
   "schedule": {
-    "R:2:0": { "date": "Jul 5",  "time": "22:00" },
-    "R:2:1": { "date": "Jul 6",  "time": "02:00" },
+    "R:2:0": { "date": "Jul 5",  "time": "22:00", "venue": "East Rutherford" },
+    "R:2:1": { "date": "Jul 6",  "time": "02:00", "venue": "Mexico City" },
     "R:2:2": { "date": "Jul 7",  "time": "18:00" },
     "R:2:3": { "date": "Jul 7",  "time": "22:00" },
     "R:3:0": { "date": "Jul 11", "time": "23:00" },
     "R:3:1": { "date": "Jul 12", "time": "03:00" },
-    "R:4:0": { "date": "Jul 15" },
+    "R:4:0": { "date": "Jul 15", "venue": "Atlanta" },
     "L:2:0": { "date": "Jul 7",  "time": "02:00" },
     "L:2:1": { "date": "Jul 6",  "time": "21:00" },
-    "L:2:2": { "date": "Jul 4",  "time": "19:00" },
-    "L:2:3": { "date": "Jul 4",  "time": "23:00" },
+    "L:2:2": { "date": "Jul 4",  "time": "19:00", "venue": "Houston" },
+    "L:2:3": { "date": "Jul 4",  "time": "23:00", "venue": "Philadelphia" },
     "L:3:0": { "date": "Jul 10", "time": "21:00" },
     "L:3:1": { "date": "Jul 9",  "time": "22:00" },
-    "L:4:0": { "date": "Jul 14" }
+    "L:4:0": { "date": "Jul 14", "venue": "Arlington" }
   },
 
-  "final": { "date": "Jul 19" },
-  "thirdPlace": { "date": "Jul 18" },
+  "final": { "date": "Jul 19", "venue": "East Rutherford" },
+  "thirdPlace": { "date": "Jul 18", "venue": "Miami Gardens" },
 
   "_groups": "Final group-stage standings (finishing order 1-4) and matches, keyed A-L. Table row: {code,name,iso,w,d,l,gf,ga}; played=w+d+l, pts=3w+d, gd=gf-ga are derived. Match: {d,a,b,s} with score s in a-b order. Qualification (winner/runner-up/best third/eliminated) is derived from position + bracket membership.",
   "groups": {

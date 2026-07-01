@@ -37,7 +37,7 @@
   }
   #settings-toggle:hover, #settings-toggle.on { opacity: 1; background: rgba(128,128,128,.16); }
   /* Clickable team crests open the group/matches modal */
-  #bracket-art [data-team] { cursor: pointer; }
+  #bracket-art [data-team], #bracket-art [data-match] { cursor: pointer; }
   #team-modal table td, #team-modal table th { font-variant-numeric: tabular-nums; }
   #controls .grp { margin-bottom: 12px; }
   #controls .grp:last-child { margin-bottom: 0; }
@@ -202,6 +202,7 @@ function renderVals(P, DATA) {
       boxStyle:'position:absolute;left:'+(px/12)+'%;top:'+(py/12)+'%;transform:translate(-50%,-50%);z-index:7;'+
         'background:'+T.chipBg+';border:1px solid '+T.chipBorder+';border-radius:5px;padding:1px 6px 2px;'+
         'text-align:center;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none;',
+      match:o.match,
       phase:o.phase, hasPhase:hasPhase,
       score:o.score, hasScore:hasScore, showScore:(hasScore && !o.pens), pens:!!o.pens, showEt:(!!o.et && !o.pens),
       date:o.date, hasDate:hasDate,
@@ -251,17 +252,19 @@ function renderVals(P, DATA) {
           const code = decidedR16[side+':'+k];
           const m = MATCHES[side+':1:'+k] || {};
           if (code){
-            teamNodes.push(makeTeam(TEAMS.find(x=>x.code===code), p, 44, true, false));
-            if (showResults && m.score) innerCards.push(makeInnerCard(p.x, p.y - 21, { score:m.score, pens:m.pens }));
+            const wn = makeTeam(TEAMS.find(x=>x.code===code), p, 44, true, false);
+            wn.match = side+':1:'+k;   // this crest = the R32 match it won
+            teamNodes.push(wn);
+            if (showResults && m.score) innerCards.push(makeInnerCard(p.x, p.y - 21, { score:m.score, pens:m.pens, match:side+':1:'+k }));
           } else if (showResults){
-            innerCards.push(makeInnerCard(p.x, p.y, { phase:'R32', date:m.date, time:m.time }));
+            innerCards.push(makeInnerCard(p.x, p.y, { phase:'R32', date:m.date, time:m.time, match:side+':1:'+k }));
           } else {
             emptyNodes.push({ boxStyle: dotStyle(p, 14) });
           }
         } else if (showResults){
           // inner match card on the bridge: round + date/time now, score once played
           const info = INNER_INFO[side+':'+L+':'+k] || {};
-          innerCards.push(makeInnerCard(p.x, p.y, { phase:matchRound[L], date:info.date, time:info.time }));
+          innerCards.push(makeInnerCard(p.x, p.y, { phase:matchRound[L], date:info.date, time:info.time, match:side+':'+L+':'+k }));
         } else {
           emptyNodes.push({ boxStyle: dotStyle(p, 16) });
         }
@@ -287,10 +290,10 @@ function renderVals(P, DATA) {
   const titleStyle = 'font-family:Barlow,sans-serif;font-weight:700;font-size:clamp(26px,4.4vw,42px);margin:4px 0 0;line-height:1.05;color:'+T.titleColor+';';
   const footerStyle = "text-align:center;margin-top:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:"+T.footerColor+';';
 
-  if (showResults) innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:DATA.final.date }));
+  if (showResults) innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:DATA.final.date, match:'final' }));
   // Third-place play-off: a standalone chip above the trophy (the two SF losers;
   // disconnected from the main path to the final).
-  if (showResults && DATA.thirdPlace) innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:DATA.thirdPlace.date }));
+  if (showResults && DATA.thirdPlace) innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:DATA.thirdPlace.date, match:'third' }));
 
   return { teamNodes, emptyNodes, links, labels: showNames?labels:[], innerCards, statusDots, title, kicker, rootStyle, kickerStyle, titleStyle, footerStyle, flagMode, ringMode: !flagMode };
 }
@@ -368,6 +371,7 @@ function buildBracket(v){
     if (c.pens)      box.appendChild(el('div', c.pensStyle, 'Penalties'));
     if (c.hasDate)   box.appendChild(el('div', c.dateStyle, c.date));
     if (c.hasTime)   box.appendChild(el('div', c.timeStyle, c.time + ' CET'));
+    if (c.match){ box.dataset.match = c.match; box.style.pointerEvents = 'auto'; box.style.cursor = 'pointer'; box.onclick = () => openMatchModal(c.match); }
     art.appendChild(box);
   });
 
@@ -383,8 +387,8 @@ function buildBracket(v){
     v.teamNodes.forEach(n=>{
       const box = el('div', n.boxStyle);
       box.title = n.name;
-      box.dataset.team = n.code;
-      box.onclick = () => openTeamModal(n.code);
+      if (n.match){ box.dataset.match = n.match; box.onclick = () => openMatchModal(n.match); }
+      else { box.dataset.team = n.code; box.onclick = () => openTeamModal(n.code); }
       const img = document.createElement('img');
       img.src = n.flag; img.alt = n.name; img.loading = 'lazy';
       img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;';
@@ -396,8 +400,8 @@ function buildBracket(v){
     v.teamNodes.forEach(n=>{
       const box = el('div', n.boxStyle);
       box.title = n.name;
-      box.dataset.team = n.code;
-      box.onclick = () => openTeamModal(n.code);
+      if (n.match){ box.dataset.match = n.match; box.onclick = () => openMatchModal(n.match); }
+      else { box.dataset.team = n.code; box.onclick = () => openTeamModal(n.code); }
       const inner = el('div', n.innerStyle);
       inner.appendChild(el('span', n.codeStyle, n.code));
       box.appendChild(inner);
@@ -658,6 +662,94 @@ function buildMatchList(code, pal, accent){
     wrap.appendChild(row);
   });
   return wrap;
+}
+
+// ---------------------------------------------------------------------------
+// Match modal — click a bracket match (crest, chip, final/third) for details.
+// ---------------------------------------------------------------------------
+function winnerOfNode(side, L, k){ return L === 1 ? ((DATA.r32[side + ':1:' + k] || {}).winner || null) : null; }
+function matchParticipants(side, L, k){
+  if (L === 1){ const off = side === 'R' ? 0 : 16; return [DATA.teams[off + 2 * k].code, DATA.teams[off + 2 * k + 1].code]; }
+  return [winnerOfNode(side, L - 1, 2 * k), winnerOfNode(side, L - 1, 2 * k + 1)];
+}
+const ROUND_NAME = { 1: 'Round of 32', 2: 'Round of 16', 3: 'Quarter-final', 4: 'Semi-final' };
+function resolveMatch(id){
+  if (id === 'final') return { round: 'Final', a: winnerOfNode('R', 4, 0), b: winnerOfNode('L', 4, 0), date: (DATA.final || {}).date, venue: (DATA.final || {}).venue, played: false };
+  if (id === 'third') return { round: 'Third-place play-off', a: null, b: null, date: (DATA.thirdPlace || {}).date, venue: (DATA.thirdPlace || {}).venue, played: false };
+  const parts = id.split(':'), side = parts[0], L = +parts[1], k = +parts[2];
+  const round = ROUND_NAME[L], part = matchParticipants(side, L, k);
+  if (L === 1){
+    const mm = DATA.r32[id] || {};
+    if (mm.score){
+      const g = mm.score.split('–'), aWon = mm.winner === part[0];
+      return { round, a: part[0], b: part[1], played: true, winner: mm.winner,
+        aGoals: aWon ? g[0] : g[1], bGoals: aWon ? g[1] : g[0], goals: mm.goals || [],
+        et: mm.et, pens: mm.pens, penScore: mm.penScore, date: mm.date, venue: mm.venue };
+    }
+    return { round, a: part[0], b: part[1], played: false, date: mm.date, time: mm.time, venue: mm.venue };
+  }
+  const info = DATA.schedule[id] || {};
+  return { round, a: part[0], b: part[1], played: false, date: info.date, time: info.time, venue: info.venue };
+}
+function openMatchModal(id){
+  if (!DATA) return;
+  const m = resolveMatch(id);
+  if (!m) return;
+  closeTeamModal();
+  const dark = state.bgTheme === 'Dark', accent = state.accentColor;
+  const pal = dark
+    ? { panel: '#1b1a12', text: '#f4efe2', sub: 'rgba(228,222,206,.6)', line: 'rgba(255,255,255,.12)', head: 'rgba(228,222,206,.5)' }
+    : { panel: '#ffffff', text: '#1c1813', sub: 'rgba(70,62,48,.7)', line: 'rgba(0,0,0,.1)', head: 'rgba(70,62,48,.55)' };
+  const overlay = el('div', 'position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(6,6,8,.55);');
+  overlay.id = 'team-modal';
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeTeamModal(); });
+  const panel = el('div', "position:relative;width:min(94vw,440px);max-height:88vh;overflow:auto;background:" + pal.panel + ';color:' + pal.text + ";border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);font-family:'Barlow',system-ui,sans-serif;padding:18px 18px 20px;");
+  const x = document.createElement('button');
+  x.textContent = '×'; x.type = 'button'; x.setAttribute('aria-label', 'Close');
+  x.style.cssText = 'position:absolute;top:8px;right:12px;border:none;background:transparent;color:' + pal.text + ';font-size:24px;line-height:1;cursor:pointer;opacity:.5;';
+  x.onclick = closeTeamModal;
+  panel.appendChild(x);
+
+  panel.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:13px;color:" + accent + ';margin:0 24px 0 0;', m.round));
+  const sub = [];
+  if (m.date) sub.push(m.date + (m.time ? (' · ' + m.time + ' CET') : ''));
+  if (m.venue) sub.push(m.venue);
+  if (sub.length) panel.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:3px;', sub.join('  ·  ')));
+
+  const box = el('div', 'margin-top:14px;border-top:1px solid ' + pal.line + ';');
+  const teamRow = (code, goalsList, score, isWinner) => {
+    const info = code ? (TEAMDIR[code] || { name: code, iso: '' }) : { name: 'To be decided', iso: '' };
+    const row = el('div', 'display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid ' + pal.line + ';');
+    if (info.iso) row.appendChild(flagImg(info.iso, 28));
+    else row.appendChild(el('div', 'width:28px;height:20px;border-radius:2px;flex:none;background:' + pal.line + ';'));
+    const mid = el('div', 'flex:1;min-width:0;');
+    const nm = el('div', 'display:flex;align-items:center;gap:6px;');
+    nm.appendChild(el('span', 'font-weight:' + (isWinner ? '700' : '600') + ';font-size:15px;' + (code ? '' : 'color:' + pal.sub + ';'), info.name));
+    if (isWinner) nm.appendChild(el('span', 'color:' + accent + ';font-size:13px;font-weight:700;', '✓'));
+    mid.appendChild(nm);
+    if (goalsList && goalsList.length)
+      mid.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:3px;line-height:1.5;', goalsList.map(g => g.p + ' ' + g.m).join(', ')));
+    row.appendChild(mid);
+    if (m.played) row.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;flex:none;", String(score)));
+    return row;
+  };
+  box.appendChild(teamRow(m.a, (m.goals || []).filter(g => g.t === m.a), m.aGoals, m.played && m.winner === m.a));
+  if (!m.played) box.appendChild(el('div', 'text-align:center;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:' + pal.sub + ';padding:6px 0;', 'vs'));
+  box.appendChild(teamRow(m.b, (m.goals || []).filter(g => g.t === m.b), m.bGoals, m.played && m.winner === m.b));
+  panel.appendChild(box);
+
+  if (m.played && (m.pens || m.et)){
+    const win = TEAMDIR[m.winner] ? TEAMDIR[m.winner].name : m.winner;
+    const note = m.pens ? (win + ' won ' + (m.penScore || '') + ' on penalties (a.e.t.)') : 'After extra time';
+    panel.appendChild(el('div', 'margin-top:10px;font-size:12px;color:' + pal.sub + ';', note));
+  }
+  if (!m.played && (!m.a || !m.b))
+    panel.appendChild(el('div', 'margin-top:10px;font-size:12px;color:' + pal.sub + ';', 'Awaiting the results of the previous round.'));
+
+  overlay.appendChild(panel);
+  modalEl = overlay;
+  document.body.appendChild(overlay);
+  document.addEventListener('keydown', modalKey);
 }
 function render(){
   if (!DATA) return;
