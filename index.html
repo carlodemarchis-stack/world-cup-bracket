@@ -1145,7 +1145,7 @@ function openScorersModal(){
         const mid = el('span', "font-family:'Barlow Condensed',sans-serif;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
         mid.appendChild(el('span', '', en.opp));
         if (kind === 'assists') mid.appendChild(el('span', 'opacity:.7;', '  → ' + en.note));
-        else if (en.note) mid.appendChild(el('span', 'opacity:.7;', '  · ' + en.note));
+        else if (en.note) mid.appendChild(el('span', 'opacity:.7;', '  · assist by ' + en.note));
         d.appendChild(mid);
         d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';flex:none;width:44px;text-align:right;', en.min));
         d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';flex:none;width:32px;text-align:right;', en.run));
