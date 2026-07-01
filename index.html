@@ -904,7 +904,8 @@ function playedFrom(round, a, b, s){
   const g = String(s.score || '').split('–'), aWon = s.winner === a;
   return { round, a, b, played: true, winner: s.winner,
     aGoals: aWon ? g[0] : g[1], bGoals: aWon ? g[1] : g[0], goals: s.goals || [],
-    et: s.et, pens: s.pens, penScore: s.penScore, date: s.date, venue: s.venue, highlights: s.highlights };
+    et: s.et, pens: s.pens, penScore: s.penScore, date: s.date, venue: s.venue,
+    highlights: s.highlights, ref: s.ref, att: s.att };
 }
 function sfLoser(side){
   const part = matchParticipants(side, 4, 0), w = winnerOfNode(side, 4, 0);
@@ -954,6 +955,10 @@ function openMatchModal(id){
   if (m.date){ const kk = fmtKickoff(m.date, m.time); sub.push(kk.date + (kk.time ? (' · ' + kk.time + ' ' + kk.zone) : '')); }
   if (m.venue) sub.push(m.venue);
   if (sub.length) panel.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:3px;', sub.join('  ·  ')));
+  const meta2 = [];
+  if (m.ref) meta2.push('Referee: ' + m.ref);
+  if (m.att) meta2.push('Att. ' + Number(m.att).toLocaleString());
+  if (meta2.length) panel.appendChild(el('div', 'font-size:11px;color:' + pal.sub + ';margin-top:2px;', meta2.join('  ·  ')));
 
   const box = el('div', 'margin-top:14px;border-top:1px solid ' + pal.line + ';');
   const teamRow = (code, goalsList, score, isWinner) => {
@@ -967,7 +972,8 @@ function openMatchModal(id){
     if (isWinner) nm.appendChild(el('span', 'color:' + accent + ';font-size:13px;font-weight:700;', '✓'));
     mid.appendChild(nm);
     if (goalsList && goalsList.length)
-      mid.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:3px;line-height:1.5;', goalsList.map(g => g.p + ' ' + g.m).join(', ')));
+      mid.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:3px;line-height:1.5;',
+        goalsList.map(g => g.p + ' ' + g.m + (g.a ? ' — assist ' + g.a : '')).join(', ')));
     row.appendChild(mid);
     if (m.played) row.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;flex:none;", String(score)));
     return row;

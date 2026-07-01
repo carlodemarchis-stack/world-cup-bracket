@@ -32,6 +32,9 @@ API = ("https://api.fifa.com/api/v3/calendar/matches"
 DASH = "–"  # en-dash, matching the existing data
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_PATH = os.path.join(ROOT, "data.json")
+# Opt-in: also backfill assists onto already-recorded goals (one-off; the
+# hourly cron runs without it, so it never re-fetches settled matches).
+REFRESH_GOALS = "--refresh-goals" in sys.argv
 
 
 def desc(v):
@@ -86,6 +89,10 @@ def parse_fifa(matches):
                 continue
             hp, ap = m.get("HomeTeamPenaltyScore"), m.get("AwayTeamPenaltyScore")
             pens = hp is not None and ap is not None
+            ref = next((desc(o.get("Name")) for o in (m.get("Officials") or [])
+                        if o.get("OfficialType") == 1), None)
+            att = m.get("Attendance")
+            att = int(att) if att and str(att).isdigit() else None
             ko[frozenset((hc, ac))] = {
                 "scores": {hc: int(hs), ac: int(as_)},
                 "pens": {hc: int(hp), ac: int(ap)} if pens else None,
@@ -93,14 +100,21 @@ def parse_fifa(matches):
                 "et": m.get("ResultType") in (2, 3) or pens,
                 "ids": (str(m.get("IdStage")), str(m.get("IdMatch"))),
                 "id2code": id2code,
+                "ref": ref or None,
+                "att": att,
             }
     return group, ko
 
 
 def _surname(desc_txt):
-    """'Harry KANE (England) scores!!' -> 'Kane' (the ALL-CAPS surname)."""
+    """The ALL-CAPS surname from a FIFA event description.
+
+    'Harry KANE (England) scores!!' -> 'Kane'
+    'Assisted by Erik LIRA.'         -> 'Lira'
+    """
     part = desc_txt.split("(")[0].strip()
-    words = part.split()
+    words = [w.strip(".,!?;:'’") for w in part.split()]
+    words = [w for w in words if w]
     caps = [w for w in words if w == w.upper() and any(c.isalpha() for c in w)]
     name = " ".join(caps) if caps else (words[-1] if words else part)
     return name.title()
@@ -126,8 +140,19 @@ def fetch_goals(ids, id2code):
     except Exception:  # noqa: BLE001 - scorers are best-effort; never break the run
         return []
     codes = list(id2code.values())
-    goals = []
-    for e in payload.get("Event", []) or []:
+    events = payload.get("Event", []) or []
+
+    # Assists come as their own events, sharing the goal's minute and team.
+    assists = {}
+    for e in events:
+        if desc(e.get("TypeLocalized")).strip().lower() == "assist":
+            tc = id2code.get(str(e.get("IdTeam")))
+            nm = _surname(desc(e.get("EventDescription")))
+            if tc and nm:
+                assists.setdefault((e.get("MatchMinute") or "", tc), []).append(nm)
+
+    goals, used = [], {}
+    for e in events:
         tl = desc(e.get("TypeLocalized")).strip().lower()
         ed = desc(e.get("EventDescription"))
         own = "own goal" in tl or "own goal" in ed.lower()
@@ -142,8 +167,15 @@ def fetch_goals(ids, id2code):
             if other:
                 team = other[0]
         mm = e.get("MatchMinute") or ""
-        goals.append({"t": team, "p": _surname(ed) + (" (o.g.)" if own else ""),
-                      "m": mm, "_k": _minute_key(mm)})
+        g = {"t": team, "p": _surname(ed) + (" (o.g.)" if own else ""),
+             "m": mm, "_k": _minute_key(mm)}
+        if not own:  # pair with an unused assist from the same team + minute
+            lst = assists.get((mm, scorer_team), [])
+            i = used.get((mm, scorer_team), 0)
+            if i < len(lst):
+                g["a"] = lst[i]
+                used[(mm, scorer_team)] = i + 1
+        goals.append(g)
     goals.sort(key=lambda g: g["_k"])
     for g in goals:
         g.pop("_k", None)
@@ -182,12 +214,30 @@ def apply_ko(slot, a, b, ko, changes, label):
         if k not in new and k in slot:
             changes.append(f"{label}: drop {k}")
             del slot[k]
+    # Referee + attendance from the feed — fill only when missing.
+    for key in ("ref", "att"):
+        if res.get(key) and not slot.get(key):
+            slot[key] = res[key]
+            changes.append(f"{label}: {key}={res[key]}")
     # Scorers: fill in only when missing, so hand-curated goals are never lost.
-    if not slot.get("goals") and res.get("ids"):
-        g = fetch_goals(res["ids"], res["id2code"])
-        if g:
-            slot["goals"] = g
-            changes.append(f"{label}: +{len(g)} scorer(s)")
+    if res.get("ids"):
+        if not slot.get("goals"):
+            g = fetch_goals(res["ids"], res["id2code"])
+            if g:
+                slot["goals"] = g
+                changes.append(f"{label}: +{len(g)} scorer(s)")
+        elif REFRESH_GOALS and any("a" not in g for g in slot["goals"]):
+            # Backfill assists onto existing goals (keeps curated scorer names).
+            fresh = fetch_goals(res["ids"], res["id2code"])
+            pool = {}
+            for fg in fresh:
+                if fg.get("a"):
+                    pool.setdefault((fg["m"], fg["t"]), []).append(fg["a"])
+            for g in slot["goals"]:
+                lst = pool.get((g.get("m"), g.get("t")))
+                if "a" not in g and lst:
+                    g["a"] = lst.pop(0)
+                    changes.append(f"{label}: assist {g['p']} <- {g['a']}")
 
 
 def winner_of(slot_dict, key):
