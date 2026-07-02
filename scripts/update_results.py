@@ -418,8 +418,8 @@ def fetch_squads(matches, existing):
                 code2id[t["Abbreviation"]] = str(t["IdTeam"])
     out = dict(existing or {})
     for code, tid in sorted(code2id.items()):
-        if code in out and "pic" in (out[code] or [{}])[0]:
-            continue   # already have this squad with ids + photo field
+        if code in out and "dob" in (out[code] or [{}])[0]:
+            continue   # already have this squad with ids + photo + bio fields
         try:
             sq = fetch(f"https://api.fifa.com/api/v3/teams/{tid}/squad"
                        f"?idCompetition={COMPETITION}&idSeason={SEASON}&language=en")
@@ -427,7 +427,10 @@ def fetch_squads(matches, existing):
             continue
         players = [{"n": int(p["JerseyNum"]), "p": desc(p.get("PlayerName")).title(),
                     "pos": p.get("Position"), "id": str(p.get("IdPlayer") or ""),
-                    "pic": (p.get("PlayerPicture") or {}).get("PictureUrl") or ""}
+                    "pic": (p.get("PlayerPicture") or {}).get("PictureUrl") or "",
+                    "dob": (p.get("BirthDate") or "")[:10],
+                    "ht": int(p["Height"]) if p.get("Height") else None,
+                    "wt": int(p["Weight"]) if p.get("Weight") else None}
                    for p in (sq.get("Players") or [])
                    if p.get("JerseyNum") and desc(p.get("PlayerName"))]
         if players:

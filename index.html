@@ -1482,7 +1482,27 @@ function openScorersModal(){
     Object.values(DATA.schedule || {}).forEach(s => { eatG(s.goals); eatC(s.cards); });
     [DATA.final, DATA.thirdPlace].forEach(s => { eatG((s || {}).goals); eatC((s || {}).cards); });
     const POS = { 0: 'GK', 1: 'DEF', 2: 'MID', 3: 'FWD' };
+    const POSFULL = { 0: 'Goalkeeper', 1: 'Defender', 2: 'Midfielder', 3: 'Forward' };
+    const EVIC = { g: '⚽', gp: '⚽', a: '🥾', y: '🟨', r: '🟥' };
+    const ageFrom = iso => { if (!iso) return null; const b = new Date(iso), t = new Date(); if (isNaN(+b)) return null; let a = t.getFullYear() - b.getFullYear(); if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--; return a; };
     const mini = (icon, n) => { const s = el('span', 'display:inline-flex;align-items:center;gap:3px;flex:none;'); s.appendChild(el('span', 'font-size:11px;line-height:1;', icon)); s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;", String(n))); return s; };
+    // Per-player match log: the matches where a player scored, assisted or was booked.
+    const plog = {};
+    const addEv = (mt, teamCode, pid, k, m) => {
+      if (!pid) return;
+      const opp = teamCode === mt.a ? mt.b : mt.a, arr = (plog[pid] = plog[pid] || []);
+      let e = arr.find(x => x.id === mt.id);
+      if (!e){ e = { id: mt.id, stage: mt.stage, opp, ev: [] }; arr.push(e); }
+      e.ev.push({ k, m });
+    };
+    matches.forEach(mt => {
+      const full = resolveMatch(mt.id); if (!full) return;
+      (full.goals || []).forEach(g => {
+        if (g.p && g.p.indexOf('(o.g.)') < 0) addEv(mt, g.t, g.id, g.pen ? 'gp' : 'g', g.m);
+        if (g.aid) addEv(mt, g.t, g.aid, 'a', g.m);
+      });
+      (full.cards || []).forEach(c => addEv(mt, c.t, c.id, c.c === 'R' ? 'r' : 'y', c.m));
+    });
     Object.keys(squads).sort((a, b) => (TEAMDIR[a] ? TEAMDIR[a].name : a).localeCompare(TEAMDIR[b] ? TEAMDIR[b].name : b)).forEach(code => {
       const info = TEAMDIR[code] || { name: code, iso: '' }, tm = ev[code] || {};
       const wrap = el('div', 'border-bottom:1px solid ' + pal.line + ';');
@@ -1497,7 +1517,8 @@ function openScorersModal(){
         if (!built){
           (squads[code] || []).forEach(pl => {
             const acc = tm[pl.id] || { g: 0, a: 0, y: 0, r: 0 };
-            const d = el('div', 'display:flex;align-items:center;gap:8px;font-size:12px;padding:3px 0;');
+            const pwrap = el('div', '');
+            const d = el('div', 'display:flex;align-items:center;gap:8px;font-size:12px;padding:3px 0;cursor:pointer;');
             d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;width:20px;flex:none;text-align:right;color:" + pal.sub + ';', String(pl.n)));
             d.appendChild(avatarImg(pl.pic, 28, pal.line));
             d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:.3px;width:26px;flex:none;color:" + accent + ';', POS[pl.pos] || ''));
@@ -1508,7 +1529,43 @@ function openScorersModal(){
             if (acc.y) st.appendChild(mini('🟨', acc.y));
             if (acc.r) st.appendChild(mini('🟥', acc.r));
             d.appendChild(st);
-            detail.appendChild(d);
+            const pplus = el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;width:14px;flex:none;text-align:center;color:" + pal.sub + ';', '+');
+            d.appendChild(pplus);
+            const pd = el('div', 'display:none;padding:1px 0 7px 40px;');
+            let pbuilt = false;
+            d.addEventListener('click', () => {
+              if (!pbuilt){
+                const bio = [];
+                if (POSFULL[pl.pos]) bio.push(POSFULL[pl.pos]);
+                const age = ageFrom(pl.dob); if (age != null) bio.push('Age ' + age);
+                if (pl.ht) bio.push(pl.ht + ' cm');
+                if (pl.wt) bio.push(pl.wt + ' kg');
+                if (bio.length) pd.appendChild(el('div', 'font-size:11px;color:' + pal.sub + ';padding:1px 0 5px;', bio.join('  ·  ')));
+                const lg = plog[pl.id] || [];
+                lg.forEach(e => {
+                  const oi = TEAMDIR[e.opp] || { iso: '' };
+                  const lr = el('div', 'display:flex;align-items:center;gap:6px;font-size:11px;color:' + pal.sub + ';padding:2px 0;');
+                  lr.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.3px;color:" + accent + ';width:30px;flex:none;', e.stage));
+                  lr.appendChild(el('span', 'flex:none;', 'v'));
+                  if (oi.iso) lr.appendChild(flagImg(oi.iso, 12));
+                  lr.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;flex:none;", e.opp));
+                  const ew = el('div', 'display:flex;flex-wrap:wrap;gap:3px 9px;flex:1;min-width:0;justify-content:flex-end;');
+                  e.ev.forEach(x => {
+                    const c = el('span', 'display:inline-flex;align-items:center;gap:3px;flex:none;color:' + pal.text + ';');
+                    c.appendChild(el('span', 'font-size:10px;line-height:1;', EVIC[x.k]));
+                    c.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;", x.m + (x.k === 'gp' ? ' (pen)' : '')));
+                    ew.appendChild(c);
+                  });
+                  lr.appendChild(ew);
+                  pd.appendChild(lr);
+                });
+                if (!bio.length && !lg.length) pd.appendChild(el('div', 'font-size:11px;color:' + pal.sub + ';padding:2px 0;', 'No details available.'));
+                pbuilt = true;
+              }
+              const open = pd.style.display === 'none'; pd.style.display = open ? 'block' : 'none'; pplus.textContent = open ? '–' : '+';
+            });
+            pwrap.appendChild(d); pwrap.appendChild(pd);
+            detail.appendChild(pwrap);
           });
           built = true;
         }
