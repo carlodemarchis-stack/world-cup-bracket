@@ -10,6 +10,13 @@
 <style>
   body { margin: 0; }
   @keyframes wcpulse { 0% { transform: translate(-50%,-50%) scale(1); opacity: .6 } 100% { transform: translate(-50%,-50%) scale(2.5); opacity: 0 } }
+  /* Match kicking off within the next 12 hours: a soft, breathing green ring. */
+  @keyframes matchSoon {
+    0%   { box-shadow: 0 0 0 0 rgba(55,181,106,.6), 0 2px 6px rgba(0,0,0,.4); }
+    70%  { box-shadow: 0 0 0 7px rgba(55,181,106,0), 0 2px 6px rgba(0,0,0,.4); }
+    100% { box-shadow: 0 0 0 0 rgba(55,181,106,0), 0 2px 6px rgba(0,0,0,.4); }
+  }
+  .match-soon { border-color: #37b56a !important; animation: matchSoon 2s ease-in-out infinite; }
 
   /* Live controls panel — reproduces the design's own editor props.
      Hidden at start; opened via the gear icon in the footer. */
@@ -263,7 +270,11 @@ function renderVals(P, DATA) {
   // a card at a node = the match that fills it: a date while pending, a score once played
   function makeInnerCard(px, py, o){
     const hasScore = !!o.score, hasPhase = !!o.phase, k = fmtKickoff(o.date, o.time), hasDate = (!!k.date && !hasScore);
+    // Kicking off within the next 12h (and not already decided) → flag for a glow.
+    const inst = hasScore ? null : kickoffInstant(o.date, o.time);
+    const soon = !!(inst && !isNaN(inst) && inst.getTime() <= Date.now() + 12 * 3600e3 && inst.getTime() >= Date.now() - 3 * 3600e3);
     return {
+      soon: soon,
       boxStyle:'position:absolute;left:'+(px/12)+'%;top:'+(py/12)+'%;transform:translate(-50%,-50%);z-index:7;'+
         'background:'+T.chipBg+';border:1px solid '+T.chipBorder+';border-radius:5px;padding:2px 7px 3px;'+
         'text-align:center;white-space:nowrap;line-height:1.12;box-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none;',
@@ -507,6 +518,7 @@ function buildBracket(v){
   // inner cards (match chips)
   v.innerCards.forEach(c=>{
     const box = el('div', c.boxStyle);
+    if (c.soon) box.className = 'match-soon';
     if (c.hasPhase || c.ta || c.tb){
       const head = el('div', 'white-space:nowrap;line-height:1.12;margin-top:-2px;');
       const showTeams = !!(c.ta || c.tb);
@@ -1759,15 +1771,30 @@ function renderControls(){
 // Controls whose active-state styling depends on theme/accent need a controls rebuild too.
 function rerender(){ render(); renderControls(); }
 
-// Load the schedule + results feed, then build the bracket. Fetched once on load;
-// re-fetch (reload the page) to pick up live updates pushed into data.json.
+// Load the schedule + results feed, then build the bracket.
+let feedTxt = '';
+function applyFeed(data){
+  DATA = data;
+  buildTeamIndex();
+  if (data.title)  state.title  = data.title;
+  if (data.kicker) state.kicker = data.kicker;
+}
+// Silent auto-refresh: re-fetch data.json every 15 minutes and re-render in place
+// (no page reload). Skips while a modal is open; also re-renders even when the
+// feed is unchanged so the "kicking-off-soon" glow tracks the advancing clock.
+setInterval(() => {
+  if (modalEl) return;
+  fetch('data.json', { cache: 'no-store' })
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    .then(txt => { if (txt !== feedTxt){ feedTxt = txt; applyFeed(JSON.parse(txt)); renderControls(); } render(); })
+    .catch(() => {});
+}, 15 * 60 * 1000);
+
 fetch('data.json', { cache: 'no-store' })
-  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-  .then(data => {
-    DATA = data;
-    buildTeamIndex();
-    if (data.title)  state.title  = data.title;
-    if (data.kicker) state.kicker = data.kicker;
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+  .then(txt => {
+    feedTxt = txt;
+    applyFeed(JSON.parse(txt));
     renderControls();
     render();
   })
