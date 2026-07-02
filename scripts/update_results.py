@@ -257,6 +257,34 @@ def fetch_timeline(ids, id2code):
     return goals, var, cards
 
 
+def fetch_lineups(ids, id2code):
+    """Fetch a match's lineups from the live endpoint; return
+    {code: {"xi": [starter ids], "subs": [[on_id, off_id, minute], ...]}}.
+
+    Starting XI = players with Status 1; substitutions carry the player coming
+    on, going off, and the minute. Returns {} on any failure (best-effort)."""
+    stage, match = ids
+    try:
+        d = fetch(f"https://api.fifa.com/api/v3/live/football/{COMPETITION}/{SEASON}/{stage}/{match}?language=en")
+    except Exception:  # noqa: BLE001
+        return {}
+    out = {}
+    for side in ("HomeTeam", "AwayTeam"):
+        t = d.get(side) or {}
+        code = id2code.get(str(t.get("IdTeam")))
+        if not code:
+            continue
+        xi = [str(p["IdPlayer"]) for p in (t.get("Players") or [])
+              if p.get("Status") == 1 and p.get("IdPlayer")]
+        subs = [[str(s.get("IdPlayerOn") or ""), str(s.get("IdPlayerOff") or ""),
+                 (s.get("Minute") or "").strip()]
+                for s in (t.get("Substitutions") or [])
+                if s.get("IdPlayerOn") or s.get("IdPlayerOff")]
+        if xi or subs:
+            out[code] = {"xi": xi, "subs": subs}
+    return out
+
+
 def apply_ko(slot, a, b, ko, changes, label):
     """Write a knockout result into `slot` (mutates it).
 
@@ -349,6 +377,13 @@ def enrich(slot, res, changes, label):
                 slot["goals"].append(fg)
                 changes.append(f"{label}: +goal {fg['p']} {fg['m']}")
         slot["goals"].sort(key=lambda g: _minute_key(g.get("m", "")))
+
+    # Lineups (starting XI + subs) — fill once per match, refresh on demand.
+    if "line" not in slot or REFRESH_GOALS:
+        ln = fetch_lineups(res["ids"], res["id2code"])
+        if ln and slot.get("line") != ln:
+            slot["line"] = ln
+            changes.append(f"{label}: lineups")
 
 
 def winner_of(slot_dict, key):

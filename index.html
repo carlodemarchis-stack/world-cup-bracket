@@ -1046,7 +1046,7 @@ function playedFrom(round, a, b, s){
   return { round, a, b, played: true, winner: s.winner,
     aGoals: aWon ? g[0] : g[1], bGoals: aWon ? g[1] : g[0], goals: s.goals || [],
     et: s.et, pens: s.pens, penScore: s.penScore, date: s.date, venue: s.venue,
-    highlights: s.highlights, ref: s.ref, att: s.att, form: s.form, var: s.var, cards: s.cards, num: s.num };
+    highlights: s.highlights, ref: s.ref, att: s.att, form: s.form, var: s.var, cards: s.cards, num: s.num, line: s.line };
 }
 function sfLoser(side){
   const part = matchParticipants(side, 4, 0), w = winnerOfNode(side, 4, 0);
@@ -1060,7 +1060,7 @@ function resolveMatch(id){
     const winner = sc[0] > sc[1] ? gm.a : (sc[1] > sc[0] ? gm.b : null);
     return { round: 'Group ' + p[1], a: gm.a, b: gm.b, played: true, winner,
       aGoals: sc[0], bGoals: sc[1], goals: gm.goals || [], date: gm.d,
-      ref: gm.ref, att: gm.att, form: gm.form, venue: gm.venue, var: gm.var, cards: gm.cards, num: gm.num,
+      ref: gm.ref, att: gm.att, form: gm.form, venue: gm.venue, var: gm.var, cards: gm.cards, num: gm.num, line: gm.line,
       highlights: gm.h ? ('https://www.youtube.com/watch?v=' + gm.h + '&list=PLBRLtDhTHh5o') : null };
   }
   if (id === 'final'){
@@ -1486,22 +1486,38 @@ function openScorersModal(){
     const EVIC = { g: '⚽', gp: '⚽', a: '🥾', y: '🟨', r: '🟥' };
     const ageFrom = iso => { if (!iso) return null; const b = new Date(iso), t = new Date(); if (isNaN(+b)) return null; let a = t.getFullYear() - b.getFullYear(); if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--; return a; };
     const mini = (icon, n) => { const s = el('span', 'display:inline-flex;align-items:center;gap:3px;flex:none;'); s.appendChild(el('span', 'font-size:11px;line-height:1;', icon)); s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;", String(n))); return s; };
-    // Per-player match log: the matches where a player scored, assisted or was booked.
-    const plog = {};
-    const addEv = (mt, teamCode, pid, k, m) => {
-      if (!pid) return;
-      const opp = teamCode === mt.a ? mt.b : mt.a, arr = (plog[pid] = plog[pid] || []);
-      let e = arr.find(x => x.id === mt.id);
-      if (!e){ e = { id: mt.id, stage: mt.stage, opp, ev: [] }; arr.push(e); }
-      e.ev.push({ k, m });
-    };
+    // Per-player appearances: for every match, each player's participation
+    // (started / on / off / sent off, from the lineup + subs) plus their events.
+    const papp = {};
     matches.forEach(mt => {
       const full = resolveMatch(mt.id); if (!full) return;
-      (full.goals || []).forEach(g => {
-        if (g.p && g.p.indexOf('(o.g.)') < 0) addEv(mt, g.t, g.id, g.pen ? 'gp' : 'g', g.m);
-        if (g.aid) addEv(mt, g.t, g.aid, 'a', g.m);
+      [[mt.a, mt.b], [mt.b, mt.a]].forEach(([code, opp]) => {
+        const line = (full.line || {})[code];
+        const evBy = {}, sentBy = {};   // id -> [{k,m}] ; id -> minute
+        (full.goals || []).forEach(g => {
+          if (g.t !== code) return;
+          if (g.id && g.p.indexOf('(o.g.)') < 0) (evBy[g.id] = evBy[g.id] || []).push({ k: g.pen ? 'gp' : 'g', m: g.m });
+          if (g.aid) (evBy[g.aid] = evBy[g.aid] || []).push({ k: 'a', m: g.m });
+        });
+        (full.cards || []).forEach(c => {
+          if (c.t !== code || !c.id) return;
+          if (c.c === 'R') sentBy[c.id] = c.m; else (evBy[c.id] = evBy[c.id] || []).push({ k: 'y', m: c.m });
+        });
+        const part = {};   // id -> {started, on, off}
+        if (line){
+          (line.xi || []).forEach(id => { (part[id] = part[id] || {}).started = true; });
+          (line.subs || []).forEach(([inId, outId, m]) => {
+            if (inId) (part[inId] = part[inId] || {}).on = m;
+            if (outId) (part[outId] = part[outId] || {}).off = m;
+          });
+        }
+        const ids = new Set([...Object.keys(part), ...Object.keys(evBy), ...Object.keys(sentBy)]);
+        ids.forEach(id => {
+          const p = part[id] || {}, evs = evBy[id] || [], sent = sentBy[id] || null;
+          if (!p.started && !p.on && !p.off && !evs.length && !sent) return;   // didn't feature
+          (papp[id] = papp[id] || []).push({ stage: mt.stage, opp, started: !!p.started, on: p.on || null, off: p.off || null, sent, evs, hasLine: !!line });
+        });
       });
-      (full.cards || []).forEach(c => addEv(mt, c.t, c.id, c.c === 'R' ? 'r' : 'y', c.m));
     });
     Object.keys(squads).sort((a, b) => (TEAMDIR[a] ? TEAMDIR[a].name : a).localeCompare(TEAMDIR[b] ? TEAMDIR[b].name : b)).forEach(code => {
       const info = TEAMDIR[code] || { name: code, iso: '' }, tm = ev[code] || {};
@@ -1541,16 +1557,26 @@ function openScorersModal(){
                 if (pl.ht) bio.push(pl.ht + ' cm');
                 if (pl.wt) bio.push(pl.wt + ' kg');
                 if (bio.length) pd.appendChild(el('div', 'font-size:11px;color:' + pal.sub + ';padding:1px 0 5px;', bio.join('  ·  ')));
-                const lg = plog[pl.id] || [];
+                const lg = papp[pl.id] || [];
                 lg.forEach(e => {
                   const oi = TEAMDIR[e.opp] || { iso: '' };
-                  const lr = el('div', 'display:flex;align-items:center;gap:6px;font-size:11px;color:' + pal.sub + ';padding:2px 0;');
+                  const lr = el('div', 'display:flex;align-items:center;flex-wrap:wrap;gap:3px 6px;font-size:11px;color:' + pal.sub + ';padding:2px 0;');
                   lr.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.3px;color:" + accent + ';width:30px;flex:none;', e.stage));
                   lr.appendChild(el('span', 'flex:none;', 'v'));
                   if (oi.iso) lr.appendChild(flagImg(oi.iso, 12));
-                  lr.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;flex:none;", e.opp));
+                  lr.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;flex:none;width:30px;", e.opp));
+                  // Participation status (the five cases), from the lineup + subs.
+                  if (e.hasLine){
+                    let txt, col = pal.sub;
+                    if (e.sent) { txt = (e.on ? 'On ' + e.on + ' · ' : '') + 'Sent off ' + e.sent; col = '#e0463f'; }
+                    else if (e.on && e.off) txt = 'On ' + e.on + ' · Off ' + e.off;
+                    else if (e.on) txt = 'On ' + e.on;
+                    else if (e.off) txt = 'Off ' + e.off;
+                    else if (e.started) { txt = 'Full match'; col = accent; }
+                    if (txt) lr.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;flex:none;color:" + col + ';', txt));
+                  }
                   const ew = el('div', 'display:flex;flex-wrap:wrap;gap:3px 9px;flex:1;min-width:0;justify-content:flex-end;');
-                  e.ev.forEach(x => {
+                  e.evs.forEach(x => {
                     const c = el('span', 'display:inline-flex;align-items:center;gap:3px;flex:none;color:' + pal.text + ';');
                     c.appendChild(el('span', 'font-size:10px;line-height:1;', EVIC[x.k]));
                     c.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;", x.m + (x.k === 'gp' ? ' (pen)' : '')));
