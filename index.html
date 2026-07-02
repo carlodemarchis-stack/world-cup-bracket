@@ -770,10 +770,13 @@ function teamPlayers(code){
 }
 function buildPlayerList(players, pal, accent){
   const wrap = el('div', 'display:flex;flex-direction:column;');
-  const stat = (n, label, color) => {
-    const s = el('div', 'display:inline-flex;align-items:baseline;gap:3px;flex:none;');
+  const BALL = c => '<svg width="14" height="14" viewBox="0 0 24 24" style="display:block;"><circle cx="12" cy="12" r="9.2" fill="none" stroke="' + c + '" stroke-width="1.6"/><path d="M12 6.6l3.3 2.4-1.26 3.9h-4.08L8.7 9z" fill="' + c + '"/></svg>';
+  const BOOT = c => '<svg width="17" height="13" viewBox="0 0 28 20" style="display:block;"><path d="M2 4h6l2.6 4H21c3 0 5 1.9 5 4.6V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4z" fill="' + c + '"/><rect x="2" y="16" width="22" height="2.2" rx="1.1" fill="' + c + '"/></svg>';
+  const iconStat = (svg, n) => {
+    const s = el('div', 'display:inline-flex;align-items:center;gap:4px;flex:none;');
+    const ic = document.createElement('span'); ic.style.cssText = 'display:inline-flex;'; ic.innerHTML = svg;
+    s.appendChild(ic);
     s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;", String(n)));
-    s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.5px;color:" + color + ';', label));
     return s;
   };
   const card = (color, n) => {
@@ -786,8 +789,8 @@ function buildPlayerList(players, pal, accent){
     const row = el('div', 'display:flex;align-items:center;gap:12px;padding:6px 0;border-bottom:1px solid ' + pal.line + ';');
     row.appendChild(el('span', 'flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', p.name));
     const stats = el('div', 'display:flex;align-items:center;gap:12px;flex:none;');
-    if (p.g) stats.appendChild(stat(p.g, 'G', accent));
-    if (p.a) stats.appendChild(stat(p.a, 'A', pal.sub));
+    if (p.g) stats.appendChild(iconStat(BALL(accent), p.g));
+    if (p.a) stats.appendChild(iconStat(BOOT(pal.sub), p.a));
     if (p.y) stats.appendChild(card('#f4c430', p.y));
     if (p.r) stats.appendChild(card('#e0463f', p.r));
     row.appendChild(stats);
