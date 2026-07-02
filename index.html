@@ -1431,11 +1431,12 @@ function openScorersModal(){
   const playersView = () => {
     const box = el('div', 'margin-top:6px;');
     const squads = DATA.squads || {};
-    const fold = s => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z]/g, '');
+    // Tally by exact FIFA player id (goals/cards/assists all carry it), so squad
+    // players match without any name guessing.
     const ev = {};
-    const bump = (code, name, f) => { if (!code || !name) return; const k = fold(name); if (!k) return; (ev[code] = ev[code] || {}); (ev[code][k] = ev[code][k] || { g: 0, a: 0, y: 0, r: 0 })[f]++; };
-    const eatG = arr => (arr || []).forEach(g => { if (g.p && g.p.indexOf('(o.g.)') < 0) bump(g.t, g.p, 'g'); if (g.a) bump(g.t, g.a, 'a'); });
-    const eatC = arr => (arr || []).forEach(c => bump(c.t, c.p, c.c === 'R' ? 'r' : 'y'));
+    const bump = (code, id, f) => { if (!code || !id) return; (ev[code] = ev[code] || {}); (ev[code][id] = ev[code][id] || { g: 0, a: 0, y: 0, r: 0 })[f]++; };
+    const eatG = arr => (arr || []).forEach(g => { if (g.p && g.p.indexOf('(o.g.)') < 0) bump(g.t, g.id, 'g'); if (g.aid) bump(g.t, g.aid, 'a'); });
+    const eatC = arr => (arr || []).forEach(c => bump(c.t, c.id, c.c === 'R' ? 'r' : 'y'));
     Object.values(DATA.groups || {}).forEach(gr => (gr.matches || []).forEach(m => { eatG(m.goals); eatC(m.cards); }));
     Object.values(DATA.r32 || {}).forEach(s => { eatG(s.goals); eatC(s.cards); });
     Object.values(DATA.schedule || {}).forEach(s => { eatG(s.goals); eatC(s.cards); });
@@ -1455,9 +1456,7 @@ function openScorersModal(){
       row.addEventListener('click', () => {
         if (!built){
           (squads[code] || []).forEach(pl => {
-            const acc = { g: 0, a: 0, y: 0, r: 0 }, seen = {};
-            const toks = String(pl.p || '').trim().split(/\s+/);
-            [fold(pl.p), fold(toks[toks.length - 1]), fold(toks.slice(-2).join(' '))].forEach(k => { if (k && tm[k] && !seen[k]){ seen[k] = 1; acc.g += tm[k].g; acc.a += tm[k].a; acc.y += tm[k].y; acc.r += tm[k].r; } });
+            const acc = tm[pl.id] || { g: 0, a: 0, y: 0, r: 0 };
             const d = el('div', 'display:flex;align-items:center;gap:8px;font-size:12px;padding:3px 0;');
             d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;width:20px;flex:none;text-align:right;color:" + pal.sub + ';', String(pl.n)));
             d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:.3px;width:26px;flex:none;color:" + accent + ';', POS[pl.pos] || ''));

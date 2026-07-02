@@ -156,7 +156,8 @@ def fetch_timeline(ids, id2code):
             tc = id2code.get(str(e.get("IdTeam")))
             nm = _surname(desc(e.get("EventDescription")))
             if tc and nm:
-                assists.setdefault((e.get("MatchMinute") or "", tc), []).append(nm)
+                assists.setdefault((e.get("MatchMinute") or "", tc), []).append(
+                    (nm, str(e.get("IdPlayer") or "")))
 
     goals, used = [], {}
     for e in events:
@@ -180,13 +181,18 @@ def fetch_timeline(ids, id2code):
                 team = other[0]
         g = {"t": team, "p": _surname(ed) + (" (o.g.)" if own else ""),
              "m": mm, "_k": _minute_key(mm)}
+        pid = str(e.get("IdPlayer") or "")
+        if pid:
+            g["id"] = pid
         if tl == "penalty goal":
             g["pen"] = True
         if not own:  # pair with an unused assist from the same team + minute
             lst = assists.get((mm, scorer_team), [])
             i = used.get((mm, scorer_team), 0)
             if i < len(lst):
-                g["a"] = lst[i]
+                g["a"] = lst[i][0]
+                if lst[i][1]:
+                    g["aid"] = lst[i][1]
                 used[(mm, scorer_team)] = i + 1
         goals.append(g)
     goals.sort(key=lambda g: g["_k"])
@@ -239,8 +245,12 @@ def fetch_timeline(ids, id2code):
         p = _surname(desc(e.get("EventDescription")))
         mm = (e.get("MatchMinute") or "").strip()
         if p and mm:
-            cards.append({"m": mm, "p": p, "t": id2code.get(str(e.get("IdTeam"))),
-                          "c": "R" if "red" in tl else "Y", "_k": _minute_key(mm)})
+            entry = {"m": mm, "p": p, "t": id2code.get(str(e.get("IdTeam"))),
+                     "c": "R" if "red" in tl else "Y", "_k": _minute_key(mm)}
+            pid = str(e.get("IdPlayer") or "")
+            if pid:
+                entry["id"] = pid
+            cards.append(entry)
     cards.sort(key=lambda c: c["_k"])
     for c in cards:
         c.pop("_k", None)
@@ -331,6 +341,10 @@ def enrich(slot, res, changes, label):
                 if fg.get("pen") and not match.get("pen"):
                     match["pen"] = True
                     changes.append(f"{label}: {match['p']} (pen)")
+                if fg.get("id") and not match.get("id"):
+                    match["id"] = fg["id"]        # backfill FIFA player id
+                if fg.get("aid") and not match.get("aid"):
+                    match["aid"] = fg["aid"]
             else:
                 slot["goals"].append(fg)
                 changes.append(f"{label}: +goal {fg['p']} {fg['m']}")
@@ -393,8 +407,9 @@ def assign_ko_venues(data, matches, changes):
 
 
 def fetch_squads(matches, existing):
-    """{code: [{n: jersey, p: name, pos: 0-3}]} for every team, from the FIFA
-    squad endpoint. Fills only teams not already present (fetch-once)."""
+    """{code: [{n: jersey, p: name, pos: 0-3, id: FIFA player id}]} for every team,
+    from the FIFA squad endpoint. Fills teams not present, or re-fetches a stored
+    squad that predates player ids (fetch-once, self-healing)."""
     code2id = {}
     for m in matches:
         for side in ("Home", "Away"):
@@ -403,15 +418,15 @@ def fetch_squads(matches, existing):
                 code2id[t["Abbreviation"]] = str(t["IdTeam"])
     out = dict(existing or {})
     for code, tid in sorted(code2id.items()):
-        if code in out:
-            continue
+        if code in out and (out[code] or [{}])[0].get("id"):
+            continue   # already have this squad with ids
         try:
             sq = fetch(f"https://api.fifa.com/api/v3/teams/{tid}/squad"
                        f"?idCompetition={COMPETITION}&idSeason={SEASON}&language=en")
         except Exception:  # noqa: BLE001 - best-effort; a missing team just isn't listed
             continue
         players = [{"n": int(p["JerseyNum"]), "p": desc(p.get("PlayerName")).title(),
-                    "pos": p.get("Position")}
+                    "pos": p.get("Position"), "id": str(p.get("IdPlayer") or "")}
                    for p in (sq.get("Players") or [])
                    if p.get("JerseyNum") and desc(p.get("PlayerName"))]
         if players:
