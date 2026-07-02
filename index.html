@@ -785,11 +785,11 @@ function teamPlayers(code){
     return e;
   };
   const eatGoals = arr => (arr || []).forEach(x => {
-    if (x.t === code && x.p && x.p.indexOf('(o.g.)') < 0) get(x.p).g++;
-    if (x.a && x.t === code) get(x.a).a++;
+    if (x.t === code && x.p && x.p.indexOf('(o.g.)') < 0){ const e = get(x.p); e.g++; e.id = e.id || x.id; }
+    if (x.a && x.t === code){ const e = get(x.a); e.a++; e.id = e.id || x.aid; }
   });
   const eatCards = arr => (arr || []).forEach(x => {
-    if (x.t === code && x.p){ const e = get(x.p); if (x.c === 'R') e.r++; else e.y++; }
+    if (x.t === code && x.p){ const e = get(x.p); if (x.c === 'R') e.r++; else e.y++; e.id = e.id || x.id; }
   });
   Object.values(DATA.groups || {}).forEach(gr => (gr.matches || []).forEach(m => { eatGoals(m.goals); eatCards(m.cards); }));
   Object.values(DATA.r32 || {}).forEach(s => { eatGoals(s.goals); eatCards(s.cards); });
@@ -806,7 +806,8 @@ function buildPlayerList(players, pal, accent){
     return s;
   };
   players.forEach(p => {
-    const row = el('div', 'display:flex;align-items:center;gap:12px;padding:6px 0;border-bottom:1px solid ' + pal.line + ';');
+    const row = el('div', 'display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid ' + pal.line + ';');
+    row.appendChild(avatarImg(picById(p.id), 30, pal.line));
     row.appendChild(el('span', 'flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', p.name));
     const stats = el('div', 'display:flex;align-items:center;gap:12px;flex:none;');
     if (p.g) stats.appendChild(stat('⚽', p.g));
@@ -1123,9 +1124,16 @@ function openMatchModal(id){
     const form = code && m.form && m.form[code];
     if (form) nm.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;color:" + pal.sub + ';', form));
     mid.appendChild(nm);
-    if (goalsList && goalsList.length)
-      mid.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:3px;line-height:1.5;',
-        goalsList.map(g => g.p + ' ' + g.m + (g.pen ? ' (pen)' : '') + (g.a ? ' — assist ' + g.a : '')).join(', ')));
+    if (goalsList && goalsList.length){
+      const gl = el('div', 'display:flex;flex-wrap:wrap;gap:5px 12px;margin-top:5px;');
+      goalsList.forEach(g => {
+        const chip = el('span', 'display:inline-flex;align-items:center;gap:5px;font-size:12px;color:' + pal.sub + ';');
+        chip.appendChild(avatarImg(picById(g.id), 20, pal.line));
+        chip.appendChild(el('span', '', g.p + ' ' + g.m + (g.pen ? ' (pen)' : '') + (g.a ? ' — assist ' + g.a : '')));
+        gl.appendChild(chip);
+      });
+      mid.appendChild(gl);
+    }
     row.appendChild(mid);
     if (m.played) row.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;flex:none;", String(score)));
     return row;
@@ -1191,6 +1199,7 @@ function openMatchModal(id){
       const r = el('div', 'display:flex;align-items:center;gap:9px;font-size:12px;padding:2px 0;');
       r.appendChild(el('span', 'width:10px;height:14px;border-radius:2px;flex:none;background:' + (c.c === 'R' ? '#e0463f' : '#f4c430') + ';'));
       r.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';width:42px;flex:none;', c.m));
+      r.appendChild(avatarImg(picById(c.id), 20, pal.line));
       r.appendChild(el('span', 'color:' + pal.text + ';', c.p + (c.t ? ' (' + c.t + ')' : '')));
       cbox.appendChild(r);
     });
