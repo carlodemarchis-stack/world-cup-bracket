@@ -1560,6 +1560,8 @@ function openScorersModal(){
             d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:.3px;width:26px;flex:none;color:" + accent + ';', POS[pl.pos] || ''));
             d.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', pl.p));
             const st = el('div', 'display:flex;align-items:center;gap:8px;flex:none;');
+            const mp = (papp[pl.id] || []).length;
+            if (mp){ const c = mini('👕', mp); c.title = mp + ' match' + (mp === 1 ? '' : 'es') + ' played'; c.style.opacity = '.85'; st.appendChild(c); }
             if (acc.g) st.appendChild(mini('⚽', acc.g));
             if (acc.a) st.appendChild(mini('🥾', acc.a));
             if (acc.y) st.appendChild(mini('🟨', acc.y));
