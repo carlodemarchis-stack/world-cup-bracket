@@ -714,7 +714,7 @@ function avatarImg(pic, size, bg){
   c.style.cssText = 'width:' + size + 'px;height:' + size + 'px;flex:none;border-radius:50%;overflow:hidden;background:' + (bg || 'rgba(128,128,128,.18)') + ';';
   if (pic){
     const im = document.createElement('img'); im.alt = ''; im.decoding = 'async';
-    im.src = pic + '?&io=transform:fill,aspectratio:1x1,width:180,gravity:top&quality=80';
+    im.src = pic + '?&io=transform:fill,aspectratio:3x1,width:300,gravity:top&quality=80';
     im.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center;display:block;';
     c.appendChild(im);
   }
