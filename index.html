@@ -1236,18 +1236,55 @@ function openScorersModal(){
     return box;
   };
 
-  // Cards tab: every booking, most recent first.
+  // Cards tab: teams ranked by bookings (reds break ties), expandable to each
+  // team's card log (round · card · minute · player · opponent).
+  const YEL = '#f4c430', RED = '#e0463f';
   const cardsView = () => {
     const box = el('div', 'margin-top:6px;');
-    cardEvents.slice().sort(recent).forEach(cd => {
-      const row = el('div', 'display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid ' + pal.line + ';cursor:pointer;');
-      row.appendChild(el('span', 'width:10px;height:14px;border-radius:2px;flex:none;background:' + (cd.c === 'R' ? '#e0463f' : '#f4c430') + ';'));
-      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:30px;flex:none;', cd.stage));
-      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;width:66px;flex:none;", cd.a + '–' + cd.b));
-      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';width:44px;flex:none;text-align:right;', cd.min));
-      row.appendChild(el('span', 'flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', cd.p + (cd.t ? ' (' + cd.t + ')' : '')));
-      row.addEventListener('click', () => openMatchModal(cd.id));
-      box.appendChild(row);
+    const byTeam = new Map();
+    cardEvents.forEach(cd => {
+      if (!cd.t) return;
+      const e = byTeam.get(cd.t) || { team: cd.t, y: 0, r: 0, n: 0, rows: [] };
+      e.n++; if (cd.c === 'R') e.r++; else e.y++;
+      e.rows.push({ stage: cd.stage, opp: cd.t === cd.a ? cd.b : cd.a, min: cd.min, p: cd.p, c: cd.c, date: cd.date });
+      byTeam.set(cd.t, e);
+    });
+    const teams = [...byTeam.values()].sort((a, b) => b.n - a.n || b.r - a.r || a.team.localeCompare(b.team));
+    const chip = (color, count) => {
+      const c = el('span', 'display:inline-flex;align-items:center;gap:4px;flex:none;');
+      c.appendChild(el('span', 'width:9px;height:13px;border-radius:2px;flex:none;background:' + color + ';'));
+      c.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;", String(count)));
+      return c;
+    };
+    let prev = null, rk = 0;
+    teams.forEach((e, idx) => {
+      rk = (e.n === prev) ? rk : idx + 1; prev = e.n;
+      e.rows.sort((x, y) => dateK(x.date) - dateK(y.date) || minK(x.min) - minK(y.min));
+      const info = TEAMDIR[e.team] || { name: e.team, iso: '' };
+      const wrap = el('div', 'border-bottom:1px solid ' + pal.line + ';');
+      const row = el('div', 'display:flex;align-items:center;gap:10px;padding:7px 0;cursor:pointer;');
+      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:" + pal.sub + ';width:16px;flex:none;text-align:right;', String(rk)));
+      if (info.iso) row.appendChild(flagImg(info.iso, 22)); else row.appendChild(el('div', 'width:22px;flex:none;'));
+      row.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;font-weight:600;', info.name));
+      const chips = el('div', 'display:flex;align-items:center;gap:9px;flex:none;');
+      chips.appendChild(chip(YEL, e.y));
+      if (e.r) chips.appendChild(chip(RED, e.r));
+      row.appendChild(chips);
+      const plus = el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;width:16px;flex:none;text-align:center;color:" + pal.sub + ';', '+');
+      row.appendChild(plus);
+      const detail = el('div', 'display:none;padding:2px 0 9px 42px;');
+      e.rows.forEach(cr => {
+        const d = el('div', 'display:flex;align-items:center;gap:7px;font-size:12px;color:' + pal.sub + ';padding:2px 0;');
+        d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:28px;flex:none;', cr.stage));
+        d.appendChild(el('span', 'width:9px;height:13px;border-radius:2px;flex:none;background:' + (cr.c === 'R' ? RED : YEL) + ';'));
+        d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';width:44px;flex:none;text-align:right;', cr.min));
+        d.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', cr.p));
+        d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;flex:none;color:" + pal.sub + ';', 'v ' + cr.opp));
+        detail.appendChild(d);
+      });
+      row.addEventListener('click', () => { const open = detail.style.display === 'none'; detail.style.display = open ? 'block' : 'none'; plus.textContent = open ? '–' : '+'; });
+      wrap.appendChild(row); wrap.appendChild(detail);
+      box.appendChild(wrap);
     });
     return box;
   };
