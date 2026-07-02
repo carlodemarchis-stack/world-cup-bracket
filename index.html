@@ -811,6 +811,11 @@ function matchDetailBlock(m, pal, accent){
     line.appendChild(el('span', 'flex:1;min-width:0;color:' + pal.text + ';', gs.map(g => g.p + ' ' + g.m + (g.pen ? ' (pen)' : '') + (g.a ? ' — ' + g.a : '')).join(', ')));
     d.appendChild(line);
   });
+  if (m.pens || m.et){
+    const win = (TEAMDIR[m.winner] || {}).name || m.winner;
+    d.appendChild(el('div', 'font-size:12px;font-weight:700;color:' + pal.text + ';margin-top:5px;',
+      m.pens ? (win + ' won ' + (m.penScore || '') + ' on penalties (a.e.t.)') : 'After extra time'));
+  }
   if (m.cards && m.cards.length){
     const line = el('div', 'display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:' + pal.sub + ';margin-top:5px;');
     m.cards.forEach(c => line.appendChild(el('span', 'white-space:nowrap;', (c.c === 'R' ? '🟥' : '🟨') + ' ' + c.m + ' ' + c.p)));
@@ -1209,7 +1214,7 @@ function openScorersModal(){
     const m = resolveMatch(id);
     if (!m || !m.played) return;
     const stage = stageOf(id);
-    matches.push({ id, stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, venue: m.venue, att: m.att ? +m.att : null, date: m.date, num: m.num || 0 });
+    matches.push({ id, stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, venue: m.venue, att: m.att ? +m.att : null, date: m.date, num: m.num || 0, et: m.et, pens: m.pens });
     (m.var || []).forEach(v => varEvents.push({ id, stage, a: m.a, b: m.b, date: m.date, min: v.m, dec: v.d, x: v.x }));
     (m.cards || []).forEach(c => cardEvents.push({ id, stage, a: m.a, b: m.b, date: m.date, min: c.m, p: c.p, t: c.t, c: c.c }));
     const cnt = { [m.a]: 0, [m.b]: 0 };   // running score as the goals go in
@@ -1396,8 +1401,9 @@ function openScorersModal(){
       const wrap = el('div', 'border-bottom:1px solid ' + pal.line + ';');
       const row = el('div', 'display:flex;align-items:center;gap:9px;padding:7px 0;cursor:pointer;');
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:34px;flex:none;', mt.stage));
-      row.appendChild(flagPair(mt.a, mt.b, mt.ag + '–' + mt.bg, true));
-      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;color:" + pal.sub + ';flex:none;', mt.date || ''));
+      row.appendChild(flagPair(mt.a, mt.b, mt.ag + '–' + mt.bg, false));
+      if (mt.pens || mt.et) row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:" + pal.sub + ';flex:none;', mt.pens ? 'pens' : 'a.e.t.'));
+      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;color:" + pal.sub + ';flex:none;margin-left:auto;', mt.date || ''));
       const plus = el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;width:16px;flex:none;text-align:center;color:" + pal.sub + ';', '+');
       row.appendChild(plus);
       const detail = el('div', 'display:none;padding:3px 0 10px 4px;');
