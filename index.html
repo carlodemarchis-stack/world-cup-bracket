@@ -525,7 +525,7 @@ function buildBracket(v){
     }
     if (c.pens){
       // one compact line so it doesn't cover the crest: score (black) + PENS (green)
-      const line = el('div', 'white-space:nowrap;line-height:1.2;');
+      const line = el('div', 'white-space:nowrap;font-size:7px;line-height:1.15;');
       line.appendChild(el('span', c.pensScoreStyle, c.score + ' '));
       line.appendChild(el('span', c.pensStyle, 'Pens' + (c.penScore ? ' (' + c.penScore + ')' : '')));
       box.appendChild(line);
