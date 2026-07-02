@@ -271,7 +271,7 @@ function renderVals(P, DATA) {
       phase:o.phase, hasPhase:hasPhase,
       // feeding teams' 3-letter codes flank the round label: "BRA  R16  NOR"
       ta:o.ta||null, tb:o.tb||null,
-      score:o.score, hasScore:hasScore, showScore:(hasScore && !o.pens), pens:!!o.pens, showEt:(!!o.et && !o.pens),
+      score:o.score, hasScore:hasScore, showScore:hasScore, pens:!!o.pens, penScore:o.penScore || '', showEt:(!!o.et && !o.pens),
       date:k.date, hasDate:hasDate,
       time:k.time, hasTime:(!!k.time && !hasScore), tzLabel:k.zone,
       phaseStyle:'font-family:Barlow,sans-serif;font-weight:700;font-size:7.5px;letter-spacing:.8px;text-transform:uppercase;line-height:1;color:'+accent+';',
@@ -316,7 +316,7 @@ function renderVals(P, DATA) {
           const wn = makeTeam(TEAMS.find(x=>x.code===wc), p, L===1?44:40, !eliminated[wc], !!eliminated[wc]);
           wn.match = side+':'+L+':'+k;   // this crest = the match it won
           teamNodes.push(wn);
-          if (showResults && m.score) innerCards.push(makeInnerCard(p.x, p.y - (L===1?21:19), { score:m.score, pens:m.pens, match:side+':'+L+':'+k }));
+          if (showResults && m.score) innerCards.push(makeInnerCard(p.x, p.y - (L===1?21:19), { score:m.score, pens:m.pens, penScore:m.penScore, match:side+':'+L+':'+k }));
         } else if (showResults){
           // pending match card on the bridge: round + date/time, plus the feeding
           // teams' codes once the previous round decides them.
@@ -378,7 +378,7 @@ function renderVals(P, DATA) {
       // champion advances to the final node; the trophy stays dead centre
       const champT = TEAMS.find(x => x.code === f.winner);
       if (champT){ const wn = makeTeam(champT, { x:C, y:C + 78, a:0 }, 46, true, false); wn.match = 'final'; teamNodes.push(wn); }
-      if (f.score) innerCards.push(makeInnerCard(C, C + 78 - 24, { score:f.score, pens:f.pens, match:'final' }));
+      if (f.score) innerCards.push(makeInnerCard(C, C + 78 - 24, { score:f.score, pens:f.pens, penScore:f.penScore, match:'final' }));
     } else {
       innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:f.date, time:f.time, match:'final' }));
     }
@@ -387,7 +387,7 @@ function renderVals(P, DATA) {
   // disconnected from the main path to the final).
   if (showResults && DATA.thirdPlace){
     const tp = DATA.thirdPlace;
-    if (tp.winner && tp.score) innerCards.push(makeInnerCard(C, C - 108, { score:tp.score, pens:tp.pens, match:'third' }));
+    if (tp.winner && tp.score) innerCards.push(makeInnerCard(C, C - 108, { score:tp.score, pens:tp.pens, penScore:tp.penScore, match:'third' }));
     else innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:tp.date, time:tp.time, match:'third' }));
   }
 
@@ -524,7 +524,7 @@ function buildBracket(v){
     }
     if (c.showScore) box.appendChild(el('div', c.scoreStyle, c.score));
     if (c.showEt)    box.appendChild(el('div', c.etStyle, 'Extra Time'));
-    if (c.pens)      box.appendChild(el('div', c.pensStyle, 'Penalties'));
+    if (c.pens)      box.appendChild(el('div', c.pensStyle, 'Pens' + (c.penScore ? ' (' + c.penScore + ')' : '')));
     if (c.hasDate)   box.appendChild(el('div', c.dateStyle, c.date));
     if (c.hasTime)   box.appendChild(el('div', c.timeStyle, c.time + ' ' + (c.tzLabel || '')));
     if (c.match){ box.dataset.match = c.match; box.style.pointerEvents = 'auto'; box.style.cursor = 'pointer'; box.onclick = () => openMatchModal(c.match); }
@@ -1214,7 +1214,7 @@ function openScorersModal(){
     const m = resolveMatch(id);
     if (!m || !m.played) return;
     const stage = stageOf(id);
-    matches.push({ id, stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, venue: m.venue, att: m.att ? +m.att : null, date: m.date, num: m.num || 0, et: m.et, pens: m.pens });
+    matches.push({ id, stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, venue: m.venue, att: m.att ? +m.att : null, date: m.date, num: m.num || 0, et: m.et, pens: m.pens, penScore: m.penScore });
     (m.var || []).forEach(v => varEvents.push({ id, stage, a: m.a, b: m.b, date: m.date, min: v.m, dec: v.d, x: v.x }));
     (m.cards || []).forEach(c => cardEvents.push({ id, stage, a: m.a, b: m.b, date: m.date, min: c.m, p: c.p, t: c.t, c: c.c }));
     const cnt = { [m.a]: 0, [m.b]: 0 };   // running score as the goals go in
@@ -1402,7 +1402,7 @@ function openScorersModal(){
       const row = el('div', 'display:flex;align-items:center;gap:9px;padding:7px 0;cursor:pointer;');
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:34px;flex:none;', mt.stage));
       row.appendChild(flagPair(mt.a, mt.b, mt.ag + '–' + mt.bg, false));
-      if (mt.pens || mt.et) row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:" + pal.sub + ';flex:none;', mt.pens ? 'pens' : 'a.e.t.'));
+      if (mt.pens || mt.et) row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:" + pal.sub + ';flex:none;', mt.pens ? ('pens' + (mt.penScore ? ' (' + mt.penScore + ')' : '')) : 'a.e.t.'));
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;color:" + pal.sub + ';flex:none;margin-left:auto;', mt.date || ''));
       const plus = el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;width:16px;flex:none;text-align:center;color:" + pal.sub + ';', '+');
       row.appendChild(plus);
