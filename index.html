@@ -728,6 +728,16 @@ function statusOf(code){
   if (pos === 2) return inBracket(code) ? { label: 'Best third', through: true } : { label: 'Eliminated', through: false };
   return { label: 'Eliminated', through: false };
 }
+// How far a team has got, for ordering: higher = still in / knocked out later.
+// 99 still in · 5 lost Final · 4 SF · 3 QF · 2 R16 · 1 R32 · 0 group stage.
+function progressRank(code){
+  if (!DATA.groups || !GRP_OF[code]) return -1;
+  if (!statusOf(code).through) return 0;                 // didn't get out of the group
+  const KO = { R32: 1, R16: 2, QF: 3, SF: 4, F: 5 };
+  for (const r of teamMatches(code))
+    if (r.stage !== 'GRP' && !r.upcoming && r.result === 'L') return KO[r.stage] || 0;
+  return 99;                                             // qualified, no knockout loss yet
+}
 // A team's full match list: 3 group games, then its knockout games (result or upcoming).
 function teamMatches(code){
   const g = GRP_OF[code];
@@ -1519,7 +1529,17 @@ function openScorersModal(){
         });
       });
     });
-    Object.keys(squads).sort((a, b) => (TEAMDIR[a] ? TEAMDIR[a].name : a).localeCompare(TEAMDIR[b] ? TEAMDIR[b].name : b)).forEach(code => {
+    // Order by how far each team got (still in first, then by elimination round),
+    // alphabetical within each tier, with a heading when the tier changes.
+    const nm = c => TEAMDIR[c] ? TEAMDIR[c].name : c;
+    const RANK_LABEL = { 99: 'In the tournament', 5: 'Eliminated — Final', 4: 'Eliminated — Semi-finals', 3: 'Eliminated — Quarter-finals', 2: 'Eliminated — Round of 16', 1: 'Eliminated — Round of 32', 0: 'Eliminated — Group stage' };
+    const ordered = Object.keys(squads).map(c => ({ c, rank: progressRank(c) })).sort((a, b) => b.rank - a.rank || nm(a.c).localeCompare(nm(b.c)));
+    let lastRank = null;
+    ordered.forEach(({ c: code, rank }) => {
+      if (rank !== lastRank){
+        lastRank = rank;
+        box.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:10px;color:" + pal.sub + ';padding:11px 0 3px;', RANK_LABEL[rank] || ''));
+      }
       const info = TEAMDIR[code] || { name: code, iso: '' }, tm = ev[code] || {};
       const wrap = el('div', 'border-bottom:1px solid ' + pal.line + ';');
       const row = el('div', 'display:flex;align-items:center;gap:10px;padding:7px 0;cursor:pointer;');
