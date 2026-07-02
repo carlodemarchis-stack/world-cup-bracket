@@ -1585,15 +1585,21 @@ function openScorersModal(){
                   lr.appendChild(el('span', 'flex:none;', 'v'));
                   if (oi.iso) lr.appendChild(flagImg(oi.iso, 12));
                   lr.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;flex:none;width:30px;", e.opp));
-                  // Participation status (the five cases), from the lineup + subs.
+                  // Participation (five cases): ▲ subbed on / ▼ subbed off with the
+                  // minute, 🟥 sent off, or "Full match" for the whole game.
                   if (e.hasLine){
-                    let txt, col = pal.sub;
-                    if (e.sent) { txt = (e.on ? 'On ' + e.on + ' · ' : '') + 'Sent off ' + e.sent; col = '#e0463f'; }
-                    else if (e.on && e.off) txt = 'On ' + e.on + ' · Off ' + e.off;
-                    else if (e.on) txt = 'On ' + e.on;
-                    else if (e.off) txt = 'Off ' + e.off;
-                    else if (e.started) { txt = 'Full match'; col = accent; }
-                    if (txt) lr.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;flex:none;color:" + col + ';', txt));
+                    const stat = el('div', 'display:inline-flex;align-items:center;gap:7px;flex:none;');
+                    const subChip = (icon, col, min) => {
+                      const s = el('span', 'display:inline-flex;align-items:center;gap:2px;flex:none;');
+                      s.appendChild(el('span', 'font-size:11px;line-height:1;font-weight:700;color:' + col + ';', icon));
+                      s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';', min));
+                      return s;
+                    };
+                    if (e.on) stat.appendChild(subChip('▲', '#37b56a', e.on));
+                    if (e.off) stat.appendChild(subChip('▼', '#e0463f', e.off));
+                    if (e.sent) stat.appendChild(subChip('🟥', pal.text, e.sent));
+                    if (!e.on && !e.off && !e.sent && e.started) stat.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + accent + ';', 'Full match'));
+                    if (stat.children.length) lr.appendChild(stat);
                   }
                   const ew = el('div', 'display:flex;flex-wrap:wrap;gap:3px 9px;flex:1;min-width:0;justify-content:flex-end;');
                   e.evs.forEach(x => {
