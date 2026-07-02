@@ -1054,6 +1054,19 @@ function openMatchModal(id){
     panel.appendChild(a);
   }
 
+  if (m.played && m.cards && m.cards.length){
+    const cbox = el('div', 'margin-top:15px;border-top:1px solid ' + pal.line + ';padding-top:10px;');
+    cbox.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:11px;color:" + pal.head + ';margin-bottom:5px;', 'Cards'));
+    m.cards.forEach(c => {
+      const r = el('div', 'display:flex;align-items:center;gap:9px;font-size:12px;padding:2px 0;');
+      r.appendChild(el('span', 'width:10px;height:14px;border-radius:2px;flex:none;background:' + (c.c === 'R' ? '#e0463f' : '#f4c430') + ';'));
+      r.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';width:42px;flex:none;', c.m));
+      r.appendChild(el('span', 'color:' + pal.text + ';', c.p + (c.t ? ' (' + c.t + ')' : '')));
+      cbox.appendChild(r);
+    });
+    panel.appendChild(cbox);
+  }
+
   if (m.played && m.var && m.var.length){
     const vbox = el('div', 'margin-top:15px;border-top:1px solid ' + pal.line + ';padding-top:10px;');
     vbox.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:11px;color:" + pal.head + ';margin-bottom:5px;', 'VAR'));
@@ -1067,19 +1080,6 @@ function openMatchModal(id){
       vbox.appendChild(r);
     });
     panel.appendChild(vbox);
-  }
-
-  if (m.played && m.cards && m.cards.length){
-    const cbox = el('div', 'margin-top:15px;border-top:1px solid ' + pal.line + ';padding-top:10px;');
-    cbox.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:11px;color:" + pal.head + ';margin-bottom:5px;', 'Cards'));
-    m.cards.forEach(c => {
-      const r = el('div', 'display:flex;align-items:center;gap:9px;font-size:12px;padding:2px 0;');
-      r.appendChild(el('span', 'width:10px;height:14px;border-radius:2px;flex:none;background:' + (c.c === 'R' ? '#e0463f' : '#f4c430') + ';'));
-      r.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';width:42px;flex:none;', c.m));
-      r.appendChild(el('span', 'color:' + pal.text + ';', c.p + (c.t ? ' (' + c.t + ')' : '')));
-      cbox.appendChild(r);
-    });
-    panel.appendChild(cbox);
   }
 
   overlay.appendChild(panel);
@@ -1307,7 +1307,7 @@ function openScorersModal(){
     if (items.length) content.appendChild(list(items, 15, key));
     else content.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
   };
-  [['goals', 'Goals'], ['assists', 'Assists'], ['attendance', 'Attendance'], ['var', 'VAR'], ['cards', 'Cards']].forEach(([k, lbl]) => {
+  [['goals', 'Goals'], ['assists', 'Assists'], ['attendance', 'Attendance'], ['cards', 'Cards'], ['var', 'VAR']].forEach(([k, lbl]) => {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl;
     b.onclick = () => show(k); btns[k] = b; tabBar.appendChild(b);
   });
