@@ -1459,6 +1459,12 @@ function openScorersModal(){
             const acc = tm[pl.id] || { g: 0, a: 0, y: 0, r: 0 };
             const d = el('div', 'display:flex;align-items:center;gap:8px;font-size:12px;padding:3px 0;');
             d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;width:20px;flex:none;text-align:right;color:" + pal.sub + ';', String(pl.n)));
+            if (pl.pic){
+              const av = document.createElement('img'); av.decoding = 'async';
+              av.src = pl.pic + '?&io=transform:fit,width:120&quality=75';
+              av.style.cssText = 'width:28px;height:28px;flex:none;border-radius:50%;object-fit:cover;object-position:top center;background:' + pal.line + ';';
+              d.appendChild(av);
+            } else { d.appendChild(el('div', 'width:28px;height:28px;flex:none;border-radius:50%;background:' + pal.line + ';')); }
             d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:.3px;width:26px;flex:none;color:" + accent + ';', POS[pl.pos] || ''));
             d.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', pl.p));
             const st = el('div', 'display:flex;align-items:center;gap:8px;flex:none;');
