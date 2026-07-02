@@ -525,7 +525,34 @@
     "L:1:1": {
       "date": "Jul 2",
       "time": "02:00",
-      "venue": "San Francisco Bay Area Stadium"
+      "venue": "San Francisco Bay Area Stadium",
+      "score": "2–0",
+      "winner": "USA",
+      "ref": "Raphael Claus",
+      "att": 68827,
+      "form": {
+        "USA": "3-5-2",
+        "BIH": "4-4-2"
+      },
+      "goals": [
+        {
+          "t": "USA",
+          "p": "Balogun",
+          "m": "45'"
+        },
+        {
+          "t": "USA",
+          "p": "Tillman",
+          "m": "82'"
+        }
+      ],
+      "var": [
+        {
+          "m": "63'",
+          "d": "Red card given",
+          "x": "Balogun"
+        }
+      ]
     },
     "L:1:2": {
       "date": "Jul 2",
