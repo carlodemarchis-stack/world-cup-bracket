@@ -1289,6 +1289,16 @@ function openScorersModal(){
   const minK = mm => { const m = String(mm).replace(/'/g, '').trim(); if (m.indexOf('+') >= 0){ const p = m.split('+'); return (+p[0] || 0) + (+p[1] || 0) / 100; } return +m || 0; };
   const dateK = d => { const p = String(d || '').split(' '); return (MONTHS[p[0]] || 0) * 100 + (+p[1] || 0); };
   const recent = (a, b) => dateK(b.date) - dateK(a.date) || minK(b.min) - minK(a.min);
+  const flagPair = (a, b, mid, grow) => {
+    const s = el('span', 'display:inline-flex;align-items:center;gap:5px;min-width:0;' + (grow ? 'flex:1;overflow:hidden;' : 'flex:none;'));
+    const ia = TEAMDIR[a] || { iso: '' }, ib = TEAMDIR[b] || { iso: '' };
+    if (ia.iso) s.appendChild(flagImg(ia.iso, 15));
+    s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;flex:none;", a));
+    s.appendChild(el('span', 'font-size:13px;font-weight:600;flex:none;', mid));
+    s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;flex:none;", b));
+    if (ib.iso) s.appendChild(flagImg(ib.iso, 15));
+    return s;
+  };
 
   // Attendance tab: every played match ranked by crowd — stadium then match,
   // each row drills into the match modal.
@@ -1313,8 +1323,8 @@ function openScorersModal(){
     varEvents.slice().sort(recent).forEach(v => {
       const row = el('div', 'display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid ' + pal.line + ';cursor:pointer;');
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:32px;flex:none;', v.stage));
-      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;width:66px;flex:none;", v.a + '–' + v.b));
-      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';width:44px;flex:none;text-align:right;', v.min));
+      row.appendChild(flagPair(v.a, v.b, '–'));
+      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';width:44px;flex:none;text-align:right;margin-left:auto;', v.min));
       const dc = el('div', 'flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;');
       dc.appendChild(document.createTextNode(v.dec));
       if (v.x) dc.appendChild(el('span', 'color:' + pal.sub + ';', ' — ' + v.x));
@@ -1386,7 +1396,7 @@ function openScorersModal(){
       const wrap = el('div', 'border-bottom:1px solid ' + pal.line + ';');
       const row = el('div', 'display:flex;align-items:center;gap:9px;padding:7px 0;cursor:pointer;');
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:34px;flex:none;', mt.stage));
-      row.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:600;', mt.a + ' ' + mt.ag + '–' + mt.bg + ' ' + mt.b));
+      row.appendChild(flagPair(mt.a, mt.b, mt.ag + '–' + mt.bg, true));
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;color:" + pal.sub + ';flex:none;', mt.date || ''));
       const plus = el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;width:16px;flex:none;text-align:center;color:" + pal.sub + ';', '+');
       row.appendChild(plus);
