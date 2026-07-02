@@ -5372,5 +5372,6343 @@
         }
       ]
     }
+  },
+  "squads": {
+    "ALG": [
+      {
+        "n": 1,
+        "p": "Melvin Mastil",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Aissa Mandi",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Achref Abada",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Mohamed Amine Tougai",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Zineddine Belaid",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Ramiz Zerrouki",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Riyad Mahrez",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Houssem Aouar",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Amine Gouiri",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Fares Chaibi",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Anis Hadj Moussa",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Nadhir Benbouali",
+        "pos": 3
+      },
+      {
+        "n": 13,
+        "p": "Jaouen Hadjam",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Hicham Boudaoui",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Rayan Ait-Nouri",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Oussama Benbot",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Rafik Belghali",
+        "pos": 1
+      },
+      {
+        "n": 18,
+        "p": "Mohamed Amoura",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Nabil Bentaleb",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Adil Boulbina",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Ramy Bensebaini",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Ibrahim Maza",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Luca Zidane",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Yassine Titraoui",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Fares Ghedjemis",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Samir Chergui",
+        "pos": 1
+      }
+    ],
+    "ARG": [
+      {
+        "n": 1,
+        "p": "Juan Musso",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Marcos Senesi",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Nicolas Tagliafico",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Gonzalo Montiel",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Leandro Paredes",
+        "pos": 2
+      },
+      {
+        "n": 6,
+        "p": "Lisandro Martinez",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Rodrigo De Paul",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Valentin Barco",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Julian Alvarez",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Lionel Messi",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Giovani Lo Celso",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Geronimo Rulli",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Cristian Romero",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Exequiel Palacios",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Nico Gonzalez",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Thiago Almada",
+        "pos": 3
+      },
+      {
+        "n": 17,
+        "p": "Giuliano Simeone",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Nico Paz",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Nicolas Otamendi",
+        "pos": 1
+      },
+      {
+        "n": 20,
+        "p": "Alexis Mac Allister",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Jose Manuel Lopez",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Lautaro Martinez",
+        "pos": 3
+      },
+      {
+        "n": 23,
+        "p": "Emiliano Martinez",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Enzo Fernandez",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Facundo Medina",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Nahuel Molina",
+        "pos": 1
+      }
+    ],
+    "AUS": [
+      {
+        "n": 1,
+        "p": "Mathew Ryan",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Milos Degenek",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Alessandro Circati",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Jacob Italiano",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Jordan Bos",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Jason Geria",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Mathew Leckie",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Connor Metcalfe",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Mohamed Toure",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Ajdin Hrustic",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Awer Mabil",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Paul Izzo",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Aiden Oneill",
+        "pos": 2
+      },
+      {
+        "n": 14,
+        "p": "Cameron Devlin",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Kai Trewin",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Aziz Behich",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Nestory Irankunda",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Patrick Beach",
+        "pos": 0
+      },
+      {
+        "n": 19,
+        "p": "Harry Souttar",
+        "pos": 1
+      },
+      {
+        "n": 20,
+        "p": "Cristian Volpato",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Cameron Burgess",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Jackson Irvine",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Nishan Velupillay",
+        "pos": 3
+      },
+      {
+        "n": 24,
+        "p": "Paul Okon-Engstler",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Lucas Herrington",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Tete Yengi",
+        "pos": 3
+      }
+    ],
+    "AUT": [
+      {
+        "n": 1,
+        "p": "Alexander Schlager",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "David Affengruber",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Kevin Danso",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Xaver Schlager",
+        "pos": 2
+      },
+      {
+        "n": 5,
+        "p": "Stefan Posch",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Nicolas Seiwald",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Marko Arnautovic",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "David Alaba",
+        "pos": 1
+      },
+      {
+        "n": 9,
+        "p": "Marcel Sabitzer",
+        "pos": 2
+      },
+      {
+        "n": 10,
+        "p": "Florian Grillitsch",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Michael Gregoritsch",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Florian Wiegele",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Patrick Pentz",
+        "pos": 0
+      },
+      {
+        "n": 14,
+        "p": "Sasa Kalajdzic",
+        "pos": 3
+      },
+      {
+        "n": 15,
+        "p": "Philipp Lienhart",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Phillip Mwene",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Carney Chukwuemeka",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Romano Schmid",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Dejan Ljubicic",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Konrad Laimer",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Patrick Wimmer",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Alexander Prass",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Marco Friedl",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Paul Wanner",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Michael Svoboda",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Alessandro Schoepf",
+        "pos": 2
+      }
+    ],
+    "BEL": [
+      {
+        "n": 1,
+        "p": "Thibaut Courtois",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Zeno Debast",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Arthur Theate",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Brandon Mechele",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Maxim De Cuyper",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Axel Witsel",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Kevin De Bruyne",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Youri Tielemans",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Romelu Lukaku",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Leandro Trossard",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Jeremy Doku",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Senne Lammens",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Mike Penders",
+        "pos": 0
+      },
+      {
+        "n": 14,
+        "p": "Dodi Lukebakio",
+        "pos": 3
+      },
+      {
+        "n": 15,
+        "p": "Thomas Meunier",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Koni De Winter",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Charles De Ketelaere",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Joaquin Seys",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Diego Moreira",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Hans Vanaken",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Timothy Castagne",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Alexis Saelemaekers",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Nicolas Raskin",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Amadou Onana",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Nathan Ngoy",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Matias Fernandez-Pardo",
+        "pos": 3
+      }
+    ],
+    "BIH": [
+      {
+        "n": 1,
+        "p": "Nikola Vasilj",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Nihad Mujakic",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Dennis Hadzikadunic",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Tarik Muharemovic",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Sead Kolasinac",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Benjamin Tahirovic",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Amar Dedic",
+        "pos": 1
+      },
+      {
+        "n": 8,
+        "p": "Armin Gigovic",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Samed Bazdar",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Ermedin Demirovic",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Edin Dzeko",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Mladen Jurkas",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Ivan Basic",
+        "pos": 2
+      },
+      {
+        "n": 14,
+        "p": "Ivan Sunjic",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Amar Memic",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Amir Hadziahmetovic",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Dzenis Burnic",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Nikola Katic",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Kerim Alajbegovic",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Esmir Bajraktarevic",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Stjepan Radeljic",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Martin Zlomislic",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Haris Tabakovic",
+        "pos": 3
+      },
+      {
+        "n": 24,
+        "p": "Arjan Malic",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Jovo Lukic",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Ermin Mahmic",
+        "pos": 2
+      }
+    ],
+    "BRA": [
+      {
+        "n": 1,
+        "p": "Alisson",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Ederson Silva",
+        "pos": 2
+      },
+      {
+        "n": 3,
+        "p": "Gabriel Magalhaes",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Marquinhos",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Casemiro",
+        "pos": 2
+      },
+      {
+        "n": 6,
+        "p": "Alex Sandro",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Vinicius Junior",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Bruno Guimaraes",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Matheus Cunha",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Neymar Jr",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Raphinha",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Weverton",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Danilo",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Bremer",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Leo Pereira",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Douglas Santos",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Fabinho",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Danilo Santos",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Endrick",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Lucas Paqueta",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Luiz Henrique",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Gabriel Martinelli",
+        "pos": 3
+      },
+      {
+        "n": 23,
+        "p": "Ederson",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Roger Ibanez",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Igor Thiago",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Rayan",
+        "pos": 3
+      }
+    ],
+    "CAN": [
+      {
+        "n": 1,
+        "p": "Dayne St. Clair",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Alistair Johnston",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Alfie Jones",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Luc De Fougerolles",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Joel Waterman",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Mathieu Choiniere",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Stephen Eustaquio",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Ismael Kone",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Cyle Larin",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Jonathan David",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Liam Millar",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Tani Oluwaseyi",
+        "pos": 3
+      },
+      {
+        "n": 13,
+        "p": "Derek Cornelius",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Jacob Shaffelburg",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Moise Bombito",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Maxime Crepeau",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Tajon Buchanan",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Owen Goodman",
+        "pos": 0
+      },
+      {
+        "n": 19,
+        "p": "Alphonso Davies",
+        "pos": 1
+      },
+      {
+        "n": 20,
+        "p": "Ali Ahmed",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Jonathan Osorio",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Richie Laryea",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Niko Sigur",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Promise David",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Nathan Saliba",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Jayden Nelson",
+        "pos": 3
+      }
+    ],
+    "CIV": [
+      {
+        "n": 1,
+        "p": "Yahia Fofana",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Ousmane Diomande",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Ghislain Konan",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Jean Michael Seri",
+        "pos": 2
+      },
+      {
+        "n": 5,
+        "p": "Wilfried Singo",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Seko Fofana",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Odilon Kossounou",
+        "pos": 1
+      },
+      {
+        "n": 8,
+        "p": "Franck Kessie",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Ange-Yoan Bonny",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Simon Adingra",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Yan Diomande",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Elye Wahi",
+        "pos": 3
+      },
+      {
+        "n": 13,
+        "p": "Christopher Operi",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Oumar Diakite",
+        "pos": 3
+      },
+      {
+        "n": 15,
+        "p": "Amad Diallo",
+        "pos": 3
+      },
+      {
+        "n": 16,
+        "p": "Mohamed Kone",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Guela Doue",
+        "pos": 1
+      },
+      {
+        "n": 18,
+        "p": "Ibrahim Sangare",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Nicolas Pepe",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Emmanuel Agbadou",
+        "pos": 1
+      },
+      {
+        "n": 21,
+        "p": "Evan Ndicka",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Evann Guessand",
+        "pos": 3
+      },
+      {
+        "n": 23,
+        "p": "Alban Lafont",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Bazoumana Toure",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Parfait Guiagon",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Christ Inao Oulai",
+        "pos": 2
+      }
+    ],
+    "COD": [
+      {
+        "n": 1,
+        "p": "Lionel Mpasi",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Aaron Wan-Bissaka",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Steve Kapuadi",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Axel Tuanzebe",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Dylan Batubinsika",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Ngalayel Mukau",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Nathanael Mbuku",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Samuel Moutoussamy",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Brian Cipenga",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Theo Bongonda",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Gael Kakuta",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Joris Kayembe",
+        "pos": 1
+      },
+      {
+        "n": 13,
+        "p": "Meschack Elia",
+        "pos": 3
+      },
+      {
+        "n": 14,
+        "p": "Noah Sadiki",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Aaron Tshibola",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Timothy Fayulu",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Cedric Bakambu",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Charles Pickel",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Fiston Mayele",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Yoane Wissa",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Matthieu Epolo",
+        "pos": 0
+      },
+      {
+        "n": 22,
+        "p": "Chancel Mbemba",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Simon Banza",
+        "pos": 3
+      },
+      {
+        "n": 24,
+        "p": "Gedeon Kalulu",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Edo Kayembe",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Arthur Masuaku",
+        "pos": 1
+      }
+    ],
+    "COL": [
+      {
+        "n": 1,
+        "p": "David Ospina",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Daniel Munoz",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Jhon Lucumi",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Santiago Arias",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Kevin Castano",
+        "pos": 2
+      },
+      {
+        "n": 6,
+        "p": "Richard Rios",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Luis Diaz",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Jorge Carrascal",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Jhon Cordoba",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "James Rodriguez",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Jhon Arias",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Camilo Vargas",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Yerry Mina",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Gustavo Puerta",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Juan Portilla",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Jefferson Lerma",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Johan Mojica",
+        "pos": 1
+      },
+      {
+        "n": 18,
+        "p": "Willer Ditta",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Cucho Hernandez",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Juan Quintero",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Jaminton Campaz",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Deiver Machado",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Davinson Sanchez",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Alvaro Montero",
+        "pos": 0
+      },
+      {
+        "n": 25,
+        "p": "Luis Suarez",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Andres Gomez",
+        "pos": 3
+      }
+    ],
+    "CPV": [
+      {
+        "n": 1,
+        "p": "Vozinha",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Stopira",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Diney Borges",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Pico Lopes",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Logan Costa",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Kevin Pina",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Jovane Cabral",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Joao Paulo",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Gilson Benchimol",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Jamiro Monteiro",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Garry Rodrigues",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Marcio Rosa",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Sidny Lopes Cabral",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Deroy Duarte",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Laros Duarte",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Yannick Semedo",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Willy Semedo",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Telmo Arcanjo",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Dailon Livramento",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Ryan Mendes",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Nuno Da Costa",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Steven Moreira",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Cj Dos Santos",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Wagner Pina",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Kelvin Pires",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Helio Varela",
+        "pos": 2
+      }
+    ],
+    "CRO": [
+      {
+        "n": 1,
+        "p": "Dominik Livakovic",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Josip Stanisic",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Marin Pongracic",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Josko Gvardiol",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Duje Caleta-Car",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Josip Sutalo",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Nikola Moro",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Mateo Kovacic",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Andrej Kramaric",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Luka Modric",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Ante Budimir",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Ivor Pandur",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Nikola Vlasic",
+        "pos": 2
+      },
+      {
+        "n": 14,
+        "p": "Ivan Perisic",
+        "pos": 3
+      },
+      {
+        "n": 15,
+        "p": "Mario Pasalic",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Martin Baturina",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Petar Sucic",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Kristijan Jakic",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Toni Fruk",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Igor Matanovic",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Luka Sucic",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Luka Vuskovic",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Dominik Kotarski",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Marco Pasalic",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Martin Erlic",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Petar Musa",
+        "pos": 3
+      }
+    ],
+    "CUW": [
+      {
+        "n": 1,
+        "p": "Eloy Room",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Shurandy Sambo",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Jurien Gaari",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Roshon Van Eijma",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Sherel Floranus",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Godfried Roemeratoe",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Juninho Bacuna",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Livano Comenencia",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Juergen Locadia",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Leandro Bacuna",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Jeremy Antonisse",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Sontje Hansen",
+        "pos": 3
+      },
+      {
+        "n": 13,
+        "p": "Tyrese Noslin",
+        "pos": 3
+      },
+      {
+        "n": 14,
+        "p": "Kenji Gorre",
+        "pos": 3
+      },
+      {
+        "n": 15,
+        "p": "Arjany Martha",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Jearl Margaritha",
+        "pos": 3
+      },
+      {
+        "n": 17,
+        "p": "Brandley Kuwas",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Armando Obispo",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Gervane Kastaneer",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Joshua Brenet",
+        "pos": 1
+      },
+      {
+        "n": 21,
+        "p": "Tahith Chong",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Kevin Felida",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Riechedly Bazoer",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Deveron Fonville",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Tyrick Bodak",
+        "pos": 0
+      },
+      {
+        "n": 26,
+        "p": "Trevor Doornbusch",
+        "pos": 0
+      }
+    ],
+    "CZE": [
+      {
+        "n": 1,
+        "p": "Matej Kovar",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "David Zima",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Tomas Holes",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Robin Hranac",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Vladimir Coufal",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Stepan Chaloupek",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Ladislav Krejci",
+        "pos": 1
+      },
+      {
+        "n": 8,
+        "p": "Vladimir Darida",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Adam Hlozek",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Patrik Schick",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Jan Kuchta",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Lukas Cerv",
+        "pos": 2
+      },
+      {
+        "n": 13,
+        "p": "Mojmir Chytil",
+        "pos": 3
+      },
+      {
+        "n": 14,
+        "p": "David Jurasek",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Pavel Sulc",
+        "pos": 3
+      },
+      {
+        "n": 16,
+        "p": "Jindrich Stanek",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Lukas Provod",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Michal Sadilek",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Tomas Chory",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Jaroslav Zeleny",
+        "pos": 1
+      },
+      {
+        "n": 21,
+        "p": "David Doudera",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Tomas Soucek",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Lukas Hornicek",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Alexandr Sojka",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Hugo Sochurek",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Denis Visinsky",
+        "pos": 3
+      }
+    ],
+    "ECU": [
+      {
+        "n": 1,
+        "p": "Hernan Galindez",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Felix Torres",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Piero Hincapie",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Joel Ordonez",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Jordy Alcivar",
+        "pos": 2
+      },
+      {
+        "n": 6,
+        "p": "Willian Pacho",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Pervis Estupinan",
+        "pos": 1
+      },
+      {
+        "n": 8,
+        "p": "Anthony Valencia",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "John Yeboah",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Kendry Paez",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Kevin Rodriguez",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Moises Ramirez",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Enner Valencia",
+        "pos": 3
+      },
+      {
+        "n": 14,
+        "p": "Alan Minda",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Pedro Vite",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Jordy Caicedo",
+        "pos": 3
+      },
+      {
+        "n": 17,
+        "p": "Angelo Preciado",
+        "pos": 1
+      },
+      {
+        "n": 18,
+        "p": "Denil Castillo",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Gonzalo Plata",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Nilson Angulo",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Alan Franco",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Gonzalo Valle",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Moises Caicedo",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Jeremy Arevalo",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Jackson Porozo",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Yaimar Medina",
+        "pos": 1
+      }
+    ],
+    "EGY": [
+      {
+        "n": 1,
+        "p": "Mohamed Elshenawy",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Yasser Ibrahim",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Mohamed Hany",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Hossam Abdelmaguid",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Ramy Rabia",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Mohamed Abdelmoneim",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Trezeguet",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Emam Ashour",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Hamza Abdelkarim",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Mohamed Salah",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Mostafa Zico",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Haissem Hassan",
+        "pos": 3
+      },
+      {
+        "n": 13,
+        "p": "Ahmed Fatouh",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Hamdy Fathy",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Karim Hafez",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Mahdy Soliman",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Mohanad Lashin",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Nabil Donga",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Marawan Attia",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Ibrahim Adel",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Mahmoud Saber",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Omar Marmoush",
+        "pos": 3
+      },
+      {
+        "n": 23,
+        "p": "Mostafa Shoubir",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Tarek Alaa",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Zizo",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Mohamed Alaa",
+        "pos": 0
+      }
+    ],
+    "ENG": [
+      {
+        "n": 1,
+        "p": "Jordan Pickford",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Ezri Konsa",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Nico Oreilly",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Declan Rice",
+        "pos": 2
+      },
+      {
+        "n": 5,
+        "p": "John Stones",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Marc Guehi",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Bukayo Saka",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Elliot Anderson",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Harry Kane",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Jude Bellingham",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Marcus Rashford",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Trevoh Chalobah",
+        "pos": 1
+      },
+      {
+        "n": 13,
+        "p": "Dean Henderson",
+        "pos": 0
+      },
+      {
+        "n": 14,
+        "p": "Jordan Henderson",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Dan Burn",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Kobbie Mainoo",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Morgan Rogers",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Anthony Gordon",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Ollie Watkins",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Noni Madueke",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Eberechi Eze",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Ivan Toney",
+        "pos": 3
+      },
+      {
+        "n": 23,
+        "p": "James Trafford",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Reece James",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Djed Spence",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Jarell Quansah",
+        "pos": 1
+      }
+    ],
+    "ESP": [
+      {
+        "n": 1,
+        "p": "David Raya",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Marc Pubill",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Alex Grimaldo",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Eric Garcia",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Marcos Llorente",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Mikel Merino",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Ferran Torres",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Fabian Ruiz",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Gavi",
+        "pos": 2
+      },
+      {
+        "n": 10,
+        "p": "Dani Olmo",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Yeremy Pino",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Pedro Porro",
+        "pos": 1
+      },
+      {
+        "n": 13,
+        "p": "Joan Garcia",
+        "pos": 0
+      },
+      {
+        "n": 14,
+        "p": "Aymeric Laporte",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Alex Baena",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Rodri",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Nico Williams",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Martin Zubimendi",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Lamine Yamal",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Pedri",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Mikel Oyarzabal",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Pau Cubarsi",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Unai Simon",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Marc Cucurella",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Victor Munoz",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Borja Iglesias",
+        "pos": 3
+      }
+    ],
+    "FRA": [
+      {
+        "n": 1,
+        "p": "Brice Samba",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Malo Gusto",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Lucas Digne",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Dayot Upamecano",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Jules Kounde",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Manu Kone",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Ousmane Dembele",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Aurelien Tchouameni",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Marcus Thuram",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Kylian Mbappe",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Michael Olise",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Bradley Barcola",
+        "pos": 3
+      },
+      {
+        "n": 13,
+        "p": "Ngolo Kante",
+        "pos": 2
+      },
+      {
+        "n": 14,
+        "p": "Adrien Rabiot",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Ibrahima Konate",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Mike Maignan",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "William Saliba",
+        "pos": 1
+      },
+      {
+        "n": 18,
+        "p": "Warren Zaire-Emery",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Theo Hernandez",
+        "pos": 1
+      },
+      {
+        "n": 20,
+        "p": "Desire Doue",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Lucas Hernandez",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Jean-Philippe Mateta",
+        "pos": 3
+      },
+      {
+        "n": 23,
+        "p": "Robin Risser",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Rayan Cherki",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Maghnes Akliouche",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Maxence Lacroix",
+        "pos": 1
+      }
+    ],
+    "GER": [
+      {
+        "n": 1,
+        "p": "Manuel Neuer",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Antonio Ruediger",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Waldemar Anton",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Jonathan Tah",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Aleksandar Pavlovic",
+        "pos": 2
+      },
+      {
+        "n": 6,
+        "p": "Joshua Kimmich",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Kai Havertz",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Leon Goretzka",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Jamie Leweling",
+        "pos": 2
+      },
+      {
+        "n": 10,
+        "p": "Jamal Musiala",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Nick Woltemade",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Oliver Baumann",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Pascal Gross",
+        "pos": 2
+      },
+      {
+        "n": 14,
+        "p": "Maximilian Beier",
+        "pos": 3
+      },
+      {
+        "n": 15,
+        "p": "Nico Schlotterbeck",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Angelo Stiller",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Florian Wirtz",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Nathaniel Brown",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Leroy Sane",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Nadiem Amiri",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Alexander Nuebel",
+        "pos": 0
+      },
+      {
+        "n": 22,
+        "p": "David Raum",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Felix Nmecha",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Malick Thiaw",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Assan Ouedraogo",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Deniz Undav",
+        "pos": 3
+      }
+    ],
+    "GHA": [
+      {
+        "n": 1,
+        "p": "Lawrence Ati Zigi",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Alidu Seidu",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Caleb Yirenkyi",
+        "pos": 2
+      },
+      {
+        "n": 4,
+        "p": "Jonas Adjetey",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Thomas Partey",
+        "pos": 2
+      },
+      {
+        "n": 6,
+        "p": "Abdul Mumin",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Abdul Fatawu",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Kwasi Sibo",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Jordan Ayew",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Brandon Thomas-Asante",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Antoine Semenyo",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Joseph Anang",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Christopher Bonsu Baah",
+        "pos": 3
+      },
+      {
+        "n": 14,
+        "p": "Gideon Mensah",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Elisha Owusu",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Benjamin Asare",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Baba Rahman",
+        "pos": 1
+      },
+      {
+        "n": 18,
+        "p": "Jerome Opoku",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Inaki Williams",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Augustine Boakye",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Kojo Peprah Oppong",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Kamaldeen Sulemana",
+        "pos": 3
+      },
+      {
+        "n": 23,
+        "p": "Derrick Luckassen",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Ernest Nuamah",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Prince Adu",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Marvin Senaya",
+        "pos": 1
+      }
+    ],
+    "HAI": [
+      {
+        "n": 1,
+        "p": "Johny Placide",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Carlens Arcus",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Keeto Thermoncy",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Ricardo Ade",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Hannes Delcroix",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Carl Sainte",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Derrick Etienne",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Martin Experience",
+        "pos": 1
+      },
+      {
+        "n": 9,
+        "p": "Duckens Nazon",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Jean-Ricner Bellegarde",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Louicius Deedson",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Alexandre Pierre",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Markhus Lacroix",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Garven Metusala",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Ruben Providence",
+        "pos": 3
+      },
+      {
+        "n": 16,
+        "p": "Lenny Joseph",
+        "pos": 3
+      },
+      {
+        "n": 17,
+        "p": "Danley Jean Jacques",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Wilson Isidor",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Yassin Fortune",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Frantzdy Pierrot",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Josue Casimir",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Jean-Kevin Duverne",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Josue Duverger",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Wilguens Paugain",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Dominique Simon",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Woodensky Pierre",
+        "pos": 2
+      }
+    ],
+    "IRN": [
+      {
+        "n": 1,
+        "p": "Alireza Beiranvand",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Saleh Hardani",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Ehsan Hajisafi",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Shoja Khalilzadeh",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Milad Mohammadi",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Saeid Ezatolahi",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Alireza Jahanbakhsh",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Mohammad Mohebbi",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Mehdi Taremi",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Mehdi Ghayedi",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Ali Alipour",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Payam Niazmand",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Hossein Kanani",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Saman Ghoddos",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Roozbeh Cheshmi",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Mehdi Torabi",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Arya Yousefi",
+        "pos": 1
+      },
+      {
+        "n": 18,
+        "p": "Amirhossein Hosseinzadeh",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Ali Nemati",
+        "pos": 1
+      },
+      {
+        "n": 20,
+        "p": "Shahriyar Moghanloo",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Mohammad Ghorbani",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Hossein Hosseini",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Ramin Rezaeian",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Dennis Dargahi",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Danial Iri",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Amirmohammad Razaghinia",
+        "pos": 2
+      }
+    ],
+    "IRQ": [
+      {
+        "n": 1,
+        "p": "Fahad Talib",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Rebin Sulaka",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Hussein Ali",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Zaid Tahseen",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Akam Hashim",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Munaf Younus",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Youssef Amyn",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Ibrahim Bayesh",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Ali Alhamadi",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Mohanad Ali",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Ahmed Qasem",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Jalal Hassan",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Ali Yousif",
+        "pos": 3
+      },
+      {
+        "n": 14,
+        "p": "Zidane Iqbal",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Ahmed Maknazi",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Amir Alammari",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Ali Jasim",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Aymen Hussein",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Kevin Yakob",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Aimar Sher",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Marko Farji",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Ahmed Basil",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Merchas Doski",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Zaid Ismael",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Mustafa Saadoon",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Frans Putros",
+        "pos": 1
+      }
+    ],
+    "JOR": [
+      {
+        "n": 1,
+        "p": "Yazeed Abulaila",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Mohammad Abuhasheesh",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Abdallah Nasib",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Husam Abudahab",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Yazan Alarab",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Amer Jamous",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Mohammad Abuzraiq",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Noor Alrawabdeh",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Ali Olwan",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Mousa Altamari",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Odeh Fakhoury",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Nour Baniateyah",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Mahmoud Almardi",
+        "pos": 3
+      },
+      {
+        "n": 14,
+        "p": "Rajaei Ayed",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Ibrahim Sadeh",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Mohammad Abualnadi",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Saleem Obaid",
+        "pos": 1
+      },
+      {
+        "n": 18,
+        "p": "Mohammad Abughoush",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Saed Alrosan",
+        "pos": 1
+      },
+      {
+        "n": 20,
+        "p": "Mohannad Abutaha",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Nizar Alrashdan",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Abdallah Alfakhori",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Ehsan Haddad",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Ali Azaizeh",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Mohammad Aldaoud",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Anas Badawi",
+        "pos": 1
+      }
+    ],
+    "JPN": [
+      {
+        "n": 1,
+        "p": "Zion Suzuki",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Yukinari Sugawara",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Shogo Taniguchi",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Kou Itakura",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Yuto Nagatomo",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Shuto Machino",
+        "pos": 3
+      },
+      {
+        "n": 7,
+        "p": "Ao Tanaka",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Takefusa Kubo",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Keisuke Goto",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Ritsu Doan",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Daizen Maeda",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Keisuke Osako",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Keito Nakamura",
+        "pos": 2
+      },
+      {
+        "n": 14,
+        "p": "Junya Ito",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Daichi Kamada",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Tsuyoshi Watanabe",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Yuito Suzuki",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Ayase Ueda",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Koki Ogawa",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Ayumu Seko",
+        "pos": 1
+      },
+      {
+        "n": 21,
+        "p": "Hiroki Ito",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Takehiro Tomiyasu",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Tomoki Hayakawa",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Kaishu Sano",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Junnosuke Suzuki",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Kento Shiogai",
+        "pos": 3
+      }
+    ],
+    "KOR": [
+      {
+        "n": 1,
+        "p": "Kim Seunggyu",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Lee Hanbeom",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Lee Gihyuk",
+        "pos": 2
+      },
+      {
+        "n": 4,
+        "p": "Kim Minjae",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Kim Taehyeon",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Hwang Inbeom",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Son Heungmin",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Paik Seungho",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Cho Guesung",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Lee Jaesung",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Hwang Heechan",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Song Bumkeun",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Lee Taeseok",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Cho Wije",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Kim Moonhwan ",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Park Jinseob",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Bae Junho",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Oh Hyeongyu",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Lee Kangin",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Yang Hyunjun ",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Jo Hyeonwoo",
+        "pos": 0
+      },
+      {
+        "n": 22,
+        "p": "Seol Youngwoo",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Castrop Jens",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Kim Jingyu",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Eom Jisung",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Lee Donggyeong",
+        "pos": 2
+      }
+    ],
+    "KSA": [
+      {
+        "n": 1,
+        "p": "Nawaf Alaqidi",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Ali Majrashi",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Ali Lajami",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Abdulelah Alamri",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Hassan Altambakti",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Nasser Aldawsari",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Musab Aljuwayr",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Aiman Yahya",
+        "pos": 3
+      },
+      {
+        "n": 9,
+        "p": "Feras Albrikan",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Salem Aldawsari",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Saleh Alshehri",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Saud Abdulhamid",
+        "pos": 1
+      },
+      {
+        "n": 13,
+        "p": "Nawaf Bu Washl",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Hassan Kadish",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Abdullah Alkhaibari",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Ziyad Aljohani",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Khalid Alghannam",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Ala Alhajji",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Abdullah Alhamddan",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Sultan Mandash",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Mohammed Alowais",
+        "pos": 0
+      },
+      {
+        "n": 22,
+        "p": "Ahmed Alkassar",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Mohamed Kanno",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Moteb Alharbi",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Jehad Thikri",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Mohammed Abu Alshamat",
+        "pos": 1
+      }
+    ],
+    "MAR": [
+      {
+        "n": 1,
+        "p": "Yassine Bounou",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Achraf Hakimi",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Noussair Mazraoui",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Sofyan Amrabat",
+        "pos": 2
+      },
+      {
+        "n": 5,
+        "p": "Marwane Saadane",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Ayyoub Bouaddi",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Chemsdine Talbi",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Azzedine Ounahi",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Soufiane Rahimi",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Brahim Diaz",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Ismael Saibari",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Munir El Kajoui",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Zakaria El Ouahdi",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Issa Diop",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Samir El Mourabet",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Gessime Yassine",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Amine Sbai",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Chadi Riad",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Youssef Belammari",
+        "pos": 1
+      },
+      {
+        "n": 20,
+        "p": "Ayoub El Kaabi",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Ayoube Amaimouni",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Ahmed Reda Tagnaouti",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Bilal El Khannouss",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Neil El Aynaoui",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Redouane Halhal",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Anass Salah Eddine",
+        "pos": 1
+      }
+    ],
+    "MEX": [
+      {
+        "n": 1,
+        "p": "Raul Rangel",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Jorge Sanchez",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Cesar Montes",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Edson Alvarez",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Johan Vasquez",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Erik Lira",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Luis Romo",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Alvaro Fidalgo",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Raul Jimenez",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Alexis Vega",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Santiago Gimenez",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Carlos Acevedo",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Guillermo Ochoa",
+        "pos": 0
+      },
+      {
+        "n": 14,
+        "p": "Armando Gonzalez",
+        "pos": 3
+      },
+      {
+        "n": 15,
+        "p": "Israel Reyes",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Julian Quinones",
+        "pos": 3
+      },
+      {
+        "n": 17,
+        "p": "Orbelin Pineda",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Obed Vargas",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Gilberto Mora",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Mateo Chavez",
+        "pos": 1
+      },
+      {
+        "n": 21,
+        "p": "Cesar Huerta",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Guillermo Martinez",
+        "pos": 3
+      },
+      {
+        "n": 23,
+        "p": "Jesus Gallardo",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Luis Chavez",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Roberto Alvarado",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Brian Gutierrez",
+        "pos": 2
+      }
+    ],
+    "NED": [
+      {
+        "n": 1,
+        "p": "Bart Verbruggen",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Lutsharel Geertruida",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Marten De Roon",
+        "pos": 2
+      },
+      {
+        "n": 4,
+        "p": "Virgil Van Dijk",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Nathan Ake",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Jan Paul Van Hecke",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Justin Kluivert",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Ryan Gravenberch",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Wout Weghorst",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Memphis Depay",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Cody Gakpo",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Mats Wieffer",
+        "pos": 1
+      },
+      {
+        "n": 13,
+        "p": "Robin Roefs",
+        "pos": 0
+      },
+      {
+        "n": 14,
+        "p": "Tijjani Reijnders",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Micky Van De Ven",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Guus Til",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Noa Lang",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Donyell Malen",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Brian Brobbey",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Teun Koopmeiners",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Frenkie De Jong",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Denzel Dumfries",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Mark Flekken",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Crysencio Summerville",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Jorrel Hato",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Quinten Timber",
+        "pos": 2
+      }
+    ],
+    "NOR": [
+      {
+        "n": 1,
+        "p": "Orjan Nyland",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Morten Thorsby",
+        "pos": 2
+      },
+      {
+        "n": 3,
+        "p": "Kristoffer Ajer",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Leo Ostigard",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "David Moller Wolfe",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Patrick Berg",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Alexander Sorloth",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Sander Berge",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Erling Haaland",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Martin Odegaard",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Jorgen Strand Larsen",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Sander Tangvik",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Egil Selvik",
+        "pos": 0
+      },
+      {
+        "n": 14,
+        "p": "Fredrik Aursnes",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Fredrik Andre Bjorkan",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Marcus Holmgren Pedersen",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Torbjorn Heggem",
+        "pos": 1
+      },
+      {
+        "n": 18,
+        "p": "Kristian Thorstvedt",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Thelo Aasgaard",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Antonio Nusa",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Andreas Schjelderup",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Oscar Bobb",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Jens Petter Hauge",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Sondre Langas",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Henrik Falchener",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Julian Ryerson",
+        "pos": 3
+      }
+    ],
+    "NZL": [
+      {
+        "n": 1,
+        "p": "Max Crocombe",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Tim Payne",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Francis De Vries",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Tyler Bindon",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Michael Boxall",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Joe Bell",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Logan Rogerson",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Marko Stamenic",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Chris Wood",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Sarpreet Singh",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Elijah Just",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Alex Paulsen",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Liberato Cacace",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Alex Rufer",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Nando Pijnaker",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Finn Surman",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Kosta Barbarouses",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Ben Waine",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Ben Old",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Callum Mccowatt",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Jesse Randall",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Michael Woud",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Ryan Thomas",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Callan Elliot",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Lachlan Bayliss",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Tommy Smith",
+        "pos": 1
+      }
+    ],
+    "PAN": [
+      {
+        "n": 1,
+        "p": "Luis Mejia",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Cesar Blackman",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Jose Cordoba",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Fidel Escobar",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Edgardo Farina",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Cristian Martinez",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Jose Luis Rodriguez",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Adalberto Carrasquilla",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Tomas Rodriguez",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Ismael Diaz",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Edgar Yoel Barcenas",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Cesar Samudio",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Jiovany Ramos",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Carlos Harvey",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Eric Davis",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Andres Andrade",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Jose Fajardo",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Cecilio Waterman",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Alberto Quintero",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Anibal Godoy",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Cesar Yanis",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Orlando Mosquera",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Amir Murillo",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Azarias Londono",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Roderick Miller",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Jorge Gutierrez",
+        "pos": 1
+      }
+    ],
+    "PAR": [
+      {
+        "n": 1,
+        "p": "Gatito Fernandez",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Gustavo Velazquez",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Omar Alderete",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Juan Jose Caceres",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Fabian Balbuena",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Junior Alonso",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Ramon Sosa",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Diego Gomez",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Antonio Sanabria",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Miguel Almiron",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Mauricio",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Orlando Gill",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Jose Canale",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Andres Cubas",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Gustavo Gomez",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Damian Bobadilla",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Alejandro Romero Gamarra",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Alex Arce",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Julio Enciso",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Braian Ojeda",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Gabriel Avalos",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Gaston Olveira",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Matias Galarza",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Gustavo Caballero",
+        "pos": 2
+      },
+      {
+        "n": 25,
+        "p": "Isidro Pitta",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Alexandro Maidana",
+        "pos": 1
+      }
+    ],
+    "POR": [
+      {
+        "n": 1,
+        "p": "Diogo Costa",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Nelson Semedo",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Ruben Dias",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Tomas Araujo",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Diogo Dalot",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Matheus Nunes",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Cristiano Ronaldo",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Bruno Fernandes",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Goncalo Ramos",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Bernardo Silva",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Joao Felix",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Jose Sa",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Renato Veiga",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Goncalo Inacio",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Joao Neves",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Francisco Trincao",
+        "pos": 3
+      },
+      {
+        "n": 17,
+        "p": "Rafael Leao",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Pedro Neto",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Goncalo Guedes",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Joao Cancelo",
+        "pos": 1
+      },
+      {
+        "n": 21,
+        "p": "Ruben Neves",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Rui Silva",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Vitinha",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Samu Costa",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Nuno Mendes",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Francisco Conceicao",
+        "pos": 3
+      }
+    ],
+    "QAT": [
+      {
+        "n": 1,
+        "p": "Mahmoud Abunada",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Pedro Miguel",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Lucas Mendes",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Issa Laye",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Jassem Gaber",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Abdulaziz Hatem",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Ahmed Alaaeldin",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Edmilson Junior",
+        "pos": 3
+      },
+      {
+        "n": 9,
+        "p": "Mohammed Muntari",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Hassan Alhaydos",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Akram Afif",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Karim Boudiaf",
+        "pos": 2
+      },
+      {
+        "n": 13,
+        "p": "Ayoub Aloui",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Homam Ahmed",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Yusuf Abdurisag",
+        "pos": 3
+      },
+      {
+        "n": 16,
+        "p": "Boualem Khoukhi",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Ahmed Alganehi",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Sultan Albrake",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Almoez Ali",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Ahmed Fathy",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Salah Zakaria",
+        "pos": 0
+      },
+      {
+        "n": 22,
+        "p": "Meshaal Barsham",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Assim Madibo",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Tahsin Mohammed",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Alhashmi Alhussein",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Mohamed Manai",
+        "pos": 3
+      }
+    ],
+    "RSA": [
+      {
+        "n": 1,
+        "p": "Ronwen Williams",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Thabang Matuludi",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Khulumani Ndamane",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Teboho Mokoena",
+        "pos": 2
+      },
+      {
+        "n": 5,
+        "p": "Thalente Mbatha",
+        "pos": 2
+      },
+      {
+        "n": 6,
+        "p": "Aubrey Modiba",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Oswin Appollis",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Tshepang Moremi",
+        "pos": 3
+      },
+      {
+        "n": 9,
+        "p": "Lyle Foster",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Relebohile Mofokeng",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Themba Zwane",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Thapelo Maseko",
+        "pos": 3
+      },
+      {
+        "n": 13,
+        "p": "Sphephelo Sithole",
+        "pos": 2
+      },
+      {
+        "n": 14,
+        "p": "Mbekezeli Mbokazi",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Iqraam Rayners",
+        "pos": 3
+      },
+      {
+        "n": 16,
+        "p": "Sipho Chaine",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Evidence Makgopa",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Samukele Kabini",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Nkosinathi Sibisi",
+        "pos": 1
+      },
+      {
+        "n": 20,
+        "p": "Khuliso Mudau",
+        "pos": 1
+      },
+      {
+        "n": 21,
+        "p": "Ime Okon",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Ricardo Goss",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Jayden Adams",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Olwethu Makhanya",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Kamogelo Sebelebele",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Bradley Cross",
+        "pos": 1
+      }
+    ],
+    "SCO": [
+      {
+        "n": 1,
+        "p": "Angus Gunn",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Aaron Hickey",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Andy Robertson",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Scott Mctominay",
+        "pos": 2
+      },
+      {
+        "n": 5,
+        "p": "Grant Hanley",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Kieran Tierney",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "John Mcginn",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Tyler Fletcher",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Lyndon Dykes",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Che Adams",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Ryan Christie",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Liam Kelly",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Jack Hendry",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Ross Stewart",
+        "pos": 3
+      },
+      {
+        "n": 15,
+        "p": "John Souttar",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Dominic Hyam",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Ben Gannon-Doak",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "George Hirst",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Lewis Ferguson",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Lawrence Shankland",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Craig Gordon",
+        "pos": 0
+      },
+      {
+        "n": 22,
+        "p": "Nathan Patterson",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Kenny Mclean",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Anthony Ralston",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Findlay Curtis",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Scott Mckenna",
+        "pos": 1
+      }
+    ],
+    "SEN": [
+      {
+        "n": 1,
+        "p": "Yehvann Diouf",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Mamadou Sarr",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Kalidou Koulibaly",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Abdoulaye Seck",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Idrissa Gana Gueye",
+        "pos": 2
+      },
+      {
+        "n": 6,
+        "p": "Pathe Ciss",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Assane Diao",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Lamine Camara",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Bamba Dieng",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Sadio Mane",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Nicolas Jackson",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Cherif Ndiaye",
+        "pos": 3
+      },
+      {
+        "n": 13,
+        "p": "Iliman Ndiaye",
+        "pos": 3
+      },
+      {
+        "n": 14,
+        "p": "Ismail Jakobs",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Krepin Diatta",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Edouard Mendy",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Pape Matar Sarr",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Ismaila Sarr",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Moussa Niakhate",
+        "pos": 1
+      },
+      {
+        "n": 20,
+        "p": "Ibrahim Mbaye",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Habib Diarra",
+        "pos": 2
+      },
+      {
+        "n": 22,
+        "p": "Bara Sapoko Ndiaye",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Mory Diaw",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Antoine Mendy",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "El Hadji Malick Diouf",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Pape Gueye",
+        "pos": 2
+      }
+    ],
+    "SUI": [
+      {
+        "n": 1,
+        "p": "Gregor Kobel",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Miro Muheim",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Silvan Widmer",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Nico Elvedi",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Manuel Akanji",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Denis Zakaria",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Breel Embolo",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Remo Freuler",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Johan Manzambi",
+        "pos": 2
+      },
+      {
+        "n": 10,
+        "p": "Granit Xhaka",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Dan Ndoye",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Yvon Mvogo",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Ricardo Rodriguez",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Ardon Jashari",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Djibril Sow",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Christian Fassnacht",
+        "pos": 3
+      },
+      {
+        "n": 17,
+        "p": "Ruben Vargas",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Eray Coemert",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Noah Okafor",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Michel Aebischer",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Marvin Keller",
+        "pos": 0
+      },
+      {
+        "n": 22,
+        "p": "Fabian Rieder",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Zeki Amdouni",
+        "pos": 3
+      },
+      {
+        "n": 24,
+        "p": "Aurele Amenda",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Luca Jaquez",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Cedric Itten",
+        "pos": 3
+      }
+    ],
+    "SWE": [
+      {
+        "n": 1,
+        "p": "Jacob Widell Zetterstrom",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Gustaf Lagerbielke",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Victor Lindelof",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Isak Hien",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Gabriel Gudmundsson",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Herman Johansson",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Lucas Bergvall",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Daniel Svensson",
+        "pos": 1
+      },
+      {
+        "n": 9,
+        "p": "Alexander Isak",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Benjamin Nygren",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Anthony Elanga",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Viktor Johansson",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Ken Sema",
+        "pos": 2
+      },
+      {
+        "n": 14,
+        "p": "Hjalmar Ekdal",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Carl Starfelt",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Jesper Karlstrom",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Viktor Gyokeres",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Yasin Ayari",
+        "pos": 2
+      },
+      {
+        "n": 19,
+        "p": "Mattias Svanberg",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Eric Smith",
+        "pos": 1
+      },
+      {
+        "n": 21,
+        "p": "Alexander Bernhardsson",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Besfort Zeneli",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Kristoffer Nordfeldt",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Elliot Stroud",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Gustaf Nilsson",
+        "pos": 3
+      },
+      {
+        "n": 26,
+        "p": "Taha Ali",
+        "pos": 3
+      }
+    ],
+    "TUN": [
+      {
+        "n": 1,
+        "p": "Mouhib Chamakh",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Ali Abdi",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Montassar Talbi",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Omar Rekik",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Adam Arous",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Dylan Bronn",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Elias Achouri",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Elias Saad",
+        "pos": 3
+      },
+      {
+        "n": 9,
+        "p": "Hazem Mastouri",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Hannibal Mejbri",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Ismael Gharbi",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Mortadha Ben Ouanes",
+        "pos": 1
+      },
+      {
+        "n": 13,
+        "p": "Rani Khedira",
+        "pos": 2
+      },
+      {
+        "n": 14,
+        "p": "Khalil Ayari",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Mohamed Hadj Mahmoud",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Aymen Dahmen",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Ellyes Skhiri",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Rayan Elloumi",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Firas Chaouat",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Yan Valery",
+        "pos": 1
+      },
+      {
+        "n": 21,
+        "p": "Mohamed Amine Ben Hmida",
+        "pos": 1
+      },
+      {
+        "n": 22,
+        "p": "Sabri Ben Hessen",
+        "pos": 0
+      },
+      {
+        "n": 23,
+        "p": "Moutaz Neffati",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Raed Chikhaoui",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Anis Slimane",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Sebastian Tounekti",
+        "pos": 2
+      }
+    ],
+    "TUR": [
+      {
+        "n": 1,
+        "p": "Mert Gunok",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Zeki Celik",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Merih Demiral",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Caglar Soyuncu",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Salih Ozcan",
+        "pos": 2
+      },
+      {
+        "n": 6,
+        "p": "Orkun Kokcu",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Kerem Akturkoglu",
+        "pos": 3
+      },
+      {
+        "n": 8,
+        "p": "Arda Guler",
+        "pos": 3
+      },
+      {
+        "n": 9,
+        "p": "Deniz Gul",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Hakan Calhanoglu",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Kenan Yildiz",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Altay Bayindir",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Eren Elmali",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Abdulkerim Bardakci",
+        "pos": 1
+      },
+      {
+        "n": 15,
+        "p": "Ozan Kabak",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Ismail Yuksek",
+        "pos": 2
+      },
+      {
+        "n": 17,
+        "p": "Irfan Can Kahveci",
+        "pos": 3
+      },
+      {
+        "n": 18,
+        "p": "Mert Muldur",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Yunus Akgun",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Ferdi Kadioglu",
+        "pos": 1
+      },
+      {
+        "n": 21,
+        "p": "Baris Alper Yilmaz",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Kaan Ayhan",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Ugurcan Cakir",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Oguz Aydin",
+        "pos": 3
+      },
+      {
+        "n": 25,
+        "p": "Samet Akaydin",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Can Uzun",
+        "pos": 3
+      }
+    ],
+    "URU": [
+      {
+        "n": 1,
+        "p": "Sergio Rochet",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Jose Maria Gimenez",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Sebastian Caceres",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Ronald Araujo",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Manuel Ugarte",
+        "pos": 2
+      },
+      {
+        "n": 6,
+        "p": "Rodrigo Bentancur",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Nicolas De La Cruz",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Federico Valverde",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Darwin Nunez",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Giorgian De Arrascaeta",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Facundo Pellistri",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Santiago Mele",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Guillermo Varela",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Agustin Canobbio",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Emiliano Martinez",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Mathias Olivera",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Matias Vina",
+        "pos": 1
+      },
+      {
+        "n": 18,
+        "p": "Brian Rodriguez",
+        "pos": 3
+      },
+      {
+        "n": 19,
+        "p": "Rodrigo Aguirre",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Maxi Araujo",
+        "pos": 2
+      },
+      {
+        "n": 21,
+        "p": "Federico Vinas",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Joaquin Piquerez",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Fernando Muslera",
+        "pos": 0
+      },
+      {
+        "n": 24,
+        "p": "Santiago Bueno",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Juan Manuel Sanabria",
+        "pos": 2
+      },
+      {
+        "n": 26,
+        "p": "Rodrigo Zalazar",
+        "pos": 2
+      }
+    ],
+    "USA": [
+      {
+        "n": 1,
+        "p": "Matt Turner",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Sergino Dest",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Chris Richards",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Tyler Adams",
+        "pos": 2
+      },
+      {
+        "n": 5,
+        "p": "Antonee Robinson",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Auston Trusty",
+        "pos": 1
+      },
+      {
+        "n": 7,
+        "p": "Giovanni Reyna",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Weston Mckennie",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Ricardo Pepi",
+        "pos": 3
+      },
+      {
+        "n": 10,
+        "p": "Christian Pulisic",
+        "pos": 3
+      },
+      {
+        "n": 11,
+        "p": "Brenden Aaronson",
+        "pos": 3
+      },
+      {
+        "n": 12,
+        "p": "Miles Robinson",
+        "pos": 1
+      },
+      {
+        "n": 13,
+        "p": "Tim Ream",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Sebastian Berhalter",
+        "pos": 2
+      },
+      {
+        "n": 15,
+        "p": "Cristian Roldan",
+        "pos": 2
+      },
+      {
+        "n": 16,
+        "p": "Alex Freeman",
+        "pos": 1
+      },
+      {
+        "n": 17,
+        "p": "Malik Tillman",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Max Arfsten",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Haji Wright",
+        "pos": 3
+      },
+      {
+        "n": 20,
+        "p": "Folarin Balogun",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Timothy Weah",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Mark Mckenzie",
+        "pos": 1
+      },
+      {
+        "n": 23,
+        "p": "Joe Scally",
+        "pos": 1
+      },
+      {
+        "n": 24,
+        "p": "Matt Freese",
+        "pos": 0
+      },
+      {
+        "n": 25,
+        "p": "Chris Brady",
+        "pos": 0
+      },
+      {
+        "n": 26,
+        "p": "Alex Zendejas",
+        "pos": 3
+      }
+    ],
+    "UZB": [
+      {
+        "n": 1,
+        "p": "Utkir Yusupov",
+        "pos": 0
+      },
+      {
+        "n": 2,
+        "p": "Abdukodir Khusanov",
+        "pos": 1
+      },
+      {
+        "n": 3,
+        "p": "Khojiakbar Alijonov",
+        "pos": 1
+      },
+      {
+        "n": 4,
+        "p": "Farrukh Sayfiev",
+        "pos": 1
+      },
+      {
+        "n": 5,
+        "p": "Rustam Ashurmatov",
+        "pos": 1
+      },
+      {
+        "n": 6,
+        "p": "Akmal Mozgovoy",
+        "pos": 2
+      },
+      {
+        "n": 7,
+        "p": "Otabek Shukurov",
+        "pos": 2
+      },
+      {
+        "n": 8,
+        "p": "Jamshid Iskanderov",
+        "pos": 2
+      },
+      {
+        "n": 9,
+        "p": "Odiljon Xamrobekov",
+        "pos": 2
+      },
+      {
+        "n": 10,
+        "p": "Ruslanbek Jiyanov",
+        "pos": 2
+      },
+      {
+        "n": 11,
+        "p": "Oston Urunov",
+        "pos": 2
+      },
+      {
+        "n": 12,
+        "p": "Abduvohid Nematov",
+        "pos": 0
+      },
+      {
+        "n": 13,
+        "p": "Sherzod Nasrullaev",
+        "pos": 1
+      },
+      {
+        "n": 14,
+        "p": "Eldor Shomurodov",
+        "pos": 3
+      },
+      {
+        "n": 15,
+        "p": "Umar Eshmurodov",
+        "pos": 1
+      },
+      {
+        "n": 16,
+        "p": "Botirali Ergashev",
+        "pos": 0
+      },
+      {
+        "n": 17,
+        "p": "Dostonbek Khamdamov",
+        "pos": 2
+      },
+      {
+        "n": 18,
+        "p": "Abdulla Abdullaev",
+        "pos": 1
+      },
+      {
+        "n": 19,
+        "p": "Azizjon Ganiev",
+        "pos": 2
+      },
+      {
+        "n": 20,
+        "p": "Azizbek Amonov",
+        "pos": 3
+      },
+      {
+        "n": 21,
+        "p": "Igor Sergeev",
+        "pos": 3
+      },
+      {
+        "n": 22,
+        "p": "Abbosbek Fayzullaev",
+        "pos": 2
+      },
+      {
+        "n": 23,
+        "p": "Sherzod Esanov",
+        "pos": 2
+      },
+      {
+        "n": 24,
+        "p": "Behruzjon Karimov",
+        "pos": 1
+      },
+      {
+        "n": 25,
+        "p": "Avazbek Ulmasaliyev",
+        "pos": 1
+      },
+      {
+        "n": 26,
+        "p": "Jakhongir Urozov",
+        "pos": 1
+      }
+    ]
   }
 }

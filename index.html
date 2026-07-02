@@ -1426,6 +1426,60 @@ function openScorersModal(){
     return box;
   };
 
+  // Players tab: every team (by name), each expandable to its full squad by
+  // jersey number with any goal / assist / card totals for the player.
+  const playersView = () => {
+    const box = el('div', 'margin-top:6px;');
+    const squads = DATA.squads || {};
+    const fold = s => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z]/g, '');
+    const ev = {};
+    const bump = (code, name, f) => { if (!code || !name) return; const k = fold(name); if (!k) return; (ev[code] = ev[code] || {}); (ev[code][k] = ev[code][k] || { g: 0, a: 0, y: 0, r: 0 })[f]++; };
+    const eatG = arr => (arr || []).forEach(g => { if (g.p && g.p.indexOf('(o.g.)') < 0) bump(g.t, g.p, 'g'); if (g.a) bump(g.t, g.a, 'a'); });
+    const eatC = arr => (arr || []).forEach(c => bump(c.t, c.p, c.c === 'R' ? 'r' : 'y'));
+    Object.values(DATA.groups || {}).forEach(gr => (gr.matches || []).forEach(m => { eatG(m.goals); eatC(m.cards); }));
+    Object.values(DATA.r32 || {}).forEach(s => { eatG(s.goals); eatC(s.cards); });
+    Object.values(DATA.schedule || {}).forEach(s => { eatG(s.goals); eatC(s.cards); });
+    [DATA.final, DATA.thirdPlace].forEach(s => { eatG((s || {}).goals); eatC((s || {}).cards); });
+    const POS = { 0: 'GK', 1: 'DEF', 2: 'MID', 3: 'FWD' };
+    const mini = (icon, n) => { const s = el('span', 'display:inline-flex;align-items:center;gap:3px;flex:none;'); s.appendChild(el('span', 'font-size:11px;line-height:1;', icon)); s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;", String(n))); return s; };
+    Object.keys(squads).sort((a, b) => (TEAMDIR[a] ? TEAMDIR[a].name : a).localeCompare(TEAMDIR[b] ? TEAMDIR[b].name : b)).forEach(code => {
+      const info = TEAMDIR[code] || { name: code, iso: '' }, tm = ev[code] || {};
+      const wrap = el('div', 'border-bottom:1px solid ' + pal.line + ';');
+      const row = el('div', 'display:flex;align-items:center;gap:10px;padding:7px 0;cursor:pointer;');
+      if (info.iso) row.appendChild(flagImg(info.iso, 22)); else row.appendChild(el('div', 'width:22px;flex:none;'));
+      row.appendChild(el('span', 'flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', info.name));
+      const plus = el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;width:16px;flex:none;text-align:center;color:" + pal.sub + ';', '+');
+      row.appendChild(plus);
+      const detail = el('div', 'display:none;padding:2px 0 9px 0;');
+      let built = false;
+      row.addEventListener('click', () => {
+        if (!built){
+          (squads[code] || []).forEach(pl => {
+            const acc = { g: 0, a: 0, y: 0, r: 0 }, seen = {};
+            const toks = String(pl.p || '').trim().split(/\s+/);
+            [fold(pl.p), fold(toks[toks.length - 1]), fold(toks.slice(-2).join(' '))].forEach(k => { if (k && tm[k] && !seen[k]){ seen[k] = 1; acc.g += tm[k].g; acc.a += tm[k].a; acc.y += tm[k].y; acc.r += tm[k].r; } });
+            const d = el('div', 'display:flex;align-items:center;gap:8px;font-size:12px;padding:3px 0;');
+            d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;width:20px;flex:none;text-align:right;color:" + pal.sub + ';', String(pl.n)));
+            d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:.3px;width:26px;flex:none;color:" + accent + ';', POS[pl.pos] || ''));
+            d.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', pl.p));
+            const st = el('div', 'display:flex;align-items:center;gap:8px;flex:none;');
+            if (acc.g) st.appendChild(mini('⚽', acc.g));
+            if (acc.a) st.appendChild(mini('🥾', acc.a));
+            if (acc.y) st.appendChild(mini('🟨', acc.y));
+            if (acc.r) st.appendChild(mini('🟥', acc.r));
+            d.appendChild(st);
+            detail.appendChild(d);
+          });
+          built = true;
+        }
+        const open = detail.style.display === 'none'; detail.style.display = open ? 'block' : 'none'; plus.textContent = open ? '–' : '+';
+      });
+      wrap.appendChild(row); wrap.appendChild(detail);
+      box.appendChild(wrap);
+    });
+    return box;
+  };
+
   const tabBar = el('div', 'display:flex;margin:2px 30px 0 0;border-bottom:1px solid ' + pal.line + ';overflow-x:auto;');
   const content = el('div', '');
   const tabCss = on => 'flex:none;border:none;background:transparent;cursor:pointer;padding:9px 2px 10px;margin-right:16px;' +
@@ -1435,7 +1489,7 @@ function openScorersModal(){
   const show = key => {
     Object.keys(btns).forEach(k => { btns[k].style.cssText = tabCss(k === key); });
     content.textContent = '';
-    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches] }[key];
+    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches], players: [playersView, Object.keys(DATA.squads || {})] }[key];
     if (special){
       content.appendChild(special[1].length ? special[0]() : el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
       return;
@@ -1444,7 +1498,7 @@ function openScorersModal(){
     if (items.length) content.appendChild(list(items, 15, key));
     else content.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
   };
-  [['goals', 'Goals'], ['assists', 'Assists'], ['attendance', 'Attendance'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches']].forEach(([k, lbl]) => {
+  [['goals', 'Goals'], ['assists', 'Assists'], ['attendance', 'Attendance'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches'], ['players', 'Players']].forEach(([k, lbl]) => {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl;
     b.onclick = () => show(k); btns[k] = b; tabBar.appendChild(b);
   });

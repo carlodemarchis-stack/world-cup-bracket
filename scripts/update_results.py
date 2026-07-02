@@ -392,6 +392,33 @@ def assign_ko_venues(data, matches, changes):
         setv(data["thirdPlace"], third, "third")
 
 
+def fetch_squads(matches, existing):
+    """{code: [{n: jersey, p: name, pos: 0-3}]} for every team, from the FIFA
+    squad endpoint. Fills only teams not already present (fetch-once)."""
+    code2id = {}
+    for m in matches:
+        for side in ("Home", "Away"):
+            t = m.get(side) or {}
+            if t.get("Abbreviation") and t.get("IdTeam"):
+                code2id[t["Abbreviation"]] = str(t["IdTeam"])
+    out = dict(existing or {})
+    for code, tid in sorted(code2id.items()):
+        if code in out:
+            continue
+        try:
+            sq = fetch(f"https://api.fifa.com/api/v3/teams/{tid}/squad"
+                       f"?idCompetition={COMPETITION}&idSeason={SEASON}&language=en")
+        except Exception:  # noqa: BLE001 - best-effort; a missing team just isn't listed
+            continue
+        players = [{"n": int(p["JerseyNum"]), "p": desc(p.get("PlayerName")).title(),
+                    "pos": p.get("Position")}
+                   for p in (sq.get("Players") or [])
+                   if p.get("JerseyNum") and desc(p.get("PlayerName"))]
+        if players:
+            out[code] = sorted(players, key=lambda x: x["n"])
+    return out
+
+
 def main():
     dry = "--dry-run" in sys.argv
     data = json.load(open(DATA_PATH, encoding="utf-8"))
@@ -455,6 +482,12 @@ def main():
 
     # Stadiums for every knockout slot (incl. not-yet-played), by bracket topology.
     assign_ko_venues(data, matches, changes)
+
+    # Full squads (jersey numbers) — fetched once, then cached in data.json.
+    squads = fetch_squads(matches, data.get("squads"))
+    if squads and squads != data.get("squads"):
+        changes.append(f"squads: {len(squads)} teams")
+        data["squads"] = squads
 
     after = json.dumps(data, ensure_ascii=False, sort_keys=True)
     if after == before:
