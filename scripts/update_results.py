@@ -87,6 +87,7 @@ def parse_fifa(matches):
             "ids": (str(m.get("IdStage")), str(m.get("IdMatch"))),
             "id2code": id2code, "ref": ref or None, "att": att, "form": form or None,
             "venue": venue,
+            "num": int(m["MatchNumber"]) if str(m.get("MatchNumber", "")).isdigit() else None,
         }
         stage = desc(m.get("StageName"))
         if "First Stage" in stage:
@@ -284,7 +285,7 @@ def apply_ko(slot, a, b, ko, changes, label):
 def enrich(slot, res, changes, label):
     """Fill referee, attendance, formations and scorers/assists onto a match
     slot (group or knockout) — only when missing, so curated data is kept."""
-    for key in ("ref", "att", "form"):
+    for key in ("ref", "att", "form", "num"):
         if res.get(key) and not slot.get(key):
             slot[key] = res[key]
             changes.append(f"{label}: {key}={res[key]}")

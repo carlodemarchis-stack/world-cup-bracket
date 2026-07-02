@@ -790,6 +790,43 @@ function buildPlayerList(players, pal, accent){
   return wrap;
 }
 
+// Compact, inline match detail (metadata · scorers · cards · VAR · highlights) —
+// the match modal minus the score header, for expandable rows.
+function matchDetailBlock(m, pal, accent){
+  const d = el('div', 'display:flex;flex-direction:column;gap:2px;');
+  const meta = [];
+  if (m.num) meta.push('Match ' + m.num);
+  if (m.date) meta.push(m.date);
+  if (m.venue) meta.push(m.venue);
+  if (m.ref) meta.push('Ref ' + m.ref);
+  if (m.att) meta.push('Att ' + Number(m.att).toLocaleString());
+  if (meta.length) d.appendChild(el('div', 'font-size:11px;color:' + pal.sub + ';line-height:1.4;', meta.join('  ·  ')));
+  [m.a, m.b].forEach(code => {
+    const gs = (m.goals || []).filter(x => x.t === code);
+    if (!gs.length) return;
+    const info = TEAMDIR[code] || { iso: '' };
+    const line = el('div', 'display:flex;align-items:center;gap:6px;font-size:12px;margin-top:4px;');
+    if (info.iso) line.appendChild(flagImg(info.iso, 15));
+    line.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;width:32px;flex:none;", code));
+    line.appendChild(el('span', 'flex:1;min-width:0;color:' + pal.text + ';', gs.map(g => g.p + ' ' + g.m + (g.pen ? ' (pen)' : '') + (g.a ? ' — ' + g.a : '')).join(', ')));
+    d.appendChild(line);
+  });
+  if (m.cards && m.cards.length){
+    const line = el('div', 'display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:' + pal.sub + ';margin-top:5px;');
+    m.cards.forEach(c => line.appendChild(el('span', 'white-space:nowrap;', (c.c === 'R' ? '🟥' : '🟨') + ' ' + c.m + ' ' + c.p)));
+    d.appendChild(line);
+  }
+  (m.var || []).forEach(v => d.appendChild(el('div', 'font-size:12px;color:' + pal.sub + ';margin-top:3px;', 'VAR ' + v.m + ' · ' + v.d + (v.x ? ' — ' + v.x : ''))));
+  if (m.highlights){
+    const a = document.createElement('a');
+    a.href = m.highlights; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.style.cssText = 'display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:5px 10px;border-radius:7px;text-decoration:none;font-weight:600;font-size:12px;background:#ff0000;color:#fff;align-self:flex-start;';
+    a.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>Highlights';
+    d.appendChild(a);
+  }
+  return d;
+}
+
 let modalEl = null;
 function closeTeamModal(){ if (modalEl){ modalEl.remove(); modalEl = null; document.removeEventListener('keydown', modalKey); } }
 function modalKey(e){ if (e.key === 'Escape') closeTeamModal(); }
@@ -967,7 +1004,7 @@ function playedFrom(round, a, b, s){
   return { round, a, b, played: true, winner: s.winner,
     aGoals: aWon ? g[0] : g[1], bGoals: aWon ? g[1] : g[0], goals: s.goals || [],
     et: s.et, pens: s.pens, penScore: s.penScore, date: s.date, venue: s.venue,
-    highlights: s.highlights, ref: s.ref, att: s.att, form: s.form, var: s.var, cards: s.cards };
+    highlights: s.highlights, ref: s.ref, att: s.att, form: s.form, var: s.var, cards: s.cards, num: s.num };
 }
 function sfLoser(side){
   const part = matchParticipants(side, 4, 0), w = winnerOfNode(side, 4, 0);
@@ -981,7 +1018,7 @@ function resolveMatch(id){
     const winner = sc[0] > sc[1] ? gm.a : (sc[1] > sc[0] ? gm.b : null);
     return { round: 'Group ' + p[1], a: gm.a, b: gm.b, played: true, winner,
       aGoals: sc[0], bGoals: sc[1], goals: gm.goals || [], date: gm.d,
-      ref: gm.ref, att: gm.att, form: gm.form, venue: gm.venue, var: gm.var, cards: gm.cards,
+      ref: gm.ref, att: gm.att, form: gm.form, venue: gm.venue, var: gm.var, cards: gm.cards, num: gm.num,
       highlights: gm.h ? ('https://www.youtube.com/watch?v=' + gm.h + '&list=PLBRLtDhTHh5o') : null };
   }
   if (id === 'final'){
@@ -1172,7 +1209,7 @@ function openScorersModal(){
     const m = resolveMatch(id);
     if (!m || !m.played) return;
     const stage = stageOf(id);
-    if (m.att) matches.push({ id, stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, venue: m.venue, att: +m.att });
+    matches.push({ id, stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, venue: m.venue, att: m.att ? +m.att : null, date: m.date, num: m.num || 0 });
     (m.var || []).forEach(v => varEvents.push({ id, stage, a: m.a, b: m.b, date: m.date, min: v.m, dec: v.d, x: v.x }));
     (m.cards || []).forEach(c => cardEvents.push({ id, stage, a: m.a, b: m.b, date: m.date, min: c.m, p: c.p, t: c.t, c: c.c }));
     const cnt = { [m.a]: 0, [m.b]: 0 };   // running score as the goals go in
@@ -1257,7 +1294,7 @@ function openScorersModal(){
   // each row drills into the match modal.
   const attendanceView = () => {
     const box = el('div', 'margin-top:6px;');
-    matches.slice().sort((a, b) => b.att - a.att).forEach((mt, idx) => {
+    matches.filter(x => x.att).sort((a, b) => b.att - a.att).forEach((mt, idx) => {
       const row = el('div', 'display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid ' + pal.line + ';cursor:pointer;');
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:" + pal.sub + ';width:16px;flex:none;text-align:right;', String(idx + 1)));
       row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:34px;flex:none;', mt.stage));
@@ -1341,6 +1378,30 @@ function openScorersModal(){
     return box;
   };
 
+  // Matches tab: all played matches, most recent first, each expandable to its
+  // detail (metadata · scorers · cards · VAR · highlights — no score, it's in the row).
+  const matchesView = () => {
+    const box = el('div', 'margin-top:6px;');
+    matches.slice().sort((a, b) => dateK(b.date) - dateK(a.date) || (b.num || 0) - (a.num || 0)).forEach(mt => {
+      const wrap = el('div', 'border-bottom:1px solid ' + pal.line + ';');
+      const row = el('div', 'display:flex;align-items:center;gap:9px;padding:7px 0;cursor:pointer;');
+      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:34px;flex:none;', mt.stage));
+      row.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:600;', mt.a + ' ' + mt.ag + '–' + mt.bg + ' ' + mt.b));
+      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;color:" + pal.sub + ';flex:none;', mt.date || ''));
+      const plus = el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;width:16px;flex:none;text-align:center;color:" + pal.sub + ';', '+');
+      row.appendChild(plus);
+      const detail = el('div', 'display:none;padding:3px 0 10px 4px;');
+      let built = false;
+      row.addEventListener('click', () => {
+        if (!built){ detail.appendChild(matchDetailBlock(resolveMatch(mt.id), pal, accent)); built = true; }
+        const open = detail.style.display === 'none'; detail.style.display = open ? 'block' : 'none'; plus.textContent = open ? '–' : '+';
+      });
+      wrap.appendChild(row); wrap.appendChild(detail);
+      box.appendChild(wrap);
+    });
+    return box;
+  };
+
   const tabBar = el('div', 'display:flex;margin:2px 30px 0 0;border-bottom:1px solid ' + pal.line + ';overflow-x:auto;');
   const content = el('div', '');
   const tabCss = on => 'flex:none;border:none;background:transparent;cursor:pointer;padding:9px 2px 10px;margin-right:16px;' +
@@ -1350,7 +1411,7 @@ function openScorersModal(){
   const show = key => {
     Object.keys(btns).forEach(k => { btns[k].style.cssText = tabCss(k === key); });
     content.textContent = '';
-    const special = { attendance: [attendanceView, matches], var: [varView, varEvents], cards: [cardsView, cardEvents] }[key];
+    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches] }[key];
     if (special){
       content.appendChild(special[1].length ? special[0]() : el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
       return;
@@ -1359,7 +1420,7 @@ function openScorersModal(){
     if (items.length) content.appendChild(list(items, 15, key));
     else content.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
   };
-  [['goals', 'Goals'], ['assists', 'Assists'], ['attendance', 'Attendance'], ['cards', 'Cards'], ['var', 'VAR']].forEach(([k, lbl]) => {
+  [['goals', 'Goals'], ['assists', 'Assists'], ['attendance', 'Attendance'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches']].forEach(([k, lbl]) => {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl;
     b.onclick = () => show(k); btns[k] = b; tabBar.appendChild(b);
   });
