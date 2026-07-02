@@ -744,6 +744,58 @@ function teamMatches(code){
   return rows;
 }
 
+// A team's players who scored, assisted or were booked — tallied across all its
+// matches. Accented/ASCII spellings of a name are merged.
+function teamPlayers(code){
+  const fold = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const map = new Map();
+  const get = name => {
+    const k = fold(name).toLowerCase(); let e = map.get(k);
+    if (!e){ e = { name, g: 0, a: 0, y: 0, r: 0 }; map.set(k, e); }
+    else if (name !== fold(name) && e.name === fold(e.name)) e.name = name;  // prefer accented
+    return e;
+  };
+  const eatGoals = arr => (arr || []).forEach(x => {
+    if (x.t === code && x.p && x.p.indexOf('(o.g.)') < 0) get(x.p).g++;
+    if (x.a && x.t === code) get(x.a).a++;
+  });
+  const eatCards = arr => (arr || []).forEach(x => {
+    if (x.t === code && x.p){ const e = get(x.p); if (x.c === 'R') e.r++; else e.y++; }
+  });
+  Object.values(DATA.groups || {}).forEach(gr => (gr.matches || []).forEach(m => { eatGoals(m.goals); eatCards(m.cards); }));
+  Object.values(DATA.r32 || {}).forEach(s => { eatGoals(s.goals); eatCards(s.cards); });
+  Object.values(DATA.schedule || {}).forEach(s => { eatGoals(s.goals); eatCards(s.cards); });
+  [DATA.final, DATA.thirdPlace].forEach(s => { eatGoals((s || {}).goals); eatCards((s || {}).cards); });
+  return [...map.values()].sort((a, b) => b.g - a.g || b.a - a.a || (b.y + b.r) - (a.y + a.r) || a.name.localeCompare(b.name));
+}
+function buildPlayerList(players, pal, accent){
+  const wrap = el('div', 'display:flex;flex-direction:column;');
+  const stat = (n, label, color) => {
+    const s = el('div', 'display:inline-flex;align-items:baseline;gap:3px;flex:none;');
+    s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;", String(n)));
+    s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.5px;color:" + color + ';', label));
+    return s;
+  };
+  const card = (color, n) => {
+    const s = el('div', 'display:inline-flex;align-items:center;gap:4px;flex:none;');
+    s.appendChild(el('span', 'width:9px;height:13px;border-radius:2px;flex:none;background:' + color + ';'));
+    s.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;", String(n)));
+    return s;
+  };
+  players.forEach(p => {
+    const row = el('div', 'display:flex;align-items:center;gap:12px;padding:6px 0;border-bottom:1px solid ' + pal.line + ';');
+    row.appendChild(el('span', 'flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', p.name));
+    const stats = el('div', 'display:flex;align-items:center;gap:12px;flex:none;');
+    if (p.g) stats.appendChild(stat(p.g, 'G', accent));
+    if (p.a) stats.appendChild(stat(p.a, 'A', pal.sub));
+    if (p.y) stats.appendChild(card('#f4c430', p.y));
+    if (p.r) stats.appendChild(card('#e0463f', p.r));
+    row.appendChild(stats);
+    wrap.appendChild(row);
+  });
+  return wrap;
+}
+
 let modalEl = null;
 function closeTeamModal(){ if (modalEl){ modalEl.remove(); modalEl = null; document.removeEventListener('keydown', modalKey); } }
 function modalKey(e){ if (e.key === 'Escape') closeTeamModal(); }
@@ -785,6 +837,12 @@ function openTeamModal(code){
   panel.appendChild(buildStandings(g, code, pal, accent));
   panel.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-size:11px;color:" + pal.head + ';margin:18px 0 8px;', 'Matches'));
   panel.appendChild(buildMatchList(code, pal, accent));
+
+  const players = teamPlayers(code);
+  if (players.length){
+    panel.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-size:11px;color:" + pal.head + ';margin:18px 0 8px;', 'Players'));
+    panel.appendChild(buildPlayerList(players, pal, accent));
+  }
 
   overlay.appendChild(panel);
   modalEl = overlay;
