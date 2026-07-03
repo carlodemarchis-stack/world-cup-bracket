@@ -1154,12 +1154,15 @@ function openMatchModal(id){
     if (form) nm.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;color:" + pal.sub + ';', form));
     mid.appendChild(nm);
     if (goalsList && goalsList.length){
-      const gl = el('div', 'display:flex;flex-wrap:wrap;gap:5px 12px;margin-top:5px;');
+      const gl = el('div', 'margin-top:5px;display:flex;flex-direction:column;gap:6px;');
       goalsList.forEach(g => {
-        const chip = el('span', 'display:inline-flex;align-items:center;gap:5px;font-size:12px;color:' + pal.sub + ';');
+        const row2 = el('div', '');
+        const chip = el('div', 'display:flex;align-items:center;gap:6px;font-size:12px;color:' + pal.sub + ';');
         chip.appendChild(avatarImg(picById(g.id), 20, pal.line));
         chip.appendChild(el('span', '', g.p + ' ' + g.m + (g.pen ? ' (pen)' : '') + (g.a ? ' — assist ' + g.a : '')));
-        gl.appendChild(chip);
+        row2.appendChild(chip);
+        if (g.desc) row2.appendChild(el('div', 'margin:2px 0 0 26px;font-size:11.5px;font-style:italic;color:' + pal.text + ';opacity:.72;line-height:1.35;', g.desc));
+        gl.appendChild(row2);
       });
       mid.appendChild(gl);
     }
@@ -1997,13 +2000,13 @@ fetch('data.json', { cache: 'no-store' })
           const s = ms[g.id] || { g: 1, a: 0 };
           out.push(Object.assign({}, base, { kind: 'goal', name: g.p, pic: scorerPic, team: g.t, m: g.m, pen: !!g.pen, run,
             part: partOf(m, g.t, g.id), moreG: Math.max(0, s.g - 1), moreA: s.a, total: totG[g.id] || 1,
-            linkName: g.a || null, linkPic: assistPic }));
+            linkName: g.a || null, linkPic: assistPic, desc: g.desc || null }));
         }
         if (g.a && assistPic){   // an ASSIST card, from the assister's side
           const s = ms[g.aid] || { g: 0, a: 1 };
           out.push(Object.assign({}, base, { kind: 'assist', name: g.a, pic: assistPic, team: g.t, m: g.m, pen: false, run,
             part: partOf(m, g.t, g.aid), moreG: s.g, moreA: Math.max(0, s.a - 1), total: totA[g.aid] || 1,
-            linkName: g.p, linkPic: scorerPic }));
+            linkName: g.p, linkPic: scorerPic, desc: g.desc || null }));
         }
       });
     });
@@ -2214,6 +2217,13 @@ fetch('data.json', { cache: 'no-store' })
     if (isGoal){ if (item.moreG) extras.push(item.moreG + ' more ' + gW); if (item.moreA) extras.push(item.moreA + ' ' + aW); }
     else { if (item.moreG) extras.push(item.moreG + ' ' + gW); if (item.moreA) extras.push(item.moreA + ' more ' + aW); }
     if (extras.length) t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12.5px;color:" + accent + ';', '+ ' + extras.join('  ·  ') + ' this game'));
+    // The goal as FIFA told it — the live-blog narrative.
+    if (item.desc){
+      const q = el('div', 'display:flex;gap:7px;margin-top:6px;');
+      q.appendChild(el('div', 'width:2px;flex:none;border-radius:2px;background:' + accent + ';'));
+      q.appendChild(el('div', 'font-size:12px;font-style:italic;color:' + fg + ';opacity:.85;line-height:1.35;', item.desc));
+      t.appendChild(q);
+    }
     // divider between the player block and the match block
     t.appendChild(el('div', 'height:1px;background:' + (dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.08)') + ';margin:6px 0 5px;'));
     // — The match —
@@ -2255,7 +2265,7 @@ fetch('data.json', { cache: 'no-store' })
     document.body.appendChild(b); current = b;   // append first so we can measure height
     let x, y;
     if (gt.mode === 'side'){
-      const h = 430;
+      const h = 500;
       x = gt.g.x0 + Math.random() * Math.max(0, gt.g.w - 18 - w);
       const yMin = Math.max(96, gt.top + 16), yMax = Math.min(window.innerHeight - h - 30, gt.bottom - h - 16);
       y = yMin + Math.random() * Math.max(0, yMax - yMin);

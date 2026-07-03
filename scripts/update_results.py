@@ -20,9 +20,12 @@ Exit code 0 always on success; non-zero if the fetch/parse fails (so CI
 never commits a half-written file).
 """
 
+import base64
 import json
 import os
+import re
 import sys
+import unicodedata
 import urllib.request
 
 COMPETITION = "17"
@@ -285,6 +288,83 @@ def fetch_lineups(ids, id2code):
     return out
 
 
+STORY_STATUS = "https://d1pm0fe67fpjw8.cloudfront.net/fifa-matches-wc/{}/status.json"
+STORY_HIST = "https://cdn.monterosa.cloud/events/{}/{}/history.json"
+_STORY_KW = ("scor", "goal", "penalt", "convert", "header", "head", "net",
+             "fire", "strike", "tap", "finish", "volley", "curl", "slot")
+
+
+def _foldsur(name):
+    """Accent-folded surname (last word), lowercased. 'CRISTIANO RONALDO' -> 'ronaldo'."""
+    words = str(name).strip().split()
+    w = words[-1] if words else ""
+    return "".join(c for c in unicodedata.normalize("NFD", w)
+                   if unicodedata.category(c) != "Mn").lower()
+
+
+def fetch_stories(ids):
+    """Per-goal editorial narratives from the FIFA.com live blog (Monterosa).
+
+    Returns [{mk, sur, story}] — one per goal card that has a matching prose
+    post. Best-effort and WC2026-only; returns [] on any failure (the blog is an
+    undocumented third-party service, so it must never break the run)."""
+    stage, match = ids
+    key = f"www.fifa.com/fifaplus/en/match-centre/match/{COMPETITION}/{SEASON}/{stage}/{match}"
+    b64 = base64.b64encode(key.encode()).decode()
+    try:
+        ev = fetch(STORY_STATUS.format(b64), tries=2)["event_id"]
+        tl = fetch(STORY_HIST.format(ev[:2], ev), tries=2)["timeline"]
+    except Exception:  # noqa: BLE001 - no blog for this match, or the CDN moved
+        return []
+
+    def strip(h):
+        return re.sub(r"<[^>]+>", " ", h or "").replace("\xa0", " ").replace("  ", " ").strip()
+
+    arts = [(i, (it.get("custom_fields") or {}).get("all", {})) for i, it in enumerate(tl)
+            if it.get("content_type") == "article-element"]
+    out = []
+    for i, it in enumerate(tl):
+        if it.get("content_type") != "goal-element":
+            continue
+        cf = (it.get("custom_fields") or {}).get("all", {})
+        sur = _foldsur(cf.get("player") or "")
+        # The rich narrative is the next article mentioning the scorer + a goal word.
+        for ai, acf in arts:
+            if ai < i:
+                continue
+            blob = (strip(acf.get("title")) + " " + strip(acf.get("text"))).lower()
+            if sur and sur in blob and any(k in blob for k in _STORY_KW):
+                out.append({"mk": _minute_key(cf.get("state") or ""), "sur": sur,
+                            "story": strip(acf.get("text"))})
+                break
+    return out
+
+
+def attach_stories(slot, res, changes, label):
+    """Attach the live-blog goal narrative to each matching goal (fill-once)."""
+    goals = [g for g in (slot.get("goals") or []) if g.get("p") and "(o.g.)" not in g["p"]]
+    if not res.get("ids") or not goals:
+        return
+    if not REFRESH_GOALS and all(g.get("desc") for g in goals):
+        return
+    recs = fetch_stories(res["ids"])
+    if not recs:
+        return
+    n = 0
+    for g in goals:
+        if g.get("desc") and not REFRESH_GOALS:
+            continue
+        mk, gsur = _minute_key(g.get("m", "")), _foldsur(g["p"])
+        cand = [r for r in recs if r["mk"] == mk]
+        rec = next((r for r in cand if r["sur"] and gsur and (r["sur"] in gsur or gsur in r["sur"])), None)
+        rec = rec or (cand[0] if cand else None)
+        if rec and g.get("desc") != rec["story"]:
+            g["desc"] = rec["story"]
+            n += 1
+    if n:
+        changes.append(f"{label}: +{n} goal description(s)")
+
+
 def apply_ko(slot, a, b, ko, changes, label):
     """Write a knockout result into `slot` (mutates it).
 
@@ -384,6 +464,9 @@ def enrich(slot, res, changes, label):
         if ln and slot.get("line") != ln:
             slot["line"] = ln
             changes.append(f"{label}: lineups")
+
+    # Live-blog goal narratives — fill once per goal.
+    attach_stories(slot, res, changes, label)
 
 
 def winner_of(slot_dict, key):
