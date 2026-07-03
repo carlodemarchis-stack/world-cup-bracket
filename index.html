@@ -1854,18 +1854,31 @@ fetch('data.json', { cache: 'no-store' })
       if (started) return { type: 'full', txt: 'Played the full match' };
       return null;
     };
+    // Pre-pass: tournament goal totals per player, and each player's goals +
+    // assists within each match (to note a multi-goal / assist game).
+    const totalG = {}, matchStats = {};
+    ids.forEach(id => {
+      const m = resolveMatch(id); if (!m || !m.played) return;
+      const ms = matchStats[id] = {};
+      (m.goals || []).forEach(g => {
+        if (g.p && g.p.indexOf('(o.g.)') < 0 && g.id){ totalG[g.id] = (totalG[g.id] || 0) + 1; (ms[g.id] = ms[g.id] || { g: 0, a: 0 }).g++; }
+        if (g.aid){ (ms[g.aid] = ms[g.aid] || { g: 0, a: 0 }).a++; }
+      });
+    });
     const out = [];
     ids.forEach(id => {
       const m = resolveMatch(id); if (!m || !m.played) return;
-      const stage = stageName(id);
+      const stage = stageName(id), ms = matchStats[id] || {};
       const cnt = { [m.a]: 0, [m.b]: 0 };
       (m.goals || []).forEach(g => {
         if (g.t in cnt) cnt[g.t]++;   // running score (all goals, incl. own goals)
         if (!g.p || g.p.indexOf('(o.g.)') >= 0) return;
         const pic = picById(g.id); if (!pic) return;
+        const st = ms[g.id] || { g: 1, a: 0 };
         out.push({ name: g.p, pic, m: g.m, pen: !!g.pen, team: g.t, stage,
           a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals,
-          run: cnt[m.a] + '–' + cnt[m.b], date: m.date, venue: m.venue, part: partOf(m, g) });
+          run: cnt[m.a] + '–' + cnt[m.b], date: m.date, venue: m.venue, part: partOf(m, g),
+          moreG: Math.max(0, st.g - 1), assists: st.a, total: totalG[g.id] || 1 });
       });
     });
     for (let i = out.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = out[i]; out[i] = out[j]; out[j] = t; }
@@ -1912,7 +1925,7 @@ fetch('data.json', { cache: 'no-store' })
     b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;flex-direction:column;pointer-events:none;' +
       'color:' + fg + ";font-family:'Barlow',system-ui,sans-serif;";
     // Transparent player cutout — no photo box — sliding up from behind the card.
-    const ph = el('div', 'width:100%;height:150px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;');
+    const ph = el('div', 'width:100%;height:150px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;position:relative;');
     const im = document.createElement('img'); im.decoding = 'async'; im.alt = '';
     im.style.cssText = 'height:100%;width:auto;max-width:100%;object-fit:contain;object-position:bottom center;display:block;' +
       'filter:drop-shadow(0 5px 8px rgba(0,0,0,.2));transform:translateY(46px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
@@ -1920,7 +1933,13 @@ fetch('data.json', { cache: 'no-store' })
     im.addEventListener('load', reveal);
     im.src = item.pic + '?&io=transform:fit,width:320&quality=86';
     if (im.complete && im.naturalWidth) reveal();
-    ph.appendChild(im); b.appendChild(ph);
+    ph.appendChild(im);
+    // Tournament goal tally — a stat medallion on the photo, detached from the match.
+    const tot = el('div', 'position:absolute;right:6px;bottom:4px;display:inline-flex;align-items:baseline;gap:3px;background:rgba(20,18,14,.9);color:#fff;padding:3px 9px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.3);');
+    tot.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;line-height:1;", String(item.total)));
+    tot.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.5px;", item.total === 1 ? 'GOAL' : 'GOALS'));
+    ph.appendChild(tot);
+    b.appendChild(ph);
     // Info card (the only part with a background).
     const t = el('div', 'padding:12px 15px 13px;display:flex;flex-direction:column;gap:3px;line-height:1.2;min-width:0;' +
       'background:' + bg + ';border-radius:16px;box-shadow:0 14px 34px rgba(0,0,0,.24);border:1px solid ' + (dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.07)') + ';');
@@ -1938,6 +1957,11 @@ fetch('data.json', { cache: 'no-store' })
       const col = item.part.type === 'sent' ? '#e0463f' : item.part.type === 'full' ? accent : sub;
       t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:" + col + ';', item.part.txt));
     }
+    // A multi-goal / assist game — noted as the last player row when it applies.
+    const extras = [];
+    if (item.moreG) extras.push(item.moreG + ' more goal' + (item.moreG > 1 ? 's' : ''));
+    if (item.assists) extras.push(item.assists + ' assist' + (item.assists > 1 ? 's' : ''));
+    if (extras.length) t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12.5px;color:" + accent + ';', '+ ' + extras.join('  ·  ') + ' this game'));
     // divider between the player block and the match block
     t.appendChild(el('div', 'height:1px;background:' + (dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.08)') + ';margin:6px 0 5px;'));
     // — The match —
