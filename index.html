@@ -1825,6 +1825,7 @@ fetch('data.json', { cache: 'no-store' })
   const mq = q => !!(window.matchMedia && matchMedia(q).matches);   // evaluated live
   const IDLE_MS = 6000;
   let lastActive = Date.now(), pool = null, mi = 0, ti = 0, mLeft = 2 + Math.floor(Math.random() * 2), current = null, nextAt = 0;
+  let paused = false, hist = [], hp = -1;   // paused = manual stop; hist/hp = back-history
   // Sequence: 2–3 goal/assist cards, then one top-scorer/assist card, repeat.
   function nextItem(){
     if (!pool.moments.length && !pool.tops.length) return null;
@@ -2103,10 +2104,8 @@ fetch('data.json', { cache: 'no-store' })
     setTimeout(() => { b.remove(); if (current === b) current = null; }, 750);
   }
 
-  function spawn(){
-    const gt = gutter(); if (!gt) return;
-    if (!pool) pool = buildPool();
-    const item = nextItem(); if (!item) return;
+  function spawn(item){
+    const gt = gutter(); if (!gt || !item) return;
     const w = Math.min(256, gt.g.w - 18), h = 430;
     const x = gt.g.x0 + Math.random() * Math.max(0, gt.g.w - 18 - w);
     const yMin = Math.max(96, gt.top + 16), yMax = Math.min(window.innerHeight - h - 30, gt.bottom - h - 16);
@@ -2115,15 +2114,38 @@ fetch('data.json', { cache: 'no-store' })
     b.style.left = Math.round(x) + 'px'; b.style.top = Math.round(y) + 'px';
     document.body.appendChild(b); current = b;
     requestAnimationFrame(() => b.classList.add('show'));
-    b._t = setTimeout(() => dismiss(b), 15000);   // long enough to read the detail
+    if (!paused) b._t = setTimeout(() => dismiss(b), 15000);   // auto-advance only while running
   }
 
+  // Forward walks the sequence, keeping a small history so Left can revisit.
+  function pickForward(){
+    hp++;
+    if (hp < hist.length) return hist[hp];
+    const it = nextItem(); if (!it){ hp--; return null; }
+    hist.push(it); if (hist.length > 60){ hist.shift(); hp--; }
+    return it;
+  }
+  function pickBack(){ if (hp > 0){ hp--; return hist[hp]; } return null; }
+  function clearCurrent(){ if (current){ clearTimeout(current._t); current.remove(); current = null; } }
+  function autoNext(){ if (!pool) pool = buildPool(); const it = pickForward(); if (it) spawn(it); }
+  function step(dir){ if (!pool) pool = buildPool(); const it = dir > 0 ? pickForward() : pickBack(); if (!it) return; clearCurrent(); spawn(it); }
+
+  // Manual override: → next · ← back · ↓ stop (if running) · ↑ restart (if stopped).
+  addEventListener('keydown', e => {
+    if (modalEl || /^(INPUT|SELECT|TEXTAREA)$/.test((e.target || {}).tagName || '')) return;
+    if (e.key === 'ArrowRight'){ e.preventDefault(); step(1); }
+    else if (e.key === 'ArrowLeft'){ e.preventDefault(); step(-1); }
+    else if (e.key === 'ArrowDown'){ if (!paused){ e.preventDefault(); paused = true; if (current) clearTimeout(current._t); } }
+    else if (e.key === 'ArrowUp'){ if (paused){ e.preventDefault(); paused = false; if (current) current._t = setTimeout(() => dismiss(current), 15000); else autoNext(); } }
+  });
+
   setInterval(() => {
+    if (paused) return;
     if (current){
       if (modalEl || document.hidden || (Date.now() - lastActive) < IDLE_MS) dismiss(current);
       return;
     }
-    if (quiet() && Date.now() >= nextAt) spawn();
+    if (quiet() && Date.now() >= nextAt) autoNext();
   }, 1400);
 })();
 </script>
