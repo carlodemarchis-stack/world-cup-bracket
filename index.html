@@ -1826,7 +1826,9 @@ fetch('data.json', { cache: 'no-store' })
   const IDLE_MS = 6000;
   let lastActive = Date.now(), pool = null, cursor = 0, current = null, nextAt = 0;
   const poke = () => { lastActive = Date.now(); };
-  ['mousemove','mousedown','wheel','scroll','keydown','touchstart','resize'].forEach(ev => addEventListener(ev, poke, { passive: true }));
+  // Only a click stops the show and restarts the quiet period — mouse moves and
+  // key presses are ignored.
+  addEventListener('pointerdown', poke, { passive: true });
 
   function buildPool(){
     const ids = [];
@@ -1921,9 +1923,8 @@ fetch('data.json', { cache: 'no-store' })
     im.src = item.pic + '?&io=transform:fit,width:320&quality=86';
     if (im.complete && im.naturalWidth) reveal();
     ph.appendChild(im); b.appendChild(ph);
-    const t = el('div', 'padding:11px 15px 13px;display:flex;flex-direction:column;gap:3px;line-height:1.2;min-width:0;');
-    // Header framing it as an archived moment (round · date), not a live update.
-    t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:" + sub + ';', item.stage + (item.date ? '  ·  ' + item.date : '')));
+    const t = el('div', 'padding:12px 15px 13px;display:flex;flex-direction:column;gap:3px;line-height:1.2;min-width:0;');
+    // — The player and their goal —
     const n = el('div', 'display:flex;align-items:center;gap:7px;');
     n.appendChild(el('span', 'font-weight:700;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', item.name));
     if (TEAMDIR[item.team] && TEAMDIR[item.team].iso) n.appendChild(flagImg(TEAMDIR[item.team].iso, 17));
@@ -1936,7 +1937,10 @@ fetch('data.json', { cache: 'no-store' })
       const col = item.part.type === 'sent' ? '#e0463f' : item.part.type === 'full' ? accent : sub;
       t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:" + col + ';', item.part.txt));
     }
-    // Scoreline with both teams' flags.
+    // divider between the player block and the match block
+    t.appendChild(el('div', 'height:1px;background:' + (dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.08)') + ';margin:6px 0 5px;'));
+    // — The match —
+    t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:" + sub + ';', item.stage + (item.date ? '  ·  ' + item.date : '')));
     const di = TEAMDIR[item.a] || {}, ei = TEAMDIR[item.b] || {};
     const sc = el('div', "display:flex;align-items:center;gap:6px;margin-top:1px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:" + fg + ';');
     if (di.iso) sc.appendChild(flagImg(di.iso, 17));
