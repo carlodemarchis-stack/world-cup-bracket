@@ -1914,8 +1914,12 @@ fetch('data.json', { cache: 'no-store' })
     // Big player cutout across the top (FIFA cutouts are head-and-torso).
     const ph = el('div', 'width:100%;height:150px;flex:none;overflow:hidden;background:' + (dark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.04)') + ';');
     const im = document.createElement('img'); im.decoding = 'async'; im.alt = '';
+    // Slide the cutout up into the frame once it has loaded.
+    im.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transform:translateY(42px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
+    const reveal = () => requestAnimationFrame(() => { im.style.transform = 'translateY(0)'; im.style.opacity = '1'; });
+    im.addEventListener('load', reveal);
     im.src = item.pic + '?&io=transform:fit,width:320&quality=86';
-    im.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;';
+    if (im.complete && im.naturalWidth) reveal();
     ph.appendChild(im); b.appendChild(ph);
     const t = el('div', 'padding:11px 15px 13px;display:flex;flex-direction:column;gap:3px;line-height:1.2;min-width:0;');
     // Header framing it as an archived moment (round · date), not a live update.
@@ -1967,7 +1971,7 @@ fetch('data.json', { cache: 'no-store' })
     b.style.left = Math.round(x) + 'px'; b.style.top = Math.round(y) + 'px';
     document.body.appendChild(b); current = b;
     requestAnimationFrame(() => b.classList.add('show'));
-    b._t = setTimeout(() => dismiss(b), 9000);   // long enough to read the detail
+    b._t = setTimeout(() => dismiss(b), 15000);   // long enough to read the detail
   }
 
   setInterval(() => {
