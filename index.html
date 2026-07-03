@@ -1297,7 +1297,7 @@ function openScorersModal(){
         const gk = keyOf(g.p, g.t), ge = gmap.get(gk) || { name: g.p, team: g.t, rows: [] };
         ge.name = bestName(ge.name, g.p);
         ge.id = ge.id || g.id;
-        ge.rows.push({ stage, opp, min: g.m, run, score, note: g.a || null });   // note = assister
+        ge.rows.push({ stage, opp, min: g.m, run, score, note: g.a || null, pen: !!g.pen });   // note = assister
         gmap.set(gk, ge);
         if (g.a){
           const ak = keyOf(g.a, g.t), ae = amap.get(ak) || { name: g.a, team: g.t, rows: [] };
@@ -1349,6 +1349,7 @@ function openScorersModal(){
         if (oi.iso) d.appendChild(flagImg(oi.iso, 13));
         const mid = el('span', "font-family:'Barlow Condensed',sans-serif;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;");
         mid.appendChild(el('span', '', en.opp));
+        if (kind !== 'assists' && en.pen) mid.appendChild(el('span', 'color:' + accent + ';font-weight:700;', '  (pen)'));
         if (kind === 'assists') mid.appendChild(el('span', 'opacity:.7;', '  → ' + en.note));
         else if (en.note) mid.appendChild(el('span', 'opacity:.7;', '  · assist by ' + en.note));
         d.appendChild(mid);
