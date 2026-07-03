@@ -1840,6 +1840,8 @@ fetch('data.json', { cache: 'no-store' })
     ids.push('third', 'final');
     const stageName = id => id[0] === 'G' ? 'Group ' + id.split(':')[1] : id === 'final' ? 'Final' : id === 'third' ? '3rd place'
       : ({ '1':'Round of 32', '2':'Round of 16', '3':'Quarter-final', '4':'Semi-final' })[id.split(':')[1]];
+    const shortStage = id => id[0] === 'G' ? 'GRP' : id === 'final' ? 'FINAL' : id === 'third' ? '3RD'
+      : ({ '1':'R32', '2':'R16', '3':'QF', '4':'SF' })[id.split(':')[1]];
     // How a player featured in this match, from the lineup + subs + red cards.
     const partOf = (m, teamCode, pid) => {
       const line = (m.line || {})[teamCode]; if (!line) return null;
@@ -1856,12 +1858,16 @@ fetch('data.json', { cache: 'no-store' })
     };
     // Pre-pass: tournament goal + assist totals per player, and each player's
     // goals + assists within each match.
-    const totG = {}, totA = {}, matchStats = {};
+    const totG = {}, totA = {}, matchStats = {}, goalLog = {}, pInfo = {};
     ids.forEach(id => {
       const m = resolveMatch(id); if (!m || !m.played) return;
-      const ms = matchStats[id] = {};
+      const ms = matchStats[id] = {}, stg = shortStage(id);
       (m.goals || []).forEach(g => {
-        if (g.p && g.p.indexOf('(o.g.)') < 0 && g.id){ totG[g.id] = (totG[g.id] || 0) + 1; (ms[g.id] = ms[g.id] || { g: 0, a: 0 }).g++; }
+        if (g.p && g.p.indexOf('(o.g.)') < 0 && g.id){
+          totG[g.id] = (totG[g.id] || 0) + 1; (ms[g.id] = ms[g.id] || { g: 0, a: 0 }).g++;
+          (goalLog[g.id] = goalLog[g.id] || []).push({ stage: stg, opp: (g.t === m.a ? m.b : m.a), min: g.m, pen: !!g.pen });
+          if (!pInfo[g.id]) pInfo[g.id] = { name: g.p, team: g.t };
+        }
         if (g.aid){ totA[g.aid] = (totA[g.aid] || 0) + 1; (ms[g.aid] = ms[g.aid] || { g: 0, a: 0 }).a++; }
       });
     });
@@ -1889,6 +1895,12 @@ fetch('data.json', { cache: 'no-store' })
             linkName: g.p, linkPic: scorerPic }));
         }
       });
+    });
+    // Top-scorer profile cards for anyone on 2+ goals.
+    Object.keys(goalLog).forEach(pid => {
+      if (goalLog[pid].length < 2) return;
+      const pic = picById(pid); if (!pic) return;
+      out.push({ kind: 'topscorer', name: pInfo[pid].name, team: pInfo[pid].team, pic, total: goalLog[pid].length, log: goalLog[pid] });
     });
     for (let i = out.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = out[i]; out[i] = out[j]; out[j] = t; }
     return out;
@@ -1925,7 +1937,57 @@ fetch('data.json', { cache: 'no-store' })
       (Date.now() - lastActive) >= IDLE_MS;
   }
 
-  function make(item, w){
+  function make(item, w){ return item.kind === 'topscorer' ? makeTop(item, w) : makeMoment(item, w); }
+
+  // Distinct "top scorer" spotlight card: hero photo, big goal total, goal log.
+  function makeTop(item, w){
+    const dark = state.bgTheme === 'Dark', accent = state.accentColor;
+    const bg = dark ? 'rgba(27,26,18,.98)' : 'rgba(255,255,255,.99)';
+    const fg = dark ? '#f4efe2' : '#1c1813', sub = dark ? 'rgba(228,222,206,.6)' : 'rgba(70,62,48,.66)';
+    const line = dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.08)';
+    const b = el('div', '');
+    b.className = 'wc-bubble';
+    b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;pointer-events:none;' +
+      'border-radius:16px;background:' + bg + ';color:' + fg + ';box-shadow:0 16px 40px rgba(0,0,0,.3);border:1px solid ' + line + ';' +
+      "font-family:'Barlow',system-ui,sans-serif;";
+    // Hero photo banner (full player photo) with overlays.
+    const heroBg = dark ? 'rgba(255,255,255,.05)' : 'rgba(0,0,0,.035)';
+    const hero = el('div', 'position:relative;width:100%;height:170px;overflow:hidden;background:' + heroBg + ';');
+    const im = document.createElement('img'); im.decoding = 'async'; im.alt = '';
+    im.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transform:translateY(30px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
+    const reveal = () => requestAnimationFrame(() => { im.style.transform = 'translateY(0)'; im.style.opacity = '1'; });
+    im.addEventListener('load', reveal); im.src = item.pic + '?&io=transform:fit,width:340&quality=86';
+    if (im.complete && im.naturalWidth) reveal();
+    hero.appendChild(im);
+    hero.appendChild(el('div', 'position:absolute;left:0;right:0;bottom:0;height:76px;background:linear-gradient(180deg,' + (dark ? 'rgba(27,26,18,0),rgba(27,26,18,.98)' : 'rgba(255,255,255,0),rgba(255,255,255,.99)') + ');'));
+    hero.appendChild(el('div', 'position:absolute;top:10px;left:12px;background:' + accent + ';color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:5px;', 'Top scorer'));
+    const num = el('div', 'position:absolute;top:6px;right:12px;display:flex;flex-direction:column;align-items:flex-end;line-height:.85;text-shadow:0 2px 8px rgba(0,0,0,.55);');
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:52px;color:#fff;", String(item.total)));
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:#fff;", 'GOALS'));
+    hero.appendChild(num);
+    const nm = el('div', 'position:absolute;left:13px;bottom:8px;display:flex;align-items:center;gap:7px;');
+    nm.appendChild(el('span', 'font-weight:800;font-size:19px;', item.name));
+    if (TEAMDIR[item.team] && TEAMDIR[item.team].iso) nm.appendChild(flagImg(TEAMDIR[item.team].iso, 18));
+    hero.appendChild(nm);
+    b.appendChild(hero);
+    // Goal log — like the top-scorers tab.
+    const list = el('div', 'padding:8px 14px 12px;display:flex;flex-direction:column;');
+    item.log.forEach((gl, i) => {
+      const r = el('div', "display:flex;align-items:center;gap:8px;padding:3px 0;font-family:'Barlow Condensed',sans-serif;font-size:13px;" + (i ? 'border-top:1px solid ' + line + ';' : ''));
+      r.appendChild(el('span', 'font-weight:700;font-size:9px;letter-spacing:.4px;color:' + accent + ';width:30px;flex:none;', gl.stage));
+      r.appendChild(el('span', 'color:' + sub + ';flex:none;', 'v'));
+      const oi = TEAMDIR[gl.opp] || {};
+      if (oi.iso) r.appendChild(flagImg(oi.iso, 14));
+      r.appendChild(el('span', 'font-weight:700;flex:1;min-width:0;', gl.opp));
+      r.appendChild(el('span', 'font-weight:700;color:' + fg + ';flex:none;', gl.min));
+      if (gl.pen) r.appendChild(el('span', 'font-weight:700;color:' + accent + ';flex:none;', '(pen)'));
+      list.appendChild(r);
+    });
+    b.appendChild(list);
+    return b;
+  }
+
+  function makeMoment(item, w){
     const dark = state.bgTheme === 'Dark', accent = state.accentColor, isGoal = item.kind === 'goal';
     const bg = dark ? 'rgba(27,26,18,.97)' : 'rgba(255,255,255,.98)';
     const fg = dark ? '#f4efe2' : '#1c1813', sub = dark ? 'rgba(228,222,206,.6)' : 'rgba(70,62,48,.66)';
@@ -2013,7 +2075,7 @@ fetch('data.json', { cache: 'no-store' })
     if (!pool) pool = buildPool();
     if (!pool.length) return;
     const item = pool[cursor % pool.length]; cursor++;
-    const w = Math.min(256, gt.g.w - 18), h = 370;
+    const w = Math.min(256, gt.g.w - 18), h = 390;
     const x = gt.g.x0 + Math.random() * Math.max(0, gt.g.w - 18 - w);
     const yMin = Math.max(96, gt.top + 16), yMax = Math.min(window.innerHeight - h - 30, gt.bottom - h - 16);
     const y = yMin + Math.random() * Math.max(0, yMax - yMin);
