@@ -602,9 +602,9 @@ function buildBracket(v){
   footer.style.zIndex = '10';
   footer.style.display = 'flex';
   footer.style.alignItems = 'center';
-  footer.style.justifyContent = 'center';
+  footer.style.justifyContent = 'space-between';
   footer.style.flexWrap = 'wrap';
-  footer.style.gap = '10px';
+  footer.style.gap = '10px 16px';
   // The square bracket box reserves ~9.8% of its width as empty space below the
   // circle; pull the footer up into it for a consistent ~26px gap at any width
   // (min(94vw,820px) mirrors the stage width, so it caps with the bracket).
@@ -628,7 +628,46 @@ function buildBracket(v){
   emilio.textContent = '(here)';
   emilio.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:2px;';
   credit.appendChild(emilio);
+  credit.style.cssText = 'flex:1 1 260px;min-width:0;';
   footer.appendChild(credit);
+
+  // Right cluster: card controls · timezone · settings.
+  const right = el('div');
+  right.style.cssText = 'display:flex;align-items:center;gap:10px;flex-wrap:wrap;';
+
+  // Card controls — mirror the arrow keys (← prev · stop/start · → next).
+  const btnCss = 'display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;color:inherit;background:transparent;border:1px solid currentColor;border-radius:6px;cursor:pointer;opacity:.65;transition:opacity .15s;';
+  const mkBtn = (title, svg) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.title = title; b.setAttribute('aria-label', title);
+    b.style.cssText = btnCss; b.innerHTML = svg;
+    b.onmouseenter = () => b.style.opacity = '1';
+    b.onmouseleave = () => b.style.opacity = '.65';
+    return b;
+  };
+  const ICON_PREV = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;"><polygon points="19 20 9 12 19 4"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>';
+  const ICON_NEXT = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;"><polygon points="5 4 15 12 5 20"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>';
+  const ICON_PAUSE = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:block;pointer-events:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+  const ICON_PLAY = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:block;pointer-events:none;"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>';
+  const prevBtn = mkBtn('Previous card (←)', ICON_PREV);
+  const nextBtn = mkBtn('Next card (→)', ICON_NEXT);
+  const toggleBtn = mkBtn('Stop cards (↓)', ICON_PAUSE);
+  const cardsApi = () => window.wcbCards;
+  const syncToggle = () => {
+    const paused = !!(cardsApi() && cardsApi().isPaused());
+    toggleBtn.innerHTML = paused ? ICON_PLAY : ICON_PAUSE;
+    toggleBtn.title = paused ? 'Start cards (↑)' : 'Stop cards (↓)';
+  };
+  prevBtn.onclick = () => { const a = cardsApi(); if (a) a.prev(); syncToggle(); };
+  nextBtn.onclick = () => { const a = cardsApi(); if (a) a.next(); syncToggle(); };
+  toggleBtn.onclick = () => { const a = cardsApi(); if (a) a.toggle(); syncToggle(); };
+  window.__wcbCardsSync = syncToggle;   // arrow keys / auto-stop refresh this button
+  syncToggle();
+  const cardCtl = el('div');
+  cardCtl.title = 'Ambient cards';
+  cardCtl.style.cssText = 'display:inline-flex;align-items:center;gap:4px;';
+  cardCtl.appendChild(prevBtn); cardCtl.appendChild(toggleBtn); cardCtl.appendChild(nextBtn);
+  right.appendChild(cardCtl);
 
   // Timezone selector — kickoff times shown in this zone (defaults to the client's).
   const tzSel = document.createElement('select');
@@ -641,7 +680,7 @@ function buildBracket(v){
     .forEach(z => { if (z[0] !== localZone) zones.push(z); });
   zones.forEach(([z, label]) => { const o = document.createElement('option'); o.value = z; o.textContent = label; if (z === tz) o.selected = true; tzSel.appendChild(o); });
   tzSel.onchange = () => { tz = tzSel.value; render(); };
-  footer.appendChild(tzSel);
+  right.appendChild(tzSel);
   const gear = document.createElement('button');
   gear.id = 'settings-toggle';
   gear.type = 'button';
@@ -651,7 +690,8 @@ function buildBracket(v){
   gear.classList.toggle('on', controlsOpen);
   gear.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>';
   gear.onclick = () => setControls(!controlsOpen);
-  footer.appendChild(gear);
+  right.appendChild(gear);
+  footer.appendChild(right);
   root.appendChild(footer);
   return root;
 }
@@ -2292,14 +2332,24 @@ fetch('data.json', { cache: 'no-store' })
   function clearCurrent(){ if (current){ clearTimeout(current._t); current.remove(); current = null; } }
   function autoNext(){ if (!pool) pool = buildPool(); const it = pickForward(); if (it) spawn(it); }
   function step(dir){ if (!pool) pool = buildPool(); const it = dir > 0 ? pickForward() : pickBack(); if (!it) return; clearCurrent(); spawn(it); }
+  function setPaused(v){
+    if (v === paused) return;
+    paused = v;
+    if (paused){ if (current) clearTimeout(current._t); }
+    else { if (current) current._t = setTimeout(() => dismiss(current), 15000); else autoNext(); }
+    if (window.__wcbCardsSync) window.__wcbCardsSync();   // keep the footer toggle button in sync
+  }
+  // Footer buttons drive the same controls as the arrow keys.
+  window.wcbCards = { next: () => step(1), prev: () => step(-1),
+    toggle: () => setPaused(!paused), isPaused: () => paused };
 
   // Manual override: → next · ← back · ↓ stop (if running) · ↑ restart (if stopped).
   addEventListener('keydown', e => {
     if (modalEl || /^(INPUT|SELECT|TEXTAREA)$/.test((e.target || {}).tagName || '')) return;
     if (e.key === 'ArrowRight'){ e.preventDefault(); step(1); }
     else if (e.key === 'ArrowLeft'){ e.preventDefault(); step(-1); }
-    else if (e.key === 'ArrowDown'){ if (!paused){ e.preventDefault(); paused = true; if (current) clearTimeout(current._t); } }
-    else if (e.key === 'ArrowUp'){ if (paused){ e.preventDefault(); paused = false; if (current) current._t = setTimeout(() => dismiss(current), 15000); else autoNext(); } }
+    else if (e.key === 'ArrowDown'){ if (!paused){ e.preventDefault(); setPaused(true); } }
+    else if (e.key === 'ArrowUp'){ if (paused){ e.preventDefault(); setPaused(false); } }
   });
 
   // Build the pool and warm the first cards' photos before the first bubble.
