@@ -20,6 +20,10 @@
     100% { box-shadow: 0 0 0 0 rgba(55,181,106,0), 0 2px 6px rgba(0,0,0,.4); }
   }
   .match-soon { border-color: #37b56a !important; animation: matchSoon 2s ease-in-out infinite; }
+  /* Ambient side-gutter bubble: gentle fade + rise, one at a time when idle. */
+  .wc-bubble { opacity: 0; transform: translateY(10px) scale(.96); transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
+  .wc-bubble.show { opacity: 1; transform: translateY(0) scale(1); }
+  .wc-bubble.hide { opacity: 0; transform: translateY(-14px) scale(.98); transition: opacity .6s ease, transform .7s ease; }
 
   /* Live controls panel — reproduces the design's own editor props.
      Hidden at start; opened via the gear icon in the footer. */
@@ -1811,6 +1815,120 @@ fetch('data.json', { cache: 'no-store' })
         '<pre style="background:#f1ece1;padding:12px 14px;border-radius:8px;overflow:auto;margin:0;">python3 world-cup-bracket/server.py\n# then open http://localhost:4173</pre>' +
       '</div>';
   });
+
+// ---- Ambient side-gutter bubbles --------------------------------------------
+// One bubble at a time, desktop only, and only when the page is quiet (no
+// interaction for a few seconds) with no modal open. Surfaces a random goal
+// moment (scorer photo + minute + opponent). Never blocks clicks; pauses the
+// moment anything happens.
+(function(){
+  const REDUCED = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const DESKTOP = !!(window.matchMedia && matchMedia('(pointer: fine)').matches);
+  const IDLE_MS = 6000;
+  let lastActive = Date.now(), pool = null, cursor = 0, current = null;
+  const poke = () => { lastActive = Date.now(); };
+  ['mousemove','mousedown','wheel','scroll','keydown','touchstart','resize'].forEach(ev => addEventListener(ev, poke, { passive: true }));
+
+  function buildPool(){
+    const ids = [];
+    Object.keys(DATA.groups || {}).sort().forEach(L => (DATA.groups[L].matches || []).forEach((_, i) => ids.push('G:' + L + ':' + i)));
+    for (const s of ['R','L']) for (let k = 0; k < 8; k++) ids.push(s + ':1:' + k);
+    for (const s of ['R','L']) for (let k = 0; k < 4; k++) ids.push(s + ':2:' + k);
+    for (const s of ['R','L']) for (let k = 0; k < 2; k++) ids.push(s + ':3:' + k);
+    for (const s of ['R','L']) ids.push(s + ':4:0');
+    ids.push('third', 'final');
+    const out = [];
+    ids.forEach(id => {
+      const m = resolveMatch(id); if (!m || !m.played) return;
+      (m.goals || []).forEach(g => {
+        if (!g.p || g.p.indexOf('(o.g.)') >= 0) return;
+        const pic = picById(g.id); if (!pic) return;
+        out.push({ name: g.p, pic, m: g.m, opp: (g.t === m.a ? m.b : m.a), pen: !!g.pen });
+      });
+    });
+    for (let i = out.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = out[i]; out[i] = out[j]; out[j] = t; }
+    return out;
+  }
+
+  // Real drawn extent of the bracket, measured over crest/label-sized elements
+  // (so the group-stage "parenthesis" arcs count, but full-width wrappers and the
+  // wide title/footer don't). We only ever place bubbles beyond this.
+  function contentBounds(){
+    const app = document.getElementById('app'); if (!app) return null;
+    let L = Infinity, R = -Infinity, T = Infinity, B = -Infinity;
+    app.querySelectorAll('*').forEach(elm => {
+      const r = elm.getBoundingClientRect();
+      if (r.width < 16 || r.width > 200 || r.height < 16 || r.height > 200) return;
+      if (r.left < L) L = r.left; if (r.right > R) R = r.right;
+      if (r.top < T) T = r.top; if (r.bottom > B) B = r.bottom;
+    });
+    return isFinite(L) ? { left: L, right: R, top: T, bottom: B } : null;
+  }
+  function gutter(){
+    const c = contentBounds(); if (!c) return null;
+    const pad = 14, edge = 8, minW = 200;
+    const cand = [
+      { w: c.left - pad - edge, x0: edge },
+      { w: window.innerWidth - c.right - pad - edge, x0: c.right + pad }
+    ].filter(g => g.w >= minW);
+    if (!cand.length) return null;
+    return { g: cand[Math.floor(Math.random() * cand.length)], top: c.top, bottom: c.bottom };
+  }
+
+  function quiet(){
+    return DATA && DESKTOP && !REDUCED && !modalEl && !document.hidden && (Date.now() - lastActive) >= IDLE_MS;
+  }
+
+  function make(item, w){
+    const dark = state.bgTheme === 'Dark';
+    const bg = dark ? 'rgba(27,26,18,.95)' : 'rgba(255,255,255,.97)';
+    const fg = dark ? '#f4efe2' : '#1c1813', sub = dark ? 'rgba(228,222,206,.62)' : 'rgba(70,62,48,.72)';
+    const b = el('div', '');
+    b.className = 'wc-bubble';
+    b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;align-items:center;gap:9px;' +
+      'padding:6px 13px 6px 6px;border-radius:40px;background:' + bg + ';color:' + fg + ';pointer-events:none;' +
+      'box-shadow:0 6px 22px rgba(0,0,0,.22);border:1px solid ' + (dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.07)') + ';' +
+      "font-family:'Barlow',system-ui,sans-serif;";
+    b.appendChild(avatarImg(item.pic, 38, dark ? 'rgba(255,255,255,.12)' : 'rgba(0,0,0,.08)'));
+    const t = el('div', 'min-width:0;flex:1;line-height:1.16;');
+    t.appendChild(el('div', 'font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', item.name));
+    t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;white-space:nowrap;color:" + sub + ';',
+      '⚽ ' + item.m + '  v ' + item.opp + (item.pen ? '  (pen)' : '')));
+    b.appendChild(t);
+    return b;
+  }
+
+  function dismiss(b){
+    if (!b) return;
+    clearTimeout(b._t);
+    b.classList.remove('show'); b.classList.add('hide');
+    setTimeout(() => { b.remove(); if (current === b) current = null; }, 750);
+  }
+
+  function spawn(){
+    const gt = gutter(); if (!gt) return;
+    if (!pool) pool = buildPool();
+    if (!pool.length) return;
+    const item = pool[cursor % pool.length]; cursor++;
+    const w = Math.min(196, gt.g.w - 20), h = 54;
+    const x = gt.g.x0 + Math.random() * Math.max(0, gt.g.w - 20 - w);
+    const yMin = Math.max(96, gt.top + 16), yMax = Math.min(window.innerHeight - h - 30, gt.bottom - h - 16);
+    const y = yMin + Math.random() * Math.max(0, yMax - yMin);
+    const b = make(item, w);
+    b.style.left = Math.round(x) + 'px'; b.style.top = Math.round(y) + 'px';
+    document.body.appendChild(b); current = b;
+    requestAnimationFrame(() => b.classList.add('show'));
+    b._t = setTimeout(() => dismiss(b), 4400);
+  }
+
+  setInterval(() => {
+    if (current){
+      if (modalEl || document.hidden || (Date.now() - lastActive) < IDLE_MS) dismiss(current);
+      return;
+    }
+    if (quiet()) spawn();
+  }, 1400);
+})();
 </script>
 </body>
 </html>
