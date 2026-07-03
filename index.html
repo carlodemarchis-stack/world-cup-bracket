@@ -1838,17 +1838,32 @@ fetch('data.json', { cache: 'no-store' })
     ids.push('third', 'final');
     const stageName = id => id[0] === 'G' ? 'Group ' + id.split(':')[1] : id === 'final' ? 'Final' : id === 'third' ? '3rd place'
       : ({ '1':'Round of 32', '2':'Round of 16', '3':'Quarter-final', '4':'Semi-final' })[id.split(':')[1]];
+    // How the scorer featured in this match, from the lineup + subs + red cards.
+    const partOf = (m, g) => {
+      const line = (m.line || {})[g.t]; if (!line) return null;
+      const started = (line.xi || []).indexOf(g.id) >= 0;
+      const on = (line.subs || []).find(s => s[0] === g.id), off = (line.subs || []).find(s => s[1] === g.id);
+      const red = (m.cards || []).find(c => c.id === g.id && c.c === 'R');
+      const onM = on ? on[2] : null, offM = off ? off[2] : null, sent = red ? red.m : null;
+      if (sent) return { type: 'sent', txt: (onM ? 'On ' + onM + ' · ' : '') + 'Sent off ' + sent };
+      if (onM && offM) return { type: 'sub', txt: 'On ' + onM + ' · Off ' + offM };
+      if (onM) return { type: 'sub', txt: 'Subbed on ' + onM };
+      if (offM) return { type: 'sub', txt: 'Subbed off ' + offM };
+      if (started) return { type: 'full', txt: 'Played the full match' };
+      return null;
+    };
     const out = [];
     ids.forEach(id => {
       const m = resolveMatch(id); if (!m || !m.played) return;
-      const stage = stageName(id), score = (m.a || '?') + ' ' + m.aGoals + '–' + m.bGoals + ' ' + (m.b || '?');
+      const stage = stageName(id);
       const cnt = { [m.a]: 0, [m.b]: 0 };
       (m.goals || []).forEach(g => {
         if (g.t in cnt) cnt[g.t]++;   // running score (all goals, incl. own goals)
         if (!g.p || g.p.indexOf('(o.g.)') >= 0) return;
         const pic = picById(g.id); if (!pic) return;
-        out.push({ name: g.p, pic, m: g.m, pen: !!g.pen, team: g.t, stage, score,
-          run: cnt[m.a] + '–' + cnt[m.b], date: m.date, venue: m.venue });
+        out.push({ name: g.p, pic, m: g.m, pen: !!g.pen, team: g.t, stage,
+          a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals,
+          run: cnt[m.a] + '–' + cnt[m.b], date: m.date, venue: m.venue, part: partOf(m, g) });
       });
     });
     for (let i = out.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = out[i]; out[i] = out[j]; out[j] = t; }
@@ -1892,29 +1907,41 @@ fetch('data.json', { cache: 'no-store' })
     const fg = dark ? '#f4efe2' : '#1c1813', sub = dark ? 'rgba(228,222,206,.6)' : 'rgba(70,62,48,.66)';
     const b = el('div', '');
     b.className = 'wc-bubble';
-    b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;align-items:stretch;gap:11px;' +
-      'padding:11px 14px 11px 11px;border-radius:16px;background:' + bg + ';color:' + fg + ';pointer-events:none;' +
-      'box-shadow:0 12px 32px rgba(0,0,0,.26);border:1px solid ' + (dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.07)') + ';' +
+    b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;' +
+      'border-radius:16px;background:' + bg + ';color:' + fg + ';pointer-events:none;' +
+      'box-shadow:0 14px 36px rgba(0,0,0,.28);border:1px solid ' + (dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.07)') + ';' +
       "font-family:'Barlow',system-ui,sans-serif;";
-    // Fuller player cutout (FIFA cutouts are head-and-torso; no full-body source).
-    const ph = el('div', 'width:66px;flex:none;align-self:stretch;min-height:104px;border-radius:12px;overflow:hidden;position:relative;background:' + (dark ? 'rgba(255,255,255,.07)' : 'rgba(0,0,0,.045)') + ';');
+    // Big player cutout across the top (FIFA cutouts are head-and-torso).
+    const ph = el('div', 'width:100%;height:150px;flex:none;overflow:hidden;background:' + (dark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.04)') + ';');
     const im = document.createElement('img'); im.decoding = 'async'; im.alt = '';
-    im.src = item.pic + '?&io=transform:fit,width:260&quality=85';
+    im.src = item.pic + '?&io=transform:fit,width:320&quality=86';
     im.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;';
     ph.appendChild(im); b.appendChild(ph);
-    const t = el('div', 'min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:2px;line-height:1.16;');
+    const t = el('div', 'padding:11px 15px 13px;display:flex;flex-direction:column;gap:3px;line-height:1.2;min-width:0;');
     // Header framing it as an archived moment (round · date), not a live update.
-    t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.7px;text-transform:uppercase;color:" + sub + ';', item.stage + (item.date ? '  ·  ' + item.date : '')));
-    const n = el('div', 'display:flex;align-items:center;gap:6px;margin-top:1px;');
-    n.appendChild(el('span', 'font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', item.name));
-    if (TEAMDIR[item.team] && TEAMDIR[item.team].iso) n.appendChild(flagImg(TEAMDIR[item.team].iso, 15));
+    t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:" + sub + ';', item.stage + (item.date ? '  ·  ' + item.date : '')));
+    const n = el('div', 'display:flex;align-items:center;gap:7px;');
+    n.appendChild(el('span', 'font-weight:700;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', item.name));
+    if (TEAMDIR[item.team] && TEAMDIR[item.team].iso) n.appendChild(flagImg(TEAMDIR[item.team].iso, 17));
     t.appendChild(n);
-    const gl = el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;white-space:nowrap;color:" + accent + ';');
+    const gl = el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;white-space:nowrap;color:" + accent + ';');
     gl.appendChild(document.createTextNode('⚽ ' + item.m + (item.pen ? ' (pen)' : '')));
     gl.appendChild(el('span', 'color:' + sub + ';font-weight:600;', '  ·  made it ' + item.run));
     t.appendChild(gl);
-    t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:" + fg + ';', item.score));
-    if (item.venue) t.appendChild(el('div', 'font-size:10.5px;color:' + sub + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', item.venue));
+    if (item.part){
+      const col = item.part.type === 'sent' ? '#e0463f' : item.part.type === 'full' ? accent : sub;
+      t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:" + col + ';', item.part.txt));
+    }
+    // Scoreline with both teams' flags.
+    const di = TEAMDIR[item.a] || {}, ei = TEAMDIR[item.b] || {};
+    const sc = el('div', "display:flex;align-items:center;gap:6px;margin-top:1px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:" + fg + ';');
+    if (di.iso) sc.appendChild(flagImg(di.iso, 17));
+    sc.appendChild(el('span', '', item.a));
+    sc.appendChild(el('span', 'color:' + sub + ';', item.ag + '–' + item.bg));
+    sc.appendChild(el('span', '', item.b));
+    if (ei.iso) sc.appendChild(flagImg(ei.iso, 17));
+    t.appendChild(sc);
+    if (item.venue) t.appendChild(el('div', 'font-size:12px;color:' + sub + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', item.venue));
     b.appendChild(t);
     return b;
   }
@@ -1922,7 +1949,7 @@ fetch('data.json', { cache: 'no-store' })
   function dismiss(b){
     if (!b) return;
     clearTimeout(b._t);
-    nextAt = Date.now() + 6000;   // a calm gap before the next one
+    nextAt = Date.now() + 2500;   // short gap before the next one
     b.classList.remove('show'); b.classList.add('hide');
     setTimeout(() => { b.remove(); if (current === b) current = null; }, 750);
   }
@@ -1932,7 +1959,7 @@ fetch('data.json', { cache: 'no-store' })
     if (!pool) pool = buildPool();
     if (!pool.length) return;
     const item = pool[cursor % pool.length]; cursor++;
-    const w = Math.min(256, gt.g.w - 18), h = 132;
+    const w = Math.min(256, gt.g.w - 18), h = 290;
     const x = gt.g.x0 + Math.random() * Math.max(0, gt.g.w - 18 - w);
     const yMin = Math.max(96, gt.top + 16), yMax = Math.min(window.innerHeight - h - 30, gt.bottom - h - 16);
     const y = yMin + Math.random() * Math.max(0, yMax - yMin);
