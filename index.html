@@ -1826,6 +1826,16 @@ fetch('data.json', { cache: 'no-store' })
   const IDLE_MS = 6000;
   let lastActive = Date.now(), pool = null, mi = 0, ti = 0, mLeft = 2 + Math.floor(Math.random() * 2), current = null, nextAt = 0;
   let paused = false, hist = [], hp = -1;   // paused = manual stop; hist/hp = back-history
+  // Preload the big card photos a few ahead so they never pop in empty.
+  const PREF = new Set();
+  const photoUrl = item => item.pic + '?&io=transform:fit,width:340&quality=86';
+  const preload = url => { if (!url || PREF.has(url)) return; PREF.add(url); const im = new Image(); im.decoding = 'async'; im.src = url; };
+  function prefetchAhead(){
+    if (!pool) return;
+    const ml = pool.moments.length, tl = pool.tops.length;
+    for (let k = 0; k < 4 && ml; k++) preload(photoUrl(pool.moments[(mi + k) % ml]));
+    for (let k = 0; k < 2 && tl; k++) preload(photoUrl(pool.tops[(ti + k) % tl]));
+  }
   // Sequence: 2–3 goal/assist cards, then one top-scorer/assist card, repeat.
   function nextItem(){
     if (!pool.moments.length && !pool.tops.length) return null;
@@ -1979,7 +1989,7 @@ fetch('data.json', { cache: 'no-store' })
     const im = document.createElement('img'); im.decoding = 'async'; im.alt = '';
     im.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transform:translateY(30px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
     const reveal = () => requestAnimationFrame(() => { im.style.transform = 'translateY(0)'; im.style.opacity = '1'; });
-    im.addEventListener('load', reveal); im.src = item.pic + '?&io=transform:fit,width:340&quality=86';
+    im.addEventListener('load', reveal); im.src = photoUrl(item);
     if (im.complete && im.naturalWidth) reveal();
     hero.appendChild(im);
     hero.appendChild(el('div', 'position:absolute;left:0;right:0;bottom:0;height:76px;background:linear-gradient(180deg,' + (dark ? 'rgba(27,26,18,0),rgba(27,26,18,.98)' : 'rgba(255,255,255,0),rgba(255,255,255,.99)') + ');'));
@@ -2029,7 +2039,7 @@ fetch('data.json', { cache: 'no-store' })
       'filter:drop-shadow(0 5px 8px rgba(0,0,0,.2));transform:translateY(46px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
     const reveal = () => requestAnimationFrame(() => { im.style.transform = 'translateY(0)'; im.style.opacity = '1'; });
     im.addEventListener('load', reveal);
-    im.src = item.pic + '?&io=transform:fit,width:320&quality=86';
+    im.src = photoUrl(item);
     if (im.complete && im.naturalWidth) reveal();
     ph.appendChild(im);
     // Tournament tally (goals or assists) — a medallion on the photo, detached from the match.
@@ -2115,6 +2125,7 @@ fetch('data.json', { cache: 'no-store' })
     document.body.appendChild(b); current = b;
     requestAnimationFrame(() => b.classList.add('show'));
     if (!paused) b._t = setTimeout(() => dismiss(b), 15000);   // auto-advance only while running
+    prefetchAhead();   // warm the next few cards' photos
   }
 
   // Forward walks the sequence, keeping a small history so Left can revisit.
@@ -2139,6 +2150,8 @@ fetch('data.json', { cache: 'no-store' })
     else if (e.key === 'ArrowUp'){ if (paused){ e.preventDefault(); paused = false; if (current) current._t = setTimeout(() => dismiss(current), 15000); else autoNext(); } }
   });
 
+  // Build the pool and warm the first cards' photos before the first bubble.
+  setTimeout(() => { if (DATA && !pool){ pool = buildPool(); prefetchAhead(); } }, 2500);
   setInterval(() => {
     if (paused) return;
     if (current){
