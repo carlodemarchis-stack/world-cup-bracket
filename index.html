@@ -1887,7 +1887,7 @@ fetch('data.json', { cache: 'no-store' })
     ids.forEach(id => {
       const m = resolveMatch(id); if (!m || !m.played) return;
       const stage = stageName(id), ms = matchStats[id] || {};
-      const base = { stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, date: m.date, venue: m.venue };
+      const base = { stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, date: m.date, venue: m.venue, hl: m.highlights || null };
       const cnt = { [m.a]: 0, [m.b]: 0 };
       (m.goals || []).forEach(g => {
         if (g.t in cnt) cnt[g.t]++;   // running score (all goals, incl. own goals)
@@ -1920,10 +1920,12 @@ fetch('data.json', { cache: 'no-store' })
       out.push({ kind: 'topassist', name: aInfo[pid].name, team: aInfo[pid].team, pic, total: assistLog[pid].length, log: assistLog[pid] });
     });
     const shuffle = arr => { for (let i = arr.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = arr[i]; arr[i] = arr[j]; arr[j] = t; } return arr; };
-    return {
-      moments: shuffle(out.filter(x => x.kind === 'goal' || x.kind === 'assist')),
-      tops: shuffle(out.filter(x => x.kind === 'topscorer' || x.kind === 'topassist'))
-    };
+    // Top cards: front-load the biggest tallies, then interleave a high and a low
+    // one so it opens strong but keeps mixing high and low stats.
+    const topsSorted = shuffle(out.filter(x => x.kind === 'topscorer' || x.kind === 'topassist')).sort((a, b) => b.total - a.total);
+    const half = Math.ceil(topsSorted.length / 2), hi = topsSorted.slice(0, half), lo = topsSorted.slice(half), tops = [];
+    for (let i = 0; i < hi.length; i++){ tops.push(hi[i]); if (lo[i]) tops.push(lo[i]); }
+    return { moments: shuffle(out.filter(x => x.kind === 'goal' || x.kind === 'assist')), tops };
   }
 
   // Real drawn extent of the bracket, measured over crest/label-sized elements
@@ -1981,9 +1983,9 @@ fetch('data.json', { cache: 'no-store' })
     hero.appendChild(im);
     hero.appendChild(el('div', 'position:absolute;left:0;right:0;bottom:0;height:76px;background:linear-gradient(180deg,' + (dark ? 'rgba(27,26,18,0),rgba(27,26,18,.98)' : 'rgba(255,255,255,0),rgba(255,255,255,.99)') + ');'));
     hero.appendChild(el('div', 'position:absolute;top:10px;left:12px;background:' + accent + ';color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:5px;', isScorer ? 'Top scorer' : 'Top assists'));
-    const num = el('div', 'position:absolute;top:6px;right:12px;display:flex;flex-direction:column;align-items:flex-end;line-height:.85;text-shadow:0 2px 8px rgba(0,0,0,.55);');
-    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:52px;color:#fff;", String(item.total)));
-    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:#fff;", isScorer ? 'GOALS' : 'ASSISTS'));
+    const num = el('div', 'position:absolute;top:6px;right:12px;display:flex;flex-direction:column;align-items:flex-end;line-height:.85;text-shadow:0 1px 5px rgba(0,0,0,.45),0 0 3px rgba(255,255,255,.35);');
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:52px;color:" + accent + ';', String(item.total)));
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:" + accent + ';', isScorer ? 'GOALS' : 'ASSISTS'));
     hero.appendChild(num);
     const nm = el('div', 'position:absolute;left:13px;bottom:8px;display:flex;align-items:center;gap:7px;');
     nm.appendChild(el('span', 'font-weight:800;font-size:19px;', item.name));
@@ -2081,6 +2083,14 @@ fetch('data.json', { cache: 'no-store' })
     if (ei.iso) sc.appendChild(flagImg(ei.iso, 17));
     t.appendChild(sc);
     if (item.venue) t.appendChild(el('div', 'font-size:12px;color:' + sub + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', item.venue));
+    // Match highlights link (clickable even though the card itself isn't).
+    if (item.hl){
+      const a = document.createElement('a');
+      a.href = item.hl; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      a.style.cssText = 'display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:6px 11px;border-radius:8px;background:#ff0000;color:#fff;text-decoration:none;font-weight:700;font-size:12px;align-self:flex-start;pointer-events:auto;';
+      a.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="#fff" style="flex:none;"><path d="M10 15l5.19-3L10 9v6zm11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>Highlights';
+      t.appendChild(a);
+    }
     b.appendChild(t);
     return b;
   }
@@ -2097,7 +2107,7 @@ fetch('data.json', { cache: 'no-store' })
     const gt = gutter(); if (!gt) return;
     if (!pool) pool = buildPool();
     const item = nextItem(); if (!item) return;
-    const w = Math.min(256, gt.g.w - 18), h = 390;
+    const w = Math.min(256, gt.g.w - 18), h = 430;
     const x = gt.g.x0 + Math.random() * Math.max(0, gt.g.w - 18 - w);
     const yMin = Math.max(96, gt.top + 16), yMax = Math.min(window.innerHeight - h - 30, gt.bottom - h - 16);
     const y = yMin + Math.random() * Math.max(0, yMax - yMin);
