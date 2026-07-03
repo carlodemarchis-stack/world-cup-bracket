@@ -1909,29 +1909,30 @@ fetch('data.json', { cache: 'no-store' })
     const fg = dark ? '#f4efe2' : '#1c1813', sub = dark ? 'rgba(228,222,206,.6)' : 'rgba(70,62,48,.66)';
     const b = el('div', '');
     b.className = 'wc-bubble';
-    b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;' +
-      'border-radius:16px;background:' + bg + ';color:' + fg + ';pointer-events:none;' +
-      'box-shadow:0 14px 36px rgba(0,0,0,.28);border:1px solid ' + (dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.07)') + ';' +
-      "font-family:'Barlow',system-ui,sans-serif;";
-    // Big player cutout across the top (FIFA cutouts are head-and-torso).
-    const ph = el('div', 'width:100%;height:150px;flex:none;overflow:hidden;background:' + (dark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.04)') + ';');
+    b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;flex-direction:column;pointer-events:none;' +
+      'color:' + fg + ";font-family:'Barlow',system-ui,sans-serif;";
+    // Transparent player cutout — no photo box — sliding up from behind the card.
+    const ph = el('div', 'width:100%;height:150px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;');
     const im = document.createElement('img'); im.decoding = 'async'; im.alt = '';
-    // Slide the cutout up into the frame once it has loaded.
-    im.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transform:translateY(42px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
+    im.style.cssText = 'height:100%;width:auto;max-width:100%;object-fit:contain;object-position:bottom center;display:block;' +
+      'filter:drop-shadow(0 5px 8px rgba(0,0,0,.2));transform:translateY(46px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
     const reveal = () => requestAnimationFrame(() => { im.style.transform = 'translateY(0)'; im.style.opacity = '1'; });
     im.addEventListener('load', reveal);
     im.src = item.pic + '?&io=transform:fit,width:320&quality=86';
     if (im.complete && im.naturalWidth) reveal();
     ph.appendChild(im); b.appendChild(ph);
-    const t = el('div', 'padding:12px 15px 13px;display:flex;flex-direction:column;gap:3px;line-height:1.2;min-width:0;');
+    // Info card (the only part with a background).
+    const t = el('div', 'padding:12px 15px 13px;display:flex;flex-direction:column;gap:3px;line-height:1.2;min-width:0;' +
+      'background:' + bg + ';border-radius:16px;box-shadow:0 14px 34px rgba(0,0,0,.24);border:1px solid ' + (dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.07)') + ';');
     // — The player and their goal —
     const n = el('div', 'display:flex;align-items:center;gap:7px;');
     n.appendChild(el('span', 'font-weight:700;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', item.name));
     if (TEAMDIR[item.team] && TEAMDIR[item.team].iso) n.appendChild(flagImg(TEAMDIR[item.team].iso, 17));
     t.appendChild(n);
-    const gl = el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;white-space:nowrap;color:" + accent + ';');
-    gl.appendChild(document.createTextNode('⚽ ' + item.m + (item.pen ? ' (pen)' : '')));
-    gl.appendChild(el('span', 'color:' + sub + ';font-weight:600;', '  ·  made it ' + item.run));
+    const gl = el('div', 'display:flex;align-items:center;gap:7px;flex-wrap:wrap;');
+    gl.appendChild(el('span', 'background:' + accent + ';color:#fff;font-weight:800;font-size:10px;letter-spacing:.7px;padding:2px 7px;border-radius:5px;text-transform:uppercase;flex:none;', 'Goal'));
+    gl.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;color:" + fg + ';', item.m + (item.pen ? ' (pen)' : '')));
+    gl.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;color:" + sub + ';', '· made it ' + item.run));
     t.appendChild(gl);
     if (item.part){
       const col = item.part.type === 'sent' ? '#e0463f' : item.part.type === 'full' ? accent : sub;
@@ -1967,7 +1968,7 @@ fetch('data.json', { cache: 'no-store' })
     if (!pool) pool = buildPool();
     if (!pool.length) return;
     const item = pool[cursor % pool.length]; cursor++;
-    const w = Math.min(256, gt.g.w - 18), h = 290;
+    const w = Math.min(256, gt.g.w - 18), h = 340;
     const x = gt.g.x0 + Math.random() * Math.max(0, gt.g.w - 18 - w);
     const yMin = Math.max(96, gt.top + 16), yMax = Math.min(window.innerHeight - h - 30, gt.bottom - h - 16);
     const y = yMin + Math.random() * Math.max(0, yMax - yMin);
