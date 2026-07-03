@@ -1256,6 +1256,67 @@ function openMatchModal(id){
   document.addEventListener('keydown', modalKey);
 }
 
+// Tournament-wide totals, aggregated from every played match.
+function computeTotals(){
+  const ids = [];
+  Object.keys(DATA.groups || {}).sort().forEach(L => (DATA.groups[L].matches || []).forEach((_, i) => ids.push('G:' + L + ':' + i)));
+  for (const s of ['R', 'L']) for (let k = 0; k < 8; k++) ids.push(s + ':1:' + k);
+  for (const s of ['R', 'L']) for (let k = 0; k < 4; k++) ids.push(s + ':2:' + k);
+  for (const s of ['R', 'L']) for (let k = 0; k < 2; k++) ids.push(s + ':3:' + k);
+  for (const s of ['R', 'L']) ids.push(s + ':4:0');
+  ids.push('third', 'final');
+  const T = { n: 0, goals: 0, pens: 0, og: 0, assists: 0, yel: 0, red: 0, varc: 0, subs: 0, hats: 0, shoot: 0, highest: 0, attTot: 0, attN: 0, attMax: 0 };
+  const scorers = new Set();
+  ids.forEach(id => {
+    const m = resolveMatch(id); if (!m || !m.played) return;
+    T.n++;
+    const tot = (+m.aGoals || 0) + (+m.bGoals || 0);
+    T.goals += tot; if (tot > T.highest) T.highest = tot;
+    if (m.pens) T.shoot++;
+    const cnt = {};
+    (m.goals || []).forEach(g => {
+      if (g.pen) T.pens++;
+      if (g.p && g.p.indexOf('(o.g.)') >= 0){ T.og++; return; }
+      if (g.a) T.assists++;
+      if (g.id){ scorers.add(g.id); cnt[g.id] = (cnt[g.id] || 0) + 1; }
+    });
+    Object.values(cnt).forEach(v => { if (v >= 3) T.hats++; });
+    (m.cards || []).forEach(c => { if (c.c === 'R') T.red++; else T.yel++; });
+    T.varc += (m.var || []).length;
+    Object.values(m.line || {}).forEach(t => { T.subs += (t.subs || []).length; });
+    if (m.att){ const a = +m.att; if (a){ T.attTot += a; T.attN++; if (a > T.attMax) T.attMax = a; } }
+  });
+  T.scorers = scorers.size;
+  T.attAvg = T.attN ? Math.round(T.attTot / T.attN) : 0;
+  return T;
+}
+// Display list of totals, grouped, shared by the Totals tab and the stat bubbles.
+function totalsStats(){
+  const T = computeTotals(), per = (x) => T.n ? (x / T.n).toFixed(1) : '0', M = (x) => (x / 1e6).toFixed(1) + 'M', L = (x) => x.toLocaleString();
+  return [
+    { group: 'Goals & scorers', items: [
+      { ic: '⚽', label: 'Goals', val: L(T.goals), sub: per(T.goals) + ' per match' },
+      { ic: '🥾', label: 'Assists', val: L(T.assists) },
+      { ic: '🎯', label: 'Penalties', val: T.pens },
+      { ic: '🔄', label: 'Own goals', val: T.og },
+      { ic: '🎩', label: 'Hat-tricks', val: T.hats },
+      { ic: '👟', label: 'Scorers', val: T.scorers, sub: 'different players' } ] },
+    { group: 'Cards & VAR', items: [
+      { ic: '🟨', label: 'Yellow cards', val: L(T.yel), sub: per(T.yel) + ' per match' },
+      { ic: '🟥', label: 'Red cards', val: T.red },
+      { ic: '📺', label: 'VAR reviews', val: T.varc } ] },
+    { group: 'Matches & play', items: [
+      { ic: '📋', label: 'Matches played', val: T.n },
+      { ic: '🔁', label: 'Substitutions', val: L(T.subs), sub: per(T.subs) + ' per match' },
+      { ic: '🥅', label: 'Shootouts', val: T.shoot },
+      { ic: '🔥', label: 'Top match', val: T.highest, sub: 'goals in a game' } ] },
+    { group: 'The crowd', items: [
+      { ic: '👥', label: 'Total attendance', val: M(T.attTot), sub: L(T.attTot) + ' fans' },
+      { ic: '📊', label: 'Average crowd', val: L(T.attAvg), sub: 'per match' },
+      { ic: '🏟️', label: 'Record crowd', val: L(T.attMax) } ] }
+  ];
+}
+
 // Easter egg: click the centre ball for the tournament's top scorers + assists,
 // tallied from every stored goal (no extra data needed).
 function openScorersModal(){
@@ -1652,6 +1713,27 @@ function openScorersModal(){
     return box;
   };
 
+  // Totals tab: tournament-wide numbers, grouped into rows of stat cards.
+  const totalsView = () => {
+    const box = el('div', 'margin-top:8px;');
+    totalsStats().forEach(sec => {
+      box.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:10px;color:" + pal.sub + ';margin:12px 0 7px;', sec.group));
+      const grid = el('div', 'display:grid;grid-template-columns:1fr 1fr;gap:8px;');
+      sec.items.forEach(it => {
+        const c = el('div', 'display:flex;align-items:center;gap:11px;padding:9px 12px;border:1px solid ' + pal.line + ';border-radius:10px;');
+        c.appendChild(el('span', 'font-size:20px;line-height:1;flex:none;', it.ic));
+        const t = el('div', 'min-width:0;line-height:1.1;');
+        t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;color:" + accent + ';', String(it.val)));
+        t.appendChild(el('div', 'font-size:11px;font-weight:600;color:' + pal.text + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', it.label));
+        if (it.sub) t.appendChild(el('div', 'font-size:10px;color:' + pal.sub + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', it.sub));
+        c.appendChild(t);
+        grid.appendChild(c);
+      });
+      box.appendChild(grid);
+    });
+    return box;
+  };
+
   const tabBar = el('div', 'display:flex;flex-wrap:wrap;column-gap:14px;row-gap:1px;margin:2px 28px 0 0;border-bottom:1px solid ' + pal.line + ';');
   const content = el('div', '');
   const tabCss = on => 'flex:none;border:none;background:transparent;cursor:pointer;padding:9px 1px 10px;' +
@@ -1661,7 +1743,7 @@ function openScorersModal(){
   const show = key => {
     Object.keys(btns).forEach(k => { btns[k].style.cssText = tabCss(k === key); });
     content.textContent = '';
-    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches], players: [playersView, Object.keys(DATA.squads || {})] }[key];
+    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches], players: [playersView, Object.keys(DATA.squads || {})], totals: [totalsView, matches] }[key];
     if (special){
       content.appendChild(special[1].length ? special[0]() : el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
       return;
@@ -1670,7 +1752,7 @@ function openScorersModal(){
     if (items.length) content.appendChild(list(items, 15, key));
     else content.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
   };
-  [['goals', 'Goals'], ['assists', 'Assists'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches'], ['players', 'Players'], ['attendance', 'Attendance']].forEach(([k, lbl]) => {
+  [['goals', 'Goals'], ['assists', 'Assists'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches'], ['players', 'Players'], ['attendance', 'Attendance'], ['totals', 'Totals']].forEach(([k, lbl]) => {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl;
     b.onclick = () => show(k); btns[k] = b; tabBar.appendChild(b);
   });
@@ -1824,8 +1906,8 @@ fetch('data.json', { cache: 'no-store' })
 (function(){
   const mq = q => !!(window.matchMedia && matchMedia(q).matches);   // evaluated live
   const IDLE_MS = 6000;
-  let lastActive = Date.now(), pool = null, mi = 0, ti = 0, mLeft = 2 + Math.floor(Math.random() * 2), current = null, nextAt = 0;
-  let paused = false, hist = [], hp = -1;   // paused = manual stop; hist/hp = back-history
+  let lastActive = Date.now(), pool = null, mi = 0, ti = 0, si = 0, topN = 0, mLeft = 2 + Math.floor(Math.random() * 2), current = null, nextAt = 0;
+  let paused = false, hist = [], hp = -1, belowMode = false;   // belowMode = mobile, card under the circle
   // Preload the big card photos a few ahead so they never pop in empty.
   const PREF = new Set();
   const photoUrl = item => item.pic + '?&io=transform:fit,width:340&quality=86';
@@ -1836,12 +1918,18 @@ fetch('data.json', { cache: 'no-store' })
     for (let k = 0; k < 4 && ml; k++) preload(photoUrl(pool.moments[(mi + k) % ml]));
     for (let k = 0; k < 2 && tl; k++) preload(photoUrl(pool.tops[(ti + k) % tl]));
   }
-  // Sequence: 2–3 goal/assist cards, then one top-scorer/assist card, repeat.
+  // Sequence: 2–3 goal/assist cards, then a spotlight slot — a top-scorer/assist
+  // card, and every 3rd spotlight a "by the numbers" stat card instead.
   function nextItem(){
-    if (!pool.moments.length && !pool.tops.length) return null;
-    if (mLeft > 0 && pool.moments.length){ mLeft--; return pool.moments[mi++ % pool.moments.length]; }
+    const ml = pool.moments.length, tl = pool.tops.length, sl = pool.stats.length;
+    if (!ml && !tl && !sl) return null;
+    if (mLeft > 0 && ml){ mLeft--; return pool.moments[mi++ % ml]; }
     mLeft = 2 + Math.floor(Math.random() * 2);
-    return pool.tops.length ? pool.tops[ti++ % pool.tops.length] : pool.moments[mi++ % pool.moments.length];
+    topN++;
+    if (sl && topN % 3 === 0) return pool.stats[si++ % sl];
+    if (tl) return pool.tops[ti++ % tl];
+    if (sl) return pool.stats[si++ % sl];
+    return pool.moments[mi++ % ml];
   }
   const poke = () => { lastActive = Date.now(); };
   // Only a click stops the show and restarts the quiet period — mouse moves and
@@ -1936,7 +2024,22 @@ fetch('data.json', { cache: 'no-store' })
     const topsSorted = shuffle(out.filter(x => x.kind === 'topscorer' || x.kind === 'topassist')).sort((a, b) => b.total - a.total);
     const half = Math.ceil(topsSorted.length / 2), hi = topsSorted.slice(0, half), lo = topsSorted.slice(half), tops = [];
     for (let i = 0; i < hi.length; i++){ tops.push(hi[i]); if (lo[i]) tops.push(lo[i]); }
-    return { moments: shuffle(out.filter(x => x.kind === 'goal' || x.kind === 'assist')), tops };
+    // Stat cards — a subset of the totals, one number at a time.
+    const T = computeTotals(), per = x => (x / T.n).toFixed(1);
+    const stats = [
+      { kind: 'stat', ic: '⚽', big: T.goals, unit: 'goals', sub: per(T.goals) + ' per match', ctx: T.n + ' matches played' },
+      { kind: 'stat', ic: '🥾', big: T.assists, unit: 'assists', sub: 'laid on for a team-mate' },
+      { kind: 'stat', ic: '🎯', big: T.pens, unit: 'penalties', sub: 'scored in open play' },
+      { kind: 'stat', ic: '🎩', big: T.hats, unit: 'hat-tricks', sub: 'a treble in one match' },
+      { kind: 'stat', ic: '👟', big: T.scorers, unit: 'scorers', sub: 'different players on the sheet' },
+      { kind: 'stat', ic: '🟨', big: T.yel, unit: 'yellow cards', sub: per(T.yel) + ' per match' },
+      { kind: 'stat', ic: '🟥', big: T.red, unit: 'red cards', sub: 'players sent off' },
+      { kind: 'stat', ic: '📺', big: T.varc, unit: 'VAR reviews', sub: 'on-field checks' },
+      { kind: 'stat', ic: '🔁', big: T.subs.toLocaleString(), unit: 'substitutions', sub: per(T.subs) + ' per match' },
+      { kind: 'stat', ic: '👥', big: (T.attTot / 1e6).toFixed(1) + 'M', unit: 'fans', sub: 'total attendance so far' },
+      { kind: 'stat', ic: '🏟️', big: T.attMax.toLocaleString(), unit: 'record crowd', sub: 'biggest single gate' }
+    ];
+    return { moments: shuffle(out.filter(x => x.kind === 'goal' || x.kind === 'assist')), tops, stats: shuffle(stats) };
   }
 
   // Real drawn extent of the bracket, measured over crest/label-sized elements
@@ -1955,22 +2058,52 @@ fetch('data.json', { cache: 'no-store' })
   }
   function gutter(){
     const c = contentBounds(); if (!c) return null;
-    const pad = 14, edge = 8, minW = 262;
+    const vw = window.innerWidth, vh = window.innerHeight, pad = 14, edge = 8, minW = 262;
     const cand = [
       { w: c.left - pad - edge, x0: edge },
-      { w: window.innerWidth - c.right - pad - edge, x0: c.right + pad }
+      { w: vw - c.right - pad - edge, x0: c.right + pad }
     ].filter(g => g.w >= minW);
-    if (!cand.length) return null;
-    return { g: cand[Math.floor(Math.random() * cand.length)], top: c.top, bottom: c.bottom };
+    if (cand.length) return { mode: 'side', g: cand[Math.floor(Math.random() * cand.length)], top: c.top, bottom: c.bottom };
+    // No side room (mobile): drop one card centred below the circle, if it fits.
+    const belowTop = c.bottom + 12;
+    if (vw >= 320 && vh - belowTop >= 230) return { mode: 'below', vw, vh, belowTop };
+    return null;
   }
 
   function quiet(){
     return DATA && !modalEl && !document.hidden &&
-      mq('(pointer: fine)') && !mq('(prefers-reduced-motion: reduce)') &&
+      !mq('(prefers-reduced-motion: reduce)') &&
       (Date.now() - lastActive) >= IDLE_MS;
   }
 
-  function make(item, w){ return (item.kind === 'topscorer' || item.kind === 'topassist') ? makeTop(item, w) : makeMoment(item, w); }
+  function make(item, w){
+    if (item.kind === 'stat') return makeStat(item, w);
+    if (item.kind === 'topscorer' || item.kind === 'topassist') return makeTop(item, w);
+    return makeMoment(item, w);
+  }
+
+  // "By the numbers" stat card — no photo, data-forward, distinct from player cards.
+  function makeStat(item, w){
+    const dark = state.bgTheme === 'Dark', accent = state.accentColor;
+    const bg = dark ? 'rgba(27,26,18,.98)' : 'rgba(255,255,255,.99)';
+    const fg = dark ? '#f4efe2' : '#1c1813', sub = dark ? 'rgba(228,222,206,.6)' : 'rgba(70,62,48,.66)';
+    const line = dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.08)';
+    const b = el('div', '');
+    b.className = 'wc-bubble';
+    b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;pointer-events:none;' +
+      'border-radius:16px;background:' + bg + ';color:' + fg + ';box-shadow:0 14px 34px rgba(0,0,0,.24);border:1px solid ' + line + ";font-family:'Barlow',system-ui,sans-serif;";
+    const head = el('div', 'display:flex;align-items:center;gap:8px;padding:9px 15px;background:' + accent + ';color:#fff;');
+    head.appendChild(el('span', 'font-size:15px;line-height:1;', item.ic));
+    head.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;", 'By the numbers'));
+    b.appendChild(head);
+    const body = el('div', 'padding:16px 16px 18px;display:flex;flex-direction:column;gap:3px;');
+    body.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:54px;line-height:.9;color:" + accent + ';', String(item.big)));
+    body.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase;letter-spacing:.6px;color:" + fg + ';', item.unit));
+    if (item.sub) body.appendChild(el('div', 'font-size:12.5px;color:' + sub + ';margin-top:3px;', item.sub));
+    if (item.ctx) body.appendChild(el('div', 'font-size:11px;color:' + sub + ';', item.ctx));
+    b.appendChild(body);
+    return b;
+  }
 
   // Distinct "top scorer" spotlight card: hero photo, big goal total, goal log.
   function makeTop(item, w){
@@ -1985,7 +2118,7 @@ fetch('data.json', { cache: 'no-store' })
       "font-family:'Barlow',system-ui,sans-serif;";
     // Hero photo banner (full player photo) with overlays.
     const heroBg = dark ? 'rgba(255,255,255,.05)' : 'rgba(0,0,0,.035)';
-    const hero = el('div', 'position:relative;width:100%;height:170px;overflow:hidden;background:' + heroBg + ';');
+    const hero = el('div', 'position:relative;width:100%;height:' + (belowMode ? 138 : 170) + 'px;overflow:hidden;background:' + heroBg + ';');
     const im = document.createElement('img'); im.decoding = 'async'; im.alt = '';
     im.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transform:translateY(30px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
     const reveal = () => requestAnimationFrame(() => { im.style.transform = 'translateY(0)'; im.style.opacity = '1'; });
@@ -2033,7 +2166,7 @@ fetch('data.json', { cache: 'no-store' })
     b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;flex-direction:column;pointer-events:none;' +
       'color:' + fg + ";font-family:'Barlow',system-ui,sans-serif;";
     // Transparent player cutout — no photo box — sliding up from behind the card.
-    const ph = el('div', 'width:100%;height:150px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;position:relative;');
+    const ph = el('div', 'width:100%;height:' + (belowMode ? 118 : 150) + 'px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;position:relative;');
     const im = document.createElement('img'); im.decoding = 'async'; im.alt = '';
     im.style.cssText = 'height:100%;width:auto;max-width:100%;object-fit:contain;object-position:bottom center;display:block;' +
       'filter:drop-shadow(0 5px 8px rgba(0,0,0,.2));transform:translateY(46px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
@@ -2116,13 +2249,22 @@ fetch('data.json', { cache: 'no-store' })
 
   function spawn(item){
     const gt = gutter(); if (!gt || !item) return;
-    const w = Math.min(256, gt.g.w - 18), h = 430;
-    const x = gt.g.x0 + Math.random() * Math.max(0, gt.g.w - 18 - w);
-    const yMin = Math.max(96, gt.top + 16), yMax = Math.min(window.innerHeight - h - 30, gt.bottom - h - 16);
-    const y = yMin + Math.random() * Math.max(0, yMax - yMin);
+    const w = gt.mode === 'side' ? Math.min(256, gt.g.w - 18) : Math.min(300, gt.vw - 24);
+    belowMode = gt.mode === 'below';
     const b = make(item, w);
+    document.body.appendChild(b); current = b;   // append first so we can measure height
+    let x, y;
+    if (gt.mode === 'side'){
+      const h = 430;
+      x = gt.g.x0 + Math.random() * Math.max(0, gt.g.w - 18 - w);
+      const yMin = Math.max(96, gt.top + 16), yMax = Math.min(window.innerHeight - h - 30, gt.bottom - h - 16);
+      y = yMin + Math.random() * Math.max(0, yMax - yMin);
+    } else {   // centred below the circle; pull up if it would overflow the viewport
+      const cardH = b.offsetHeight || 300;
+      x = (gt.vw - w) / 2;
+      y = Math.max(8, Math.min(gt.belowTop, gt.vh - cardH - 12));
+    }
     b.style.left = Math.round(x) + 'px'; b.style.top = Math.round(y) + 'px';
-    document.body.appendChild(b); current = b;
     requestAnimationFrame(() => b.classList.add('show'));
     if (!paused) b._t = setTimeout(() => dismiss(b), 15000);   // auto-advance only while running
     prefetchAhead();   // warm the next few cards' photos
