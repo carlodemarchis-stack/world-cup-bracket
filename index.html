@@ -628,7 +628,7 @@ function buildBracket(v){
   emilio.textContent = '(here)';
   emilio.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:2px;';
   credit.appendChild(emilio);
-  credit.style.cssText = 'flex:1 1 260px;min-width:0;';
+  credit.style.cssText = 'flex:1 1 260px;min-width:0;text-align:left;';
   footer.appendChild(credit);
 
   // Right cluster: card controls · timezone · settings.
@@ -667,6 +667,10 @@ function buildBracket(v){
   cardCtl.title = 'Ambient cards';
   cardCtl.style.cssText = 'display:inline-flex;align-items:center;gap:4px;';
   cardCtl.appendChild(prevBtn); cardCtl.appendChild(toggleBtn); cardCtl.appendChild(nextBtn);
+  // Using these controls is interacting WITH the cards — don't let it register as
+  // page activity (the global pointerdown "poke" would make the idle loop dismiss
+  // the very card you just summoned). The arrow keys already bypass poke.
+  cardCtl.addEventListener('pointerdown', e => e.stopPropagation());
   right.appendChild(cardCtl);
 
   // Timezone selector — kickoff times shown in this zone (defaults to the client's).
