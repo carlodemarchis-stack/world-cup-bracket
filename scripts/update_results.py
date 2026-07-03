@@ -136,6 +136,21 @@ def _minute_key(mm):
     return int(m) if m.isdigit() else 999
 
 
+def _all_goals(obj, out=None):
+    """Every goal dict (those carrying a `desc`) anywhere in the data tree."""
+    if out is None:
+        out = []
+    if isinstance(obj, dict):
+        if isinstance(obj.get("desc"), str) and obj["desc"].strip():
+            out.append(obj)
+        for v in obj.values():
+            _all_goals(v, out)
+    elif isinstance(obj, list):
+        for v in obj:
+            _all_goals(v, out)
+    return out
+
+
 def fetch_timeline(ids, id2code):
     """Fetch a match timeline once; return (goals, var, cards).
 
@@ -360,6 +375,7 @@ def attach_stories(slot, res, changes, label):
         rec = rec or (cand[0] if cand else None)
         if rec and g.get("desc") != rec["story"]:
             g["desc"] = rec["story"]
+            g["dp"] = 0   # raw live-blog text — needs a paraphrase pass before publishing
             n += 1
     if n:
         changes.append(f"{label}: +{n} goal description(s)")
@@ -639,6 +655,13 @@ def main():
     with open(DATA_PATH, "w", encoding="utf-8") as f:
         f.write(json.dumps(data, ensure_ascii=False, indent=2) + "\n")
     print("Wrote data.json")
+
+    # Warn if any goal narratives are still the raw live-blog text (dp != 1).
+    raw = [g for g in _all_goals(data) if g.get("desc") and g.get("dp") != 1]
+    if raw:
+        print(f"\n  ⚠ {len(raw)} goal narrative(s) are raw FIFA text and need paraphrasing.")
+        print("    Ask Claude to run the paraphrase pass, then commit — do NOT push the raw text:")
+        print("    python3 scripts/paraphrase.py extract   # then apply the rewrites")
 
 
 def _loser(sched, key):

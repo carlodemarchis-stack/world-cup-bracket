@@ -331,7 +331,8 @@
           "p": "Sano",
           "m": "29'",
           "id": "479294",
-          "desc": "That was a great block by Sano from Lucas Paqueta's strike following a spell of Brazilian pressing and probing.   Sano made the most interceptions of any player in the 2025/26 Bundesliga."
+          "desc": "A fine block by Sano to deny Lucas Paqueta's strike, which came after a spell of Brazilian pressing and probing. Sano registered more interceptions than any other player in the 2025/26 Bundesliga.",
+          "dp": 1
         },
         {
           "t": "BRA",
@@ -340,7 +341,8 @@
           "a": "Gabriel Magalhaes",
           "id": "308386",
           "aid": "430601",
-          "desc": "Casemiro's point-blank header looks certain to enter the goal but the attempt hits Tomiyasu on the line and, on the rebound, bounces favourably off goalkeeper Suzuki. Somehow it doesn't go in!"
+          "desc": "Casemiro's point-blank header seems bound for the net, but it strikes Tomiyasu on the line and then, off the rebound, bounces kindly off goalkeeper Suzuki. Somehow it stays out!",
+          "dp": 1
         },
         {
           "t": "BRA",
@@ -349,7 +351,8 @@
           "a": "Bruno Guimaraes",
           "id": "430597",
           "aid": "430605",
-          "desc": "The Seleção score through Gabriel Martinelli! After Rayan wins the ball back in a dangerous position, his pass allows Bruno Guimaraes to thread the ball into Martinelli who breaks Japanese hearts with an unerring low right-footed finish into Suzuki's goal via the keeper's fingers and left-hand post."
+          "desc": "Gabriel Martinelli puts the Seleção ahead! Rayan wins possession back in a dangerous area, and his pass lets Bruno Guimaraes slide the ball through to Martinelli, who breaks Japanese hearts with an unerring low right-footed finish that beats Suzuki via the keeper's fingers and the left-hand post.",
+          "dp": 1
         }
       ],
       "ref": "Maurizio Mariani",
@@ -491,7 +494,8 @@
           "a": "Odegaard",
           "id": "483448",
           "aid": "400716",
-          "desc": "Beautiful finish from Antonio Nusa.   Norway have just had their best spell of the game, and they've made it count. They work the ball out to Nusa on the edge of the box and he curls a delightful shot into the top corner.   That was in from the moment it left his boot - Nusa was already wheeling away in celebration before it hit the net!"
+          "desc": "A beautiful finish from Antonio Nusa. Norway have just enjoyed their best spell of the match and made it pay. The ball is worked out to Nusa at the edge of the box, and he bends a delightful effort into the top corner. It was in from the instant it left his boot — Nusa had already wheeled away to celebrate before it reached the net!",
+          "dp": 1
         },
         {
           "t": "CIV",
@@ -500,7 +504,8 @@
           "a": "Pepe",
           "id": "430822",
           "aid": "402261",
-          "desc": "They will play Brazil in the Round of 16!   Predictably, Erling Haaland is the match-winner. His 86th-minute strike secures victory for Norway – who were pushed all the way by an excellent Côte d'Ivoire side.   Antonio Nusa had put Norway ahead with a superb curling effort, before Amad Diallo equalised with arguably an even better goal – showing skill and poise to fire his team level.   Haaland had the final word though, slotting home after a slick Norway move. What a game. What a tournament."
+          "desc": "They'll meet Brazil in the Round of 16! As you'd expect, Erling Haaland is the match-winner, his 86th-minute strike sealing a Norway victory after they were pushed all the way by an excellent Côte d'Ivoire side. Antonio Nusa had opened the scoring with a superb curling effort before Amad Diallo levelled with an arguably even better goal, showing skill and poise to bring his side level. Haaland had the last word, though, finishing off a slick Norway move. What a game. What a tournament.",
+          "dp": 1
         },
         {
           "t": "NOR",
@@ -509,7 +514,8 @@
           "a": "Berg",
           "id": "419652",
           "aid": "483442",
-          "desc": "Haaland puts Norway back in front!   It's a fine team goal from Norway. A ball is threaded through from Oscar Bobb to Patrick Berg, who had made a superb run forward. He plays a square pass across for Haaland, who is perfectly placed to slot home. 2-1!"
+          "desc": "Haaland restores Norway's lead! It's a fine team move: Oscar Bobb threads a ball through to Patrick Berg, who had timed a superb run forward, and Berg squares it for Haaland, ideally placed to slot home. 2-1!",
+          "dp": 1
         }
       ],
       "highlights": "https://www.youtube.com/watch?v=ATzmoebQMj0&list=PLBRLtDhTHh5o",
@@ -619,7 +625,8 @@
           "a": "Alvarado",
           "id": "429157",
           "aid": "403585",
-          "desc": "The co-hosts play through the Ecuador press to release Julian Quinones. He still has it all to do with Willian Pacho tracking his every move, but a quick drop of the shoulder opens up the space to shoot inside the box and he rockets an emphatic finish past the goalkeeper."
+          "desc": "The co-hosts work through Ecuador's press to release Julian Quinones. There's plenty still to do with Willian Pacho shadowing his every step, but a quick drop of the shoulder creates the room to shoot inside the box, and he rockets an emphatic finish past the goalkeeper.",
+          "dp": 1
         },
         {
           "t": "MEX",
@@ -628,7 +635,8 @@
           "a": "Quinones",
           "id": "356731",
           "aid": "429157",
-          "desc": "Raul Jimenez gives El Tri daylight. He telegraphs an errant pass out from the back and finds Julian Quinones before continuing his run. The Mexico No9 drives into space on the edge of the area, receives the return ball and finishes with aplomb."
+          "desc": "Raul Jimenez hands El Tri daylight. He seizes on an errant pass played out from the back, finds Julian Quinones and keeps running. The Mexico No9 surges into space at the edge of the area, collects the return ball and finishes with aplomb.",
+          "dp": 1
         }
       ],
       "ref": "Slavko VINCIC",
@@ -777,14 +785,16 @@
           "a": "Mbemba",
           "id": "510989",
           "aid": "356532",
-          "desc": "What a start for Congo DR and what a way for Brian Cipenga to score his first international goal! It's one touch with his left foot and then a sharp finish with his right inside Jordan Pickford's near post. The forward takes advantage of a right-to-left switch of play, breaking into the box to sweep his shot home."
+          "desc": "What a start for Congo DR, and what a way for Brian Cipenga to notch his first international goal! One touch with his left foot, then a sharp finish with his right inside Jordan Pickford's near post. The forward capitalises on a right-to-left switch of play, breaking into the box to sweep his shot home.",
+          "dp": 1
         },
         {
           "t": "ENG",
           "p": "Kane",
           "m": "75'",
           "id": "369419",
-          "desc": "England are back level: Lionel Mpasi is finally beaten by Harry Kane's well-placed header from substitute Anthony Gordon's cross from the left following a ball in from Declan Rice."
+          "desc": "England are level again: Lionel Mpasi is finally beaten by a well-placed Harry Kane header, meeting substitute Anthony Gordon's cross from the left that followed a ball in from Declan Rice.",
+          "dp": 1
         },
         {
           "t": "ENG",
@@ -793,7 +803,8 @@
           "a": "Gordon",
           "id": "369419",
           "aid": "448189",
-          "desc": "Harry Kane scores again! The skipper rockets a shot into the roof of the net after receiving the ball from Anthony Gordon's back-heel and advancing into the area.   It all started with the previous phase of play, Jude Bellingham's surge and shot.   It is Kane's 13th World Cup finals goal and his fifth of this North American campaign."
+          "desc": "Harry Kane strikes again! The skipper fires into the roof of the net after collecting Anthony Gordon's back-heel and driving into the area. It all began with the earlier phase of play — Jude Bellingham's surge and shot. That's Kane's 13th World Cup finals goal and his fifth of this North American campaign.",
+          "dp": 1
         }
       ],
       "ref": "Adham Mohammad Tumah Makhadmeh",
@@ -930,7 +941,8 @@
           "id": "430482",
           "a": "Karim Hafez",
           "aid": "407022",
-          "desc": "Ashour gives Egypt the lead. The Pharaohs recycle the ball after Ashour's initial effort from a free-kick on the angle is blocked by Irvine. But when the ball is sent back in by Hafez, Ashour heads the cross firmly past Beach for his second goal of these finals."
+          "desc": "Ashour puts Egypt ahead. The Pharaohs recycle possession after Irvine blocks Ashour's initial effort from an angled free-kick. When Hafez sends the ball back in, Ashour heads it firmly past Beach for his second goal of these finals.",
+          "dp": 1
         },
         {
           "t": "AUS",
@@ -1074,14 +1086,16 @@
           "id": "393480",
           "a": "Manzambi",
           "aid": "502727",
-          "desc": "This is all about Johan Manzambi though!   The 20-year-old embarks on a sensational run down the left channel and leaves Aissa Mandi trailing in his wake. He cuts the ball across goal and Breel Embolo taps home.   It's against the run of play, but the Swiss lead."
+          "desc": "This one is all about Johan Manzambi, though! The 20-year-old sets off on a sensational run down the left channel, leaving Aissa Mandi trailing behind. He pulls the ball across goal and Breel Embolo taps it home. Against the run of play, but Switzerland lead.",
+          "dp": 1
         },
         {
           "t": "SUI",
           "p": "Ndoye",
           "m": "46'",
           "id": "448114",
-          "desc": "Clinical from Ndoye!   Switzerland have got off to a dream start to the second half. It's a fine finish from Dan Ndoye, who expertly controls a Rafik Belghali defensive clearance before placing a precision shot into the bottom corner.   The Swiss have a firm grip on this tie now."
+          "desc": "Clinical from Ndoye! Switzerland have made a dream start to the second half. A fine finish from Dan Ndoye, who expertly controls a Rafik Belghali defensive clearance before slotting a precise shot into the bottom corner. The Swiss now hold a firm grip on this tie.",
+          "dp": 1
         }
       ],
       "cards": [
@@ -1211,7 +1225,8 @@
           "p": "Diarra",
           "m": "24'",
           "id": "486130",
-          "desc": "Senegal in front! It's Habib Diarra with the goal, but huge credit should also go to Ismaila Sarr.   Sarr did brilliantly to rise high and direct a header at goal, only for his effort to hit the post. Diarra was on the rebound in a flash, though, and lashed in to make it 1-0 to the Lions of Teranga."
+          "desc": "Senegal lead! Habib Diarra gets the goal, but plenty of credit belongs to Ismaila Sarr too. Sarr did brilliantly to climb high and steer a header goalward, only to see it strike the post. Diarra pounced on the rebound in a flash, lashing it in to make it 1-0 to the Lions of Teranga.",
+          "dp": 1
         },
         {
           "t": "SEN",
@@ -1220,7 +1235,8 @@
           "a": "Niakhate",
           "id": "401889",
           "aid": "430690",
-          "desc": "Emphatic finish from Ismaila Sarr!   This is a wonderful play from the Senagalese forward. Moussa Niakhate sends a raking lofted pass over the top of the Belgium backline. Sarr runs in behind, takes the ball down on his chest, then crashes a shot beyond Courtois. Brilliant."
+          "desc": "An emphatic finish from Ismaila Sarr! Wonderful play from the Senegalese forward. Moussa Niakhate lofts a raking pass over the Belgium backline, Sarr runs in behind, brings it down on his chest and then crashes a shot past Courtois. Brilliant.",
+          "dp": 1
         },
         {
           "t": "BEL",
@@ -1229,7 +1245,8 @@
           "a": "Meunier",
           "id": "358112",
           "aid": "358122",
-          "desc": "Now then!   Just when Belgium looked to be heading for the exit, Romelu Lukaku converts from a Thomas Meunier cross to give them hope!"
+          "desc": "Now then! Just as Belgium looked bound for the exit, Romelu Lukaku converts a Thomas Meunier cross to hand them hope!",
+          "dp": 1
         },
         {
           "t": "BEL",
@@ -1238,7 +1255,8 @@
           "a": "Trossard",
           "id": "401444",
           "aid": "448355",
-          "desc": "What a comeback!   Youri Tielemans has just levelled for Belgium. It's an extremely brave header from the captain, who holds off challenges from two Senegal defenders and goalkeeper Mory Diaw to direct his effort into the net.   Senegal looked in full control, but now Belgium are buoyant!"
+          "desc": "What a comeback! Youri Tielemans has just drawn Belgium level. It's a hugely brave header from the captain, who fights off two Senegal defenders and goalkeeper Mory Diaw to steer his effort into the net. Senegal had looked in complete control, but now Belgium are buoyant!",
+          "dp": 1
         },
         {
           "t": "BEL",
@@ -1246,7 +1264,8 @@
           "m": "120'+5'",
           "pen": true,
           "id": "401444",
-          "desc": "Belgium have surely won it!   It's a superb penalty from the Belgium captain, who sends his kick into the top corner. Senegal goalkeeper Diaw went the wrong way - but I don't think it would have mattered if he'd have guessed right.   Precision placement from Tielemans. Ice in his veins!"
+          "desc": "Belgium have surely won it! A superb penalty from the captain, who buries his kick in the top corner. Senegal keeper Diaw dived the wrong way — though it likely wouldn't have mattered even if he'd guessed right. Precision placement from Tielemans. Ice in his veins!",
+          "dp": 1
         }
       ],
       "var": [
@@ -1395,14 +1414,16 @@
           "p": "Balogun",
           "m": "45'",
           "id": "466624",
-          "desc": "USA score! It's Balogun! Malik Tillman slips in a pass that takes a slight deflection, Balogun is there, keeps his composure and finishes to hand USA a 1-0 lead."
+          "desc": "USA score — and it's Balogun! Malik Tillman slides in a pass that takes a slight deflection, Balogun is on hand, stays composed and finishes to give USA a 1-0 lead.",
+          "dp": 1
         },
         {
           "t": "USA",
           "p": "Tillman",
           "m": "82'",
           "id": "448214",
-          "desc": "Malik Tillman gives USA a 2-0 lead!! A foul on Sergino Dest right outside the area yields a free tick and Tillman blasts one past the keeper and into net. USA, playing with ten men, double their lead!"
+          "desc": "Malik Tillman makes it 2-0 to USA!! A foul on Sergino Dest just outside the box brings a free-kick, and Tillman blasts it past the keeper into the net. USA, down to ten men, double their advantage!",
+          "dp": 1
         }
       ],
       "var": [
@@ -1534,7 +1555,8 @@
           "id": "430751",
           "a": "Cucurella",
           "aid": "430735",
-          "desc": "Spain lead! It's Oyarzabal's third goal of these finals (and his 16th in his last 16 starts) as the forward finishes calmly by stroking the ball into the corner of the net from Cucurella's smart pass into the area from the left."
+          "desc": "Spain lead! It's Oyarzabal's third goal of these finals — and his 16th in his last 16 starts — as the forward finishes calmly, stroking Cucurella's smart pass from the left into the corner of the net.",
+          "dp": 1
         },
         {
           "t": "ESP",
@@ -1543,7 +1565,8 @@
           "id": "430144",
           "a": "Baena",
           "aid": "447860",
-          "desc": "Perro scores his first national-team goal! The right-back times his run perfectly to meet Baena's left-wing cross after the ball is worked out by Cucurella. A thumping header extends La Roja 's lead."
+          "desc": "Perro nets his first national-team goal! The right-back times his run to perfection to meet Baena's left-wing cross, worked out wide by Cucurella. A thumping header extends La Roja's lead.",
+          "dp": 1
         },
         {
           "t": "ESP",
@@ -1552,7 +1575,8 @@
           "id": "430751",
           "a": "Cucurella",
           "aid": "430735",
-          "desc": "Spain score again! Cucurella measures an inch-perfect ball from the left to coincide with the run of Oyarzabal who strokes nervelessly past Schlager for his second goal of this match and his fourth of the North America tournament."
+          "desc": "Spain score again! Cucurella measures an inch-perfect delivery from the left to match Oyarzabal's run, and he strokes it nervelessly past Schlager for his second goal of the match and his fourth of the North American tournament.",
+          "dp": 1
         }
       ],
       "cards": [
@@ -1671,7 +1695,8 @@
           "p": "Perisic",
           "m": "53'",
           "id": "359381",
-          "desc": "Croatia's ironman brought the ball down and fired home at the far post to give the 2018 finalists the lead in Toronto. Croatia have come out prepared to win it in the second half."
+          "desc": "Croatia's ironman brought the ball down and drilled it home at the far post to hand the 2018 finalists the lead in Toronto. Croatia have emerged for the second half determined to win it.",
+          "dp": 1
         },
         {
           "t": "POR",
@@ -1679,7 +1704,8 @@
           "m": "68'",
           "id": "201200",
           "pen": true,
-          "desc": "After being denied by the flag moments earlier, Ronaldo found the back of the net from 11 yards to equalise for Portugal. His first goal in the knockout stage of the competition!"
+          "desc": "Having been flagged offside moments earlier, Ronaldo found the net from 11 yards to level for Portugal — his first goal in the knockout stage of the competition!",
+          "dp": 1
         },
         {
           "t": "POR",
@@ -1688,7 +1714,8 @@
           "id": "448081",
           "a": "Rafael Leao",
           "aid": "418550",
-          "desc": "The substitute rose above the Croatian defenders and headed in what he hopes will be the winner! Oh my word, what a game we have had."
+          "desc": "The substitute climbed above the Croatian defenders to head in what he'll hope proves the winner! My word, what a game this has been.",
+          "dp": 1
         }
       ],
       "var": [
@@ -1824,7 +1851,8 @@
           "a": "Summerville",
           "id": "448152",
           "aid": "489518",
-          "desc": "It's the Dutch that make the breakthrough. In the midst of personal tragedy, Cody Gakpo has shown great courage in playing tonight and he's now the man who has broken the deadlock. It was a wonderful run and off-balance touch back across the face of goal from Crysencio Summerville to tee up Gakpo who swept home and was immediately overcome with emotion."
+          "desc": "The Dutch make the breakthrough. Amid personal tragedy, Cody Gakpo has shown great courage to play tonight, and now he's the man to break the deadlock. It came from a wonderful run and an off-balance touch back across the face of goal by Crysencio Summerville, teeing up Gakpo, who swept it home and was immediately overcome with emotion.",
+          "dp": 1
         },
         {
           "t": "MAR",
@@ -1833,7 +1861,8 @@
           "a": "Talbi",
           "id": "403083",
           "aid": "494293",
-          "desc": "Late drama as the Atlas Lions strike back. Central defender Issa Diop finds himself in an advanced position to head home substitute Chemsdine Talbi's cross at the start of additional time."
+          "desc": "Late drama as the Atlas Lions hit back. Centre-back Issa Diop pops up in an advanced position to head home substitute Chemsdine Talbi's cross at the start of added time.",
+          "dp": 1
         }
       ],
       "ref": "Wilton SAMPAIO",
@@ -1956,7 +1985,8 @@
           "p": "Eustáquio",
           "m": "90+2'",
           "id": "433635",
-          "desc": "Stephen Eustaquio is the Canada hero!   It's a superb goal. A headed clearance went straight to Eustaquio at the edge of the box, but he still had it all to do. He takes a superb touch then rifles a shot into the bottom corner. Williams had no chance.   Canada are euphoric!"
+          "desc": "Stephen Eustaquio is Canada's hero! A superb goal. A headed clearance dropped straight to Eustaquio at the edge of the box, but there was plenty still to do. He takes a brilliant touch, then rifles it into the bottom corner. Williams had no chance. Canada are euphoric!",
+          "dp": 1
         }
       ],
       "ref": "João Pedro Silva Pinheiro",
@@ -2072,7 +2102,8 @@
           "a": "Dembele",
           "id": "389867",
           "aid": "398680",
-          "desc": "Zetterstrom can't stop this one! Dembele and Olise combine from the corner and slide Mbappe in. He dances past Gyokeres and fires an effort into the bottom-right corner, leaving the Sweden stopper rooted!"
+          "desc": "Zetterstrom has no answer to this one! Dembele and Olise combine from the corner to release Mbappe. He dances past Gyokeres and drives into the bottom-right corner, leaving the Sweden stopper rooted!",
+          "dp": 1
         },
         {
           "t": "FRA",
@@ -2081,7 +2112,8 @@
           "a": "Olise",
           "id": "484860",
           "aid": "485655",
-          "desc": "France have come closest to finding the game's third goal, with Olise denied twice since Barcola's strike. Sweden have done well to hang in there, but now need to turn the screw if they're to have a shot at the knockouts."
+          "desc": "France have gone closest to a third goal, Olise twice denied since Barcola's strike. Sweden have done well to stay in it, but must now turn the screw if they want a shot at the knockouts.",
+          "dp": 1
         },
         {
           "t": "FRA",
@@ -2090,7 +2122,8 @@
           "a": "Olise",
           "id": "389867",
           "aid": "485655",
-          "desc": "Eighteen World Cup goals for Kylian Mbappe in as many matches."
+          "desc": "That's eighteen World Cup goals for Kylian Mbappe, from the same number of matches.",
+          "dp": 1
         }
       ],
       "ref": "Danny Desmond Makkelie",
@@ -2205,7 +2238,8 @@
           "a": "Galarza",
           "id": "441234",
           "aid": "424422",
-          "desc": "Completely against the run of play, Paraguay have taken the lead just before the break as Julio Enciso heads in the ball past a helpless Manuel Neuer.   Paraguay's gameplan has completely worked as they soaked up Germany's pressure and made their move on the counter-attack."
+          "desc": "Entirely against the run of play, Paraguay grab the lead just before the interval as Julio Enciso heads past a helpless Manuel Neuer. Their gameplan has worked to perfection — soaking up Germany's pressure before striking on the counter-attack.",
+          "dp": 1
         },
         {
           "t": "GER",
@@ -2214,7 +2248,8 @@
           "a": "Wirtz",
           "id": "411367",
           "aid": "430669",
-          "desc": "Germany are back in the game as Kai Havertz heads in a cross from Florian Wirtz. It's game on!"
+          "desc": "Germany are right back in this as Kai Havertz heads in a Florian Wirtz cross. Game on!",
+          "dp": 1
         }
       ],
       "ref": "Jalal Jayed",
@@ -2532,7 +2567,8 @@
               "a": "Lira",
               "id": "429157",
               "aid": "419518",
-              "desc": "Pandemonium! Mexico are ahead!   They've been on the front foot from the off and Julian Quinones has just sent Mexico City Stadium wild.   South Africa attempted to play out from the back but after some excellent pressing from Erik Lira, Quinones seized possession and lashed the ball through Ronwen Williams' legs."
+              "desc": "Pandemonium! Mexico are in front! On the front foot from the start, they see Julian Quinones send Mexico City Stadium wild. South Africa tried to play out from the back, but excellent pressing from Erik Lira let Quinones steal possession and lash the ball through Ronwen Williams' legs.",
+              "dp": 1
             },
             {
               "t": "MEX",
@@ -2541,7 +2577,8 @@
               "a": "Alvarado",
               "id": "356731",
               "aid": "403585",
-              "desc": "There was a little tension in the air at 1-0, but now Mexico are in dreamland!   It was a wonderfully-crafted goal, with Roberto Alvarado sending in a pinpoint cross which Jimenez converted with a trademark header. The emotion was writ all over the striker's face as he celebrated that one."
+              "desc": "There was a hint of tension at 1-0, but now Mexico are in dreamland! A wonderfully-crafted goal: Roberto Alvarado whips in a pinpoint cross that Jimenez converts with a trademark header. The emotion was written all over the striker's face as he celebrated.",
+              "dp": 1
             }
           ],
           "venue": "Mexico City Stadium",
@@ -2699,7 +2736,8 @@
               "a": "Coufal",
               "id": "441170",
               "aid": "472908",
-              "desc": "Somewhat against the run of play but it's Czechia that strike first. A long throw-in met by the head of the onrushing captain, who powered his shot past Kim Seunggyu."
+              "desc": "Somewhat against the run of play, but Czechia strike first. A long throw-in is met by the head of the onrushing captain, who powers it past Kim Seunggyu.",
+              "dp": 1
             },
             {
               "t": "KOR",
@@ -2708,7 +2746,8 @@
               "a": "Lee",
               "id": "395084",
               "aid": "418490",
-              "desc": "Korea's silky midfielder schemer Hwang Inbeom collects a defence-splitter from Lee Kangin, takes one touch to control it, another to befuddle Kovar and produces a chipped finish into an empty net. His first goal for his nation since 2023 could be a decisive one."
+              "desc": "Korea's silky midfield schemer Hwang Inbeom gathers a defence-splitting pass from Lee Kangin, takes one touch to control and another to bamboozle Kovar before dinking a chipped finish into an empty net. His first goal for his country since 2023 could prove decisive.",
+              "dp": 1
             },
             {
               "t": "KOR",
@@ -2717,7 +2756,8 @@
               "a": "Hwang",
               "id": "448586",
               "aid": "395084",
-              "desc": "Having scored the opener, Hwang Inbeom crafts the second, cutting the ball back from the byline where it was swept home by substitute Oh Hyeongyu to edge the Koreans ahead."
+              "desc": "Having grabbed the opener, Hwang Inbeom makes the second, cutting the ball back from the byline for substitute Oh Hyeongyu to sweep home and edge Korea in front.",
+              "dp": 1
             }
           ],
           "venue": "Guadalajara Stadium",
@@ -2833,7 +2873,8 @@
               "a": "Sojka",
               "id": "433668",
               "aid": "523097",
-              "desc": "A super team goal from Czechia. Adam Hlozek pulls the ball back from the right flank to Alexandr Sojka whose forward touch frees up a shooting chance for Michal Sadilek. The Sparta Praha midfielder scores his second national-team goal with a smart finish past Ronwen Williams."
+              "desc": "A superb team goal from Czechia. Adam Hlozek cuts it back from the right flank to Alexandr Sojka, whose forward touch opens a shooting chance for Michal Sadilek. The Sparta Praha midfielder takes his second national-team goal with a smart finish past Ronwen Williams.",
+              "dp": 1
             },
             {
               "t": "RSA",
@@ -2841,7 +2882,8 @@
               "m": "83'",
               "pen": true,
               "id": "403616",
-              "desc": "Teboho Mokoena just made a vital defensive interception as Czechia were building up a head of steam."
+              "desc": "Teboho Mokoena has just produced a vital defensive interception with Czechia building a head of steam.",
+              "dp": 1
             }
           ],
           "venue": "Atlanta Stadium",
@@ -2964,7 +3006,8 @@
               "p": "Romo",
               "m": "50'",
               "id": "430763",
-              "desc": "It's delirium in Guadalajara! Luis Romo capitalised on the confusion in the box and slammed the ball into an open net."
+              "desc": "Delirium in Guadalajara! Luis Romo pounced on the confusion in the box to slam the ball into an open net.",
+              "dp": 1
             }
           ],
           "venue": "Guadalajara Stadium",
@@ -3092,7 +3135,8 @@
               "a": "Romo",
               "id": "500038",
               "aid": "430763",
-              "desc": "Mateo Chavez is the man to break the deadlock! The No20 dashes from inside his own half, skips over a Czechia challenge, squares up Matej Kovar and cooly slots home to send Mexico City Stadium wild."
+              "desc": "Mateo Chavez is the man to break the deadlock! The No20 races from inside his own half, hurdles a Czechia challenge, squares up Matej Kovar and coolly slots home to send Mexico City Stadium wild.",
+              "dp": 1
             },
             {
               "t": "MEX",
@@ -3101,7 +3145,8 @@
               "a": "Sanchez",
               "id": "429157",
               "aid": "403596",
-              "desc": "If the first half lacked impetus, the second half was the total opposite.   Mateo Chavez got the ball rolling, latching on to a Raul Jimenez pass, darting beyond a Czechia challenge and slotting home to send Mexico City Stadium into raptures.   Just six minutes later and it was two. Jorge Sanchez was sent through, and while he was denied by Matej Kovar, a poor Czechia clearance saw the ball fall to Julian Quinones who had the easiest of tasks to double the co-host's lead.   The party was taken up a notch when legendary goalkeeper Guillermo Ochoa, who is at his sixth World Cup, was brought on for his 153rd Mexico cap with 12 minutes to go.   Then, in stoppage time, Alvaro Fidalgo put the icing on the cake. Santiago Gimenez ploughed towards goal but couldn't beat Kovar. It mattered not, however, as Fidalgo was on hand to rifle the ball into the top-left corner and set the seal on one of El Tri's greatest nights."
+              "desc": "If the first half lacked spark, the second was the complete opposite. Mateo Chavez set it in motion, latching on to a Raul Jimenez pass, darting past a Czechia challenge and slotting home to send Mexico City Stadium into raptures. Six minutes later it was two: Jorge Sanchez was sent clear and, though denied by Matej Kovar, a poor Czechia clearance dropped to Julian Quinones, who had the simplest of tasks to double the co-hosts' lead. The party stepped up a gear when legendary goalkeeper Guillermo Ochoa, at his sixth World Cup, came on for his 153rd Mexico cap with 12 minutes remaining. Then, in stoppage time, Alvaro Fidalgo added the icing: Santiago Gimenez charged goalward but couldn't beat Kovar, yet Fidalgo was on hand to rifle into the top-left corner and cap one of El Tri's greatest nights.",
+              "dp": 1
             },
             {
               "t": "MEX",
@@ -3110,7 +3155,8 @@
               "a": "Alvarado",
               "id": "416576",
               "aid": "403585",
-              "desc": "If the first half lacked impetus, the second half was the total opposite.   Mateo Chavez got the ball rolling, latching on to a Raul Jimenez pass, darting beyond a Czechia challenge and slotting home to send Mexico City Stadium into raptures.   Just six minutes later and it was two. Jorge Sanchez was sent through, and while he was denied by Matej Kovar, a poor Czechia clearance saw the ball fall to Julian Quinones who had the easiest of tasks to double the co-host's lead.   The party was taken up a notch when legendary goalkeeper Guillermo Ochoa, who is at his sixth World Cup, was brought on for his 153rd Mexico cap with 12 minutes to go.   Then, in stoppage time, Alvaro Fidalgo put the icing on the cake. Santiago Gimenez ploughed towards goal but couldn't beat Kovar. It mattered not, however, as Fidalgo was on hand to rifle the ball into the top-left corner and set the seal on one of El Tri's greatest nights."
+              "desc": "If the first half lacked spark, the second was the complete opposite. Mateo Chavez set it in motion, latching on to a Raul Jimenez pass, darting past a Czechia challenge and slotting home to send Mexico City Stadium into raptures. Six minutes later it was two: Jorge Sanchez was sent clear and, though denied by Matej Kovar, a poor Czechia clearance dropped to Julian Quinones, who had the simplest of tasks to double the co-hosts' lead. The party stepped up a gear when legendary goalkeeper Guillermo Ochoa, at his sixth World Cup, came on for his 153rd Mexico cap with 12 minutes remaining. Then, in stoppage time, Alvaro Fidalgo added the icing: Santiago Gimenez charged goalward but couldn't beat Kovar, yet Fidalgo was on hand to rifle into the top-left corner and cap one of El Tri's greatest nights.",
+              "dp": 1
             }
           ],
           "venue": "Mexico City Stadium",
@@ -3231,7 +3277,8 @@
               "a": "Moremi",
               "id": "463234",
               "aid": "504193",
-              "desc": "How important could that be? Thapelo Maseko makes one stick with his fifth attempt of the game, firing through the legs of Jens Castrop and beyond the reach of Kim Seunggyu."
+              "desc": "How big could that prove? Thapelo Maseko finally makes one count with his fifth attempt of the match, firing through the legs of Jens Castrop and out of Kim Seunggyu's reach.",
+              "dp": 1
             }
           ],
           "venue": "Monterrey Stadium",
@@ -3550,7 +3597,8 @@
               "m": "17'",
               "pen": true,
               "id": "393480",
-              "desc": "A bit like buses, you wait an age and then they all come in one go: first substitute Karim Boudiaf fires over at one, then Juan Vargas is denied in a one-on-one with Mahmoud Abunada before Breel Embolo shoots into the side-netting."
+              "desc": "Like buses — you wait an age, then they all arrive at once: first substitute Karim Boudiaf fires over, then Juan Vargas is denied one-on-one by Mahmoud Abunada before Breel Embolo shoots into the side-netting.",
+              "dp": 1
             },
             {
               "t": "QAT",
@@ -3689,7 +3737,8 @@
               "p": "Manzambi",
               "m": "74'",
               "id": "502727",
-              "desc": "Aged just 20, Johan Manzambi has made his mark at the World Cup on the back of a stellar season for Bundesliga club Freiburg, whom he helped guide to the UEFA Europa League final. He was named the Europa League Young Player of the Season and is a definite star of the future.   Manzambi (20 years and 247 days) has become the youngest Swiss player to score at the World Cup since Kiki Antenen (20 years and 241 days) scored against Mexico in 1950. He is the third youngest Swiss player to score overall."
+              "desc": "At just 20, Johan Manzambi has left his mark at the World Cup after a stellar season for Bundesliga side Freiburg, whom he helped reach the UEFA Europa League final. Named the Europa League Young Player of the Season, he's a clear star of the future. Manzambi (20 years and 247 days) is the youngest Swiss player to score at the World Cup since Kiki Antenen (20 years and 241 days) did so against Mexico in 1950, and the third-youngest Swiss scorer overall.",
+              "dp": 1
             },
             {
               "t": "SUI",
@@ -3698,7 +3747,8 @@
               "a": "Embolo",
               "id": "448131",
               "aid": "393480",
-              "desc": "The Swiss double their lead with just minutes remaining! They are on their way to full points. Ruben Vargas comes off the bench to slot home a right-footed finish."
+              "desc": "Switzerland double their lead with only minutes left! They're heading for full points as Ruben Vargas, off the bench, slots home a right-footed finish.",
+              "dp": 1
             },
             {
               "t": "SUI",
@@ -3707,14 +3757,16 @@
               "a": "Vargas",
               "id": "502727",
               "aid": "448131",
-              "desc": "It's Manzambi again and Vargas gets to play the role of playmaker with a sharp cutback pass and Manzambi coolly finishes. What a final 15 minutes from the Swiss!"
+              "desc": "Manzambi again! This time Vargas turns playmaker with a sharp cutback, and Manzambi finishes coolly. What a closing 15 minutes from the Swiss!",
+              "dp": 1
             },
             {
               "t": "BIH",
               "p": "Mahmic",
               "m": "90'+3'",
               "id": "522846",
-              "desc": "It's now raining goals at Los Angeles Stadium! Bosnia and Herzegovina pull one back in second half stoppage time on a fireball of a volley from Ermin Mahmic."
+              "desc": "It's raining goals now at Los Angeles Stadium! Bosnia and Herzegovina pull one back in second-half stoppage time through a thunderbolt volley from Ermin Mahmic.",
+              "dp": 1
             },
             {
               "t": "SUI",
@@ -3722,7 +3774,8 @@
               "m": "90'+7'",
               "pen": true,
               "id": "311558",
-              "desc": "Granit Xhaka converts from the spot, leaving no doubt with a penalty tucked into the corner of net. The Swiss cap a wild finish in style!"
+              "desc": "Granit Xhaka converts from the spot, leaving no doubt as he tucks the penalty into the corner. Switzerland cap a wild finale in style!",
+              "dp": 1
             }
           ],
           "venue": "Los Angeles Stadium",
@@ -3862,28 +3915,32 @@
               "p": "Larin",
               "m": "16'",
               "id": "390670",
-              "desc": "BC Place erupts!   Canada have started well and they've got their reward! Cyle Larin gets his second goal of the tournament, prodding in from close range to send the home fans wild!   David had lashed a shot at goal which Abunada did well to parry, but Larin was on the rebound in a flash."
+              "desc": "BC Place erupts! Canada have begun well and get their reward! Cyle Larin nets his second goal of the tournament, prodding in from close range to send the home fans wild. David had lashed in a shot that Abunada did well to parry, but Larin was onto the rebound in a flash.",
+              "dp": 1
             },
             {
               "t": "CAN",
               "p": "David",
               "m": "29'",
               "id": "441257",
-              "desc": "Jonathan David makes it 2-0 – and in some style!   It's a stunning volley from the Canada striker, who watched the ball all the way on to his boot before rifling an effort which had too much power for Abunada."
+              "desc": "Jonathan David makes it 2-0 — and in style! A stunning volley from the Canada striker, who watches the ball all the way onto his boot before rifling in an effort with too much power for Abunada.",
+              "dp": 1
             },
             {
               "t": "CAN",
               "p": "David",
               "m": "45'+3'",
               "id": "441257",
-              "desc": "Canada are rampant!   Jonathan David has scored his second and Canada's third. Cyle Larin gets up high and directs a powerful header at goal. Abunada makes a tremendous save but David is there to convert from close range. 3-0!"
+              "desc": "Canada are rampant! Jonathan David grabs his second and Canada's third. Cyle Larin rises high to power a header goalward; Abunada makes a tremendous save, but David is there to convert from close range. 3-0!",
+              "dp": 1
             },
             {
               "t": "CAN",
               "p": "Saliba",
               "m": "64'",
               "id": "423941",
-              "desc": "Jonathan David makes it 6-0!   It's a hat-trick for the lethal Canada striker. Saliba took aim with a shot from range but David, sensing it wasn't going to go in, controlled the ball with a fabulous touch before finishing with power and precision."
+              "desc": "Jonathan David makes it 6-0! A hat-trick for the lethal Canada striker. Saliba let fly from range but David, sensing it wouldn't drop in, controlled with a fabulous touch before finishing with power and precision.",
+              "dp": 1
             },
             {
               "t": "CAN",
@@ -3898,7 +3955,8 @@
               "a": "Saliba",
               "id": "441257",
               "aid": "423941",
-              "desc": "Jonathan David makes it 6-0!   It's a hat-trick for the lethal Canada striker. Saliba took aim with a shot from range but David, sensing it wasn't going to go in, controlled the ball with a fabulous touch before finishing with power and precision."
+              "desc": "Jonathan David makes it 6-0! A hat-trick for the lethal Canada striker. Saliba let fly from range but David, sensing it wouldn't drop in, controlled with a fabulous touch before finishing with power and precision.",
+              "dp": 1
             }
           ],
           "venue": "BC Place Vancouver",
@@ -4047,7 +4105,8 @@
               "a": "Manzambi",
               "id": "448131",
               "aid": "502727",
-              "desc": "Just 40 seconds into the second half, Ruben Vargas scores his second goal of the finals, a brilliant low drive that beats Maxime Crepeau down at his right-hand post, after the forward connects with Johan Manzambi's delivery from the right."
+              "desc": "Only 40 seconds into the second half, Ruben Vargas nets his second of the finals — a brilliant low drive that beats Maxime Crepeau at his right-hand post after the forward meets Johan Manzambi's delivery from the right.",
+              "dp": 1
             },
             {
               "t": "SUI",
@@ -4056,7 +4115,8 @@
               "a": "Embolo",
               "id": "502727",
               "aid": "393480",
-              "desc": "Breel Embolo tees up Johan Manzambi for his third goal of the finals, a low strike across Maxime Crepeau that the keeper can't keep out. It is Manzambi's third goal of the finals and sixth in 15 games for the Nati."
+              "desc": "Breel Embolo sets up Johan Manzambi for his third goal of the finals, a low strike across Maxime Crepeau that the keeper can't stop. That's Manzambi's third of the finals and his sixth in 15 games for the Nati.",
+              "dp": 1
             },
             {
               "t": "CAN",
@@ -4065,7 +4125,8 @@
               "a": "Saliba",
               "id": "493970",
               "aid": "423941",
-              "desc": "\"Let's go Canada\" is the chant and the Vancouver crowd haven't given up on this game, certainly not after that brilliant reach and finish by Promise David. There was nearly a quickfire equaliser too, only Derek Cornelius flashed an inviting headed chance wide under pressure from Johan Manzambi."
+              "desc": "\"Let's go Canada\" rings out, and the Vancouver crowd haven't given up on this one — certainly not after that brilliant stretch and finish from Promise David. A quickfire equaliser nearly followed, too, only for Derek Cornelius to flash an inviting header wide under pressure from Johan Manzambi.",
+              "dp": 1
             }
           ],
           "venue": "BC Place Vancouver",
@@ -4528,7 +4589,8 @@
               "p": "Mcginn",
               "m": "28'",
               "id": "401334",
-              "desc": "McGinn puts the Scots ahead and with a finish that took a deflection on its way into the back of the net. A magical touch from Che Adams set this one up, and after an initial block, McGinn was there to steer one home."
+              "desc": "McGinn puts the Scots in front with a finish that took a deflection on its way in. A magical touch from Che Adams set it up, and after an initial block, McGinn was on hand to steer it home.",
+              "dp": 1
             }
           ],
           "venue": "Boston Stadium",
@@ -4660,7 +4722,8 @@
               "a": "Diaz",
               "id": "448598",
               "aid": "430740",
-              "desc": "What a start by Morocco. They play keep-ball before Brahim Diaz clips a pass over the top of the Scotland defence for Ismael Saibari, who wellies an unstoppable finish into the roof of the net. Absolutely no chance for Angus Gunn."
+              "desc": "What a start by Morocco. They knock it around before Brahim Diaz clips a pass over the Scotland defence for Ismael Saibari, who thrashes an unstoppable finish into the roof of the net. No chance whatsoever for Angus Gunn.",
+              "dp": 1
             }
           ],
           "venue": "Boston Stadium",
@@ -4781,7 +4844,8 @@
               "p": "Matheus Cunha",
               "m": "23'",
               "id": "430609",
-              "desc": "The threat had been building and it's Matheus Cunha that puts Brazil ahead. Vinicius Junior dribbled into the box and cut the ball back centrally, where Hannes Delcroix touched it onto the Brazilian forward, with his effort rolling past Johny Placide in the Haiti goal."
+              "desc": "The threat had been mounting, and it's Matheus Cunha who puts Brazil ahead. Vinicius Junior dribbles into the box and cuts it back centrally, where Hannes Delcroix diverts it onto the Brazilian forward, whose effort rolls past Johny Placide in the Haiti goal.",
+              "dp": 1
             },
             {
               "t": "BRA",
@@ -4790,7 +4854,8 @@
               "a": "Vinicius Junior",
               "id": "430609",
               "aid": "405742",
-              "desc": "They haven’t consistently dazzled but they’ve done more than enough. Two incisive Vinicius Junior runs that crafted Matheus Cunha’s brace – his second and third goals for his country – had Brazil in control. Vini Jr. then turned from provider to punisher, grabbing a stoppage-time third."
+              "desc": "They haven't dazzled throughout, but they've done more than enough. Two incisive Vinicius Junior runs that fashioned Matheus Cunha's brace — his second and third goals for his country — kept Brazil in control. Vini Jr. then switched from provider to finisher, grabbing a stoppage-time third.",
+              "dp": 1
             },
             {
               "t": "BRA",
@@ -4799,7 +4864,8 @@
               "a": "Lucas Paqueta",
               "id": "405742",
               "aid": "411726",
-              "desc": "Brazil extend their lead in the shadows of half-time. Lucas Paqueta makes Haiti pay for holding a high line as he flicks the ball to an onrushing Vinicius Junior. The Real Madrid forward takes two touches and slots his shot through the legs of Placide."
+              "desc": "Brazil stretch their lead on the stroke of half-time. Lucas Paqueta punishes Haiti's high line, flicking the ball to an onrushing Vinicius Junior. The Real Madrid forward takes two touches and slots through the legs of Placide.",
+              "dp": 1
             }
           ],
           "venue": "Philadelphia Stadium",
@@ -4957,7 +5023,8 @@
               "a": "Bruno Guimaraes",
               "id": "430609",
               "aid": "430605",
-              "desc": "Wonderful team goal from Brazil.   They knock the ball around with speed, precision and poise. The ball eventually lands at Bruno Guimaraes' feet, and he finds Cunha with a sensational reverse pass. The Manchester United man confidently slots home his third goal of the tournament."
+              "desc": "A wonderful team goal from Brazil. They move the ball with speed, precision and poise until it drops to Bruno Guimaraes, who picks out Cunha with a sensational reverse pass. The Manchester United man confidently slots home his third of the tournament.",
+              "dp": 1
             }
           ],
           "venue": "Miami Stadium",
@@ -5110,14 +5177,16 @@
               "a": "Duverne",
               "id": "405879",
               "aid": "431781",
-              "desc": "What a terrific football match in Atlanta. Haiti jumped out to a 1-0 lead with their first World Cup goal since 1974, only to see Morocco equalise. Isidor then struck a golazo to remember for the Caribbean side, but again Morocco had an answer. The second half tilted in favour of the Africans and goals from Rahimi and Yassine cemented the points. Morocco advance to the Round of 32 in fine form, while Haiti go home with plenty of admirers."
+              "desc": "What a terrific match in Atlanta. Haiti raced into a 1-0 lead with their first World Cup goal since 1974, only for Morocco to equalise. Isidor then struck a golazo to remember for the Caribbean side, but once more Morocco responded. The second half tilted towards the Africans, and goals from Rahimi and Yassine sealed the points. Morocco march into the Round of 32 in fine form, while Haiti head home with plenty of admirers.",
+              "dp": 1
             },
             {
               "t": "MAR",
               "p": "Saibari",
               "m": "45'+1'",
               "id": "448598",
-              "desc": "How about that for a response???? Morocco counter and Saibari finishes it with a sweet stroke into net. It's 2-2!!"
+              "desc": "How's that for a response???? Morocco break and Saibari finishes with a sweet stroke into the net. It's 2-2!!",
+              "dp": 1
             },
             {
               "t": "MAR",
@@ -5126,7 +5195,8 @@
               "a": "Riad",
               "id": "433426",
               "aid": "448607",
-              "desc": "Morocco now lead 4-2!! A ball near the end line stays in and the cross from Rahimi is easy for Yassine to slot home."
+              "desc": "Morocco lead 4-2 now!! A ball near the byline stays in, and Rahimi's cross is simple for Yassine to slot home.",
+              "dp": 1
             },
             {
               "t": "MAR",
@@ -5135,7 +5205,8 @@
               "a": "Rahimi",
               "id": "505112",
               "aid": "433426",
-              "desc": "Morocco now lead 4-2!! A ball near the end line stays in and the cross from Rahimi is easy for Yassine to slot home."
+              "desc": "Morocco lead 4-2 now!! A ball near the byline stays in, and Rahimi's cross is simple for Yassine to slot home.",
+              "dp": 1
             }
           ],
           "venue": "Atlanta Stadium",
@@ -5322,14 +5393,16 @@
               "a": "Pulisic",
               "id": "466624",
               "aid": "390267",
-              "desc": "This goal WILL count! It's a fantastic run from Pulisic down the left and the ball across finds the charging Balogun, whose clinical finish doubles the USA lead! They are in dreamland!   History has repeated itself for Balogun and the USA. The frontman scored what proved the winner against Paraguay during a friendly in November."
+              "desc": "This one WILL count! A fantastic run from Pulisic down the left, and the ball across picks out the charging Balogun, whose clinical finish doubles the USA lead! They're in dreamland. History repeats itself for Balogun and the USA — the frontman scored what proved the winner against Paraguay in a November friendly.",
+              "dp": 1
             },
             {
               "t": "USA",
               "p": "Balogun",
               "m": "45'+5'",
               "id": "466624",
-              "desc": "It's a party in Los Angeles Stadium as the USA hit a third right before half-time. Balogun stays inside, receives a pass, keeps his composure and lashes a left-footed laser to make it 3-0!   It is a familiar scoreline for both teams - USA defeated Paraguay 3-0 in the 1930 World Cup."
+              "desc": "It's a party at Los Angeles Stadium as the USA grab a third just before half-time. Balogun stays central, takes a pass, keeps his composure and lashes a left-footed laser to make it 3-0! A familiar scoreline for these teams — USA beat Paraguay 3-0 at the 1930 World Cup.",
+              "dp": 1
             },
             {
               "t": "PAR",
@@ -5338,7 +5411,8 @@
               "a": "Enciso",
               "id": "495046",
               "aid": "441234",
-              "desc": "It's 3-1... Paraguay are within two and it came from a long ball played upfield, a scramble and the ball falls for Enciso who sets up a perfect finish from Mauricio."
+              "desc": "It's 3-1... Paraguay are within two, the goal coming from a long ball forward, a scramble, and the ball dropping to Enciso, who sets up a perfect finish for Mauricio.",
+              "dp": 1
             },
             {
               "t": "USA",
@@ -5347,7 +5421,8 @@
               "a": "Freeman",
               "id": "419068",
               "aid": "464542",
-              "desc": "Gio Reyna cements the USA win with a sparkling finish with the outside of his foot to cap a 20-pass sequence, setting off a wild celebration in Los Angeles Stadium. What a finish!"
+              "desc": "Gio Reyna seals the USA win with a sparkling outside-of-the-boot finish to cap a 20-pass move, sparking wild celebrations at Los Angeles Stadium. What a finish!",
+              "dp": 1
             }
           ],
           "venue": "Los Angeles Stadium",
@@ -5504,14 +5579,16 @@
               "a": "Okon-Engstler",
               "id": "486306",
               "aid": "498421",
-              "desc": "Starlet Nestory Irankunda shows just why he's so highly rated, as he fires Australia ahead midway through the first half.   Paul Okon-Engstler arced a ball over the top for Irankunda to chase, and the live-wire forward latched onto it before cutting inside Merih Demiral and slotting clinically into the bottom corner."
+              "desc": "Starlet Nestory Irankunda shows exactly why he's so highly rated, firing Australia ahead midway through the first half. Paul Okon-Engstler arced a ball over the top for Irankunda to chase, and the live-wire forward ran onto it before cutting inside Merih Demiral and slotting clinically into the bottom corner.",
+              "dp": 1
             },
             {
               "t": "AUS",
               "p": "Metcalfe",
               "m": "75'",
               "id": "430452",
-              "desc": "The Socceroos have the three points in their grasp after Connor Metcalfe's long drive.   The ball broke for Metcalfe midway inside the Türkiye half, and he carried it forward before unleashing a fierce strike from 25 yards that skidded of the turf and beyond Cakir into the back of the net."
+              "desc": "The Socceroos have three points within reach after Connor Metcalfe's long-range drive. The ball broke to Metcalfe midway inside the Türkiye half, and he drove forward before unleashing a fierce strike from 25 yards that skidded off the turf and past Cakir into the net.",
+              "dp": 1
             }
           ],
           "venue": "BC Place Vancouver",
@@ -5636,7 +5713,8 @@
               "p": "Freeman",
               "m": "43'",
               "id": "464542",
-              "desc": "For just the second time in their history, USA have begun a World Cup with two successive wins and their reward is qualification from Group D. For Australia, the damage was done with the two first-half goals – Cameron Burgess' own goal from Folarin Balogun's low cross followed by Alex Freeman's close-range header from Sergino Dest's deflected strike – which capped off the co-hosts' fast start in Seattle. The Socceroos came back into it after half-time but were unable to muster a goal of their own."
+              "desc": "For only the second time in their history, USA have opened a World Cup with two straight wins, and the reward is qualification from Group D. For Australia, the damage came from two first-half goals — Cameron Burgess' own goal from Folarin Balogun's low cross, then Alex Freeman's close-range header from Sergino Dest's deflected strike — capping the co-hosts' fast start in Seattle. The Socceroos rallied after the break but couldn't find a goal of their own.",
+              "dp": 1
             }
           ],
           "venue": "Seattle Stadium",
@@ -5806,7 +5884,8 @@
               "a": "Enciso",
               "id": "424422",
               "aid": "441234",
-              "desc": "Paraguay have taken the lead with 64 seconds gone after Matias Galarza fires in from distance. They are off to the races! It is the fastest goal of this World Cup so far."
+              "desc": "Paraguay lead after just 64 seconds, Matias Galarza firing in from distance. They're off to the races — the fastest goal of this World Cup so far!",
+              "dp": 1
             }
           ],
           "venue": "San Francisco Bay Area Stadium",
@@ -5960,7 +6039,8 @@
               "a": "Berhalter",
               "id": "390272",
               "aid": "499912",
-              "desc": "Auston Trusty with the goal!   This place has just erupted! Berhalter's corner goes all the way to Trusty at the back post, he takes a touch then leathers the ball into the back of the net."
+              "desc": "Auston Trusty with the goal! The place has erupted! Berhalter's corner travels all the way to Trusty at the back post, and he takes a touch before leathering it into the net.",
+              "dp": 1
             },
             {
               "t": "TUR",
@@ -5969,7 +6049,8 @@
               "a": "Yilmaz",
               "id": "484087",
               "aid": "484139",
-              "desc": "Türkiye have their first goal of the tournament!   It's extremely well taken from Arda Guler, too. Yilmaz is the creator. He fires an incisive pass into the Real Madrid man's feet, Guler controls and slots a clinical finish beyond Turner."
+              "desc": "Türkiye have their first goal of the tournament! And it's superbly taken by Arda Guler. Yilmaz is the creator, firing an incisive pass into the Real Madrid man's feet; Guler controls and slots a clinical finish past Turner.",
+              "dp": 1
             },
             {
               "t": "TUR",
@@ -5984,14 +6065,16 @@
               "p": "Berhalter",
               "m": "49'",
               "id": "499912",
-              "desc": "A bolt from Berhalter!   It's such a sweet strike. USA got off to a flyer in the first half, and they've done exactly the same in the second.   A long throw from McKenzie is cleared out to Berhalter on the edge of the box. The ball sits up nicely but the midfielder still has it all to do – he gets over the ball and hammers it beyond Cakir in the Türkiye goal. The keeper had no chance."
+              "desc": "A bolt from Berhalter! Such a sweet strike. USA flew out of the blocks in the first half and have done exactly the same in the second. A long McKenzie throw is cleared out to Berhalter at the edge of the box; the ball sits up nicely, but there's still plenty to do — he gets over it and hammers it past Cakir in the Türkiye goal. The keeper had no chance.",
+              "dp": 1
             },
             {
               "t": "TUR",
               "p": "Ayhan",
               "m": "90'+8'",
               "id": "336170",
-              "desc": "Drama! It's a bit scrappy, but Türkiye won't care! Ayhan finishes from close range after some pinball in the penalty box. 3-2!"
+              "desc": "Drama! Scrappy, but Türkiye won't mind! Ayhan finishes from close range after pinball in the penalty box. 3-2!",
+              "dp": 1
             }
           ],
           "venue": "Los Angeles Stadium",
@@ -6263,14 +6346,16 @@
               "a": "Wirtz",
               "id": "492363",
               "aid": "430669",
-              "desc": "Beautiful goal from Felix Nmecha!   It's slick and deadly from Julian Nagelsmann's men. Nmecha plays a stunning one-two with Florian Wirtz before caressing a curling effort into the bottom corner. Perfection."
+              "desc": "A beautiful goal from Felix Nmecha! Slick and deadly from Julian Nagelsmann's side. Nmecha exchanges a stunning one-two with Florian Wirtz before caressing a curling effort into the bottom corner. Perfection.",
+              "dp": 1
             },
             {
               "t": "CUW",
               "p": "Comenencia",
               "m": "21'",
               "id": "494989",
-              "desc": "Time to take a breath! That was a quite remarkable first half in Houston.   Germany looked like they were going to run riot after Felix Nmecha’s early goal, but Curaçao showed incredible spirit to hang in there and then equalise through Livano Comenencia.   Germany, though, soon regained control and a Nico Schlotterbeck header and a Kai Havertz penalty means they lead 3-1 at half-time."
+              "desc": "Time to catch a breath! A quite remarkable first half in Houston. Germany looked set to run riot after Felix Nmecha's early goal, but Curaçao showed incredible spirit to stay in it and level through Livano Comenencia. Germany soon reasserted control, though, and a Nico Schlotterbeck header plus a Kai Havertz penalty leave them 3-1 up at the break.",
+              "dp": 1
             },
             {
               "t": "GER",
@@ -6279,7 +6364,8 @@
               "a": "Brown",
               "id": "430667",
               "aid": "511015",
-              "desc": "Schlotterbeck with the header!   That will ease some German tension. It's a fine header from Nico Schlotterbeck, who meets a Nathaniel Brown delivery and directs the ball beyond Eloy Room."
+              "desc": "Schlotterbeck with the header! That will settle some German nerves. A fine header from Nico Schlotterbeck, who meets Nathaniel Brown's delivery and steers it past Eloy Room.",
+              "dp": 1
             },
             {
               "t": "GER",
@@ -6287,7 +6373,8 @@
               "m": "45'+5'",
               "pen": true,
               "id": "411367",
-              "desc": "Cool as you like! The Arsenal man slots in from the spot, sending Eloy Room the wrong way.   The penalty was awarded for a foul by Riechedly Bazoer on Felix Nmecha.   Germany in total control."
+              "desc": "Cool as you like! The Arsenal man slots home from the spot, sending Eloy Room the wrong way. The penalty came for a Riechedly Bazoer foul on Felix Nmecha. Germany in complete control.",
+              "dp": 1
             },
             {
               "t": "GER",
@@ -6296,7 +6383,8 @@
               "a": "Kimmich",
               "id": "429642",
               "aid": "386413",
-              "desc": "A precision finish from the Bayern Munich man!   Musiala couldn't have placed that any better. Joshua Kimmich slid a pass into his path and he took aim first-time, sending his shot across goal, beyond goalkeeper Eloy Room and into the bottom corner.   Unbelievable quality."
+              "desc": "A precision finish from the Bayern Munich man! Musiala couldn't have placed it any better. Joshua Kimmich slid a pass into his path and he struck first-time, sending it across goal, past Eloy Room and into the bottom corner. Unbelievable quality.",
+              "dp": 1
             },
             {
               "t": "GER",
@@ -6305,7 +6393,8 @@
               "a": "Undav",
               "id": "511015",
               "aid": "484851",
-              "desc": "It's another lovely finish – and what an assist too!   Deniz Undav's impudent flick finds Nathaniel Brown, who volleys past Eloy Room.   The quality of the goals today has been superb."
+              "desc": "Another lovely finish — and what an assist! Deniz Undav's impudent flick releases Nathaniel Brown, who volleys past Eloy Room. The quality of today's goals has been superb.",
+              "dp": 1
             },
             {
               "t": "GER",
@@ -6314,7 +6403,8 @@
               "a": "Kimmich",
               "id": "484851",
               "aid": "386413",
-              "desc": "Germany are not letting up!   Deniz Undav makes it 6-1, converting after the ball was laid on a plate to him by Joshua Kimmich.   Leandro Bacuna attempted to block the strike, but it was too powerful and deflected into the net."
+              "desc": "Germany aren't easing off! Deniz Undav makes it 6-1, converting after Joshua Kimmich laid it on a plate. Leandro Bacuna tried to block the strike, but it was too powerful and deflected in.",
+              "dp": 1
             },
             {
               "t": "GER",
@@ -6323,7 +6413,8 @@
               "a": "Undav",
               "id": "411367",
               "aid": "484851",
-              "desc": "Simply sublime.   He's taken that brilliantly, Kai Havertz. He alights on a pass from Deniz Undav, holds off a challenge from Gervane Kastaneer, and dinks a finish over Eloy Room."
+              "desc": "Simply sublime. Kai Havertz has taken that brilliantly. He seizes on a Deniz Undav pass, holds off Gervane Kastaneer's challenge and dinks a finish over Eloy Room.",
+              "dp": 1
             }
           ],
           "venue": "Houston Stadium",
@@ -6559,7 +6650,8 @@
               "p": "Kessie",
               "m": "30'",
               "id": "371609",
-              "desc": "That first half has raced by! The action has been unrelenting. Germany are behind, but they haven't played poorly - much of their football has been slick, inventive and purposeful.   Côte d'Ivoire, though, possess electrifying forwards, with Yan Diomande the pick of the bunch so far. His dazzling run helped set up the Franck Kessie goal which separates the teams.   You feel limiting Diomande's threat could be a key theme of Julian Nagelsmann's half-time team-talk.   Time to take a breath!"
+              "desc": "That first half has flown by, the action relentless. Germany trail, but they haven't played poorly — much of their football has been slick, inventive and purposeful. Côte d'Ivoire, though, boast electrifying forwards, with Yan Diomande the pick so far. His dazzling run helped fashion the Franck Kessie goal that separates the sides. Curbing Diomande's threat may well be a key theme of Julian Nagelsmann's half-time talk. Time to catch a breath!",
+              "dp": 1
             },
             {
               "t": "GER",
@@ -6568,7 +6660,8 @@
               "a": "Amiri",
               "id": "484851",
               "aid": "395471",
-              "desc": "The substitute strikes!   It's a lovely volleyed finish from Deniz Undav, who converts from an excellent cross from fellow sub Nadiem Amiri. 1-1."
+              "desc": "The substitute strikes! A lovely volleyed finish from Deniz Undav, converting an excellent cross from fellow sub Nadiem Amiri. 1-1.",
+              "dp": 1
             },
             {
               "t": "GER",
@@ -6577,7 +6670,8 @@
               "a": "Nmecha",
               "id": "484851",
               "aid": "492363",
-              "desc": "The substitute has done it again!   Superb from Deniz Undav, who looks like he's won it for Germany – and sent them to the knockout stage.   It's another brilliant finish. He receives a pass from Nmecha on the turn, before swivelling and shooting in one movement, leaving Fofana with no chance in the Côte d'Ivoire goal.   What an impact!"
+              "desc": "The substitute has done it again! Superb from Deniz Undav, who looks to have won it for Germany — and booked their knockout place. Another brilliant finish: he takes a Nmecha pass on the turn, then swivels and shoots in one motion, leaving Fofana no chance in the Côte d'Ivoire goal. What an impact!",
+              "dp": 1
             }
           ],
           "venue": "Toronto Stadium",
@@ -6823,7 +6917,8 @@
               "a": "Diomande",
               "id": "402261",
               "aid": "510922",
-              "desc": "Côte d'Ivoire with the opener!   The electric Yan Diomande seizes possession after some sloppy Curaçao passing in their defensive third. The winger drives forward and lays the ball on a plate for Nicolas Pepe, who taps home from close range."
+              "desc": "Côte d'Ivoire with the opener! The electric Yan Diomande pounces on sloppy Curaçao passing in their defensive third. The winger drives forward and lays it on a plate for Nicolas Pepe, who taps home from close range.",
+              "dp": 1
             },
             {
               "t": "CIV",
@@ -6832,7 +6927,8 @@
               "a": "Sangare",
               "id": "402261",
               "aid": "430831",
-              "desc": "Wonderful finish from Nicolas Pepe. It's 2-0!   Elite-level stuff from the Côte d'Ivoire forward. He takes a perfect touch from Sangare's driven pass before sending an unstoppable curling effort into the top corner."
+              "desc": "A wonderful finish from Nicolas Pepe. It's 2-0! Elite-level work from the Côte d'Ivoire forward, who takes a perfect touch off Sangare's driven pass before bending an unstoppable effort into the top corner.",
+              "dp": 1
             }
           ],
           "venue": "Philadelphia Stadium",
@@ -6967,7 +7063,8 @@
               "a": "Wirtz",
               "id": "404353",
               "aid": "430669",
-              "desc": "Leroy Sane sidefoots home inside two minutes after Aleksandar Pavlovic wins the ball outside the area and Florian Wirtz tees up Sane for a smart low finish."
+              "desc": "Leroy Sane sidefoots home inside two minutes, after Aleksandar Pavlovic wins the ball outside the box and Florian Wirtz sets up Sane for a smart low finish.",
+              "dp": 1
             },
             {
               "t": "ECU",
@@ -6976,7 +7073,8 @@
               "a": "Vite",
               "id": "448312",
               "aid": "424036",
-              "desc": "Nilson Angulo equalises with a great strike from outside the box, bending the ball through the legs of Aleksandar Pavlovic and beyond the despairing dive of Manuel Neuer."
+              "desc": "Nilson Angulo levels with a great strike from outside the box, curling it through the legs of Aleksandar Pavlovic and beyond the despairing dive of Manuel Neuer.",
+              "dp": 1
             },
             {
               "t": "ECU",
@@ -6985,7 +7083,8 @@
               "a": "Rodriguez",
               "id": "419020",
               "aid": "448310",
-              "desc": "2-1 Ecuador: The stadium goes crazy as Ecuador score from a corner flicked on by Kevin Rodriguez for Gonzalo Plata to turn in at close range just in front of Manuel Neuer."
+              "desc": "Ecuador 2-1: The stadium goes wild as Ecuador score from a corner, flicked on by Kevin Rodriguez for Gonzalo Plata to turn in from close range right in front of Manuel Neuer.",
+              "dp": 1
             }
           ],
           "venue": "New York/New Jersey Stadium",
@@ -7179,7 +7278,8 @@
               "a": "Gravenberch",
               "id": "397786",
               "aid": "430176",
-              "desc": "Virgil van Dijk with the breakthrough for the Netherlands as a recycled free-kick from Ryan Gravenberch is whipped in from the right and the unmarked central defender pilots his header past Zion Suzuki."
+              "desc": "Virgil van Dijk makes the breakthrough for the Netherlands: a recycled Ryan Gravenberch free-kick is whipped in from the right, and the unmarked centre-back guides his header past Zion Suzuki.",
+              "dp": 1
             },
             {
               "t": "JPN",
@@ -7188,7 +7288,8 @@
               "a": "Kubo",
               "id": "405522",
               "aid": "403304",
-              "desc": "Takefusa Kubo waltzes into the Dutch box and lays the ball back for Keito Nakamura, who takes two touches and fires past Bart Verbruggen to pull Japan level. A quiet first half has made way for a far more lively second term and it's well and truly game on now."
+              "desc": "Takefusa Kubo glides into the Dutch box and rolls it back for Keito Nakamura, who takes two touches and fires past Bart Verbruggen to draw Japan level. A quiet first half has given way to a far livelier second, and it's well and truly game on.",
+              "dp": 1
             },
             {
               "t": "NED",
@@ -7197,7 +7298,8 @@
               "a": "Gravenberch",
               "id": "489518",
               "aid": "430176",
-              "desc": "A second assist from Ryan Gravenberch as he lays the ball off to Summerviile, who produces a fine left-footed curler from the top of the box to restore the Netherlands lead."
+              "desc": "A second assist for Ryan Gravenberch, laying it off to Summerville, who bends a fine left-footed effort from the top of the box to restore the Netherlands' lead.",
+              "dp": 1
             },
             {
               "t": "JPN",
@@ -7206,7 +7308,8 @@
               "a": "Ogawa",
               "id": "448557",
               "aid": "403293",
-              "desc": "A deflected Daichi Kamada strike two minutes from time has earned Japan a share of the spoils in Dallas. Scoreless at the break, the contest sprung to life in the second stanza, with all four goals arriving in the final 45. Virgil van Dijk and then Crysencio Summerville goals had the Dutch in front twice, only for Japan to peg them back on both occasions and collect a point in the Group F opener."
+              "desc": "A deflected Daichi Kamada strike two minutes from time earns Japan a share of the spoils in Dallas. Goalless at the break, the game burst to life in the second half, with all four goals coming in the final 45. Virgil van Dijk and then Crysencio Summerville had put the Dutch ahead twice, only for Japan to peg them back each time and take a point from the Group F opener.",
+              "dp": 1
             }
           ],
           "venue": "Dallas Stadium",
@@ -7339,7 +7442,8 @@
               "p": "Ayari",
               "m": "7'",
               "id": "489688",
-              "desc": "What a start by Sweden! Yasin Ayari hits a thunderbolt from distance after the ball falls kindly into his path to give the Scandinavians a deserved lead. One of the goals of the tournament so far!"
+              "desc": "What a start by Sweden! Yasin Ayari unleashes a thunderbolt from distance after the ball drops kindly into his path, handing the Scandinavians a deserved lead. One of the goals of the tournament so far!",
+              "dp": 1
             },
             {
               "t": "SWE",
@@ -7348,7 +7452,8 @@
               "a": "Gyokeres",
               "id": "430150",
               "aid": "483327",
-              "desc": "Sweden continue their momentum after the hydration break as they double their lead in fine fashion when Alexander Isak attacks down the left wing, cuts inside and guides the ball into the corner of the net. What a start!"
+              "desc": "Sweden keep their momentum after the hydration break, doubling their lead in fine style as Alexander Isak attacks down the left, cuts inside and steers the ball into the corner. What a start!",
+              "dp": 1
             },
             {
               "t": "TUN",
@@ -7357,7 +7462,8 @@
               "a": "Mejbri",
               "id": "433367",
               "aid": "433378",
-              "desc": "And just like that, Tunisia are back in the game. Omar Rekik guides a beautiful glancing header into the net just before the break. This could be a real momentum shift.   This was Rekik's first international goal - what a time to score it!"
+              "desc": "And just like that, Tunisia are back in it. Omar Rekik glances a beautiful header into the net just before the break — this could be a real momentum shift. It was Rekik's first international goal, and what a moment to score it!",
+              "dp": 1
             },
             {
               "t": "SWE",
@@ -7366,7 +7472,8 @@
               "a": "Isak",
               "id": "483327",
               "aid": "430150",
-              "desc": "It's been coming as Sweden have ramped up the attack early in the second half. This time it's Viktor Gyokeres who scores after Isak capitalizes on a defensive error to make it 3-1 for Sweden."
+              "desc": "It had been coming as Sweden cranked up the pressure early in the second half. This time Viktor Gyokeres is the scorer, after Isak pounces on a defensive error, making it 3-1 to Sweden.",
+              "dp": 1
             },
             {
               "t": "SWE",
@@ -7383,7 +7490,8 @@
               "a": "Bergvall",
               "id": "489688",
               "aid": "489689",
-              "desc": "This game has been bookmarked by goals from Yasin Ayari who caps an amazing performance for Sweden with a thunderbolt from distance."
+              "desc": "This game has been bookended by goals from Yasin Ayari, who caps an outstanding Sweden display with a thunderbolt from distance.",
+              "dp": 1
             }
           ],
           "venue": "Monterrey Stadium",
@@ -7511,7 +7619,8 @@
               "a": "Gakpo",
               "id": "424051",
               "aid": "448152",
-              "desc": "Brian Brobbey, brought in to be a focal point for the Netherlands attack, converts the cross from Cody Gakpo to complete a sweeping Dutch move wtih a close-range finish."
+              "desc": "Brian Brobbey, drafted in as a focal point for the Netherlands attack, converts Cody Gakpo's cross to finish off a sweeping Dutch move from close range.",
+              "dp": 1
             },
             {
               "t": "NED",
@@ -7520,7 +7629,8 @@
               "a": "Dumfries",
               "id": "424051",
               "aid": "436612",
-              "desc": "A low angled cross from the right by Denzel Dumfries is touched in by Brian Brobbey on the stretch for his third international goal."
+              "desc": "A low, angled cross from the right by Denzel Dumfries is turned in by Brian Brobbey at full stretch for his third international goal.",
+              "dp": 1
             },
             {
               "t": "NED",
@@ -7529,7 +7639,8 @@
               "a": "Dumfries",
               "id": "448152",
               "aid": "436612",
-              "desc": "Cody Gakpo strikes at the end of a fast Netherlands counterattack. The No11 cuts in and shoots unstoppably into the near post after being fed by impact sub Crysencio Summerville."
+              "desc": "Cody Gakpo strikes to finish a rapid Netherlands counter. The No11 cuts inside and fires unstoppably into the near post after being fed by impact sub Crysencio Summerville.",
+              "dp": 1
             },
             {
               "t": "NED",
@@ -7538,7 +7649,8 @@
               "a": "Summerville",
               "id": "448152",
               "aid": "489518",
-              "desc": "Cody Gakpo strikes at the end of a fast Netherlands counterattack. The No11 cuts in and shoots unstoppably into the near post after being fed by impact sub Crysencio Summerville."
+              "desc": "Cody Gakpo strikes to finish a rapid Netherlands counter. The No11 cuts inside and fires unstoppably into the near post after being fed by impact sub Crysencio Summerville.",
+              "dp": 1
             },
             {
               "t": "SWE",
@@ -7547,7 +7659,8 @@
               "a": "Isak",
               "id": "441137",
               "aid": "430150",
-              "desc": "Substitute Anthony Elanga scores for Sweden, keeping calm and slotting past the goalkeeper after running on to Alexander Isak's super through ball."
+              "desc": "Substitute Anthony Elanga scores for Sweden, staying calm to slot past the keeper after running onto Alexander Isak's superb through ball.",
+              "dp": 1
             },
             {
               "t": "NED",
@@ -7556,7 +7669,8 @@
               "a": "Depay",
               "id": "489518",
               "aid": "336098",
-              "desc": "Netherlands 5-1 Sweden: What an impact by Crysencio Summerville, who starts and finishes the move, advancing to the edge of the area before unleashing an unerring low strike beyond the dive of Kristoffer Nordfeldt."
+              "desc": "Netherlands 5-1 Sweden: What an impact from Crysencio Summerville, who both starts and finishes the move, driving to the edge of the box before unleashing an unerring low strike past the dive of Kristoffer Nordfeldt.",
+              "dp": 1
             }
           ],
           "venue": "Houston Stadium",
@@ -7690,14 +7804,16 @@
               "a": "Nakamura",
               "id": "448557",
               "aid": "405522",
-              "desc": "Daichi Kamada's fourth-minute goal is the fastest scored by a Japanese player in FIFA World Cup history. The previous quickest was Shinji Kagawa in 2018 against Colombia when he scored in the sixth minute.   Meanwhile, Kamada is just the second Japanese player to score in back-to-back matches at the FIFA World Cup following Junichi Inamoto's goals against Belgium and Russia in 2002."
+              "desc": "Daichi Kamada's fourth-minute goal is the fastest by a Japanese player in FIFA World Cup history. The previous quickest was Shinji Kagawa's sixth-minute strike against Colombia in 2018. Kamada is also just the second Japanese player to score in back-to-back World Cup matches, after Junichi Inamoto found the net against Belgium and Russia in 2002.",
+              "dp": 1
             },
             {
               "t": "JPN",
               "p": "Ueda",
               "m": "31'",
               "id": "430413",
-              "desc": "Japan are brilliant, while Tunisia are on the brink. The Asian side have doubled their lead in spectacular fashion with an amazing strike from Ayase Ueda into the bottom corner."
+              "desc": "Japan are brilliant; Tunisia are on the brink. The Asian side double their lead in spectacular fashion, Ayase Ueda drilling an amazing strike into the bottom corner.",
+              "dp": 1
             },
             {
               "t": "JPN",
@@ -7706,7 +7822,8 @@
               "a": "Ueda",
               "id": "395321",
               "aid": "430413",
-              "desc": "Japan extend their lead once again as Junya Ito breaks clear of the Tunisia defence and slots home in style. Tunisia are in the deepest of holes now.   This is only the second time in 27 matches in the FIFA World Cup that Japan have scored three goals in a game. The previous occasion came back in 2010 when they beat Denmark 3-1 in South Africa."
+              "desc": "Japan stretch their lead again as Junya Ito bursts clear of the Tunisia defence and slots home in style. Tunisia are in the deepest of holes now. It's only the second time in 27 World Cup matches that Japan have scored three in a game — the last coming in 2010, when they beat Denmark 3-1 in South Africa.",
+              "dp": 1
             },
             {
               "t": "JPN",
@@ -7715,7 +7832,8 @@
               "a": "Sano",
               "id": "430413",
               "aid": "479294",
-              "desc": "What a performance for Japan, who have scored four goals in a World Cup match for the first time. It comes from the inspirational Ayase Ueda who generates massive hang time in the air and loops a header over the Tunisia defence into the net.   In addition, Ueda is the first Japan player to score two goals in a match at the FIFA World Cup."
+              "desc": "What a display from Japan, who have scored four in a World Cup match for the first time. It comes from the inspirational Ayase Ueda, who hangs in the air before looping a header over the Tunisia defence and in. Ueda also becomes the first Japan player to score twice in a single World Cup match.",
+              "dp": 1
             }
           ],
           "venue": "Monterrey Stadium",
@@ -7827,7 +7945,8 @@
               "a": "Doan",
               "id": "430407",
               "aid": "391646",
-              "desc": "Both sides will feel they could have won this contest, but a draw suits both and ensures their respective North American adventures will continue.   Daizen Maeda opened the scoring in the second half, putting the finishing touch on a flowing Japan move 11 minutes after the break.   Sweden didn't take that hit lying down, though, and hit back just six minutes later. Anthony Elanga picked the ball up on the right wing, cut inside and curled a sumptuous left-footed effort into the corner.   Graham Potter's side came closest to winning it when Alexander Isak had a header tipped on to the bar by Zion Suzuki late on.   Japan will now face Brazil in Houston on 29 June, while Sweden must wait to see who they will take on."
+              "desc": "Both sides will feel they could have won it, but a draw suits each and keeps their North American adventures alive. Daizen Maeda broke the deadlock in the second half, applying the finish to a flowing Japan move 11 minutes after the restart. Sweden responded, though, striking back just six minutes later: Anthony Elanga collected the ball on the right, cut inside and curled a sumptuous left-footed effort into the corner. Graham Potter's side went closest to winning it when Alexander Isak's late header was tipped onto the bar by Zion Suzuki. Japan now meet Brazil in Houston on 29 June, while Sweden await their opponents.",
+              "dp": 1
             },
             {
               "t": "SWE",
@@ -7836,7 +7955,8 @@
               "a": "Gyokeres",
               "id": "441137",
               "aid": "483327",
-              "desc": "Anthony Elanga scores for a second straight match! The winger picks the ball up on the right, cuts inside and unleashes an unstoppable effort which flies into Suzuki's goal. Game on!"
+              "desc": "Anthony Elanga scores in a second successive match! The winger collects it on the right, cuts inside and unleashes an unstoppable effort that flies past Suzuki. Game on!",
+              "dp": 1
             }
           ],
           "venue": "Dallas Stadium",
@@ -7977,7 +8097,8 @@
               "a": "Van Dijk",
               "id": "424051",
               "aid": "397786",
-              "desc": "The Dutch striker doubles the Oranje's lead and adds a third to his individual account at the tournament. The Tunisian defence was again undone by a crossfield ball and then a pass across the penalty area."
+              "desc": "The Dutch striker doubles the Oranje's lead and takes his personal tally at the tournament to three. Tunisia's defence was again unpicked by a crossfield ball and then a pass across the box.",
+              "dp": 1
             },
             {
               "t": "TUN",
@@ -7986,7 +8107,8 @@
               "a": "Mejbri",
               "id": "494374",
               "aid": "433378",
-              "desc": "Hazem Mastouri heads home from a corner kick. Now the game should open up more. The Eagles of Carthage have looked better after the break."
+              "desc": "Hazem Mastouri heads home from a corner. The game should open up more now, with the Eagles of Carthage looking sharper after the break.",
+              "dp": 1
             },
             {
               "t": "NED",
@@ -7995,7 +8117,8 @@
               "a": "Reijnders",
               "id": "489517",
               "aid": "483526",
-              "desc": "His first goal with the national team gives the Dutch some breathing room as they fight for first place in Group F."
+              "desc": "His first goal for the national team gives the Dutch some breathing space as they battle for top spot in Group F.",
+              "dp": 1
             }
           ],
           "venue": "Kansas City Stadium",
@@ -8153,7 +8276,8 @@
               "a": "Mohamed Salah",
               "id": "430482",
               "aid": "344654",
-              "desc": "What a way to score your first international goal! Eman Ashour drifts in from the left-hand side and delivers an exquisite finish with pace and swerve. It is the 28-year-old midfielder's first strike for his country."
+              "desc": "What a way to open your international account! Eman Ashour drifts in from the left and delivers an exquisite finish with pace and swerve — the 28-year-old midfielder's first strike for his country.",
+              "dp": 1
             },
             {
               "t": "BEL",
@@ -8301,14 +8425,16 @@
               "a": "Wood",
               "id": "405454",
               "aid": "274078",
-              "desc": "Against the run of play, New Zealand find the net through Elijah Just, who fires a volley into the net. Game on!"
+              "desc": "Against the run of play, New Zealand find a way through Elijah Just, who lashes a volley into the net. Game on!",
+              "dp": 1
             },
             {
               "t": "IRN",
               "p": "Rezaeian",
               "m": "32'",
               "id": "384797",
-              "desc": "IR Iran have pushed on since the hydration break and level the scores after an attacking effort from Shahriyar Moghanloo kindly falls into the path of Ramin Rezaeian, who fires home with the outside of the boot much to the delight of the Team Melli fans at Los Angeles Stadium."
+              "desc": "IR Iran have grown since the hydration break and draw level after an attacking effort from Shahriyar Moghanloo drops kindly for Ramin Rezaeian, who fires home with the outside of his boot, to the delight of the Team Melli fans at Los Angeles Stadium.",
+              "dp": 1
             },
             {
               "t": "NZL",
@@ -8317,7 +8443,8 @@
               "a": "Wood",
               "id": "405454",
               "aid": "274078",
-              "desc": "Elijah Just is the man of the moment. He finds the target in style to give New Zealand the lead once again. It was a brilliant team effort from the All Whites, which he finished fantastically. Can New Zealand hold on to win their first-ever World Cup match?"
+              "desc": "Elijah Just is the man of the moment, finding the target in style to put New Zealand ahead once more. A brilliant team move from the All Whites, which he finished superbly. Can New Zealand hold on for their first-ever World Cup win?",
+              "dp": 1
             },
             {
               "t": "IRN",
@@ -8326,7 +8453,8 @@
               "a": "Rezaeian",
               "id": "448497",
               "aid": "384797",
-              "desc": "IR Iran have levelled the scores for the second time here through a towering header from Mohammad Mohebbi. What a finish we have in store!"
+              "desc": "IR Iran have drawn level for a second time here, this through a towering Mohammad Mohebbi header. What a finish we have in store!",
+              "dp": 1
             }
           ],
           "venue": "Los Angeles Stadium",
@@ -8569,7 +8697,8 @@
               "a": "Payne",
               "id": "463580",
               "aid": "331463",
-              "desc": "Finn Surman with the gaol!   It's a wonderful header from the defender, who rises high and powers home from Tim Payne's corner delivery. What a start for the All Whites!"
+              "desc": "Finn Surman with the goal! A wonderful header from the defender, who climbs high to power home Tim Payne's corner. What a start for the All Whites!",
+              "dp": 1
             },
             {
               "t": "EGY",
@@ -8578,7 +8707,8 @@
               "a": "Mohamed Hany",
               "id": "483161",
               "aid": "408950",
-              "desc": "It had been coming! Egypt's pressure pays off.   Mohamed Hany is the creator. He swings in an inviting cross which Zico heads at goal – Max Crocombe gets a hand to it but the power is too much for him. 1-1!"
+              "desc": "It had been coming! Egypt's pressure tells. Mohamed Hany is the provider, swinging in an inviting cross that Zico heads goalward — Max Crocombe gets a hand to it, but the power is too much. 1-1!",
+              "dp": 1
             },
             {
               "t": "EGY",
@@ -8587,7 +8717,8 @@
               "a": "Mostafa Zico",
               "id": "344654",
               "aid": "483161",
-              "desc": "He's done it! Egypt's captain has just put his team in front – and in some style.   Salah plays a delightful one-two with Zico before powering a precision drive beyond Crocombe.   BC Place has erupted."
+              "desc": "He's done it! Egypt's captain has put his side ahead — and in style. Salah exchanges a delightful one-two with Zico before powering a precise drive past Crocombe. BC Place has erupted.",
+              "dp": 1
             },
             {
               "t": "EGY",
@@ -8735,14 +8866,16 @@
               "a": "Trezeguet",
               "id": "483183",
               "aid": "363863",
-              "desc": "And breathe. Egypt and IR Iran have put on a show so far in Seattle.   Saber opened the scoring in just the fifth minute, but it looked like that would be cancelled just moments later when Taremi sized up a penalty. While Shoebir denied him, but he was powerless just 135 seconds later to stop Rezaeian from stealing in to level matters.   Which side will regain the initiative after the hydration break?"
+              "desc": "And breathe. Egypt and IR Iran have served up a show so far in Seattle. Saber opened the scoring in only the fifth minute, and it looked set to be cancelled out moments later when Taremi lined up a penalty — Shoebir denied him, but was powerless 135 seconds on to stop Rezaeian stealing in to level. Which side will seize the initiative after the hydration break?",
+              "dp": 1
             },
             {
               "t": "IRN",
               "p": "Rezaeian",
               "m": "14'",
               "id": "384797",
-              "desc": "IR Iran are level! What a game!   Ramin Rezaeian is the man. Milad Mohammadi fires towards goal and while Shobeir saves, Rezaeian is there to turn the ball home from the tightest of angles. Game on!"
+              "desc": "IR Iran are level! What a game! Ramin Rezaeian is the man. Milad Mohammadi fires goalward and, though Shobeir saves, Rezaeian is on hand to turn it home from the tightest of angles. Game on!",
+              "dp": 1
             }
           ],
           "venue": "Seattle Stadium",
@@ -8899,7 +9032,8 @@
               "p": "Trossard",
               "m": "28'",
               "id": "448355",
-              "desc": "It has been coming all game. Belgium take the lead after Leandro Trossard converts a Kevin De Bruyne corner as the ball kindly falls into his path. New Zealand are going out as things stand."
+              "desc": "It had been coming all game. Belgium go ahead as Leandro Trossard converts a Kevin De Bruyne corner, the ball dropping kindly into his path. As things stand, New Zealand are heading out.",
+              "dp": 1
             },
             {
               "t": "BEL",
@@ -8908,21 +9042,24 @@
               "a": "Vanaken",
               "id": "448355",
               "aid": "448343",
-              "desc": "Belgium start the second half brightly as Trossard finds the net at the second time of asking. New Zealand are in a deep hole here and facing elimination."
+              "desc": "Belgium begin the second half brightly, Trossard finding the net at the second attempt. New Zealand are in a deep hole now and staring at elimination.",
+              "dp": 1
             },
             {
               "t": "BEL",
               "p": "De Bruyne",
               "m": "66'",
               "id": "358120",
-              "desc": "Belgium get their third to all but assure their place in the Round of 32 and knock out New Zealand. Kevin De Bruyne has had a number of chances in this game and he finally makes one count as he guides the ball into the corner. What a moment for the veteran."
+              "desc": "Belgium's third all but seals their Round of 32 spot and eliminates New Zealand. Kevin De Bruyne, who'd spurned a few chances tonight, finally makes one count, guiding the ball into the corner. What a moment for the veteran.",
+              "dp": 1
             },
             {
               "t": "NZL",
               "p": "Just",
               "m": "84'",
               "id": "405454",
-              "desc": "After scoring twice against IR Iran, Elijah Just scores his third of the tournament with another fantastic strike against Belgium. He has a bright future ahead."
+              "desc": "Having scored twice against IR Iran, Elijah Just grabs his third of the tournament with another fantastic strike, this time against Belgium. The future looks bright for him.",
+              "dp": 1
             },
             {
               "t": "BEL",
@@ -8931,7 +9068,8 @@
               "a": "Raskin",
               "id": "358112",
               "aid": "495349",
-              "desc": "Almost a minute after coming on the field, Romelu Lukaku finds the net to restore Belgium's three-goal lead with a powerful downward header. He really provides the Red Devils a different attacking element."
+              "desc": "Barely a minute after coming on, Romelu Lukaku finds the net with a powerful downward header to restore Belgium's three-goal cushion. He really gives the Red Devils a different attacking dimension.",
+              "dp": 1
             },
             {
               "t": "BEL",
@@ -8940,7 +9078,8 @@
               "a": "Lukaku",
               "id": "433092",
               "aid": "358112",
-              "desc": "After a sluggish start, Belgium have finished the group stage with an emphatic victory against New Zealand. Alexis Saelemaekers makes it five with a brilliant strike after clever hold-up play from Lukaku.   The Red Devils are marching on to the knockout rounds while New Zealand are eliminated. It was a tough way for the All Whites to go out."
+              "desc": "After a sluggish start, Belgium end the group stage with an emphatic win over New Zealand. Alexis Saelemaekers makes it five with a brilliant strike following clever Lukaku hold-up play. The Red Devils march on to the knockouts, while New Zealand are out — a tough way for the All Whites to bow out.",
+              "dp": 1
             }
           ],
           "venue": "BC Place Vancouver",
@@ -9234,7 +9373,8 @@
               "p": "Araujo",
               "m": "80'",
               "id": "419100",
-              "desc": "The Celeste get their goal! It's a deserved goal for Bielsa's men, who have had Saudi Arabia backed up in their own half during the entire second half. Al Owais did well to make an initial save, but Maxi Araujo, who had a terrific early chance, comes good on this one."
+              "desc": "La Celeste have their goal! A deserved one for Bielsa's men, who've pinned Saudi Arabia back in their own half throughout the second period. Al Owais did well with an initial save, but Maxi Araujo — denied a terrific early chance — makes no mistake this time.",
+              "dp": 1
             }
           ],
           "venue": "Miami Stadium",
@@ -9355,7 +9495,8 @@
               "a": "Oyarzabal",
               "id": "484320",
               "aid": "430751",
-              "desc": "One of the outstanding statistics of Spain's first game was that central attacker Mikel Oyarzabal did not have a single touch in the opening half-hour. Today has already been a much better day for him: look at that fantastic cross that Yamal turned in for the goal."
+              "desc": "One of the standout stats from Spain's opener was that central attacker Mikel Oyarzabal didn't manage a single touch in the first half-hour. Today has already been a far better day for him: look at that fantastic cross that Yamal turned in for the goal.",
+              "dp": 1
             },
             {
               "t": "ESP",
@@ -9364,14 +9505,16 @@
               "a": "Laporte",
               "id": "430751",
               "aid": "335999",
-              "desc": "Spain have been flying from the first minute and those two Mikel Oyarzabal goals, his 26th and 27th for his country, have now put them in complete control."
+              "desc": "Spain have flown from the first minute, and those two Mikel Oyarzabal goals — his 26th and 27th for his country — have put them in complete control.",
+              "dp": 1
             },
             {
               "t": "ESP",
               "p": "Oyarzabal",
               "m": "24'",
               "id": "430751",
-              "desc": "Spain have been flying from the first minute and those two Mikel Oyarzabal goals, his 26th and 27th for his country, have now put them in complete control."
+              "desc": "Spain have flown from the first minute, and those two Mikel Oyarzabal goals — his 26th and 27th for his country — have put them in complete control.",
+              "dp": 1
             },
             {
               "t": "ESP",
@@ -9509,14 +9652,16 @@
               "p": "Kevin Pina",
               "m": "21'",
               "id": "477852",
-              "desc": "Can you believe it! Kevin Pina scores the historic goal on Cabo Verde's first chance in the game and against the run of play."
+              "desc": "Can you believe it! Kevin Pina scores a historic goal with Cabo Verde's first chance of the game — and against the run of play.",
+              "dp": 1
             },
             {
               "t": "URU",
               "p": "Araujo",
               "m": "44'",
               "id": "419100",
-              "desc": "La Celeste were pushing forward in waves and Maxi Araujo finally broke through the staunch Blue Shark defence, heading home after Bentancur hit the post."
+              "desc": "La Celeste were pouring forward in waves, and Maxi Araujo finally breached the staunch Blue Sharks defence, heading home after Bentancur struck the post.",
+              "dp": 1
             },
             {
               "t": "URU",
@@ -9525,14 +9670,16 @@
               "a": "Araujo",
               "id": "402876",
               "aid": "419100",
-              "desc": "La Celeste stun Cabo Verde to go into the half leading 2-1. Canobbio tapped home after a beautiful set up header from Araujo."
+              "desc": "La Celeste stun Cabo Verde to lead 2-1 at the interval. Canobbio tapped home after a beautiful headed assist from Araujo.",
+              "dp": 1
             },
             {
               "t": "CPV",
               "p": "Helio Varela",
               "m": "61'",
               "id": "477849",
-              "desc": "Helio Varela came on just three minutes ago and just like that he has levelled the score! Can Cabo Verde go one step further?"
+              "desc": "Helio Varela came on just three minutes ago and, just like that, he's levelled it! Can Cabo Verde go one better?",
+              "dp": 1
             }
           ],
           "venue": "Miami Stadium",
@@ -9791,7 +9938,8 @@
               "a": "Llorente",
               "id": "447860",
               "aid": "382739",
-              "desc": "Baena takes a cross from the right wing, finds space in front of two defenders and swings a shot that Muslera can't control, the ball trickling into net. Both Ugarte and Yamal were on the ground as the play happened with injuries as play continued, but Baena's focus never wavered. Spain lead 1-0."
+              "desc": "Baena collects a cross from the right, finds space in front of two defenders and swings in a shot Muslera can't hold, the ball trickling over the line. Both Ugarte and Yamal were down injured as the move unfolded, but Baena's focus never wavered. Spain lead 1-0.",
+              "dp": 1
             }
           ],
           "venue": "Guadalajara Stadium",
@@ -9981,7 +10129,8 @@
               "a": "Olise",
               "id": "389867",
               "aid": "485655",
-              "desc": "Kylian Mbappe equalled Lionel Messi’s tally of 13 World Cups goals. The Frenchman did it in his 15th appearance, while the Argentinian has 26 games to his name. Mbappe and Messi are three goals short of Miroslav Klose’s competition record."
+              "desc": "Kylian Mbappe has matched Lionel Messi's haul of 13 World Cup goals, reaching it in his 15th appearance to the Argentine's 26 games. Both Mbappe and Messi now sit three goals shy of Miroslav Klose's competition record.",
+              "dp": 1
             },
             {
               "t": "FRA",
@@ -9990,7 +10139,8 @@
               "a": "Rabiot",
               "id": "484860",
               "aid": "402047",
-              "desc": "With Bradley Barcala taking the field in place of his PSG colleague Ousmane Dembele, he became the third young forward to make his World Cup debut for Les Bleus today ... and what a way to mark it, with his goal."
+              "desc": "Coming on for his PSG team-mate Ousmane Dembele, Bradley Barcala became the third young forward to make his World Cup debut for Les Bleus today ... and what a way to mark it, with a goal.",
+              "dp": 1
             },
             {
               "t": "SEN",
@@ -9999,14 +10149,16 @@
               "a": "Ndiaye",
               "id": "496358",
               "aid": "448815",
-              "desc": "A word too for Senegal who played well in the first period and so nearly opened the scoring with Nicolas Jackson's shot against the post and Ismaila Sarr's close-range attempt over the bar. They are a team with plenty of attacking talent themselves as also seen in the goal from 18-year-old World Cup debutant Ibrahiim Mbaye."
+              "desc": "A word, too, for Senegal, who played well in the first half and came so close to opening the scoring through Nicolas Jackson's shot off the post and Ismaila Sarr's close-range effort over the bar. They carry plenty of attacking talent of their own, as shown by the goal from 18-year-old World Cup debutant Ibrahiim Mbaye.",
+              "dp": 1
             },
             {
               "t": "FRA",
               "p": "Mbappe",
               "m": "90'+6'",
               "id": "389867",
-              "desc": "Moments after that Senegal goal, Kylian Mbappe has just lashed in a shot from long range to take himselfpast Olivier Giroud as France's record goalscorer."
+              "desc": "Moments after that Senegal goal, Kylian Mbappe lashes in a long-range strike to move past Olivier Giroud as France's all-time record scorer.",
+              "dp": 1
             }
           ],
           "venue": "New York/New Jersey Stadium",
@@ -10109,7 +10261,8 @@
               "a": "Moller Wolfe",
               "id": "419652",
               "aid": "483505",
-              "desc": "It’s been a highly entertaining opening period, and Norway have the advantage thanks to a double by you know who!   A typically predatory finish from Erling Haaland put the Norwegians in front but Iraq responded impressively and levelled through a superb Aymen Hussein header. Haaland would soon punish Iraq again, pouncing on a loose back pass to goalkeeper Jalal Hassan to put his team back in front.   Iraq finished the half strongly, though, applying sustained pressure in search of another equaliser.   Roll on the second half!"
+              "desc": "A highly entertaining opening period, and Norway lead thanks to a double from you-know-who! A typically predatory Erling Haaland finish put them ahead, but Iraq responded impressively to level through a superb Aymen Hussein header. Haaland soon punished Iraq again, pouncing on a loose back pass towards goalkeeper Jalal Hassan to restore Norway's lead. Iraq finished the half strongly, though, piling on sustained pressure in search of another equaliser. Roll on the second half!",
+              "dp": 1
             },
             {
               "t": "IRQ",
@@ -10118,14 +10271,16 @@
               "a": "Amir Alammari",
               "id": "395186",
               "aid": "433074",
-              "desc": "It’s been a highly entertaining opening period, and Norway have the advantage thanks to a double by you know who!   A typically predatory finish from Erling Haaland put the Norwegians in front but Iraq responded impressively and levelled through a superb Aymen Hussein header. Haaland would soon punish Iraq again, pouncing on a loose back pass to goalkeeper Jalal Hassan to put his team back in front.   Iraq finished the half strongly, though, applying sustained pressure in search of another equaliser.   Roll on the second half!"
+              "desc": "A highly entertaining opening period, and Norway lead thanks to a double from you-know-who! A typically predatory Erling Haaland finish put them ahead, but Iraq responded impressively to level through a superb Aymen Hussein header. Haaland soon punished Iraq again, pouncing on a loose back pass towards goalkeeper Jalal Hassan to restore Norway's lead. Iraq finished the half strongly, though, piling on sustained pressure in search of another equaliser. Roll on the second half!",
+              "dp": 1
             },
             {
               "t": "NOR",
               "p": "Haaland",
               "m": "43'",
               "id": "419652",
-              "desc": "It’s been a highly entertaining opening period, and Norway have the advantage thanks to a double by you know who!   A typically predatory finish from Erling Haaland put the Norwegians in front but Iraq responded impressively and levelled through a superb Aymen Hussein header. Haaland would soon punish Iraq again, pouncing on a loose back pass to goalkeeper Jalal Hassan to put his team back in front.   Iraq finished the half strongly, though, applying sustained pressure in search of another equaliser.   Roll on the second half!"
+              "desc": "A highly entertaining opening period, and Norway lead thanks to a double from you-know-who! A typically predatory Erling Haaland finish put them ahead, but Iraq responded impressively to level through a superb Aymen Hussein header. Haaland soon punished Iraq again, pouncing on a loose back pass towards goalkeeper Jalal Hassan to restore Norway's lead. Iraq finished the half strongly, though, piling on sustained pressure in search of another equaliser. Roll on the second half!",
+              "dp": 1
             },
             {
               "t": "NOR",
@@ -10260,7 +10415,8 @@
               "a": "Olise",
               "id": "389867",
               "aid": "485655",
-              "desc": "Stunner from Mbappe to put France in front just shy of the quarter hour. A quick give-and-go with Michael Olise and the France captain puts his nation ahead in front of his father, who is watching on in the stands."
+              "desc": "A stunner from Mbappe puts France ahead just shy of the quarter-hour. A quick give-and-go with Michael Olise, and the France captain fires his nation in front — with his father watching on from the stands.",
+              "dp": 1
             },
             {
               "t": "FRA",
@@ -10269,7 +10425,8 @@
               "a": "Dembele",
               "id": "389867",
               "aid": "398680",
-              "desc": "Horrible mix-up at the back for Iraq and Mbappe pounces to make it two. Zaid Tahseen's pass was intended for his keeper but instead went straight to Dembele inside the penalty area, who pushed it back for Mbappe to sweep home for the easiest of his now 16 World Cup goals."
+              "desc": "A horrible mix-up at the back for Iraq, and Mbappe pounces to make it two. Zaid Tahseen's pass, meant for his keeper, ran straight to Dembele inside the box, and he rolled it back for Mbappe to sweep home the easiest of his now 16 World Cup goals.",
+              "dp": 1
             },
             {
               "t": "FRA",
@@ -10278,7 +10435,8 @@
               "a": "Olise",
               "id": "398680",
               "aid": "485655",
-              "desc": "France now in complete control as Ousmane Dembele makes it three. Michael Olise was the architect, breezing past several Iraq defenders, splitting several more with a ball to Dembele whose first-time shot flashed by Ahmed Basil."
+              "desc": "France in complete control now as Ousmane Dembele makes it three. Michael Olise was the architect, gliding past several Iraq defenders and splitting several more with a pass to Dembele, whose first-time shot flashed past Ahmed Basil.",
+              "dp": 1
             }
           ],
           "venue": "Philadelphia Stadium",
@@ -10397,7 +10555,8 @@
               "p": "Holmgren Pedersen",
               "m": "43'",
               "id": "494625",
-              "desc": "Marcus Holmgren Pedersen began the game on the bench. After getting his chance, the right-back seized it in some style by firing Norway ahead with his first international goal."
+              "desc": "Marcus Holmgren Pedersen started on the bench, but once handed his chance the right-back took it in style, firing Norway ahead with his first international goal.",
+              "dp": 1
             },
             {
               "t": "NOR",
@@ -10406,7 +10565,8 @@
               "a": "Odegaard",
               "id": "419652",
               "aid": "400716",
-              "desc": "Talk about incisive! Martin Odegaard leads a 4-on-2 attack before slipping a perfectly weighted pass into the feet of Erling Haaland. He has team-mates to his right but doesn't need them, lifting a superb finish high past Edouard Mendy."
+              "desc": "Talk about incisive! Martin Odegaard drives a 4-on-2 break before threading a perfectly weighted pass to the feet of Erling Haaland. He has team-mates to his right but doesn't need them, lifting a superb finish high past Edouard Mendy.",
+              "dp": 1
             },
             {
               "t": "SEN",
@@ -10415,7 +10575,8 @@
               "a": "Mane",
               "id": "401889",
               "aid": "353790",
-              "desc": "Sadio Mane does brilliantly to retain possession and keep the move alive down the left. When he gets it back, he slides it on for Ismaila Sarr, who shows tremendous strength before dispatching his finish past the onrushing Orjan Nyland. The Norway goalkeeper gets a hand to it, but cannot keep the ball out."
+              "desc": "Sadio Mane does brilliantly to keep possession and the move alive down the left. Getting it back, he slides it to Ismaila Sarr, who shows tremendous strength before burying his finish past the onrushing Orjan Nyland. The Norway keeper gets a hand to it but can't keep it out.",
+              "dp": 1
             },
             {
               "t": "NOR",
@@ -10424,7 +10585,8 @@
               "a": "Berg",
               "id": "419652",
               "aid": "483442",
-              "desc": "Another World Cup double for one of the best strikers in the business. Senegal don't clear their lines as a ball comes in from the right, allowing Antonio Nusa to pounce and feed Patrick Berg to his left. The cross is right on the money, and the finish from Haaland - on the volley and off the underside of the bar - is even better."
+              "desc": "Another World Cup double for one of the finest strikers around. Senegal fail to clear their lines from a ball in off the right, letting Antonio Nusa pounce and feed Patrick Berg to his left. The cross is spot on, and Haaland's finish — a volley off the underside of the bar — is even better.",
+              "dp": 1
             },
             {
               "t": "SEN",
@@ -10433,7 +10595,8 @@
               "a": "Jackson",
               "id": "401889",
               "aid": "418795",
-              "desc": "Senegal reduce the arrears through Ismaila Sarr's second of the contest. A great first touch on the penalty spot takes him away from the defender, and he makes no mistake with his finish. Six minutes or so for the Lions of Teranga to find an equaliser..."
+              "desc": "Senegal pull one back through Ismaila Sarr's second of the game. A great first touch on the penalty spot takes him clear of his marker, and he makes no mistake with the finish. Around six minutes for the Lions of Teranga to find a leveller...",
+              "dp": 1
             }
           ],
           "venue": "New York/New Jersey Stadium",
@@ -10543,7 +10706,8 @@
               "p": "Dembele",
               "m": "7'",
               "id": "398680",
-              "desc": "It takes six minutes for Ousmane Dembele to open the scoring for France. Released by Kylian Mbappe's crossfield pass, Dembele has acres of space to invade down the right and then cuts into the area to flash an unstoppable shot past Egil Selvik. It's his ninth international goal."
+              "desc": "It takes six minutes for Ousmane Dembele to break the deadlock for France. Freed by Kylian Mbappe's crossfield pass, Dembele has acres of room to attack down the right before cutting inside to flash an unstoppable shot past Egil Selvik. His ninth international goal.",
+              "dp": 1
             },
             {
               "t": "FRA",
@@ -10552,7 +10716,8 @@
               "a": "Mbappe",
               "id": "398680",
               "aid": "389867",
-              "desc": "Ousmane Dembele again! The France forward receives from Kylian Mbappe and advances inside from the right while Mbappe makes the decoy run, enabling Dembele to execute a perfect finish that curves away from the goalkeeper."
+              "desc": "Ousmane Dembele again! The France forward takes a pass from Kylian Mbappe and cuts inside from the right as Mbappe makes the decoy run, letting Dembele curl a perfect finish away from the goalkeeper.",
+              "dp": 1
             },
             {
               "t": "NOR",
@@ -10561,7 +10726,8 @@
               "a": "Schjelderup",
               "id": "494627",
               "aid": "494626",
-              "desc": "Norway have one back! Winger Thelo Aasgaard, who has a Norwegian father and a French mother, dummies inside Dayot Upamecano and also wrong-foots goalkeeper Mike Maignan with a fine low strike. No Les Bleus player touched the ball between France's second goal and Norway's instant reply."
+              "desc": "Norway pull one back! Winger Thelo Aasgaard — Norwegian father, French mother — dummies inside Dayot Upamecano and wrong-foots goalkeeper Mike Maignan with a fine low strike. No Les Bleus player touched the ball between France's second goal and Norway's instant reply.",
+              "dp": 1
             },
             {
               "t": "FRA",
@@ -10570,7 +10736,8 @@
               "a": "Tchouameni",
               "id": "398680",
               "aid": "405893",
-              "desc": "Ousmane Dembele produces the exact same finish as his last one to complete a 32nd-minute hat-trick. The goalkeeper is unsighted and Dembele flashes another unerring finish into the far post. It's the third treble of this tournament."
+              "desc": "Ousmane Dembele repeats his previous finish exactly to complete a 32nd-minute hat-trick. With the goalkeeper unsighted, Dembele flashes another unerring effort into the far post. It's the third treble of this tournament.",
+              "dp": 1
             },
             {
               "t": "FRA",
@@ -10579,7 +10746,8 @@
               "a": "Barcola",
               "id": "464114",
               "aid": "484860",
-              "desc": "4-1: A beautiful header from Desire Doue who redirects Bradley Barcola's cross beyond Egil Selvik. It's a goal that adds gloss to this French win."
+              "desc": "4-1: A beautiful header from Desire Doue, who redirects Bradley Barcola's cross past Egil Selvik. A goal that adds gloss to this French win.",
+              "dp": 1
             }
           ],
           "venue": "Boston Stadium",
@@ -10707,7 +10875,8 @@
               "a": "Seck",
               "id": "486130",
               "aid": "370171",
-              "desc": "Habib Diarra strikes first for Senegal, turning home Seck's header to put the Lions of Teranga in front. It's a dream start for the African side."
+              "desc": "Habib Diarra strikes first for Senegal, turning home Seck's header to put the Lions of Teranga ahead. A dream start for the African side.",
+              "dp": 1
             },
             {
               "t": "SEN",
@@ -10716,7 +10885,8 @@
               "a": "Camara",
               "id": "401889",
               "aid": "464842",
-              "desc": "From close range, Ismaila Sarr scores his fourth World Cup goal for Senegal. He's overtake Papa Bouba Diop as his country's all-time leading goalscorer at the tournament."
+              "desc": "From close range, Ismaila Sarr nets his fourth World Cup goal for Senegal, moving past Papa Bouba Diop as his country's all-time leading scorer at the tournament.",
+              "dp": 1
             },
             {
               "t": "SEN",
@@ -10725,7 +10895,8 @@
               "a": "Sarr",
               "id": "431788",
               "aid": "401889",
-              "desc": "Just seconds after coming on a substitute, Gueye has unleashed a thunderous left-foot shot into the roof of the net from 20 yards out. Unbelievable hit - one of the goals of the tournament so far."
+              "desc": "Just seconds after coming on as a substitute, Gueye unleashes a thunderous left-foot strike into the roof of the net from 20 yards. Unbelievable hit — one of the goals of the tournament so far.",
+              "dp": 1
             },
             {
               "t": "SEN",
@@ -10734,7 +10905,8 @@
               "a": "Ndiaye",
               "id": "431788",
               "aid": "448815",
-              "desc": "He's done it again! Senegal make it four and super sub Gueye has a second. That one may have been closer to 100 km/h. Just not possible to save strikes like that."
+              "desc": "He's done it again! Senegal make it four, and super-sub Gueye has his second. That one may have been nearer 100 km/h — simply impossible to save strikes like that.",
+              "dp": 1
             },
             {
               "t": "SEN",
@@ -10743,7 +10915,8 @@
               "a": "Gueye",
               "id": "448815",
               "aid": "431788",
-              "desc": "Another wonder-goal for Senegal. This time from Ndiaye. Right foot. Fiercely struck. Top corner."
+              "desc": "Another wonder-goal for Senegal, this time from Ndiaye. Right foot. Fiercely hit. Top corner.",
+              "dp": 1
             }
           ],
           "venue": "Toronto Stadium",
@@ -10945,14 +11118,16 @@
               "a": "De Paul",
               "id": "229397",
               "aid": "428882",
-              "desc": "It is a GOLAZO from Messi! The legendary No10 collects a ball in the middle, surges toward the area and unleashes a left-footed laser to beat Zidane for his 14th.... yes, 14th World Cup goal!!"
+              "desc": "A GOLAZO from Messi! The legendary No10 picks the ball up centrally, surges towards the box and unleashes a left-footed laser past Zidane for his 14th... yes, 14th World Cup goal!!",
+              "dp": 1
             },
             {
               "t": "ARG",
               "p": "Messi",
               "m": "60'",
               "id": "229397",
-              "desc": "Argentina double their lead, as Zidane can't handle a sizzling Alexis Mac Allister strike from distance and Messi is there to clean up the rebound, coolly sweeping home for the goal. 15 World Cup goals!"
+              "desc": "Argentina double their lead as Zidane can't hold a sizzling Alexis Mac Allister strike from distance, and Messi is there to tidy up the rebound, coolly sweeping home. 15 World Cup goals!",
+              "dp": 1
             },
             {
               "t": "ARG",
@@ -10961,7 +11136,8 @@
               "a": "Gonzalez",
               "id": "229397",
               "aid": "430631",
-              "desc": "He's done it again! Incredible! Messi the beneficiary of a brilliant build-up and he polishes it off as only he can, with a superb left-footed strike to give himself a trio of goals on the night. He has 16 World Cup goals, tying Miroslav Klose for the all-time mark! It is also Messi's first World Cup hat-trick."
+              "desc": "He's done it again! Incredible! Messi benefits from a brilliant build-up and finishes as only he can, a superb left-footed strike completing his treble on the night. That's 16 World Cup goals, drawing him level with Miroslav Klose's all-time mark — and it's Messi's first World Cup hat-trick.",
+              "dp": 1
             }
           ],
           "venue": "Kansas City Stadium",
@@ -11079,7 +11255,8 @@
               "a": "Schlager",
               "id": "463283",
               "aid": "385531",
-              "desc": "A wonderful, curling effort from the top of the D from Romano Schmid fires Austria in front. The Austrian forward with his fourth international goal."
+              "desc": "A wonderful curling effort from the top of the D by Romano Schmid fires Austria ahead — the forward's fourth international goal.",
+              "dp": 1
             },
             {
               "t": "JOR",
@@ -11088,7 +11265,8 @@
               "a": "Noor Alrawabdeh",
               "id": "431212",
               "aid": "431230",
-              "desc": "Another fantastic goal as Jordan draw level. A wonderful run and finish from the top scorer at last year's FIFA Arab Cup, with his curling effort taking a touch off the post on its way past Alexander Schlager."
+              "desc": "Another fantastic goal as Jordan level. A wonderful run and finish from the top scorer at last year's FIFA Arab Cup, his curling effort clipping the post on its way past Alexander Schlager.",
+              "dp": 1
             },
             {
               "t": "AUT",
@@ -11102,7 +11280,8 @@
               "m": "90'+12'",
               "pen": true,
               "id": "299200",
-              "desc": "A late penalty from Austria's record-scorer extends his own goal tally to 48 and makes the points safe for the Europeans."
+              "desc": "A late penalty from Austria's record scorer takes his personal tally to 48 and secures the points for the Europeans.",
+              "dp": 1
             }
           ],
           "venue": "San Francisco Bay Area Stadium",
@@ -11234,14 +11413,16 @@
               "a": "Medina",
               "id": "229397",
               "aid": "418963",
-              "desc": "Lionel Messi has swept home his fourth goal of this tournament ... and his record 17th on the World Cup stage!"
+              "desc": "Lionel Messi sweeps home his fourth goal of this tournament ... and his record 17th on the World Cup stage!",
+              "dp": 1
             },
             {
               "t": "ARG",
               "p": "Messi",
               "m": "90'+5'",
               "id": "229397",
-              "desc": "Lionel Messi, two days shy of his 39th birthday, plays in moments but what moments from world football's man of the moment. He knows exactly where to be on the pitch to deploy his enduring magic. What an incredible display from the Argentina skipper to earn his nation's second win of this campaign ... and break that World Cup scoring record."
+              "desc": "Lionel Messi, two days short of his 39th birthday, picks his moments — and what moments from world football's man of the hour. He knows exactly where to be to conjure his enduring magic. An incredible display from the Argentina skipper to secure his nation's second win of the campaign ... and break that World Cup scoring record.",
+              "dp": 1
             }
           ],
           "venue": "Dallas Stadium",
@@ -11389,7 +11570,8 @@
               "a": "Mousa Altamari",
               "id": "433534",
               "aid": "431211",
-              "desc": "Algeria have dominated the opening period but Jordan soaked up the pressure and made the breakthrough as Nizar Alrashdan strikes the ball beautifully with the outside of his boot."
+              "desc": "Algeria have dominated the opening period, but Jordan soaked up the pressure and struck first as Nizar Alrashdan hits it beautifully with the outside of his boot.",
+              "dp": 1
             },
             {
               "t": "ALG",
@@ -11398,7 +11580,8 @@
               "a": "Mahrez",
               "id": "520071",
               "aid": "379942",
-              "desc": "It has been coming. Algeria level the scores after Nadhir Benbouali rises high to head in a corner. It their first goal in a World Cup finals since Brazil 2014. What a finish we have in store?"
+              "desc": "It had been coming. Algeria draw level as Nadhir Benbouali climbs high to head in a corner — their first goal at a World Cup finals since Brazil 2014. What a finish we have in store?",
+              "dp": 1
             },
             {
               "t": "ALG",
@@ -11532,14 +11715,16 @@
               "a": "Alaba",
               "id": "299200",
               "aid": "316002",
-              "desc": "The Austrian shook off some pain in his leg and chased down a long ball over the top to open the scoring."
+              "desc": "The Austrian shrugged off some pain in his leg to chase down a long ball over the top and open the scoring.",
+              "dp": 1
             },
             {
               "t": "ALG",
               "p": "Belghali",
               "m": "45'",
               "id": "511009",
-              "desc": "Les Fennecs had been looking dangerous, creating chance after chance. Belghali skillfully beat three defenders and smashed it into the roof of the net!"
+              "desc": "Les Fennecs had looked dangerous, creating chance after chance. Belghali skilfully beat three defenders and smashed it into the roof of the net!",
+              "dp": 1
             },
             {
               "t": "AUT",
@@ -11556,7 +11741,8 @@
               "a": "Aouar",
               "id": "379942",
               "aid": "430698",
-              "desc": "Algeria levels through Riyad Mahrez! The former Manchester City man finished sweetly at the near post. There is no way this ends 2-2."
+              "desc": "Algeria level through Riyad Mahrez! The former Manchester City man finishes sweetly at the near post. There's no way this ends 2-2.",
+              "dp": 1
             },
             {
               "t": "ALG",
@@ -11565,7 +11751,8 @@
               "a": "Aouar",
               "id": "379942",
               "aid": "430698",
-              "desc": "The last-minute goal surely means Algeria will finish in second place! A smooth finish to the far corner with his weak foot."
+              "desc": "This last-minute goal surely means Algeria will finish second! A smooth finish into the far corner with his weaker foot.",
+              "dp": 1
             },
             {
               "t": "AUT",
@@ -11574,7 +11761,8 @@
               "a": "Gregoritsch",
               "id": "430100",
               "aid": "401131",
-              "desc": "We all thought Mahrez scored the winner, but Sasa Kalajdzic just headed Austria right back into second place!"
+              "desc": "We all thought Mahrez had won it, but Sasa Kalajdzic has just headed Austria straight back into second place!",
+              "dp": 1
             }
           ],
           "venue": "Kansas City Stadium",
@@ -11688,7 +11876,8 @@
               "p": "Lo Celso",
               "m": "19'",
               "id": "395414",
-              "desc": "Stunning free-kick from Giovani Lo Celso. One of the nine Argentina changes earns a smile of approval from Lionel Messi after curling a peach of a left-footed free-kick home from the top of the box."
+              "desc": "A stunning free-kick from Giovani Lo Celso. One of Argentina's nine changes draws a smile of approval from Lionel Messi, curling a peach of a left-footed free-kick home from the top of the box.",
+              "dp": 1
             },
             {
               "t": "ARG",
@@ -11696,7 +11885,8 @@
               "m": "31'",
               "pen": true,
               "id": "402920",
-              "desc": "Mousa Al Tamari pegs one back for Jordan. A wonderful curling ball from the right from Ehsan Haddad is met by the halftime substitute, who guides the ball past Emi Martinez to give Jordan a lifeline."
+              "desc": "Mousa Al Tamari pulls one back for Jordan. A wonderful curling delivery from the right by Ehsan Haddad is met by the half-time substitute, who steers it past Emi Martinez to hand Jordan a lifeline.",
+              "dp": 1
             },
             {
               "t": "JOR",
@@ -11711,7 +11901,8 @@
               "p": "Messi",
               "m": "80'",
               "id": "229397",
-              "desc": "Lionel Messi with a wonderful free-kick to extend both Argentina's lead and his own scoring record. The iconic No10 keeps it low, curls it around the wall and into the far corner of the goal."
+              "desc": "Lionel Messi with a wonderful free-kick to extend both Argentina's lead and his own scoring record. The iconic No10 keeps it low, bending it around the wall and into the far corner.",
+              "dp": 1
             }
           ],
           "venue": "Dallas Stadium",
@@ -11899,7 +12090,8 @@
               "a": "Pedro Neto",
               "id": "484141",
               "aid": "418548",
-              "desc": "Joao Neves scores his fourth goal for his country with a terrific header from a left-wing cross by Pedro Neto."
+              "desc": "Joao Neves nets his fourth goal for his country with a terrific header from Pedro Neto's left-wing cross.",
+              "dp": 1
             },
             {
               "t": "COD",
@@ -11908,7 +12100,8 @@
               "a": "Masuaku",
               "id": "441316",
               "aid": "436572",
-              "desc": "It's a goal 52 years in the making as Yoane Wissa gets up to direct a firm header over the reach of goalkeeper Diogo Costa from Arthur Masuaka's inswinging cross."
+              "desc": "A goal 52 years in the making as Yoane Wissa rises to steer a firm header beyond the reach of goalkeeper Diogo Costa from Arthur Masuaka's inswinging cross.",
+              "dp": 1
             }
           ],
           "venue": "Houston Stadium",
@@ -12045,14 +12238,16 @@
               "a": "Diaz",
               "id": "431200",
               "aid": "428886",
-              "desc": "Colombia opens the scoring through Daniel Munoz. The right-back found himself in the box and flicked in a beautiful ball from Luis Diaz. The goal continues Colombia's streak of never having a goalless World Cup match."
+              "desc": "Colombia break the deadlock through Daniel Munoz. The right-back popped up in the box to flick in a beautiful Luis Diaz ball, extending Colombia's run of never playing out a goalless World Cup match.",
+              "dp": 1
             },
             {
               "t": "UZB",
               "p": "Fayzullaev",
               "m": "60'",
               "id": "464933",
-              "desc": "Uzbekistan scores its first-ever goal at the World Cup. The Asian side has been growing into the game in the past few minutes, and Shomurodov's strong volley created enough of an opening for Fayzullaev to knock in the rebound."
+              "desc": "Uzbekistan score their first-ever World Cup goal. The Asian side had been growing into the game over the past few minutes, and Shomurodov's powerful volley opened up enough for Fayzullaev to bundle in the rebound.",
+              "dp": 1
             },
             {
               "t": "COL",
@@ -12061,7 +12256,8 @@
               "a": "Puerta",
               "id": "428886",
               "aid": "463902",
-              "desc": "The Bayern winger played a pivotal role, delivering crosses and creating danger down the wing before netting Colombia's second goal."
+              "desc": "The Bayern winger was pivotal, delivering crosses and creating danger down the flank before netting Colombia's second.",
+              "dp": 1
             },
             {
               "t": "COL",
@@ -12070,7 +12266,8 @@
               "a": "Hernandez",
               "id": "405755",
               "aid": "418881",
-              "desc": "With time about to run out La Tricolor scores another one to ensure that they go top of the group with a two-goal margin! Campaz with the powerful header!"
+              "desc": "With time almost up, La Tricolor add another to make sure they top the group by a two-goal margin! Campaz with the powerful header!",
+              "dp": 1
             }
           ],
           "venue": "Mexico City Stadium",
@@ -12198,7 +12395,8 @@
               "a": "Joao Cancelo",
               "id": "201200",
               "aid": "368649",
-              "desc": "Ronaldo becomes the first man to score in six World Cups as he sweeps home Cancelo's right-wing cross. Incredible!"
+              "desc": "Ronaldo becomes the first man to score at six World Cups, sweeping home Cancelo's right-wing cross. Incredible!",
+              "dp": 1
             },
             {
               "t": "POR",
@@ -12213,7 +12411,8 @@
               "a": "Bruno Fernandes",
               "id": "201200",
               "aid": "395206",
-              "desc": "Two for Ronaldo. Cool as you like with the finish, Superb through-ball from Bruno Fernandes and Ronaldo makes no mistake to slide it into the bottom corner. Portugal cruising now."
+              "desc": "Two for Ronaldo. Cool as you like with the finish — a superb Bruno Fernandes through-ball, and Ronaldo makes no mistake, sliding it into the bottom corner. Portugal are cruising now.",
+              "dp": 1
             },
             {
               "t": "POR",
@@ -12226,7 +12425,8 @@
               "p": "Rafael Leao",
               "m": "87'",
               "id": "418550",
-              "desc": "As we were saying... Super sub Rafael Leao makes it five for Portugal with a very tidy finish indeed."
+              "desc": "As we were saying... super-sub Rafael Leao makes it five for Portugal with a very tidy finish indeed.",
+              "dp": 1
             }
           ],
           "venue": "Houston Stadium",
@@ -12360,7 +12560,8 @@
               "a": "Quintero",
               "id": "431200",
               "aid": "356704",
-              "desc": "It has taken 75 minutes but Colombia have finally broken the deadlock thanks to dangerman Daniel Munoz, with a curling effort at the near post, which comes off a deflection. It is redemption for Munoz who missed a chance early on. The South Americans are on course for the knockout rounds."
+              "desc": "It's taken 75 minutes, but Colombia have finally broken the deadlock through dangerman Daniel Munoz, his curling near-post effort going in off a deflection. Redemption for Munoz, who spurned a chance early on. The South Americans are on course for the knockouts.",
+              "dp": 1
             }
           ],
           "venue": "Guadalajara Stadium",
@@ -12594,7 +12795,8 @@
               "a": "Mozgovoy",
               "id": "385475",
               "aid": "479106",
-              "desc": "Uzbekistan's bright start is rewarded as Eldor Shomurodov races onto a flicked header, before lifting an audacious looped finish over Lionel Mpasi. Make sure to watch that on the match highlights!"
+              "desc": "Uzbekistan's bright start pays off as Eldor Shomurodov races onto a flicked header before lifting an audacious looped finish over Lionel Mpasi. Be sure to catch that one on the highlights!",
+              "dp": 1
             },
             {
               "t": "COD",
@@ -12602,14 +12804,16 @@
               "m": "68'",
               "pen": true,
               "id": "441316",
-              "desc": "The referee points straight to the spot as Abdukodir Khusanov catches the outstretched boot of Yoane Wissa, who dusts himself off to send the goalkeeper the wrong way. Congo DR are now just one goal away from a place in the Round of 32..."
+              "desc": "The referee points straight to the spot after Abdukodir Khusanov catches the outstretched boot of Yoane Wissa, who picks himself up to send the keeper the wrong way. Congo DR are now just one goal from a Round of 32 place...",
+              "dp": 1
             },
             {
               "t": "COD",
               "p": "Mayele",
               "m": "78'",
               "id": "477859",
-              "desc": "Congo DR score the goal that could take them through. It's two of the substitutes who combine as Fiston Mayele reacts fastest to Meschack Elia's deflected shot, dinking a very cute finish over the advancing Abduvohid Nematov."
+              "desc": "Congo DR score the goal that could send them through. Two substitutes combine as Fiston Mayele reacts quickest to Meschack Elia's deflected shot, dinking a delightful finish over the advancing Abduvohid Nematov.",
+              "dp": 1
             },
             {
               "t": "COD",
@@ -12618,7 +12822,8 @@
               "a": "Elia",
               "id": "441316",
               "aid": "426506",
-              "desc": "Yoane Wissa with a great turn and 18-yard finish to seal the deal. Meschak Elia did really well to keep the ball in play after Fiston Mayele dragged a shot wide. The angles were all against Wissa, but he carved out a chance and somehow found the far corner."
+              "desc": "Yoane Wissa with a great turn and 18-yard finish to seal it. Meschak Elia did superbly to keep the ball alive after Fiston Mayele dragged a shot wide. The angles were all against Wissa, but he made a chance and somehow found the far corner.",
+              "dp": 1
             }
           ],
           "venue": "Atlanta Stadium",
@@ -12818,7 +13023,8 @@
               "m": "12'",
               "pen": true,
               "id": "369419",
-              "desc": "Noni Madueke was a bit of a surprise starter but in the early going he has impressed by winning the penalty that led to Kane's conversion and several incisive runs down the left flank."
+              "desc": "Noni Madueke was something of a surprise starter, but early on he's impressed — winning the penalty that led to Kane's conversion and making several incisive runs down the left.",
+              "dp": 1
             },
             {
               "t": "CRO",
@@ -12835,7 +13041,8 @@
               "a": "Rice",
               "id": "369419",
               "aid": "433097",
-              "desc": "The stars are out at this World Cup and Harry Kane has joined in on the fun. A day after Kylian Mbappe of France and Norway's Erling Haaland bagged braces, plus Lionel Messi's sublime hat-trick, Kane has become the latest goalscoring hero with a first-half double against Croatia. An epic Golden Boot race is shaping up!"
+              "desc": "The stars are shining at this World Cup, and Harry Kane has joined the party. A day after France's Kylian Mbappe and Norway's Erling Haaland bagged braces, plus Lionel Messi's sublime hat-trick, Kane is the latest goalscoring hero with a first-half double against Croatia. An epic Golden Boot race is brewing!",
+              "dp": 1
             },
             {
               "t": "CRO",
@@ -12844,7 +13051,8 @@
               "a": "Perisic",
               "id": "389754",
               "aid": "359381",
-              "desc": "A wonderfully open first 45 minutes delivered four goals, including a brace for England superstar striker Harry Kane and a dramatic finish in the final seconds before intermission from Petar Musa, who plays his club football in Dallas. What else is going to happen here today???"
+              "desc": "A wonderfully open first 45 minutes produced four goals, including a brace for England superstar Harry Kane and a dramatic strike in the final seconds before the break from Petar Musa, who plays his club football in Dallas. What else can happen here today???",
+              "dp": 1
             },
             {
               "t": "ENG",
@@ -12970,7 +13178,8 @@
               "p": "Yirenkyi",
               "m": "90'+5'",
               "id": "506279",
-              "desc": "Ghana have surely won it!   Caleb Yirenkyi has just scored to send the Ghana fans absolutely crazy – and the Panama supporters into despair.   It comes from a lightning-quick counter-attack, with Thomas-Asante hurtling forward at speed before playing a precision pass into the area for Yirenkyi, who was left with the simplest of tasks to tap home."
+              "desc": "Ghana have surely won it! Caleb Yirenkyi has scored to send the Ghana fans wild — and the Panama supporters into despair. It stems from a lightning counter, Thomas-Asante charging forward before slipping a precise pass into the box for Yirenkyi, left with the simplest of tasks to tap home.",
+              "dp": 1
             }
           ],
           "venue": "Toronto Stadium",
@@ -13210,7 +13419,8 @@
               "a": "Stanisic",
               "id": "430070",
               "aid": "433667",
-              "desc": "Croatia break the deadlock! A deep cross in front of net and all alone at the back post is Budimir, who came on as a second half sub. It is a cruel blow for Panama, who have been very good thus far, but one lapse and the experience of Croatia has made them pay."
+              "desc": "Croatia break the deadlock! A deep cross to the back post finds Budimir, on as a second-half sub, all alone. A cruel blow for Panama, who'd been very good until now, but one lapse and Croatia's experience has made them pay.",
+              "dp": 1
             }
           ],
           "venue": "Toronto Stadium",
@@ -13333,7 +13543,8 @@
               "a": "Saka",
               "id": "448202",
               "aid": "448196",
-              "desc": "A set-piece goal for Jude Bellingham as he sticks out a leg to poke Bukayo Saka's corner into the bottom corner under pressure from Jorge Gutierrez."
+              "desc": "A set-piece goal for Jude Bellingham, who stretches out a leg to poke Bukayo Saka's corner into the bottom corner under pressure from Jorge Gutierrez.",
+              "dp": 1
             },
             {
               "t": "ENG",
@@ -13342,7 +13553,8 @@
               "a": "Bellingham",
               "id": "369419",
               "aid": "448202",
-              "desc": "Harry Kane becomes England's 11-goal all-time top scorer in World Cup finals ahead of Gary Lineker by heading in from Jude Bellingham's perfect cross following a positive run by the midfielder."
+              "desc": "Harry Kane becomes England's all-time top scorer at World Cup finals on 11 goals, moving ahead of Gary Lineker, heading in Jude Bellingham's perfect cross after a positive run by the midfielder.",
+              "dp": 1
             }
           ],
           "venue": "New York/New Jersey Stadium",
@@ -13477,7 +13689,8 @@
               "a": "Kovacic",
               "id": "485066",
               "aid": "339987",
-              "desc": "What a shot from the Inter Milan midfielder. Perfect placement in the far corner."
+              "desc": "What a strike from the Inter Milan midfielder. Perfectly placed into the far corner.",
+              "dp": 1
             },
             {
               "t": "GHA",
@@ -13486,7 +13699,8 @@
               "a": "Nuamah",
               "id": "520037",
               "aid": "448525",
-              "desc": "After a VAR review, Luckassen's finish is deemed valid! The Black Stars have turned the game around. The goal puts the Black Stars in second place in the group."
+              "desc": "After a VAR review, Luckassen's finish stands! The Black Stars have turned the game around, the goal lifting them into second place in the group.",
+              "dp": 1
             },
             {
               "t": "CRO",
@@ -13495,7 +13709,8 @@
               "a": "Modric",
               "id": "409191",
               "aid": "241559",
-              "desc": "Just 10 minutes between the two second half goals. What a great header from Vlasic! Croatia jump back into second place in the group. We have a thrilling finale on our hands."
+              "desc": "Only 10 minutes between the two second-half goals. What a header from Vlasic! Croatia leap back into second place in the group. We have a thrilling finale on our hands.",
+              "dp": 1
             }
           ],
           "venue": "Philadelphia Stadium",
