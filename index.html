@@ -780,6 +780,8 @@ function flagImg(iso, w){
   im.style.cssText = 'width:' + w + 'px;height:' + Math.round(w * 0.72) + 'px;object-fit:cover;border-radius:2px;flex:none;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.18);';
   return im;
 }
+// FIFA Fantasy player pool (fantasy.json) — lazy-loaded once when the tab opens.
+let FANTASY_DATA = null;
 // Map every FIFA player id to their headshot URL, built once from the squads.
 let PIC_BY_ID = null;
 function picById(id){
@@ -1482,7 +1484,7 @@ function openScorersModal(){
   const overlay = el('div', 'position:fixed;left:0;top:0;width:100%;height:100vh;height:100dvh;z-index:100;display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;background:rgba(6,6,8,.55);');
   overlay.id = 'team-modal';
   overlay.addEventListener('click', e => { if (e.target === overlay) closeTeamModal(); });
-  const panel = el('div', "position:relative;width:min(94vw,480px);max-height:88vh;max-height:88dvh;overflow:auto;background:" + pal.panel + ';color:' + pal.text + ";border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);font-family:'Barlow',system-ui,sans-serif;padding:18px 18px 20px;");
+  const panel = el('div', "position:relative;width:min(94vw,540px);max-height:88vh;max-height:88dvh;overflow:auto;background:" + pal.panel + ';color:' + pal.text + ";border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);font-family:'Barlow',system-ui,sans-serif;padding:18px 18px 20px;");
   const x = document.createElement('button');
   x.textContent = '×'; x.type = 'button'; x.setAttribute('aria-label', 'Close');
   x.style.cssText = 'position:absolute;top:8px;right:12px;border:none;background:transparent;color:' + pal.text + ';font-size:24px;line-height:1;cursor:pointer;opacity:.5;';
@@ -1836,6 +1838,61 @@ function openScorersModal(){
     return box;
   };
 
+  // FIFA Fantasy player pool — per-position, ordered by ownership % or points.
+  const fantasyView = () => {
+    const box = el('div', 'margin-top:8px;');
+    let pos = 'FWD', sortKey = 'o';
+    const POS = ['GK', 'DEF', 'MID', 'FWD'];
+    const ctrl = el('div', 'display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:4px 0 8px;');
+    const posBar = el('div', 'display:flex;gap:6px;'), posBtns = {};
+    const posCss = on => 'flex:none;border:1px solid ' + (on ? accent : pal.line) + ';background:' + (on ? accent : 'transparent') + ';color:' + (on ? '#fff' : pal.sub) + ";border-radius:20px;padding:4px 12px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.4px;";
+    POS.forEach(k => { const b = document.createElement('button'); b.type = 'button'; b.textContent = k; b.onclick = () => { pos = k; paint(); }; posBtns[k] = b; posBar.appendChild(b); });
+    const sortBar = el('div', 'display:flex;border:1px solid ' + pal.line + ';border-radius:20px;overflow:hidden;'), sortBtns = {};
+    const sortCss = on => 'flex:none;border:none;background:' + (on ? accent : 'transparent') + ';color:' + (on ? '#fff' : pal.sub) + ";cursor:pointer;padding:4px 11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;";
+    [['o', 'OWNED %'], ['pts', 'POINTS']].forEach(([k, lbl]) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl; b.onclick = () => { sortKey = k; paint(); }; sortBtns[k] = b; sortBar.appendChild(b); });
+    ctrl.appendChild(posBar); ctrl.appendChild(sortBar); box.appendChild(ctrl);
+    const listBox = el('div'); box.appendChild(listBox);
+    const fanFlag = abbr => el('span', "width:32px;flex:none;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.3px;color:" + pal.sub + ';border:1px solid ' + pal.line + ';border-radius:4px;padding:3px 0;', abbr);
+    function paint(){
+      POS.forEach(k => posBtns[k].style.cssText = posCss(k === pos));
+      ['o', 'pts'].forEach(k => sortBtns[k].style.cssText = sortCss(k === sortKey));
+      listBox.textContent = '';
+      if (!FANTASY_DATA){ listBox.appendChild(el('div', 'margin-top:16px;font-size:13px;color:' + pal.sub + ';', 'Loading fantasy data…')); return; }
+      const rows = FANTASY_DATA.players.filter(p => p.pos === pos).slice()
+        .sort((a, b) => (b[sortKey] - a[sortKey]) || (b.o - a.o) || (b.pts - a.pts));
+      const head = el('div', "display:flex;align-items:center;gap:10px;padding:0 2px 6px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.5px;color:" + pal.sub + ';border-bottom:1px solid ' + pal.line + ';');
+      head.appendChild(el('span', 'width:22px;flex:none;', '#'));
+      head.appendChild(el('span', 'flex:1;', 'PLAYER'));
+      head.appendChild(el('span', 'width:38px;text-align:right;flex:none;', 'PRICE'));
+      head.appendChild(el('span', 'width:52px;text-align:right;flex:none;' + (sortKey === 'o' ? 'color:' + accent + ';' : ''), 'OWNED'));
+      head.appendChild(el('span', 'width:42px;text-align:right;flex:none;' + (sortKey === 'pts' ? 'color:' + accent + ';' : ''), 'PTS'));
+      listBox.appendChild(head);
+      rows.forEach((p, i) => {
+        const dim = p.st && p.st !== 'playing';
+        const row = el('div', 'display:flex;align-items:center;gap:10px;padding:6px 2px;border-bottom:1px solid ' + pal.line + ';' + (dim ? 'opacity:.6;' : ''));
+        row.appendChild(el('span', "width:22px;flex:none;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:" + pal.sub + ';', String(i + 1)));
+        row.appendChild(fanFlag(p.t));
+        const nm = el('div', 'flex:1;min-width:0;');
+        nm.appendChild(el('div', 'font-size:12.5px;font-weight:600;color:' + pal.text + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', p.n));
+        const team = (FANTASY_DATA.teams[p.t] || {}).name || p.t;
+        const flag = (p.st === 'injured' || p.st === 'suspended') ? ' · ' + p.st[0].toUpperCase() + p.st.slice(1) : '';
+        nm.appendChild(el('div', 'font-size:10px;color:' + pal.sub + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', team + flag));
+        row.appendChild(nm);
+        row.appendChild(el('span', 'width:38px;text-align:right;flex:none;font-size:11.5px;color:' + pal.sub + ';', p.pr != null ? String(p.pr) : '–'));
+        row.appendChild(el('span', "width:52px;text-align:right;flex:none;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;color:" + (sortKey === 'o' ? accent : pal.text) + ';', p.o + '%'));
+        row.appendChild(el('span', "width:42px;text-align:right;flex:none;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;color:" + (sortKey === 'pts' ? accent : pal.text) + ';', String(p.pts)));
+        listBox.appendChild(row);
+      });
+      listBox.appendChild(el('div', 'margin-top:9px;font-size:10px;color:' + pal.sub + ';text-align:center;', rows.length + ' ' + pos + ' · FIFA Fantasy ownership & points, this season'));
+    }
+    paint();
+    if (!FANTASY_DATA){
+      fetch('fantasy.json').then(r => r.ok ? r.json() : Promise.reject(r.status)).then(d => { FANTASY_DATA = d; paint(); })
+        .catch(() => { listBox.textContent = ''; listBox.appendChild(el('div', 'margin-top:16px;font-size:13px;color:' + pal.sub + ';', 'Could not load fantasy data.')); });
+    }
+    return box;
+  };
+
   const tabBar = el('div', 'display:flex;flex-wrap:nowrap;column-gap:10px;overflow-x:auto;scrollbar-width:none;margin:2px 28px 0 0;border-bottom:1px solid ' + pal.line + ';');
   const content = el('div', '');
   const tabCss = on => 'flex:none;white-space:nowrap;border:none;background:transparent;cursor:pointer;padding:9px 1px 10px;' +
@@ -1845,7 +1902,7 @@ function openScorersModal(){
   const show = key => {
     Object.keys(btns).forEach(k => { btns[k].style.cssText = tabCss(k === key); });
     content.textContent = '';
-    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches], players: [playersView, Object.keys(DATA.squads || {})], totals: [totalsView, matches] }[key];
+    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches], players: [playersView, Object.keys(DATA.squads || {})], fantasy: [fantasyView, [1]], totals: [totalsView, matches] }[key];
     if (special){
       content.appendChild(special[1].length ? special[0]() : el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
       return;
@@ -1854,7 +1911,7 @@ function openScorersModal(){
     if (items.length) content.appendChild(list(items, 15, key));
     else content.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
   };
-  [['goals', 'Goals'], ['assists', 'Assists'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches'], ['players', 'Players'], ['attendance', 'Attendance'], ['totals', 'Totals']].forEach(([k, lbl]) => {
+  [['goals', 'Goals'], ['assists', 'Assists'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches'], ['players', 'Players'], ['attendance', 'Attendance'], ['fantasy', 'Fantasy'], ['totals', 'Totals']].forEach(([k, lbl]) => {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl;
     b.onclick = () => show(k); btns[k] = b; tabBar.appendChild(b);
   });
