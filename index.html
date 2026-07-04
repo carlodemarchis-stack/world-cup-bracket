@@ -21,9 +21,11 @@
   }
   .match-soon { border-color: #37b56a !important; animation: matchSoon 2s ease-in-out infinite; }
   /* Ambient side-gutter bubble: gentle fade + rise, one at a time when idle. */
-  .wc-bubble { opacity: 0; transform: translateY(10px) scale(.96); transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
-  .wc-bubble.show { opacity: 1; transform: translateY(0) scale(1); }
-  .wc-bubble.hide { opacity: 0; transform: translateY(-14px) scale(.98); transition: opacity .6s ease, transform .7s ease; }
+  /* --wc-scale lets belowMode shrink a card to fit under the circle without
+     fighting the slide animation; transform-origin keeps the top anchored. */
+  .wc-bubble { opacity: 0; transform-origin: top center; transform: translateY(10px) scale(calc(var(--wc-scale, 1) * .96)); transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
+  .wc-bubble.show { opacity: 1; transform: translateY(0) scale(var(--wc-scale, 1)); }
+  .wc-bubble.hide { opacity: 0; transform: translateY(-14px) scale(calc(var(--wc-scale, 1) * .98)); transition: opacity .6s ease, transform .7s ease; }
 
   /* Live controls panel — reproduces the design's own editor props.
      Hidden at start; opened via the gear icon in the footer. */
@@ -2277,8 +2279,9 @@ fetch('data.json', { cache: 'no-store' })
     if (isGoal){ if (item.moreG) extras.push(item.moreG + ' more ' + gW); if (item.moreA) extras.push(item.moreA + ' ' + aW); }
     else { if (item.moreG) extras.push(item.moreG + ' ' + gW); if (item.moreA) extras.push(item.moreA + ' more ' + aW); }
     if (extras.length) t.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12.5px;color:" + accent + ';', '+ ' + extras.join('  ·  ') + ' this game'));
-    // The goal as FIFA told it — the live-blog narrative.
-    if (item.desc){
+    // The goal as FIFA told it — the live-blog narrative. Omitted in belowMode
+    // (mobile, card under the circle) so the shorter card doesn't overlap it.
+    if (item.desc && !belowMode){
       const q = el('div', 'display:flex;gap:7px;margin-top:6px;');
       q.appendChild(el('div', 'width:2px;flex:none;border-radius:2px;background:' + accent + ';'));
       q.appendChild(el('div', 'font-size:12px;font-style:italic;color:' + fg + ';opacity:.85;line-height:1.35;', item.desc));
@@ -2329,10 +2332,12 @@ fetch('data.json', { cache: 'no-store' })
       x = gt.g.x0 + Math.random() * Math.max(0, gt.g.w - 18 - w);
       const yMin = Math.max(96, gt.top + 16), yMax = Math.min(window.innerHeight - h - 30, gt.bottom - h - 16);
       y = yMin + Math.random() * Math.max(0, yMax - yMin);
-    } else {   // centred below the circle; pull up if it would overflow the viewport
+    } else {   // centred below the circle; scale to fit so it never rides up over it
       const cardH = b.offsetHeight || 300;
+      const avail = gt.vh - gt.belowTop - 12;
+      if (cardH > avail) b.style.setProperty('--wc-scale', Math.max(0.7, avail / cardH).toFixed(3));
       x = (gt.vw - w) / 2;
-      y = Math.max(8, Math.min(gt.belowTop, gt.vh - cardH - 12));
+      y = gt.belowTop;   // top anchored just under the circle (transform-origin: top)
     }
     b.style.left = Math.round(x) + 'px'; b.style.top = Math.round(y) + 'px';
     requestAnimationFrame(() => b.classList.add('show'));
