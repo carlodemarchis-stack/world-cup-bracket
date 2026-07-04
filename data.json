@@ -2771,7 +2771,192 @@
     "L:2:2": {
       "date": "Jul 4",
       "time": "19:00",
-      "venue": "Houston Stadium"
+      "venue": "Houston Stadium",
+      "score": "3–0",
+      "winner": "MAR",
+      "ref": "Michael Oliver",
+      "att": 68777,
+      "form": {
+        "CAN": "4-4-2",
+        "MAR": "4-2-3-1"
+      },
+      "num": 90,
+      "goals": [
+        {
+          "t": "MAR",
+          "p": "Ounahi",
+          "m": "50'",
+          "id": "441307",
+          "a": "Hakimi",
+          "aid": "400721",
+          "desc": "Morocco lead from a well-worked set piece: Hakimi rolls a free-kick across the edge of the area to Ounahi, who slots it home through a crowd of bodies.",
+          "dp": 1
+        },
+        {
+          "t": "MAR",
+          "p": "Ounahi",
+          "m": "82'",
+          "id": "441307",
+          "a": "Diaz",
+          "aid": "430740",
+          "desc": "Ounahi lashes into the roof of the net to make it 2-0, Morocco undoing Canada on the break. It's a devastating counter, finished off by Ounahi sweeping home after Diaz squares it to him from the right. Sheer quality.",
+          "dp": 1
+        },
+        {
+          "t": "MAR",
+          "p": "Rahimi",
+          "m": "90'+8'",
+          "id": "433426",
+          "a": "Diaz",
+          "aid": "430740",
+          "desc": "Morocco put the icing on the cake on this anniversary day in the USA. With Canada committed forward, the Atlas Lions slice through on the counter, Diaz releasing substitute Rahimi to slot the third past Crepeau.",
+          "dp": 1
+        }
+      ],
+      "cards": [
+        {
+          "m": "20'",
+          "p": "Halhal",
+          "t": "MAR",
+          "c": "Y",
+          "id": "485767"
+        },
+        {
+          "m": "40'",
+          "p": "Hakimi",
+          "t": "MAR",
+          "c": "Y",
+          "id": "400721"
+        },
+        {
+          "m": "40'",
+          "p": "Laryea",
+          "t": "CAN",
+          "c": "Y",
+          "id": "431696"
+        },
+        {
+          "m": "43'",
+          "p": "David",
+          "t": "CAN",
+          "c": "Y",
+          "id": "441257"
+        },
+        {
+          "m": "45'",
+          "p": "Ounahi",
+          "t": "MAR",
+          "c": "Y",
+          "id": "441307"
+        },
+        {
+          "m": "45'+6'",
+          "p": "El Khannouss",
+          "t": "MAR",
+          "c": "Y",
+          "id": "448612"
+        },
+        {
+          "m": "49'",
+          "p": "De Fougerolles",
+          "t": "CAN",
+          "c": "Y",
+          "id": "480322"
+        },
+        {
+          "m": "67'",
+          "p": "Larin",
+          "t": "CAN",
+          "c": "Y",
+          "id": "390670"
+        }
+      ],
+      "line": {
+        "CAN": {
+          "xi": [
+            "331732",
+            "441252",
+            "480322",
+            "466585",
+            "431696",
+            "485064",
+            "433635",
+            "441257",
+            "486929",
+            "430138",
+            "466687"
+          ],
+          "subs": [
+            [
+              "390670",
+              "486929",
+              "63'"
+            ],
+            [
+              "493970",
+              "466687",
+              "78'"
+            ],
+            [
+              "448411",
+              "431696",
+              "78'"
+            ],
+            [
+              "423933",
+              "430138",
+              "87'"
+            ],
+            [
+              "370986",
+              "485064",
+              "87'"
+            ]
+          ]
+        },
+        "MAR": {
+          "xi": [
+            "356956",
+            "400721",
+            "411680",
+            "403083",
+            "485767",
+            "485760",
+            "441307",
+            "448598",
+            "448612",
+            "485740",
+            "430740"
+          ],
+          "subs": [
+            [
+              "433426",
+              "448598",
+              "22'"
+            ],
+            [
+              "372266",
+              "485760",
+              "63'"
+            ],
+            [
+              "494293",
+              "448612",
+              "63'"
+            ],
+            [
+              "395760",
+              "403083",
+              "87'"
+            ],
+            [
+              "505097",
+              "441307",
+              "87'"
+            ]
+          ]
+        }
+      }
     },
     "L:2:3": {
       "date": "Jul 4",
