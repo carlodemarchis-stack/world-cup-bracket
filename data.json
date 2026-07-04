@@ -2963,7 +2963,129 @@
     "L:2:3": {
       "date": "Jul 4",
       "time": "23:00",
-      "venue": "Philadelphia Stadium"
+      "venue": "Philadelphia Stadium",
+      "score": "1–0",
+      "winner": "FRA",
+      "ref": "Ilgiz Tantashev",
+      "att": 68324,
+      "form": {
+        "PAR": "5-4-1",
+        "FRA": "4-2-3-1"
+      },
+      "num": 89,
+      "goals": [
+        {
+          "t": "FRA",
+          "p": "Mbappe",
+          "m": "70'",
+          "id": "389867",
+          "pen": true,
+          "desc": "Kylian Mbappe tucks a penalty into the corner to put France ahead — it had been coming for Les Bleus. Mbappe has now netted ten goals in his last six FIFA World Cup matches, and 19 in 19 tournament appearances, leaving him just one behind Argentina legend Lionel Messi.",
+          "dp": 1
+        }
+      ],
+      "var": [
+        {
+          "m": "66'",
+          "d": "Penalty given",
+          "x": "Mbappe"
+        }
+      ],
+      "cards": [
+        {
+          "m": "19'",
+          "p": "Barcola",
+          "t": "FRA",
+          "c": "Y",
+          "id": "484860"
+        },
+        {
+          "m": "81'",
+          "p": "Kone",
+          "t": "FRA",
+          "c": "Y",
+          "id": "485677"
+        },
+        {
+          "m": "90'",
+          "p": "Gonzalez",
+          "t": "PAR",
+          "c": "Y"
+        },
+        {
+          "m": "90'+7'",
+          "p": "Olise",
+          "t": "FRA",
+          "c": "Y",
+          "id": "485655"
+        }
+      ],
+      "line": {
+        "PAR": {
+          "xi": [
+            "494531",
+            "486875",
+            "431202",
+            "479601",
+            "369749",
+            "369744",
+            "463128",
+            "369761",
+            "385306",
+            "424422",
+            "441234"
+          ],
+          "subs": [
+            [
+              "520066",
+              "431202",
+              "58'"
+            ],
+            [
+              "485804",
+              "441234",
+              "61'"
+            ],
+            [
+              "463127",
+              "369761",
+              "71'"
+            ],
+            [
+              "495046",
+              "463128",
+              "71'"
+            ]
+          ]
+        },
+        "FRA": {
+          "xi": [
+            "448332",
+            "368860",
+            "389876",
+            "430707",
+            "419177",
+            "485677",
+            "402047",
+            "398680",
+            "389867",
+            "485655",
+            "484860"
+          ],
+          "subs": [
+            [
+              "464114",
+              "484860",
+              "61'"
+            ],
+            [
+              "431861",
+              "398680",
+              "84'"
+            ]
+          ]
+        }
+      }
     },
     "L:3:0": {
       "date": "Jul 10",
