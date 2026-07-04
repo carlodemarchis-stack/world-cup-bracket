@@ -82,6 +82,21 @@
   #controls .val { opacity: .65; font-variant-numeric: tabular-nums; }
   #controls .chk { display: flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; }
   #controls .chk input { width: 15px; height: 15px; }
+
+  /* Wide laptops/desktops: lift the footer's two parts up into the top corners,
+     level with the header's first line. The centered header keeps the middle;
+     the corners are otherwise empty. Narrow/mobile keeps the normal bottom row. */
+  @media (min-width: 1024px) {
+    #site-footer {
+      position: absolute !important;
+      top: 30px !important; left: 16px !important; right: 16px !important;
+      width: auto !important; margin: 0 !important; z-index: 20 !important;
+      align-items: flex-start !important;
+      pointer-events: none !important;   /* empty middle band lets header clicks through */
+    }
+    #site-footer > * { pointer-events: auto !important; }
+    #site-footer > span { flex: 0 1 auto !important; max-width: 30vw !important; }
+  }
 </style>
 </head>
 <body>
@@ -385,7 +400,7 @@ function renderVals(P, DATA) {
       lstyle: finLit?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'' }));
   });
 
-  const rootStyle = 'min-height:100vh;background:'+T.rootBg+';padding:30px 16px 44px;font-family:Barlow,system-ui,sans-serif;box-sizing:border-box;';
+  const rootStyle = 'position:relative;min-height:100vh;background:'+T.rootBg+';padding:30px 16px 44px;font-family:Barlow,system-ui,sans-serif;box-sizing:border-box;';
   const kickerStyle = "font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:4px;text-transform:uppercase;font-size:12px;color:"+T.kickerColor+';';
   const titleStyle = 'font-family:Barlow,sans-serif;font-weight:700;font-size:clamp(26px,4.4vw,42px);margin:4px 0 0;line-height:1.05;color:'+T.titleColor+';';
   const footerStyle = "text-align:center;margin-top:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:"+T.footerColor+';';
@@ -596,6 +611,7 @@ function buildBracket(v){
   root.appendChild(stage);
 
   const footer = el('div', v.footerStyle);
+  footer.id = 'site-footer';
   // Sit above the bracket: the footer's negative top margin overlaps the stage,
   // which is positioned and would otherwise intercept clicks on the gear/link.
   footer.style.position = 'relative';
