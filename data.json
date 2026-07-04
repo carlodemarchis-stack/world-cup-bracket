@@ -915,7 +915,170 @@
     "R:1:4": {
       "date": "Jul 4",
       "time": "00:00",
-      "venue": "Miami Stadium"
+      "venue": "Miami Stadium",
+      "score": "3–2",
+      "winner": "ARG",
+      "et": true,
+      "ref": "Drew Fischer",
+      "att": 64478,
+      "form": {
+        "ARG": "4-4-2",
+        "CPV": "4-1-4-1"
+      },
+      "num": 86,
+      "goals": [
+        {
+          "t": "ARG",
+          "p": "Messi",
+          "m": "29'",
+          "id": "229397",
+          "desc": "More magic from the genius No10! That's Lionel Messi's seventh goal of World Cup 2026, and another special one — the technique needed to finish it, oh my. Lisandro Martinez lofts a pass over the top of the Cabo Verde defence; Messi, his run timed to perfection, kills the ball stone dead with a velvet touch before hammering it into the roof of the net. He is extraordinary.",
+          "dp": 1
+        },
+        {
+          "t": "CPV",
+          "p": "Deroy Duarte",
+          "m": "59'",
+          "id": "477827",
+          "a": "Ryan Mendes",
+          "aid": "355642",
+          "desc": "Unbelievable! Deroy Duarte has just scored a goal that will send shockwaves across the World Cup — perhaps across the world! Cabo Verde have played with real intent and purpose since the second half began, and now they're level. Duarte crashes a shot into the bottom corner, sparking wild celebrations. This World Cup keeps serving up incredible moments.",
+          "dp": 1
+        },
+        {
+          "t": "ARG",
+          "p": "Martinez",
+          "m": "92'",
+          "id": "402921",
+          "a": "Mac Allister",
+          "aid": "430628",
+          "desc": "Lisandro Martinez with the strike! Having set up Argentina's first goal, the centre-back now fires them back in front. A corner is deflected out to Martinez at the back post; he takes a superb touch to make the chance, then sends an unstoppable finish beyond Vozinha.",
+          "dp": 1
+        },
+        {
+          "t": "CPV",
+          "p": "Sidny Lopes Cabral",
+          "m": "103'",
+          "id": "477832",
+          "a": "Yannick Semedo",
+          "aid": "494313",
+          "desc": "Cabo Verde are level again! And this is special from Sidny Lopes Cabral! They've refused to buckle since Lisandro Martinez's goal, and Lopes Cabral has equalised in spectacular style. The bend he gets on this strike is remarkable: wide on the left flank, he cuts inside the penalty box and curls a sumptuous effort into the top corner, leaving Dibu Martinez grasping at thin air. One of the goals of the tournament — and it's 2-2!",
+          "dp": 1
+        },
+        {
+          "t": "ARG",
+          "p": "Diney Borges (o.g.)",
+          "m": "111'",
+          "id": "409241"
+        }
+      ],
+      "cards": [
+        {
+          "m": "68'",
+          "p": "Kevin Pina",
+          "t": "CPV",
+          "c": "Y",
+          "id": "477852"
+        },
+        {
+          "m": "115'",
+          "p": "Montiel",
+          "t": "ARG",
+          "c": "Y",
+          "id": "402926"
+        }
+      ],
+      "line": {
+        "ARG": {
+          "xi": [
+            "308300",
+            "402921",
+            "431196",
+            "418963",
+            "402925",
+            "428882",
+            "430628",
+            "448252",
+            "229397",
+            "418975",
+            "402920"
+          ],
+          "subs": [
+            [
+              "430631",
+              "418975",
+              "63'"
+            ],
+            [
+              "416081",
+              "402920",
+              "63'"
+            ],
+            [
+              "332847",
+              "428882",
+              "84'"
+            ],
+            [
+              "308322",
+              "418963",
+              "85'"
+            ],
+            [
+              "402926",
+              "402925",
+              "104'"
+            ]
+          ]
+        },
+        "CPV": {
+          "xi": [
+            "364752",
+            "409241",
+            "477770",
+            "477832",
+            "477847",
+            "477852",
+            "477856",
+            "477827",
+            "480966",
+            "401893",
+            "355642"
+          ],
+          "subs": [
+            [
+              "482782",
+              "401893",
+              "67'"
+            ],
+            [
+              "401894",
+              "480966",
+              "67'"
+            ],
+            [
+              "477849",
+              "477856",
+              "80'"
+            ],
+            [
+              "433724",
+              "355642",
+              "80'"
+            ],
+            [
+              "477862",
+              "477852",
+              "100'"
+            ],
+            [
+              "494313",
+              "477827",
+              "100'"
+            ]
+          ]
+        }
+      }
     },
     "R:1:5": {
       "date": "Jul 3",
