@@ -1292,26 +1292,35 @@ function openMatchModal(id){
     : { panel: '#ffffff', text: '#1c1813', sub: 'rgba(70,62,48,.7)', line: 'rgba(0,0,0,.1)', head: 'rgba(70,62,48,.55)' };
   // One team's starting XI laid out on a pitch by its formation. Positions come
   // from the formation string + squad roles (the feed has no pitch coordinates).
-  const formationPitch = (code, line) => {
+  const formationPitch = (code, line, gkUp) => {
     const info = TEAMDIR[code] || { name: code, iso: '' };
     const sq = {}; (DATA.squads[code] || []).forEach(p => sq[p.id] = p);
     const nums = line.nums || {}, cap = line.cap, subs = line.subs || [], xi = (line.xi || []).slice();
-    const offAt = {}; subs.forEach(([on, off, mn]) => { if (off) offAt[off] = mn; });
+    const offAt = {}, offBy = {}; subs.forEach(([on, off, mn]) => { if (off){ offAt[off] = mn; offBy[off] = on; } });
     const goalCnt = {}; (m.goals || []).forEach(g => { if (g.t === code && g.id) goalCnt[g.id] = (goalCnt[g.id] || 0) + 1; });
     const cardOf = {}; (m.cards || []).forEach(c => { if (c.t === code && c.id) cardOf[c.id] = c.c; });
     const form = (m.form && m.form[code]) || '';
     let rows = null;
     if (/^\d+(-\d+)+$/.test(form)){ const parts = form.split('-').map(Number); if (1 + parts.reduce((a, b) => a + b, 0) === xi.length) rows = [1].concat(parts); }
     const cell = id => {
-      const p = sq[id] || {}, name = String(p.p || id), surname = name.split(' ').slice(-1)[0], off = offAt[id];
+      const p = sq[id] || {}, surname = String(p.p || id).split(' ').slice(-1)[0], off = offAt[id];
       const shirt = p.n != null ? p.n : (nums[id] != null ? nums[id] : '');
-      const c = el('div', 'display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;min-width:0;' + (off ? 'opacity:.68;' : ''));
-      const dot = el('div', 'position:relative;width:26px;height:26px;flex:none;border-radius:50%;background:#f5f3ee;color:#14110c;display:flex;align-items:center;justify-content:center;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:12px;box-shadow:0 1px 3px rgba(0,0,0,.45);', String(shirt));
-      if (id === cap) dot.appendChild(el('div', 'position:absolute;top:-4px;left:-4px;width:13px;height:13px;border-radius:50%;background:' + accent + ';color:#fff;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(0,0,0,.4);', 'C'));
-      if (cardOf[id]) dot.appendChild(el('div', 'position:absolute;top:-4px;right:-3px;width:8px;height:11px;border-radius:1px;background:' + (cardOf[id] === 'R' ? '#e0463f' : '#f4c430') + ';box-shadow:0 1px 2px rgba(0,0,0,.4);'));
-      if (goalCnt[id]) dot.appendChild(el('div', 'position:absolute;bottom:-5px;right:-6px;font-size:12px;line-height:1;', goalCnt[id] > 1 ? '⚽' + goalCnt[id] : '⚽'));
-      c.appendChild(dot);
-      c.appendChild(el('div', 'max-width:100%;font-size:9px;font-weight:600;color:#fff;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', surname + (off ? ' ↓' + off : '')));
+      const c = el('div', 'display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:0;' + (off ? 'opacity:.72;' : ''));
+      const av = el('div', 'position:relative;flex:none;');
+      const face = avatarImg(picById(id), 34, 'rgba(255,255,255,.22)');
+      face.style.border = '2px solid rgba(255,255,255,.85)'; face.style.boxShadow = '0 1px 4px rgba(0,0,0,.5)';
+      av.appendChild(face);
+      // shirt number outside the circle (bottom-left)
+      if (shirt !== '') av.appendChild(el('div', "position:absolute;bottom:-3px;left:-6px;min-width:16px;height:16px;box-sizing:border-box;padding:0 3px;border-radius:8px;background:#14110c;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;line-height:14px;text-align:center;border:1px solid rgba(255,255,255,.5);", String(shirt)));
+      if (id === cap) av.appendChild(el('div', 'position:absolute;top:-4px;left:-4px;width:14px;height:14px;border-radius:50%;background:' + accent + ';color:#fff;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(0,0,0,.4);', 'C'));
+      if (cardOf[id]) av.appendChild(el('div', 'position:absolute;top:-4px;right:-3px;width:8px;height:11px;border-radius:1px;background:' + (cardOf[id] === 'R' ? '#e0463f' : '#f4c430') + ';box-shadow:0 1px 2px rgba(0,0,0,.4);'));
+      if (goalCnt[id]) av.appendChild(el('div', 'position:absolute;bottom:-5px;right:-7px;font-size:12px;line-height:1;', goalCnt[id] > 1 ? '⚽' + goalCnt[id] : '⚽'));
+      c.appendChild(av);
+      c.appendChild(el('div', 'max-width:100%;padding:1px 5px;border-radius:6px;background:rgba(0,0,0,.5);font-size:9px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', surname));
+      if (off){
+        const repl = offBy[id] ? String((sq[offBy[id]] || {}).p || '').split(' ').slice(-1)[0] : '';
+        c.appendChild(el('div', 'font-size:8px;font-weight:700;color:#ffd2ca;line-height:1.1;white-space:nowrap;', '↓ ' + off + (repl ? ' · ' + repl : '')));
+      }
       return c;
     };
     const wrap = el('div', 'margin-top:12px;');
@@ -1320,12 +1329,12 @@ function openMatchModal(id){
     head.appendChild(el('div', 'font-weight:700;font-size:14px;', info.name));
     if (form) head.appendChild(el('div', "margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;color:" + pal.sub + ';', form));
     wrap.appendChild(head);
-    const pitch = el('div', 'border-radius:10px;padding:12px 6px;display:flex;flex-direction:column;gap:6px;background:repeating-linear-gradient(180deg,#2f7d4f 0 26px,#2b7449 26px 52px);box-shadow:inset 0 0 0 2px rgba(255,255,255,.14);');
+    const pitch = el('div', 'border-radius:10px;padding:14px 6px;display:flex;flex-direction:column;gap:11px;background:repeating-linear-gradient(180deg,#2f7d4f 0 30px,#2b7449 30px 60px);box-shadow:inset 0 0 0 2px rgba(255,255,255,.14);');
     if (rows){
       let i = 0; const groups = rows.map(cnt => { const g = xi.slice(i, i + cnt); i += cnt; return g; });
-      groups.reverse().forEach(g => { const r = el('div', 'display:flex;justify-content:space-around;align-items:flex-start;gap:2px;'); g.forEach(id => r.appendChild(cell(id))); pitch.appendChild(r); });
+      (gkUp ? groups : groups.slice().reverse()).forEach(g => { const r = el('div', 'display:flex;justify-content:space-around;align-items:flex-start;gap:2px;'); g.forEach(id => r.appendChild(cell(id))); pitch.appendChild(r); });
     } else {
-      const r = el('div', 'display:flex;flex-wrap:wrap;justify-content:center;gap:8px 4px;'); xi.forEach(id => r.appendChild(cell(id))); pitch.appendChild(r);
+      const r = el('div', 'display:flex;flex-wrap:wrap;justify-content:center;gap:11px 4px;'); xi.forEach(id => r.appendChild(cell(id))); pitch.appendChild(r);
     }
     wrap.appendChild(pitch);
     const onSubs = subs.filter(s => s[0]);
@@ -1473,8 +1482,8 @@ function openMatchModal(id){
   if (m.played && m.line && (m.line[m.a] || m.line[m.b])){
     const lbox = el('div', 'margin-top:15px;border-top:1px solid ' + pal.line + ';padding-top:10px;');
     lbox.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:11px;color:" + pal.head + ';', 'Lineups'));
-    if (m.line[m.a]) lbox.appendChild(formationPitch(m.a, m.line[m.a]));
-    if (m.line[m.b]) lbox.appendChild(formationPitch(m.b, m.line[m.b]));
+    if (m.line[m.a]) lbox.appendChild(formationPitch(m.a, m.line[m.a], true));    // home: GK at top
+    if (m.line[m.b]) lbox.appendChild(formationPitch(m.b, m.line[m.b], false));   // away: GK at bottom
     panel.appendChild(lbox);
   }
 
