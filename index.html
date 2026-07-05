@@ -1882,7 +1882,7 @@ function openScorersModal(){
     [['o', 'OWNED %'], ['pts', 'POINTS']].forEach(([k, lbl]) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl; b.onclick = () => { sortKey = k; paint(); }; sortBtns[k] = b; sortBar.appendChild(b); });
     ctrl.appendChild(posBar); ctrl.appendChild(sortBar); box.appendChild(ctrl);
     const listBox = el('div'); box.appendChild(listBox);
-    const fanFlag = abbr => el('span', "width:32px;flex:none;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.3px;color:" + pal.sub + ';border:1px solid ' + pal.line + ';border-radius:4px;padding:3px 0;', abbr);
+    const fanFlag = abbr => { const iso = ((FANTASY_DATA.teams || {})[abbr] || {}).iso; return iso ? flagImg(iso, 22) : el('span', "width:24px;flex:none;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;color:" + pal.sub + ';', abbr); };
     function paint(){
       POS.forEach(k => posBtns[k].style.cssText = posCss(k === pos));
       ['o', 'pts'].forEach(k => sortBtns[k].style.cssText = sortCss(k === sortKey));

@@ -16,13 +16,29 @@ import os, sys, json, urllib.request
 
 BASE = "https://play.fifa.com/json/fantasy/{}.json"
 UA = {"User-Agent": "Mozilla/5.0"}
-OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "fantasy.json")
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(ROOT, "fantasy.json")
 
 
 def get(name):
     url = BASE.format(name)
     with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=40) as r:
         return json.loads(r.read())
+
+
+def team_iso():
+    """3-letter team code -> 2-letter ISO flag code, from data.json (all 48)."""
+    iso = {}
+    with open(os.path.join(ROOT, "data.json"), encoding="utf-8") as f:
+        d = json.load(f)
+    for t in d.get("teams", []):
+        if t.get("code") and t.get("iso"):
+            iso[t["code"]] = t["iso"]
+    for g in (d.get("groups") or {}).values():
+        for r in (g.get("table") or []):
+            if r.get("code") and r.get("iso"):
+                iso[r["code"]] = r["iso"]
+    return iso
 
 
 def player_name(p):
@@ -32,21 +48,26 @@ def player_name(p):
 def build():
     players = get("players")
     squads = {s["id"]: s for s in get("squads")}
+    iso = team_iso()
     teams = {}
     for s in squads.values():
-        teams[s["abbr"]] = {"name": s["name"], "elim": bool(s.get("isEliminated"))}
+        teams[s["abbr"]] = {"name": s["name"], "elim": bool(s.get("isEliminated")), "iso": iso.get(s["abbr"], "")}
     rows = []
     for p in players:
         if p.get("status") == "transferred":       # stale duplicate — drop
             continue
-        sq = squads.get(p.get("squadId"), {})
         st = (p.get("stats") or {})
+        own = round(float(p.get("percentSelected") or 0), 1)
+        pts = int(st.get("totalPoints") or 0)
+        if own == 0 and pts == 0:                   # never picked, never scored — drop
+            continue
+        sq = squads.get(p.get("squadId"), {})
         rows.append({
             "n": player_name(p),
             "t": sq.get("abbr", "?"),
             "pos": p.get("position"),               # GK | DEF | MID | FWD
-            "o": round(float(p.get("percentSelected") or 0), 1),  # ownership %
-            "pts": int(st.get("totalPoints") or 0),
+            "o": own,                               # ownership %
+            "pts": pts,
             "avg": round(float(st.get("avgPoints") or 0), 1),
             "pr": p.get("price"),                   # in-game price (millions)
             "st": p.get("status"),                  # playing | eliminated | injured | suspended
