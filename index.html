@@ -340,6 +340,7 @@ function renderVals(P, DATA) {
         'background:'+T.chipBg+';border:1px solid '+T.chipBorder+';border-radius:5px;padding:2px 7px 3px;'+
         'text-align:center;white-space:nowrap;line-height:1.12;box-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none;',
       match:o.match, confed: o.match ? matchConfed(o.match) : '',
+      elim: !!(o.match && (() => { const rm = resolveMatch(o.match); return rm && rm.winner && eliminated[rm.winner]; })()),
       phase:o.phase, hasPhase:hasPhase,
       // feeding teams' 3-letter codes flank the round label: "BRA  R16  NOR"
       ta:o.ta||null, tb:o.tb||null,
@@ -390,14 +391,12 @@ function renderVals(P, DATA) {
           wn.match = side+':'+L+':'+k;   // this crest = the match it won
           teamNodes.push(wn);
           if (showResults && m.score) innerCards.push(makeInnerCard(p.x, p.y - (L===1?21:19), { score:m.score, pens:m.pens, penScore:m.penScore, match:side+':'+L+':'+k }));
-        } else if (showResults){
-          // pending match card on the bridge: round + date/time, plus the feeding
-          // teams' codes once the previous round decides them.
+        } else {
+          // pending match — always shown so upcoming ties stay visible even with
+          // scores hidden: round + date/time + the feeding teams' codes.
           const ta = feederCode(side, L, 2*k)   || null;
           const tb = feederCode(side, L, 2*k+1) || null;
           innerCards.push(makeInnerCard(p.x, p.y, { phase:matchRound[L], date:m.date, time:m.time, match:side+':'+L+':'+k, ta, tb }));
-        } else {
-          emptyNodes.push({ boxStyle: dotStyle(p, L===1?14:16) });
         }
       }
     }
@@ -449,22 +448,22 @@ function renderVals(P, DATA) {
   const footerStyle = "text-align:center;margin-top:12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:"+T.footerColor+';';
   const hintStyle = "display:inline-flex;align-items:center;gap:6px;margin:7px 0 0;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;font-size:10px;color:"+T.footerColor+';';
 
-  if (showResults){
+  {
     const f = DATA.final || {};
     if (f.winner){
       // champion advances to the final node; the trophy stays dead centre
       const champT = TEAMS.find(x => x.code === f.winner);
       if (champT){ const wn = makeTeam(champT, { x:C, y:C + 78, a:0 }, 46, true, false); wn.match = 'final'; teamNodes.push(wn); }
-      if (f.score) innerCards.push(makeInnerCard(C, C + 78 - 24, { score:f.score, pens:f.pens, penScore:f.penScore, match:'final' }));
+      if (showResults && f.score) innerCards.push(makeInnerCard(C, C + 78 - 24, { score:f.score, pens:f.pens, penScore:f.penScore, match:'final' }));
     } else {
-      innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:f.date, time:f.time, match:'final' }));
+      innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:f.date, time:f.time, match:'final' }));   // upcoming final always shown
     }
   }
   // Third-place play-off: a standalone chip above the trophy (the two SF losers;
   // disconnected from the main path to the final).
-  if (showResults && DATA.thirdPlace){
+  if (DATA.thirdPlace){
     const tp = DATA.thirdPlace;
-    if (tp.winner && tp.score) innerCards.push(makeInnerCard(C, C - 108, { score:tp.score, pens:tp.pens, penScore:tp.penScore, match:'third' }));
+    if (showResults && tp.winner && tp.score) innerCards.push(makeInnerCard(C, C - 108, { score:tp.score, pens:tp.pens, penScore:tp.penScore, match:'third' }));
     else innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:tp.date, time:tp.time, match:'third' }));
   }
 
@@ -616,6 +615,7 @@ function buildBracket(v){
     if (c.match){
       box.dataset.match = c.match; box.style.pointerEvents = 'auto'; box.style.cursor = 'pointer'; box.onclick = () => openMatchModal(c.match);
       box.dataset.confed = c.confed || '';
+      if (c.elim) box.dataset.elim = '1';   // dims with "show eliminated" off (winner is out)
     }
     art.appendChild(box);
   });
