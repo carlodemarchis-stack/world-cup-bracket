@@ -294,6 +294,23 @@ function renderVals(P, DATA) {
     return 'position:absolute;left:'+(p.x/12)+'%;top:'+(p.y/12)+'%;width:'+sz+'px;height:'+sz+'px;'+
       'transform:translate(-50%,-50%);border-radius:50%;background:'+T.emptyBg+';border:1.5px solid '+T.emptyBorder+';box-sizing:border-box;z-index:2;';
   }
+  // Confederations still alive in the subtree feeding node (side, L, k) — i.e.
+  // whose teams could still reach it. (span = 2^L leaf slots under the node.)
+  const leafAliveConfeds = (side, L, k) => {
+    const off = side === 'R' ? 0 : 16, span = 1 << L, set = new Set();
+    for (let i = k * span; i < (k + 1) * span; i++){ const t = TEAMS[off + i]; if (t && !eliminated[t.code]) set.add(confedOf(t.code)); }
+    return set;
+  };
+  // Confederation(s) a match belongs to: the winner's once played; otherwise
+  // every confed that could still get there (used to keep future matches lit).
+  function matchConfed(id){
+    const rm = resolveMatch(id);
+    if (rm && rm.winner) return confedOf(rm.winner);
+    const m = /^([RL]):(\d+):(\d+)$/.exec(id);
+    if (m) return [...leafAliveConfeds(m[1], +m[2], +m[3])].join(' ');
+    if (id === 'final' || id === 'third') return [...new Set([...leafAliveConfeds('R', 4, 0), ...leafAliveConfeds('L', 4, 0)])].join(' ');
+    return rm ? [rm.a, rm.b].filter(x => x && x !== '?').map(confedOf).filter(Boolean).join(' ') : '';
+  }
   // a card at a node = the match that fills it: a date while pending, a score once played
   function makeInnerCard(px, py, o){
     const hasScore = !!o.score, hasPhase = !!o.phase, k = fmtKickoff(o.date, o.time), hasDate = (!!k.date && !hasScore);
@@ -305,7 +322,7 @@ function renderVals(P, DATA) {
       boxStyle:'position:absolute;left:'+(px/12)+'%;top:'+(py/12)+'%;transform:translate(-50%,-50%);z-index:7;'+
         'background:'+T.chipBg+';border:1px solid '+T.chipBorder+';border-radius:5px;padding:2px 7px 3px;'+
         'text-align:center;white-space:nowrap;line-height:1.12;box-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none;',
-      match:o.match,
+      match:o.match, confed: o.match ? matchConfed(o.match) : '',
       phase:o.phase, hasPhase:hasPhase,
       // feeding teams' 3-letter codes flank the round label: "BRA  R16  NOR"
       ta:o.ta||null, tb:o.tb||null,
@@ -395,14 +412,18 @@ function renderVals(P, DATA) {
           const advanced = parentWin === occ, col = advanced ? accent : elimColor;
           stroke = col; w = 3; lstyle = 'filter:drop-shadow(0 0 5px '+col+'aa)';
         }
-        links.push(trimmed(c, par, crestVB(L, k), crestVB(L+1, Math.floor(k/2)), { stroke, w, lstyle }));
+        // this segment "starts from" occ (its team); pending segments carry the
+        // confeds still alive below, so a confed's onward path stays lit.
+        const confed = occ ? confedOf(occ) : [...leafAliveConfeds(side, L, k)].join(' ');
+        links.push(trimmed(c, par, crestVB(L, k), crestVB(L+1, Math.floor(k/2)), { stroke, w, lstyle, confed }));
       }
     }
     const fin = nodePos(side,4,0);
     const champ = (DATA.final||{}).winner, sfWin = wonAt(side,4,0);
     const finLit = !!champ && !!sfWin && champ === sfWin;
     links.push(trimmed(fin, { x:C, y:C }, crestVB(4, 0), 0, { stroke: finLit?accent:T.linkColor, w: finLit?3:1.8,
-      lstyle: finLit?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'' }));
+      lstyle: finLit?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'',
+      confed: sfWin ? confedOf(sfWin) : [...leafAliveConfeds(side, 4, 0)].join(' ') }));
   });
 
   const rootStyle = 'position:relative;min-height:100vh;background:'+T.rootBg+';padding:30px 16px 44px;font-family:Barlow,system-ui,sans-serif;box-sizing:border-box;';
@@ -508,6 +529,7 @@ function buildBracket(v){
   v.links.forEach(l=>{
     const ln = svg('line', { x1:l.x1, y1:l.y1, x2:l.x2, y2:l.y2, stroke:l.stroke, 'stroke-width':l.w, 'stroke-linecap':'round' });
     if (l.lstyle) ln.setAttribute('style', l.lstyle);
+    ln.setAttribute('data-confed', l.confed || '');
     s.appendChild(ln);
   });
   art.appendChild(s);
@@ -576,10 +598,7 @@ function buildBracket(v){
     if (c.hasTime)   box.appendChild(el('div', c.timeStyle, c.time + ' ' + (c.tzLabel || '')));
     if (c.match){
       box.dataset.match = c.match; box.style.pointerEvents = 'auto'; box.style.cursor = 'pointer'; box.onclick = () => openMatchModal(c.match);
-      // Owner confederation(s): the winner's, or both participants' if not yet played.
-      const rm = resolveMatch(c.match);
-      const codes = rm ? (rm.winner ? [rm.winner] : [rm.a, rm.b]) : [];
-      box.dataset.confed = [...new Set(codes.filter(x => x && x !== '?').map(confedOf).filter(Boolean))].join(' ');
+      box.dataset.confed = c.confed || '';
     }
     art.appendChild(box);
   });
