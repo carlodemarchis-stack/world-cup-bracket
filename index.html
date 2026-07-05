@@ -260,7 +260,7 @@ function renderVals(P, DATA) {
     for (let i=0;i<n;i++) stops.push(colors[i]+' '+(i*seg)+'% '+((i+1)*seg)+'%');
     return 'conic-gradient(from 180deg, '+stops.join(', ')+')';
   }
-  function makeTeam(t, p, sz, glow, elim){
+  function makeTeam(t, p, sz, glow, elim, showStatus){
     const base = 'position:absolute;left:'+(p.x/12)+'%;top:'+(p.y/12)+'%;width:'+sz+'px;height:'+sz+'px;'+
       'box-sizing:border-box;transform:translate(-50%,-50%);border-radius:50%;z-index:3;';
     const shadow = glow ? ('0 0 16px '+accent+'cc, 0 2px 6px rgba(0,0,0,.5)') : '0 2px 6px rgba(0,0,0,.4)';
@@ -270,9 +270,22 @@ function renderVals(P, DATA) {
       ? base+'overflow:hidden;background:'+T.innerBg+';border:'+bord+';box-shadow:'+shadow+';'+(elim?'opacity:.78;':'')
       : base+'background:'+conic(t.colors)+';border:'+bord+';box-shadow:'+shadow+';'+(elim?'opacity:.82;':'');
     const codeCol = glow ? accent : (elim ? elimColor : null);
+    // Status pip on the outer roster crests: green ✓ still in / red ✕ out. Built
+    // here (theme colours in scope); rendered as a sibling so it isn't clipped.
+    let statusBadge = null;
+    if (showStatus){
+      const bs = Math.max(12, Math.round(sz * 0.36)), off = Math.round(sz * 0.33);
+      statusBadge = {
+        sym: elim ? '✕' : '✓',
+        style: 'position:absolute;left:calc(' + (p.x/12) + '% + ' + off + 'px);top:calc(' + (p.y/12) + '% - ' + off + 'px);transform:translate(-50%,-50%);z-index:5;pointer-events:none;' +
+          'width:' + bs + 'px;height:' + bs + 'px;border-radius:50%;background:' + (elim ? elimColor : '#2f9e6b') + ';border:2px solid ' + T.rootBg + ';box-sizing:border-box;' +
+          'display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:' + Math.round(bs * 0.58) + 'px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.4);'
+      };
+    }
     return {
       code: t.code, name: t.name,
       flag: 'https://flagcdn.com/w320/'+t.iso+'.png',
+      statusBadge,
       boxStyle,
       chipStyle:'position:absolute;left:50%;bottom:'+Math.round(sz*0.07)+'px;transform:translateX(-50%);pointer-events:none;'+
         'background:'+(glow?accent:(elim?elimColor:'rgba(8,8,10,.7)'))+';color:#ffffff;'+
@@ -348,7 +361,7 @@ function renderVals(P, DATA) {
       const r32done = !!wonAt(side, 1, Math.floor(i/2));
       const win = r32done && !eliminated[t.code];
       const elim = r32done && !!eliminated[t.code];
-      teamNodes.push(makeTeam(t,p,sz,win,elim));
+      teamNodes.push(makeTeam(t,p,sz,win,elim,true));   // outer roster crest → status pip
       const lr = Rr[0] + sz/2 + 8;
       const la = p.a*DEG;
       const ax = C + lr*Math.cos(la), ay = C + lr*Math.sin(la);
@@ -468,7 +481,7 @@ function renderVals(P, DATA) {
   const Re = 560, THe = 48, szE = 40;
   const arc = (t, aDeg) => {
     const a = aDeg * DEG, p = { x: C + Re*Math.cos(a), y: C + Re*Math.sin(a), a: aDeg };
-    teamNodes.push(makeTeam(t, p, szE, false, true));   // elim = dimmed crest, still clickable
+    teamNodes.push(makeTeam(t, p, szE, false, true, true));   // group-stage: dimmed crest + red status pip
   };
   elim.slice(0, 8).forEach((t, i) => arc(t, 180 + THe - (2*THe)*i/7));    // left "(" arc, groups A–F, top→bottom
   elim.slice(8, 16).forEach((t, i) => arc(t, -THe + (2*THe)*i/7));        // right ")" arc, groups G–L, top→bottom
@@ -611,6 +624,12 @@ function buildBracket(v){
   });
 
   // team nodes — flag mode or ring mode
+  const addBadge = n => {
+    if (!n.statusBadge) return;
+    const bg = el('div', n.statusBadge.style, n.statusBadge.sym);
+    bg.dataset.confed = confedOf(n.code);   // dims with the confederation filter
+    art.appendChild(bg);
+  };
   if (v.flagMode){
     v.teamNodes.forEach(n=>{
       const box = el('div', n.boxStyle);
@@ -624,6 +643,7 @@ function buildBracket(v){
       box.appendChild(img);
       box.appendChild(el('span', n.chipStyle, n.code));
       art.appendChild(box);
+      addBadge(n);
     });
   } else {
     v.teamNodes.forEach(n=>{
@@ -636,6 +656,7 @@ function buildBracket(v){
       inner.appendChild(el('span', n.codeStyle, n.code));
       box.appendChild(inner);
       art.appendChild(box);
+      addBadge(n);
     });
   }
 
@@ -2300,7 +2321,9 @@ fetch('data.json', { cache: 'no-store' })
     // Fantasy cards need fantasy.json — load it in the background and slot the
     // cards in once it arrives (pool is assigned by the caller before this runs).
     if (!FANTASY_DATA) ensureFantasy().then(() => { if (pool){ pool.fantasy = buildFantasyItems(); prefetchAhead(); } }).catch(() => {});
-    return { moments: shuffle(out.filter(x => x.kind === 'goal' || x.kind === 'assist')), tops, stats: shuffle(stats), fantasy: buildFantasyItems() };
+    // Only goal moment-cards cycle individually; assists are represented by the
+    // top-assist spotlight cards (in `tops`), not as single-assist cards.
+    return { moments: shuffle(out.filter(x => x.kind === 'goal')), tops, stats: shuffle(stats), fantasy: buildFantasyItems() };
   }
 
   // Real tournament goals/assists per FIFA person id (for the fantasy cards).
