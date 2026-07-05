@@ -289,7 +289,7 @@ function renderVals(P, DATA) {
     return {
       code: t.code, name: t.name,
       flag: 'https://flagcdn.com/w320/'+t.iso+'.png',
-      statusBadge, elim: !!(showStatus && elim),
+      statusBadge, elim: !!elim,   // any crest of an eliminated team (outer + inner) dims with "show eliminated" off
       boxStyle,
       chipStyle:'position:absolute;left:50%;bottom:'+Math.round(sz*0.07)+'px;transform:translateX(-50%);pointer-events:none;'+
         'background:'+(glow?accent:(elim?elimColor:'rgba(8,8,10,.7)'))+';color:#ffffff;'+
