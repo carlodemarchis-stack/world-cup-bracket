@@ -2761,7 +2761,138 @@
     "R:2:0": {
       "date": "Jul 5",
       "time": "22:00",
-      "venue": "New York/New Jersey Stadium"
+      "venue": "New York/New Jersey Stadium",
+      "score": "2–1",
+      "winner": "NOR",
+      "ref": "Ismail Elfath",
+      "att": 80663,
+      "form": {
+        "BRA": "4-1-2-3",
+        "NOR": "4-1-2-3"
+      },
+      "num": 91,
+      "goals": [
+        {
+          "t": "NOR",
+          "p": "Haaland",
+          "m": "79'",
+          "id": "419652",
+          "a": "Schjelderup",
+          "aid": "494626",
+          "desc": "Norway's main man delivers again — and what a moment to do it! A brilliant finish from Erling Haaland, who climbs high to meet Andreas Schjelderup's cross and powers a downward header past Alisson. 1-0 to Norway!",
+          "dp": 1
+        },
+        {
+          "t": "NOR",
+          "p": "Haaland",
+          "m": "90'",
+          "id": "419652",
+          "a": "Schjelderup",
+          "aid": "494626",
+          "desc": "What a player! Erling Haaland has surely fired Norway into the last eight! An exceptional finish: he collects the ball outside the box, takes a touch, then drives the purest strike imaginable into the bottom corner. It's 2-0, and Brazil's race looks run.",
+          "dp": 1
+        },
+        {
+          "t": "BRA",
+          "p": "Neymar Jr",
+          "m": "90'+10'",
+          "id": "314197",
+          "pen": true
+        }
+      ],
+      "var": [
+        {
+          "m": "12'",
+          "d": "Penalty given"
+        }
+      ],
+      "cards": [
+        {
+          "m": "90'+6'",
+          "p": "Neymar Jr",
+          "t": "BRA",
+          "c": "Y",
+          "id": "314197"
+        }
+      ],
+      "line": {
+        "BRA": {
+          "xi": [
+            "308370",
+            "430601",
+            "332946",
+            "335656",
+            "367981",
+            "308386",
+            "430605",
+            "405742",
+            "430609",
+            "430597",
+            "475036"
+          ],
+          "subs": [
+            [
+              "463746",
+              "430609",
+              "58'"
+            ],
+            [
+              "314197",
+              "430597",
+              "67'"
+            ],
+            [
+              "429392",
+              "475036",
+              "67'"
+            ],
+            [
+              "485069",
+              "430605",
+              "79'"
+            ]
+          ],
+          "cap": "332946"
+        },
+        "NOR": {
+          "xi": [
+            "373235",
+            "483516",
+            "483505",
+            "491244",
+            "483442",
+            "404645",
+            "400716",
+            "398588",
+            "419652",
+            "483448",
+            "483496"
+          ],
+          "subs": [
+            [
+              "494626",
+              "483448",
+              ""
+            ],
+            [
+              "477470",
+              "398588",
+              ""
+            ],
+            [
+              "483497",
+              "483496",
+              "63'"
+            ],
+            [
+              "419672",
+              "483505",
+              "90'+5'"
+            ]
+          ],
+          "cap": "400716"
+        }
+      }
     },
     "R:2:1": {
       "date": "Jul 6",
