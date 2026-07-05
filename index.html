@@ -1792,7 +1792,7 @@ function openScorersModal(){
                   fEl.textContent = '';
                   fEl.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.4px;color:" + accent + ';', 'FANTASY'));
                   fEl.appendChild(el('span', 'color:' + pal.sub + ';',
-                    '   owned ' + fp.o + '%   ·   ' + fp.pts + ' pts   ·   £' + (fp.pr != null ? fp.pr : '–')));
+                    '   owned ' + fp.o + '%   ·   ' + fp.pts + ' pts   ·   $' + (fp.pr != null ? fp.pr : '–')));
                 };
                 if (FANTASY_DATA) fillFan(); else { fEl.style.display = 'none'; ensureFantasy().then(() => { fEl.style.display = ''; fillFan(); }).catch(() => {}); }
                 const lg = papp[pl.id] || [];
