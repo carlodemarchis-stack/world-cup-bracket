@@ -38,6 +38,7 @@ DATA_PATH = os.path.join(ROOT, "data.json")
 # Opt-in: also backfill assists onto already-recorded goals (one-off; the
 # hourly cron runs without it, so it never re-fetches settled matches).
 REFRESH_GOALS = "--refresh-goals" in sys.argv
+REFRESH_LINEUPS = "--refresh-lineups" in sys.argv   # re-fetch lineups only (leaves narratives)
 
 
 def desc(v):
@@ -292,14 +293,20 @@ def fetch_lineups(ids, id2code):
         code = id2code.get(str(t.get("IdTeam")))
         if not code:
             continue
-        xi = [str(p["IdPlayer"]) for p in (t.get("Players") or [])
+        players = t.get("Players") or []
+        xi = [str(p["IdPlayer"]) for p in players
               if p.get("Status") == 1 and p.get("IdPlayer")]
         subs = [[str(s.get("IdPlayerOn") or ""), str(s.get("IdPlayerOff") or ""),
                  (s.get("Minute") or "").strip()]
                 for s in (t.get("Substitutions") or [])
                 if s.get("IdPlayerOn") or s.get("IdPlayerOff")]
+        # captain id, for the formation view (shirt numbers already live in squads)
+        cap = next((str(p["IdPlayer"]) for p in players if p.get("Captain") and p.get("IdPlayer")), None)
         if xi or subs:
-            out[code] = {"xi": xi, "subs": subs}
+            row = {"xi": xi, "subs": subs}
+            if cap:
+                row["cap"] = cap
+            out[code] = row
     return out
 
 
@@ -475,7 +482,7 @@ def enrich(slot, res, changes, label):
         slot["goals"].sort(key=lambda g: _minute_key(g.get("m", "")))
 
     # Lineups (starting XI + subs) — fill once per match, refresh on demand.
-    if "line" not in slot or REFRESH_GOALS:
+    if "line" not in slot or REFRESH_GOALS or REFRESH_LINEUPS:
         ln = fetch_lineups(res["ids"], res["id2code"])
         if ln and slot.get("line") != ln:
             slot["line"] = ln
