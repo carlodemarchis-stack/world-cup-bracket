@@ -2094,26 +2094,29 @@ fetch('data.json', { cache: 'no-store' })
 (function(){
   const mq = q => !!(window.matchMedia && matchMedia(q).matches);   // evaluated live
   const IDLE_MS = 6000;
-  let lastActive = Date.now(), pool = null, mi = 0, ti = 0, si = 0, topN = 0, mLeft = 2 + Math.floor(Math.random() * 2), current = null, nextAt = 0;
+  let lastActive = Date.now(), pool = null, mi = 0, ti = 0, si = 0, fi = 0, topN = 0, mLeft = 2 + Math.floor(Math.random() * 2), fanDue = false, current = null, nextAt = 0;
   let paused = false, hist = [], hp = -1, belowMode = false;   // belowMode = mobile, card under the circle
   // Preload the big card photos a few ahead so they never pop in empty.
   const PREF = new Set();
-  const photoUrl = item => item.pic + '?&io=transform:fit,width:340&quality=86';
+  const photoUrl = item => item.pic ? item.pic + '?&io=transform:fit,width:340&quality=86' : null;
   const preload = url => { if (!url || PREF.has(url)) return; PREF.add(url); const im = new Image(); im.decoding = 'async'; im.src = url; };
   function prefetchAhead(){
     if (!pool) return;
-    const ml = pool.moments.length, tl = pool.tops.length;
+    const ml = pool.moments.length, tl = pool.tops.length, fl = (pool.fantasy || []).length;
     for (let k = 0; k < 4 && ml; k++) preload(photoUrl(pool.moments[(mi + k) % ml]));
     for (let k = 0; k < 2 && tl; k++) preload(photoUrl(pool.tops[(ti + k) % tl]));
+    for (let k = 0; k < 2 && fl; k++) preload(photoUrl(pool.fantasy[(fi + k) % fl]));
   }
   // Sequence: 2–3 goal/assist cards, then a spotlight slot — a top-scorer/assist
-  // card, and every 3rd spotlight a "by the numbers" stat card instead.
+  // card (every 3rd spotlight a stat card) — then one FIFA Fantasy card. Repeat.
   function nextItem(){
-    const ml = pool.moments.length, tl = pool.tops.length, sl = pool.stats.length;
-    if (!ml && !tl && !sl) return null;
+    const ml = pool.moments.length, tl = pool.tops.length, sl = pool.stats.length, fl = (pool.fantasy || []).length;
+    if (!ml && !tl && !sl && !fl) return null;
+    if (fanDue && fl){ fanDue = false; return pool.fantasy[fi++ % fl]; }
     if (mLeft > 0 && ml){ mLeft--; return pool.moments[mi++ % ml]; }
     mLeft = 2 + Math.floor(Math.random() * 2);
     topN++;
+    if (fl) fanDue = true;   // one fantasy card follows each spotlight
     if (sl && topN % 3 === 0) return pool.stats[si++ % sl];
     if (tl) return pool.tops[ti++ % tl];
     if (sl) return pool.stats[si++ % sl];
@@ -2227,7 +2230,34 @@ fetch('data.json', { cache: 'no-store' })
       { kind: 'stat', ic: '👥', big: (T.attTot / 1e6).toFixed(1) + 'M', unit: 'fans', sub: 'total attendance so far' },
       { kind: 'stat', ic: '🏟️', big: T.attMax.toLocaleString(), unit: 'record crowd', sub: 'biggest single gate' }
     ];
-    return { moments: shuffle(out.filter(x => x.kind === 'goal' || x.kind === 'assist')), tops, stats: shuffle(stats) };
+    // Fantasy cards need fantasy.json — load it in the background and slot the
+    // cards in once it arrives (pool is assigned by the caller before this runs).
+    if (!FANTASY_DATA) ensureFantasy().then(() => { if (pool){ pool.fantasy = buildFantasyItems(); prefetchAhead(); } }).catch(() => {});
+    return { moments: shuffle(out.filter(x => x.kind === 'goal' || x.kind === 'assist')), tops, stats: shuffle(stats), fantasy: buildFantasyItems() };
+  }
+
+  // Real tournament goals/assists per FIFA person id (for the fantasy cards).
+  function goalTally(){
+    if (goalTally._c) return goalTally._c;
+    const t = {}, add = (id, k) => { if (id == null) return; const s = String(id); (t[s] || (t[s] = { g: 0, a: 0 }))[k]++; };
+    const eat = gs => (gs || []).forEach(g => { if (g.p && g.p.indexOf('(o.g.)') >= 0) return; add(g.id, 'g'); add(g.aid, 'a'); });
+    Object.values(DATA.groups || {}).forEach(gr => (gr.matches || []).forEach(m => eat(m.goals)));
+    Object.values(DATA.r32 || {}).forEach(s => eat(s.goals));
+    Object.values(DATA.schedule || {}).forEach(s => eat(s.goals));
+    [DATA.final, DATA.thirdPlace].forEach(s => eat((s || {}).goals));
+    return goalTally._c = t;
+  }
+  const POSLONG = { GK: 'goalkeeper', DEF: 'defender', MID: 'midfielder', FWD: 'forward' };
+  // Top 100 players by ownership, each with their real WC goals/assists joined in.
+  function buildFantasyItems(){
+    if (!FANTASY_DATA) return [];
+    const tally = goalTally();
+    return FANTASY_DATA.players.slice().sort((a, b) => b.o - a.o || b.pts - a.pts).slice(0, 100).map((p, i) => {
+      const ga = tally[String(p.fid)] || { g: 0, a: 0 };
+      return { kind: 'fantasy', rank: i + 1, name: p.n, team: p.t, iso: (FANTASY_DATA.teams[p.t] || {}).iso,
+        pic: picById(p.fid), owned: p.o, pts: p.pts, avg: p.avg, price: p.pr, pos: p.pos, st: p.st,
+        goals: ga.g, assists: ga.a };
+    });
   }
 
   // Real drawn extent of the bracket, measured over crest/label-sized elements
@@ -2265,9 +2295,58 @@ fetch('data.json', { cache: 'no-store' })
   }
 
   function make(item, w){
+    if (item.kind === 'fantasy') return makeFantasy(item, w);
     if (item.kind === 'stat') return makeStat(item, w);
     if (item.kind === 'topscorer' || item.kind === 'topassist') return makeTop(item, w);
     return makeMoment(item, w);
+  }
+
+  // FIFA Fantasy spotlight card — deliberately styled apart (violet, ★ badge,
+  // stat pills) so it reads as game data, not a match event. Hero photo, the
+  // ownership % as the headline, then points / avg / price and real WC output.
+  function makeFantasy(item, w){
+    const dark = state.bgTheme === 'Dark', FAN = '#7c4dff';
+    const bg = dark ? 'rgba(24,20,38,.98)' : 'rgba(255,255,255,.99)';
+    const fg = dark ? '#f4efe2' : '#1c1813', sub = dark ? 'rgba(224,220,240,.64)' : 'rgba(60,52,78,.64)';
+    const b = el('div', ''); b.className = 'wc-bubble';
+    b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;pointer-events:none;' +
+      'border-radius:16px;background:' + bg + ';color:' + fg + ';box-shadow:0 16px 42px rgba(56,30,120,.34);border:1.5px solid ' + FAN + "66;font-family:'Barlow',system-ui,sans-serif;";
+    const hero = el('div', 'position:relative;width:100%;height:' + (belowMode ? 132 : 162) + 'px;overflow:hidden;background:' + (dark ? 'rgba(124,77,255,.16)' : 'rgba(124,77,255,.08)') + ';');
+    const url = photoUrl(item);
+    if (url){
+      const im = document.createElement('img'); im.decoding = 'async'; im.alt = '';
+      im.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transform:translateY(28px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
+      const reveal = () => requestAnimationFrame(() => { im.style.transform = 'translateY(0)'; im.style.opacity = '1'; });
+      im.addEventListener('load', reveal); im.src = url; if (im.complete && im.naturalWidth) reveal();
+      hero.appendChild(im);
+    } else if (item.iso){
+      const f = flagImg(item.iso, 100); f.style.width = '100%'; f.style.height = '100%'; f.style.opacity = '.45'; hero.appendChild(f);
+    }
+    hero.appendChild(el('div', 'position:absolute;left:0;right:0;bottom:0;height:78px;background:linear-gradient(180deg,' + (dark ? 'rgba(24,20,38,0),rgba(24,20,38,.98)' : 'rgba(255,255,255,0),rgba(255,255,255,.99)') + ');'));
+    hero.appendChild(el('div', 'position:absolute;top:10px;left:12px;background:' + FAN + ";color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:5px;box-shadow:0 2px 10px " + FAN + '77;', '★ FIFA Fantasy'));
+    const num = el('div', 'position:absolute;top:7px;right:12px;display:flex;flex-direction:column;align-items:flex-end;line-height:.82;text-shadow:0 1px 6px rgba(0,0,0,.4),0 0 3px rgba(255,255,255,.3);');
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:44px;color:" + FAN + ';', item.owned + '%'));
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.5px;color:" + FAN + ';', 'OWNED'));
+    hero.appendChild(num);
+    const nm = el('div', 'position:absolute;left:13px;bottom:22px;display:flex;align-items:center;gap:7px;');
+    nm.appendChild(el('span', 'font-weight:800;font-size:19px;', item.name));
+    if (item.iso) nm.appendChild(flagImg(item.iso, 18));
+    hero.appendChild(nm);
+    hero.appendChild(el('div', "position:absolute;left:13px;bottom:7px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;color:" + sub + ';', '#' + item.rank + ' most-selected ' + (POSLONG[item.pos] || item.pos)));
+    b.appendChild(hero);
+    const pills = el('div', 'display:flex;gap:7px;padding:11px 13px 7px;');
+    const pill = (val, label) => { const p = el('div', 'flex:1;text-align:center;background:' + (dark ? 'rgba(124,77,255,.14)' : 'rgba(124,77,255,.08)') + ';border:1px solid ' + FAN + '33;border-radius:9px;padding:7px 3px;'); p.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;line-height:1;color:" + FAN + ';', String(val))); p.appendChild(el('div', 'font-size:8.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:' + sub + ';margin-top:3px;', label)); return p; };
+    pills.appendChild(pill(item.pts, 'Points'));
+    pills.appendChild(pill(item.avg, 'Avg / match'));
+    pills.appendChild(pill('$' + item.price, 'Price'));
+    b.appendChild(pills);
+    const bits = [];
+    if (item.goals) bits.push(item.goals + ' goal' + (item.goals > 1 ? 's' : ''));
+    if (item.assists) bits.push(item.assists + ' assist' + (item.assists > 1 ? 's' : ''));
+    const note = (item.st === 'injured' || item.st === 'suspended') ? '  ·  ' + item.st[0].toUpperCase() + item.st.slice(1)
+      : (item.st === 'eliminated' ? '  ·  Team eliminated' : '');
+    b.appendChild(el('div', 'padding:1px 15px 13px;font-size:11.5px;color:' + sub + ';', (bits.length ? bits.join(' · ') + ' at WC 2026' : 'Fantasy points · ownership · price') + note));
+    return b;
   }
 
   // "By the numbers" stat card — no photo, data-forward, distinct from player cards.
