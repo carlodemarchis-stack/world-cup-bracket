@@ -812,9 +812,17 @@ let DATA = null; // schedule + results, loaded from data.json
 let controlsOpen = false; // settings panel starts hidden, toggled by the footer gear
 function setControls(open){
   controlsOpen = open;
-  document.getElementById('controls').classList.toggle('open', open);
+  const panel = document.getElementById('controls');
+  panel.classList.toggle('open', open);
   const g = document.getElementById('settings-toggle');
   if (g){ g.classList.toggle('on', open); g.setAttribute('aria-expanded', String(open)); }
+  if (open && g){
+    // Anchor the panel just below the cog (flip above if it would overflow).
+    const gr = g.getBoundingClientRect(), pw = panel.offsetWidth || 232, ph = panel.offsetHeight || 110;
+    const left = Math.min(Math.max(8, gr.right - pw), window.innerWidth - pw - 8);
+    const top = (gr.bottom + 8 + ph > window.innerHeight - 8) ? Math.max(8, gr.top - ph - 8) : gr.bottom + 8;
+    panel.style.left = left + 'px'; panel.style.top = top + 'px'; panel.style.right = 'auto';
+  }
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && controlsOpen) setControls(false); });
 
