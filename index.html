@@ -22,7 +22,7 @@
   .match-soon { border-color: #2fd177 !important; animation: matchSoon 1.8s ease-in-out infinite; }
   /* Confederation spotlight: crests/match boxes not in the selected confed. */
   [data-confed] { transition: filter .35s ease, opacity .35s ease; }
-  .confed-dim { filter: grayscale(1) !important; opacity: .26 !important; }
+  .confed-dim, .elim-dim { filter: grayscale(1) !important; opacity: .26 !important; }
   /* Ambient side-gutter bubble: gentle fade + rise, one at a time when idle. */
   /* --wc-scale lets belowMode shrink a card to fit under the circle without
      fighting the slide animation; transform-origin keeps the top anchored. */
@@ -289,7 +289,7 @@ function renderVals(P, DATA) {
     return {
       code: t.code, name: t.name,
       flag: 'https://flagcdn.com/w320/'+t.iso+'.png',
-      statusBadge,
+      statusBadge, elim: !!(showStatus && elim),
       boxStyle,
       chipStyle:'position:absolute;left:50%;bottom:'+Math.round(sz*0.07)+'px;transform:translateX(-50%);pointer-events:none;'+
         'background:'+(glow?accent:(elim?elimColor:'rgba(8,8,10,.7)'))+';color:#ffffff;'+
@@ -632,6 +632,7 @@ function buildBracket(v){
     if (!n.statusBadge) return;
     const bg = el('div', n.statusBadge.style, n.statusBadge.sym);
     bg.dataset.confed = confedOf(n.code);   // dims with the confederation filter
+    if (n.elim) bg.dataset.elim = '1';      // dims with "show eliminated" off
     art.appendChild(bg);
   };
   if (v.flagMode){
@@ -639,6 +640,7 @@ function buildBracket(v){
       const box = el('div', n.boxStyle);
       box.title = n.name;
       box.dataset.confed = confedOf(n.code);
+      if (n.elim) box.dataset.elim = '1';
       if (n.match){ box.dataset.match = n.match; box.onclick = () => openMatchModal(n.match); }
       else { box.dataset.team = n.code; box.onclick = () => openTeamModal(n.code); }
       const img = document.createElement('img');
@@ -654,6 +656,7 @@ function buildBracket(v){
       const box = el('div', n.boxStyle);
       box.title = n.name;
       box.dataset.confed = confedOf(n.code);
+      if (n.elim) box.dataset.elim = '1';
       if (n.match){ box.dataset.match = n.match; box.onclick = () => openMatchModal(n.match); }
       else { box.dataset.team = n.code; box.onclick = () => openTeamModal(n.code); }
       const inner = el('div', n.innerStyle);
@@ -794,9 +797,14 @@ const state = {
   accentColor: '#2f9e6b',
   showNames: false,
   showResults: true,
+  showEliminated: true,
   sectionGap: 4,
   quarterGap: 3
 };
+// Dim every eliminated team's crest + pip when "Show eliminated" is off.
+function applyElim(){
+  document.querySelectorAll('[data-elim]').forEach(e => e.classList.toggle('elim-dim', !state.showEliminated));
+}
 const ACCENTS = ['#d6b04a','#d23b3b','#2f9e6b','#3b82d2'];
 
 const app = document.getElementById('app');
@@ -1296,8 +1304,8 @@ function openMatchModal(id){
   const PITCH_MARKINGS = '<svg viewBox="0 0 68 105" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;">'
     + '<g fill="none" stroke="rgba(255,255,255,.34)" stroke-width="0.5">'
     + '<rect x="1" y="1" width="66" height="103"/><line x1="1" y1="52.5" x2="67" y2="52.5"/><circle cx="34" cy="52.5" r="9.15"/>'
-    + '<rect x="13.84" y="1" width="40.32" height="16.5"/><rect x="24.84" y="1" width="18.32" height="5.5"/><path d="M27.56 17.5 A9.15 9.15 0 0 1 40.44 17.5"/>'
-    + '<rect x="13.84" y="87.5" width="40.32" height="16.5"/><rect x="24.84" y="99.5" width="18.32" height="5.5"/><path d="M27.56 87.5 A9.15 9.15 0 0 0 40.44 87.5"/>'
+    + '<rect x="13.84" y="1" width="40.32" height="16.5"/><rect x="24.84" y="1" width="18.32" height="5.5"/><path d="M27.56 17.5 A9.15 9.15 0 0 0 40.44 17.5"/>'
+    + '<rect x="13.84" y="87.5" width="40.32" height="16.5"/><rect x="24.84" y="99.5" width="18.32" height="5.5"/><path d="M27.56 87.5 A9.15 9.15 0 0 1 40.44 87.5"/>'
     + '</g><g fill="rgba(255,255,255,.45)"><circle cx="34" cy="52.5" r="0.7"/><circle cx="34" cy="11" r="0.7"/><circle cx="34" cy="94" r="0.7"/></g></svg>';
   const formationPitch = (code, line, gkUp) => {
     const info = TEAMDIR[code] || { name: code, iso: '' };
@@ -2127,6 +2135,7 @@ function render(){
   app.replaceChildren(buildBracket(renderVals(props, DATA)));
   fitArtboard();
   if (confedFilter !== 'all') applyConfed(confedFilter);   // re-apply the spotlight after a rebuild
+  if (!state.showEliminated) applyElim();                  // re-apply the eliminated dim after a rebuild
   document.title = state.title + ' — World Cup 2026 Knockout Bracket';
 }
 
@@ -2202,15 +2211,10 @@ function renderControls(){
   close.onclick = () => setControls(false);
   hd.appendChild(close);
   c.appendChild(hd);
-  c.appendChild(group('Title', textField(state.title, v => { state.title = v; render(); })));
-  c.appendChild(group('Kicker', textField(state.kicker, v => { state.kicker = v; render(); })));
-  c.appendChild(group('Node style', seg(state.nodeStyle, ['Flag','Ring'], v => { state.nodeStyle = v; rerender(); })));
-  c.appendChild(group('Background', seg(state.bgTheme, ['Dark','Light'], v => { state.bgTheme = v; rerender(); })));
-  c.appendChild(group('Accent', swatches(state.accentColor, v => { state.accentColor = v; rerender(); })));
-  c.appendChild(group(null, checkbox('Show team names', state.showNames, v => { state.showNames = v; render(); })));
-  c.appendChild(group(null, checkbox('Show results', state.showResults, v => { state.showResults = v; render(); })));
-  c.appendChild(group('Section gap', rangeField(state.sectionGap, 4, 36, 1, '°', v => { state.sectionGap = v; render(); })));
-  c.appendChild(group('Quarter gap', rangeField(state.quarterGap, 0, 24, 1, '°', v => { state.quarterGap = v; render(); })));
+  // Scores on → played matches show the score; off → every tie shows as a fixture.
+  c.appendChild(group(null, checkbox('Show scores', state.showResults, v => { state.showResults = v; render(); })));
+  // Eliminated on → shown as-is; off → all eliminated teams dimmed (grayscale).
+  c.appendChild(group(null, checkbox('Show eliminated', state.showEliminated, v => { state.showEliminated = v; applyElim(); })));
 }
 // Controls whose active-state styling depends on theme/accent need a controls rebuild too.
 function rerender(){ render(); renderControls(); }
