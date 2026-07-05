@@ -780,8 +780,25 @@ function flagImg(iso, w){
   im.style.cssText = 'width:' + w + 'px;height:' + Math.round(w * 0.72) + 'px;object-fit:cover;border-radius:2px;flex:none;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.18);';
   return im;
 }
-// FIFA Fantasy player pool (fantasy.json) — lazy-loaded once when the tab opens.
+// FIFA Fantasy player pool (fantasy.json) — lazy-loaded once, shared by the
+// Fantasy tab and the per-player fantasy line in the Players tab.
 let FANTASY_DATA = null;
+function ensureFantasy(){
+  if (FANTASY_DATA) return Promise.resolve(FANTASY_DATA);
+  if (!ensureFantasy._p) ensureFantasy._p = fetch('fantasy.json')
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(d => { FANTASY_DATA = d; return d; });
+  return ensureFantasy._p;
+}
+// FIFA person id -> fantasy player (matches squad player id === fantasy fid).
+function fantasyByFid(id){
+  if (!FANTASY_DATA) return null;
+  if (!FANTASY_DATA._byFid){
+    FANTASY_DATA._byFid = {};
+    FANTASY_DATA.players.forEach(p => { if (p.fid != null) FANTASY_DATA._byFid[String(p.fid)] = p; });
+  }
+  return FANTASY_DATA._byFid[String(id)] || null;
+}
 // Map every FIFA player id to their headshot URL, built once from the squads.
 let PIC_BY_ID = null;
 function picById(id){
@@ -1765,6 +1782,19 @@ function openScorersModal(){
                 if (pl.ht) bio.push(pl.ht + ' cm');
                 if (pl.wt) bio.push(pl.wt + ' kg');
                 if (bio.length) pd.appendChild(el('div', 'font-size:11px;color:' + pal.sub + ';padding:1px 0 5px;', bio.join('  ·  ')));
+                // FIFA Fantasy line (owned % · points · price) — filled once the
+                // fantasy feed is available (prefetched when the modal opened).
+                const fEl = el('div', 'font-size:11px;padding:0 0 6px;');
+                pd.appendChild(fEl);
+                const fillFan = () => {
+                  const fp = fantasyByFid(pl.id);
+                  if (!fp){ fEl.style.display = 'none'; return; }
+                  fEl.textContent = '';
+                  fEl.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.4px;color:" + accent + ';', 'FANTASY'));
+                  fEl.appendChild(el('span', 'color:' + pal.sub + ';',
+                    '   owned ' + fp.o + '%   ·   ' + fp.pts + ' pts   ·   £' + (fp.pr != null ? fp.pr : '–')));
+                };
+                if (FANTASY_DATA) fillFan(); else { fEl.style.display = 'none'; ensureFantasy().then(() => { fEl.style.display = ''; fillFan(); }).catch(() => {}); }
                 const lg = papp[pl.id] || [];
                 lg.forEach(e => {
                   const oi = TEAMDIR[e.opp] || { iso: '' };
@@ -1886,10 +1916,8 @@ function openScorersModal(){
       listBox.appendChild(el('div', 'margin-top:9px;font-size:10px;color:' + pal.sub + ';text-align:center;', rows.length + ' ' + pos + ' · FIFA Fantasy ownership & points, this season'));
     }
     paint();
-    if (!FANTASY_DATA){
-      fetch('fantasy.json').then(r => r.ok ? r.json() : Promise.reject(r.status)).then(d => { FANTASY_DATA = d; paint(); })
-        .catch(() => { listBox.textContent = ''; listBox.appendChild(el('div', 'margin-top:16px;font-size:13px;color:' + pal.sub + ';', 'Could not load fantasy data.')); });
-    }
+    if (!FANTASY_DATA) ensureFantasy().then(paint)
+      .catch(() => { listBox.textContent = ''; listBox.appendChild(el('div', 'margin-top:16px;font-size:13px;color:' + pal.sub + ';', 'Could not load fantasy data.')); });
     return box;
   };
 
@@ -1917,6 +1945,7 @@ function openScorersModal(){
   });
   panel.appendChild(tabBar);
   panel.appendChild(content);
+  ensureFantasy().catch(() => {});   // warm the fantasy feed for the Players + Fantasy tabs
   show('goals');
   overlay.appendChild(panel);
   modalEl = overlay;
