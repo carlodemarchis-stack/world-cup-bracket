@@ -1781,20 +1781,22 @@ function openScorersModal(){
                 const age = ageFrom(pl.dob); if (age != null) bio.push('Age ' + age);
                 if (pl.ht) bio.push(pl.ht + ' cm');
                 if (pl.wt) bio.push(pl.wt + ' kg');
-                if (bio.length) pd.appendChild(el('div', 'font-size:11px;color:' + pal.sub + ';padding:1px 0 5px;', bio.join('  ·  ')));
-                // FIFA Fantasy line (owned % · points · price) — filled once the
-                // fantasy feed is available (prefetched when the modal opened).
-                const fEl = el('div', 'font-size:11px;padding:0 0 6px;');
-                pd.appendChild(fEl);
+                // Bio + FIFA Fantasy (owned % · points · price) on one line; the
+                // fantasy part fills in once the feed is available (prefetched).
+                const bioEl = el('div', 'font-size:11px;color:' + pal.sub + ';padding:1px 0 6px;');
+                if (bio.length) bioEl.appendChild(document.createTextNode(bio.join('  ·  ')));
+                const fEl = el('span');
+                bioEl.appendChild(fEl);
+                pd.appendChild(bioEl);
                 const fillFan = () => {
                   const fp = fantasyByFid(pl.id);
-                  if (!fp){ fEl.style.display = 'none'; return; }
+                  if (!fp) return;
                   fEl.textContent = '';
+                  if (bio.length) fEl.appendChild(document.createTextNode('  ·  '));
                   fEl.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.4px;color:" + accent + ';', 'FANTASY'));
-                  fEl.appendChild(el('span', 'color:' + pal.sub + ';',
-                    '   owned ' + fp.o + '%   ·   ' + fp.pts + ' pts   ·   $' + (fp.pr != null ? fp.pr : '–')));
+                  fEl.appendChild(document.createTextNode('  owned ' + fp.o + '% · ' + fp.pts + ' pts · $' + (fp.pr != null ? fp.pr : '–')));
                 };
-                if (FANTASY_DATA) fillFan(); else { fEl.style.display = 'none'; ensureFantasy().then(() => { fEl.style.display = ''; fillFan(); }).catch(() => {}); }
+                if (FANTASY_DATA) fillFan(); else ensureFantasy().then(fillFan).catch(() => {});
                 const lg = papp[pl.id] || [];
                 lg.forEach(e => {
                   const oi = TEAMDIR[e.opp] || { iso: '' };
