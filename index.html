@@ -707,9 +707,11 @@ function buildBracket(v){
   credit.style.cssText = 'flex:1 1 260px;min-width:0;text-align:left;';
   footer.appendChild(credit);
 
-  // Right cluster: card controls · timezone · settings.
+  // Right cluster: two rows — controls, then the view toggles beneath them.
   const right = el('div');
-  right.style.cssText = 'display:flex;align-items:center;gap:10px;flex-wrap:wrap;';
+  right.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;gap:6px;';
+  const row1 = el('div');
+  row1.style.cssText = 'display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;';
 
   // Confederation spotlight — pick one to light up its teams and the results
   // they won; everything else greys out. Sits before the card controls.
@@ -719,7 +721,7 @@ function buildBracket(v){
   confedSel.style.cssText = 'font:inherit;font-size:10px;text-transform:none;letter-spacing:normal;color:inherit;background:transparent;border:1px solid currentColor;border-radius:6px;padding:2px 5px;cursor:pointer;opacity:.7;';
   [['all', 'All teams']].concat(CONFED_LIST.map(c => [c, c])).forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; if (v === confedFilter) o.selected = true; confedSel.appendChild(o); });
   confedSel.onchange = () => { confedFilter = confedSel.value; applyConfed(confedFilter); };
-  right.appendChild(confedSel);
+  row1.appendChild(confedSel);
 
   // Card controls — mirror the arrow keys (← prev · stop/start · → next).
   const btnCss = 'display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;color:inherit;background:transparent;border:1px solid currentColor;border-radius:6px;cursor:pointer;opacity:.65;transition:opacity .15s;';
@@ -757,7 +759,7 @@ function buildBracket(v){
   // page activity (the global pointerdown "poke" would make the idle loop dismiss
   // the very card you just summoned). The arrow keys already bypass poke.
   cardCtl.addEventListener('pointerdown', e => e.stopPropagation());
-  right.appendChild(cardCtl);
+  row1.appendChild(cardCtl);
 
   // Timezone selector — kickoff times shown in this zone (defaults to the client's).
   const tzSel = document.createElement('select');
@@ -770,17 +772,26 @@ function buildBracket(v){
     .forEach(z => { if (z[0] !== localZone) zones.push(z); });
   zones.forEach(([z, label]) => { const o = document.createElement('option'); o.value = z; o.textContent = label; if (z === tz) o.selected = true; tzSel.appendChild(o); });
   tzSel.onchange = () => { tz = tzSel.value; render(); };
-  right.appendChild(tzSel);
-  const gear = document.createElement('button');
-  gear.id = 'settings-toggle';
-  gear.type = 'button';
-  gear.title = 'Settings';
-  gear.setAttribute('aria-label', 'Settings');
-  gear.setAttribute('aria-expanded', String(controlsOpen));
-  gear.classList.toggle('on', controlsOpen);
-  gear.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>';
-  gear.onclick = () => setControls(!controlsOpen);
-  right.appendChild(gear);
+  row1.appendChild(tzSel);
+
+  // View toggles on a second line — same font/colour as the row above, default on.
+  const row2 = el('div');
+  row2.style.cssText = 'display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end;';
+  const mkToggle = (label, key, after) => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.style.cssText = 'display:inline-flex;align-items:center;gap:5px;background:transparent;border:none;color:inherit;cursor:pointer;font:inherit;font-size:10px;text-transform:none;letter-spacing:normal;opacity:.8;padding:0;';
+    const box = el('span');
+    const acc = state.accentColor;
+    const paint = () => { const on = !!state[key]; box.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;flex:none;border-radius:3px;line-height:1;font-size:9px;font-weight:900;color:#fff;border:1px solid ' + (on ? acc : 'currentColor') + ';background:' + (on ? acc : 'transparent') + ';'; box.textContent = on ? '✓' : ''; b.setAttribute('aria-pressed', String(on)); };
+    b.appendChild(box); b.appendChild(el('span', '', label)); paint();
+    b.onclick = () => { state[key] = !state[key]; paint(); after(); };
+    return b;
+  };
+  row2.appendChild(mkToggle('Show scores', 'showResults', () => render()));
+  row2.appendChild(mkToggle('Show eliminated', 'showEliminated', () => applyElim()));
+
+  right.appendChild(row1);
+  right.appendChild(row2);
   footer.appendChild(right);
   root.appendChild(footer);
   return root;
