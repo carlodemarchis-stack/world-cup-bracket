@@ -274,7 +274,7 @@ function renderVals(P, DATA) {
     // here (theme colours in scope); rendered as a sibling so it isn't clipped.
     let statusBadge = null;
     if (showStatus){
-      const bs = Math.max(12, Math.round(sz * 0.36));
+      const bs = Math.round(Math.min(sz, 40) * 0.36);   // cap at group-crest size so the big 32 get the same small pip
       // Place the pip radially — on the outer side of the crest, away from centre.
       const dx = p.x - C, dy = p.y - C, len = Math.hypot(dx, dy) || 1, off = sz * 0.46;
       const ox = Math.round(dx / len * off), oy = Math.round(dy / len * off);
