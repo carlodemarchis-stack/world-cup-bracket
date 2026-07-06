@@ -1258,18 +1258,15 @@ function matchParticipants(side, L, k){
   if (L === 1){ const off = side === 'R' ? 0 : 16; return [DATA.teams[off + 2 * k].code, DATA.teams[off + 2 * k + 1].code]; }
   return [winnerOfNode(side, L - 1, 2 * k), winnerOfNode(side, L - 1, 2 * k + 1)];
 }
-// Teams still alive that could reach node (side,L,k): a decided R32 contributes only
-// its winner, an undecided one contributes both of its teams.
+// Teams still alive that could reach node (side,L,k): if this match is already
+// decided only its winner can advance; otherwise recurse into both children so a
+// decided round collapses to its winner at every level (not just the R32).
 function nodeCandidates(side, L, k){
   const off = side === 'R' ? 0 : 16;
   if (L === 0) return [DATA.teams[off + k].code];
-  if (L === 1){ const w = winnerOfNode(side, 1, k); return w ? [w] : [DATA.teams[off + 2*k].code, DATA.teams[off + 2*k + 1].code]; }
-  const span = Math.pow(2, L - 1), start = k * span, out = [];
-  for (let ks = start; ks < start + span; ks++){
-    const w = winnerOfNode(side, 1, ks);
-    if (w) out.push(w); else out.push(DATA.teams[off + 2*ks].code, DATA.teams[off + 2*ks + 1].code);
-  }
-  return out;
+  const w = winnerOfNode(side, L, k);
+  if (w) return [w];
+  return nodeCandidates(side, L - 1, 2 * k).concat(nodeCandidates(side, L - 1, 2 * k + 1));
 }
 const ROUND_NAME = { 1: 'Round of 32', 2: 'Round of 16', 3: 'Quarter-final', 4: 'Semi-final' };
 // Build a played-match result object from a slot ({score, winner, ...}); score
@@ -1311,8 +1308,8 @@ function resolveMatch(id){
   const slot = (L === 1) ? (DATA.r32[id] || {}) : (DATA.schedule[id] || {});
   if (slot.score) return playedFrom(round, part[0], part[1], slot);
   const res = { round, a: part[0], b: part[1], played: false, date: slot.date, time: slot.time, venue: slot.venue };
-  // For R16 and QF, list each slot's possible teams (until QF only — not SF/final/3rd).
-  if (L === 2 || L === 3){ res.candA = nodeCandidates(side, L - 1, 2 * k); res.candB = nodeCandidates(side, L - 1, 2 * k + 1); }
+  // R16 / QF / SF: list each slot's still-possible teams (not final/3rd).
+  if (L >= 2){ res.candA = nodeCandidates(side, L - 1, 2 * k); res.candB = nodeCandidates(side, L - 1, 2 * k + 1); }
   return res;
 }
 function openMatchModal(id){
