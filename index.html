@@ -617,14 +617,8 @@ function buildBracket(v){
       if (c.showScore) box.appendChild(el('div', c.scoreStyle, c.score));
       if (c.showEt)    box.appendChild(el('div', c.etStyle, 'Extra Time'));
     }
-    if (c.hasDate || c.hasTime){
-      // date + time on one line; the tz label is dropped to keep the box compact
-      // (the "Your time" selector already tells you the zone).
-      const parts = [];
-      if (c.hasDate) parts.push(c.date);
-      if (c.hasTime) parts.push(c.time);
-      box.appendChild(el('div', c.dateStyle, parts.join(' · ')));
-    }
+    if (c.hasDate)   box.appendChild(el('div', c.dateStyle, c.date));
+    if (c.hasTime)   box.appendChild(el('div', c.timeStyle, c.time + ' ' + (c.tzLabel || '')));
     if (c.match){
       box.dataset.match = c.match; box.style.pointerEvents = 'auto'; box.style.cursor = 'pointer'; box.onclick = () => openMatchModal(c.match);
       box.dataset.confed = c.confed || '';
