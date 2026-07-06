@@ -342,8 +342,10 @@ function renderVals(P, DATA) {
       match:o.match, confed: o.match ? matchConfed(o.match) : '',
       elim: !!(o.match && (() => { const rm = resolveMatch(o.match); return rm && rm.winner && eliminated[rm.winner]; })()),
       phase:o.phase, hasPhase:hasPhase,
-      // feeding teams' 3-letter codes flank the round label: "BRA  R16  NOR"
+      // feeding teams' 3-letter codes flank the round label, with their flags above
       ta:o.ta||null, tb:o.tb||null,
+      taIso: o.ta ? ((TEAMS.find(x => x.code === o.ta) || {}).iso || '') : '',
+      tbIso: o.tb ? ((TEAMS.find(x => x.code === o.tb) || {}).iso || '') : '',
       score:o.score, hasScore:hasScore, showScore:hasScore, pens:!!o.pens, penScore:o.penScore || '', showEt:(!!o.et && !o.pens),
       date:k.date, hasDate:hasDate,
       time:k.time, hasTime:(!!k.time && !hasScore), tzLabel:k.zone,
@@ -585,20 +587,25 @@ function buildBracket(v){
     const box = el('div', c.boxStyle);
     if (c.soon) box.className = 'match-soon';
     if (c.hasPhase || c.ta || c.tb){
-      const head = el('div', 'white-space:nowrap;line-height:1.12;margin-top:-2px;');
       const showTeams = !!(c.ta || c.tb);
-      if (showTeams) head.appendChild(el('span', c.teamStyle, c.ta || '?'));
-      if (c.hasPhase){
-        const ps = el('span', c.phaseStyle, c.phase);
-        if (showTeams) ps.style.margin = '0 4px';
-        head.appendChild(ps);
-      }
       if (showTeams){
-        const tb = el('span', c.teamStyle, c.tb || '?');
-        if (!c.hasPhase) tb.style.marginLeft = '4px';
-        head.appendChild(tb);
+        // flag above each 3-letter code; round label centred, aligned to the codes
+        const teamCol = (code, iso) => {
+          const col = el('div', 'display:flex;flex-direction:column;align-items:center;gap:2px;');
+          if (iso) col.appendChild(flagImg(iso, 15));
+          col.appendChild(el('span', c.teamStyle, code));
+          return col;
+        };
+        const head = el('div', 'display:flex;align-items:flex-end;justify-content:center;gap:5px;line-height:1;margin-top:-1px;');
+        head.appendChild(teamCol(c.ta || '?', c.taIso));
+        if (c.hasPhase){ const ps = el('span', c.phaseStyle, c.phase); ps.style.paddingBottom = '1px'; head.appendChild(ps); }
+        head.appendChild(teamCol(c.tb || '?', c.tbIso));
+        box.appendChild(head);
+      } else if (c.hasPhase){
+        const head = el('div', 'line-height:1.12;');
+        head.appendChild(el('span', c.phaseStyle, c.phase));
+        box.appendChild(head);
       }
-      box.appendChild(head);
     }
     if (c.pens){
       // one compact line so it doesn't cover the crest: score (black) + PENS (green)
@@ -610,8 +617,14 @@ function buildBracket(v){
       if (c.showScore) box.appendChild(el('div', c.scoreStyle, c.score));
       if (c.showEt)    box.appendChild(el('div', c.etStyle, 'Extra Time'));
     }
-    if (c.hasDate)   box.appendChild(el('div', c.dateStyle, c.date));
-    if (c.hasTime)   box.appendChild(el('div', c.timeStyle, c.time + ' ' + (c.tzLabel || '')));
+    if (c.hasDate || c.hasTime){
+      // date + time on one line; the tz label is dropped to keep the box compact
+      // (the "Your time" selector already tells you the zone).
+      const parts = [];
+      if (c.hasDate) parts.push(c.date);
+      if (c.hasTime) parts.push(c.time);
+      box.appendChild(el('div', c.dateStyle, parts.join(' · ')));
+    }
     if (c.match){
       box.dataset.match = c.match; box.style.pointerEvents = 'auto'; box.style.cursor = 'pointer'; box.onclick = () => openMatchModal(c.match);
       box.dataset.confed = c.confed || '';
