@@ -2897,7 +2897,210 @@
     "R:2:1": {
       "date": "Jul 6",
       "time": "02:00",
-      "venue": "Mexico City Stadium"
+      "venue": "Mexico City Stadium",
+      "score": "3–2",
+      "winner": "ENG",
+      "ref": "Alireza FAGHANI",
+      "att": 80824,
+      "form": {
+        "MEX": "4-1-2-3",
+        "ENG": "4-2-3-1"
+      },
+      "num": 92,
+      "goals": [
+        {
+          "t": "ENG",
+          "p": "Bellingham",
+          "m": "36'",
+          "id": "448202",
+          "a": "Saka",
+          "aid": "448196",
+          "desc": "Mexico have been the better side so far, but it's England who lead against the run of play as Jude Bellingham heads home a clever Bukayo Saka cross. Bellingham has had a fantastic World Cup.",
+          "dp": 1
+        },
+        {
+          "t": "ENG",
+          "p": "Bellingham",
+          "m": "38'",
+          "id": "448202",
+          "a": "Kane",
+          "aid": "369419",
+          "desc": "Just like that, England are two up — and it's Jude Bellingham again, finishing a neat one-two with Harry Kane. Two goals in as many minutes for the Real Madrid man.",
+          "dp": 1
+        },
+        {
+          "t": "MEX",
+          "p": "Quinones",
+          "m": "42'",
+          "id": "429157",
+          "desc": "Just as the game looked to be slipping away from Mexico, they're suddenly back in it — Julian Quinones fires the ball into the roof of the net from a free-kick. What a passage of play!",
+          "dp": 1
+        },
+        {
+          "t": "ENG",
+          "p": "Kane",
+          "m": "60'",
+          "id": "369419",
+          "pen": true,
+          "desc": "Harry Kane drives the resulting penalty into the corner past Rangel, extending his goalscoring record as the Three Lions edge towards victory.",
+          "dp": 1
+        },
+        {
+          "t": "MEX",
+          "p": "Jimenez",
+          "m": "69'",
+          "id": "356731",
+          "pen": true,
+          "desc": "Raul Jimenez — who has scored in every match he's faced Jordan Pickford — keeps up his 100-per-cent record, rifling into the corner past the England goalkeeper. It's 3-2!",
+          "dp": 1
+        }
+      ],
+      "var": [
+        {
+          "m": "54'",
+          "d": "Red card given",
+          "x": "Quansah"
+        },
+        {
+          "m": "67'",
+          "d": "Penalty given",
+          "x": "Jimenez"
+        }
+      ],
+      "cards": [
+        {
+          "m": "1'",
+          "p": "Rice",
+          "t": "ENG",
+          "c": "Y",
+          "id": "433097"
+        },
+        {
+          "m": "54'",
+          "p": "Quansah",
+          "t": "ENG",
+          "c": "R",
+          "id": "463809"
+        },
+        {
+          "m": "68'",
+          "p": "Guehi",
+          "t": "ENG",
+          "c": "Y",
+          "id": "405841"
+        },
+        {
+          "m": "71'",
+          "p": "Sanchez",
+          "t": "MEX",
+          "c": "Y",
+          "id": "403596"
+        },
+        {
+          "m": "72'",
+          "p": "Oreilly",
+          "t": "ENG",
+          "c": "Y",
+          "id": "463780"
+        },
+        {
+          "m": "90'+8'",
+          "p": "Vasquez",
+          "t": "MEX",
+          "c": "Y",
+          "id": "425701"
+        },
+        {
+          "m": "90'+8'",
+          "p": "Henderson",
+          "t": "ENG",
+          "c": "Y",
+          "id": "356189"
+        }
+      ],
+      "line": {
+        "MEX": {
+          "xi": [
+            "485070",
+            "403596",
+            "395516",
+            "425701",
+            "402772",
+            "419518",
+            "430763",
+            "500037",
+            "356731",
+            "429157",
+            "403585"
+          ],
+          "subs": [
+            [
+              "400634",
+              "395516",
+              ""
+            ],
+            [
+              "430759",
+              "500037",
+              "61'"
+            ],
+            [
+              "464533",
+              "430763",
+              "61'"
+            ],
+            [
+              "416576",
+              "403596",
+              "79'"
+            ],
+            [
+              "386339",
+              "429157",
+              "81'"
+            ]
+          ],
+          "cap": "395516"
+        },
+        "ENG": {
+          "xi": [
+            "336022",
+            "403049",
+            "463780",
+            "405841",
+            "463809",
+            "433097",
+            "481610",
+            "448202",
+            "448196",
+            "369419",
+            "448189"
+          ],
+          "subs": [
+            [
+              "369434",
+              "448196",
+              "57'"
+            ],
+            [
+              "494345",
+              "481610",
+              "75'"
+            ],
+            [
+              "506329",
+              "463780",
+              "75'"
+            ],
+            [
+              "492716",
+              "369419",
+              "90'"
+            ]
+          ],
+          "cap": "369419"
+        }
+      }
     },
     "R:2:2": {
       "date": "Jul 7",
