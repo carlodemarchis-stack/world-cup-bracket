@@ -1664,7 +1664,7 @@ function openScorersModal(){
     const m = resolveMatch(id);
     if (!m || !m.played) return;
     const stage = stageOf(id);
-    matches.push({ id, stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, venue: m.venue, att: m.att ? +m.att : null, date: m.date, num: m.num || 0, et: m.et, pens: m.pens, penScore: m.penScore });
+    matches.push({ id, stage, a: m.a, b: m.b, ag: m.aGoals, bg: m.bGoals, venue: m.venue, att: m.att ? +m.att : null, date: m.date, num: m.num || 0, et: m.et, pens: m.pens, penScore: m.penScore, ref: m.ref || '' });
     (m.var || []).forEach(v => varEvents.push({ id, stage, a: m.a, b: m.b, date: m.date, min: v.m, dec: v.d, x: v.x }));
     (m.cards || []).forEach(c => cardEvents.push({ id, stage, a: m.a, b: m.b, date: m.date, min: c.m, p: c.p, t: c.t, c: c.c }));
     const cnt = { [m.a]: 0, [m.b]: 0 };   // running score as the goals go in
@@ -1838,6 +1838,49 @@ function openScorersModal(){
         d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;color:" + pal.text + ';width:44px;flex:none;text-align:right;', cr.min));
         d.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', cr.p));
         d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;flex:none;color:" + pal.sub + ';', 'v ' + cr.opp));
+        detail.appendChild(d);
+      });
+      row.addEventListener('click', () => { const open = detail.style.display === 'none'; detail.style.display = open ? 'block' : 'none'; plus.textContent = open ? '–' : '+'; });
+      wrap.appendChild(row); wrap.appendChild(detail);
+      box.appendChild(wrap);
+    });
+    return box;
+  };
+
+  // Referees tab: officials ranked by matches taken, expandable to each ref's
+  // fixture log (round · teams · score · date). FIFA exposes no referee photos,
+  // so we use an initials monogram.
+  const refereesView = () => {
+    const box = el('div', 'margin-top:6px;');
+    const byRef = new Map();
+    matches.forEach(mt => {
+      if (!mt.ref) return;
+      const e = byRef.get(mt.ref) || { ref: mt.ref, n: 0, rows: [] };
+      e.n++; e.rows.push(mt);
+      byRef.set(mt.ref, e);
+    });
+    const refs = [...byRef.values()].sort((a, b) => b.n - a.n || a.ref.localeCompare(b.ref));
+    const initials = s => s.split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    let prev = null, rk = 0;
+    refs.forEach((e, idx) => {
+      rk = (e.n === prev) ? rk : idx + 1; prev = e.n;
+      e.rows.sort((x, y) => dateK(x.date) - dateK(y.date) || (x.num || 0) - (y.num || 0));
+      const wrap = el('div', 'border-bottom:1px solid ' + pal.line + ';');
+      const row = el('div', 'display:flex;align-items:center;gap:10px;padding:7px 0;cursor:pointer;');
+      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:" + pal.sub + ';width:16px;flex:none;text-align:right;', String(rk)));
+      row.appendChild(el('div', 'width:24px;height:24px;flex:none;border-radius:50%;background:' + accent + '22;color:' + accent + ";display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;", initials(e.ref)));
+      row.appendChild(el('span', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;font-weight:600;', e.ref));
+      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;flex:none;color:" + accent + ';', String(e.n)));
+      row.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.3px;text-transform:uppercase;color:" + pal.sub + ';flex:none;', e.n === 1 ? 'game' : 'games'));
+      const plus = el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;width:16px;flex:none;text-align:center;color:" + pal.sub + ';', '+');
+      row.appendChild(plus);
+      const detail = el('div', 'display:none;padding:2px 0 9px 42px;');
+      e.rows.forEach(mt => {
+        const d = el('div', 'display:flex;align-items:center;gap:8px;font-size:12px;color:' + pal.sub + ';padding:2px 0;cursor:pointer;');
+        d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.4px;color:" + accent + ';width:30px;flex:none;', mt.stage));
+        d.appendChild(flagPair(mt.a, mt.b, mt.ag + '–' + mt.bg, false));
+        d.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-size:11px;flex:none;margin-left:auto;", mt.date || ''));
+        d.addEventListener('click', ev => { ev.stopPropagation(); openMatchModal(mt.id); });
         detail.appendChild(d);
       });
       row.addEventListener('click', () => { const open = detail.style.display === 'none'; detail.style.display = open ? 'block' : 'none'; plus.textContent = open ? '–' : '+'; });
@@ -2126,7 +2169,7 @@ function openScorersModal(){
   const show = key => {
     Object.keys(btns).forEach(k => { btns[k].style.cssText = tabCss(k === key); });
     content.textContent = '';
-    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches], players: [playersView, Object.keys(DATA.squads || {})], fantasy: [fantasyView, [1]], totals: [totalsView, matches] }[key];
+    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches], players: [playersView, Object.keys(DATA.squads || {})], referees: [refereesView, matches.filter(x => x.ref)], fantasy: [fantasyView, [1]], totals: [totalsView, matches] }[key];
     if (special){
       content.appendChild(special[1].length ? special[0]() : el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
       return;
@@ -2135,7 +2178,7 @@ function openScorersModal(){
     if (items.length) content.appendChild(list(items, 15, key));
     else content.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
   };
-  [['goals', 'Goals'], ['assists', 'Assists'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches'], ['players', 'Players'], ['attendance', 'Attendance'], ['fantasy', 'Fantasy'], ['totals', 'Totals']].forEach(([k, lbl]) => {
+  [['goals', 'Goals'], ['assists', 'Assists'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches'], ['players', 'Players'], ['attendance', 'Attendance'], ['referees', 'Referees'], ['fantasy', 'Fantasy'], ['totals', 'Totals']].forEach(([k, lbl]) => {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl;
     b.onclick = () => show(k); btns[k] = b; tabBar.appendChild(b);
   });
