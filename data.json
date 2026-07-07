@@ -3107,7 +3107,199 @@
     "R:2:2": {
       "date": "Jul 7",
       "time": "18:00",
-      "venue": "Atlanta Stadium"
+      "venue": "Atlanta Stadium",
+      "score": "3–2",
+      "winner": "ARG",
+      "ref": "François Letexier",
+      "att": 68239,
+      "form": {
+        "ARG": "4-1-3-2",
+        "EGY": "4-2-3-1"
+      },
+      "num": 95,
+      "goals": [
+        {
+          "t": "EGY",
+          "p": "Yasser Ibrahim",
+          "m": "15'",
+          "id": "369267",
+          "a": "Marawan Attia",
+          "aid": "461788",
+          "desc": "Egypt were the brighter side early on and led through a well-taken Ibrahim header. Argentina hit back and won a penalty, but Messi — the World Cup's all-time leading scorer — was kept out from the spot.",
+          "dp": 1
+        },
+        {
+          "t": "EGY",
+          "p": "Mostafa Zico",
+          "m": "67'",
+          "id": "483161",
+          "a": "Haissem Hassan",
+          "aid": "424106"
+        },
+        {
+          "t": "ARG",
+          "p": "Romero",
+          "m": "79'",
+          "id": "431196",
+          "a": "Messi",
+          "aid": "229397"
+        },
+        {
+          "t": "ARG",
+          "p": "Messi",
+          "m": "83'",
+          "id": "229397",
+          "a": "Montiel",
+          "aid": "402926",
+          "desc": "Lautaro clipped a ball deep into the area for Messi, who drove it goalwards. Shobeir got a hand to it but couldn't keep it out, the effort coming back off the bar and over the line.",
+          "dp": 1
+        },
+        {
+          "t": "ARG",
+          "p": "Fernandez",
+          "m": "90'+2'",
+          "id": "448252",
+          "a": "Martinez",
+          "aid": "402920"
+        }
+      ],
+      "var": [
+        {
+          "m": "59'",
+          "d": "Goal disallowed"
+        }
+      ],
+      "cards": [
+        {
+          "m": "21'",
+          "p": "Saafan Elsaghir",
+          "t": "EGY",
+          "c": "Y"
+        },
+        {
+          "m": "90'",
+          "p": "Haissem Hassan",
+          "t": "EGY",
+          "c": "Y",
+          "id": "424106"
+        },
+        {
+          "m": "90'+3'",
+          "p": "Mostafa Shoubir",
+          "t": "EGY",
+          "c": "Y",
+          "id": "416906"
+        },
+        {
+          "m": "90'+4'",
+          "p": "Hamdy Fathy",
+          "t": "EGY",
+          "c": "Y",
+          "id": "429095"
+        },
+        {
+          "m": "90'+4'",
+          "p": "Saafan Elsaghir",
+          "t": "EGY",
+          "c": "R"
+        },
+        {
+          "m": "90'+8'",
+          "p": "Marawan Attia",
+          "t": "EGY",
+          "c": "Y",
+          "id": "461788"
+        },
+        {
+          "m": "90'+9'",
+          "p": "Hossam Hassan",
+          "t": "EGY",
+          "c": "Y"
+        }
+      ],
+      "line": {
+        "ARG": {
+          "xi": [
+            "308300",
+            "308322",
+            "402921",
+            "431196",
+            "402925",
+            "332847",
+            "428882",
+            "430628",
+            "448252",
+            "416081",
+            "229397"
+          ],
+          "subs": [
+            [
+              "402920",
+              "428882",
+              "66'"
+            ],
+            [
+              "430631",
+              "308322",
+              "66'"
+            ],
+            [
+              "402926",
+              "402925",
+              "73'"
+            ],
+            [
+              "310116",
+              "431196",
+              "90'+5'"
+            ],
+            [
+              "418963",
+              "416081",
+              "90'+5'"
+            ]
+          ],
+          "cap": "229397"
+        },
+        "EGY": {
+          "xi": [
+            "416906",
+            "369267",
+            "408950",
+            "344661",
+            "407022",
+            "430482",
+            "483161",
+            "433469",
+            "461788",
+            "344654",
+            "424106"
+          ],
+          "subs": [
+            [
+              "429095",
+              "430482",
+              ""
+            ],
+            [
+              "363863",
+              "424106",
+              "73'"
+            ],
+            [
+              "430476",
+              "483161",
+              "80'"
+            ],
+            [
+              "433461",
+              "433469",
+              "90'+6'"
+            ]
+          ],
+          "cap": "344654"
+        }
+      }
     },
     "R:2:3": {
       "date": "Jul 7",
@@ -3150,16 +3342,16 @@
           "id": "448362",
           "a": "Raskin",
           "aid": "495349",
-          "desc": "Belgium started brightly and have taken the lead with less then ten minutes on the clock as USA fail to clear their lines and Charles De Ketelaere converts from short range.",
-          "dp": 0
+          "desc": "Belgium started fast and were in front inside the first ten minutes, De Ketelaere finishing from close range after the USA failed to clear their lines.",
+          "dp": 1
         },
         {
           "t": "USA",
           "p": "Tillman",
           "m": "31'",
           "id": "448214",
-          "desc": "Malik Tillman levels the scores for USA with another brilliant free-kick, which is deflected and wrong-foots Thibaut Courtois and flies into the net. Seattle Stadium is going bananas!",
-          "dp": 0
+          "desc": "Tillman levelled it for the USA with another fine free-kick that took a deflection, wrong-footed Courtois and found the net, sending Seattle Stadium wild.",
+          "dp": 1
         },
         {
           "t": "BEL",
@@ -3168,8 +3360,8 @@
           "id": "448362",
           "a": "Trossard",
           "aid": "448355",
-          "desc": "Just like that, USA are a goal behind once again. In almost a replica of the opener, Trossard attacks down the left wing and crosses for De Ketelaere who rises above Tim Ream and heads home.   The Americans had the lead for barely a minute there.",
-          "dp": 0
+          "desc": "The USA were behind again almost at once. Much like the opener, Trossard broke down the left and crossed for De Ketelaere, who rose above Ream to head home barely a minute after the equaliser.",
+          "dp": 1
         },
         {
           "t": "BEL",
@@ -3178,8 +3370,8 @@
           "id": "448343",
           "a": "De Ketelaere",
           "aid": "448362",
-          "desc": "Belgium have extended their lead as USA goalkeeper Matt Freese comes out of his area, tries to control the ball then loses it and Hans Vanaken slots into the empty net from distance. A moment to forget for Freese.",
-          "dp": 0
+          "desc": "Belgium stretched the lead when USA keeper Freese came out of his box, lost control and let Vanaken roll into an empty net from distance — a moment to forget for the goalkeeper.",
+          "dp": 1
         },
         {
           "t": "BEL",
@@ -3188,8 +3380,8 @@
           "id": "358112",
           "a": "Vanaken",
           "aid": "448343",
-          "desc": "Veteran forward Romelu Lukaku puts the icing on the cake in stoppage time with a brilliant strike into the corner past Matt Freese. USA have been completely outplayed here.",
-          "dp": 0
+          "desc": "Lukaku sealed it in stoppage time, curling a superb strike past Freese into the corner as the USA were comprehensively outplayed.",
+          "dp": 1
         }
       ],
       "cards": [
