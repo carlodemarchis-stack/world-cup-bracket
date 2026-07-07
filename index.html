@@ -2439,7 +2439,7 @@ fetch('data.json', { cache: 'no-store' })
 (function(){
   const mq = q => !!(window.matchMedia && matchMedia(q).matches);   // evaluated live
   const IDLE_MS = 6000;
-  let lastActive = Date.now(), pool = null, mi = 0, ti = 0, si = 0, fi = 0, topN = 0, mLeft = 2 + Math.floor(Math.random() * 2), fanDue = false, current = null, nextAt = 0;
+  let lastActive = Date.now(), pool = null, mi = 0, ti = 0, si = 0, fi = 0, pi = 0, topN = 0, mLeft = 2 + Math.floor(Math.random() * 2), dueKind = null, current = null, nextAt = 0;
   let paused = false, hist = [], hp = -1, belowMode = false;   // belowMode = mobile, card under the circle
   // Preload the big card photos a few ahead so they never pop in empty.
   const PREF = new Set();
@@ -2447,21 +2447,28 @@ fetch('data.json', { cache: 'no-store' })
   const preload = url => { if (!url || PREF.has(url)) return; PREF.add(url); const im = new Image(); im.decoding = 'async'; im.src = url; };
   function prefetchAhead(){
     if (!pool) return;
-    const ml = pool.moments.length, tl = pool.tops.length, fl = (pool.fantasy || []).length;
+    const ml = pool.moments.length, tl = pool.tops.length, fl = (pool.fantasy || []).length, pl = (pool.power || []).length;
     for (let k = 0; k < 4 && ml; k++) preload(photoUrl(pool.moments[(mi + k) % ml]));
     for (let k = 0; k < 2 && tl; k++) preload(photoUrl(pool.tops[(ti + k) % tl]));
     for (let k = 0; k < 2 && fl; k++) preload(photoUrl(pool.fantasy[(fi + k) % fl]));
+    for (let k = 0; k < 2 && pl; k++) preload(photoUrl(pool.power[(pi + k) % pl]));
   }
   // Sequence: 2–3 goal/assist cards, then a spotlight slot — a top-scorer/assist
-  // card (every 3rd spotlight a stat card) — then one FIFA Fantasy card. Repeat.
+  // card (every 3rd spotlight a stat card) — then one FIFA Fantasy *or* Power
+  // card (alternating). Repeat.
   function nextItem(){
-    const ml = pool.moments.length, tl = pool.tops.length, sl = pool.stats.length, fl = (pool.fantasy || []).length;
-    if (!ml && !tl && !sl && !fl) return null;
-    if (fanDue && fl){ fanDue = false; return pool.fantasy[fi++ % fl]; }
+    const ml = pool.moments.length, tl = pool.tops.length, sl = pool.stats.length, fl = (pool.fantasy || []).length, pl = (pool.power || []).length;
+    if (!ml && !tl && !sl && !fl && !pl) return null;
+    if (dueKind === 'fantasy' && fl){ dueKind = null; return pool.fantasy[fi++ % fl]; }
+    if (dueKind === 'power' && pl){ dueKind = null; return pool.power[pi++ % pl]; }
+    dueKind = null;
     if (mLeft > 0 && ml){ mLeft--; return pool.moments[mi++ % ml]; }
     mLeft = 2 + Math.floor(Math.random() * 2);
     topN++;
-    if (fl) fanDue = true;   // one fantasy card follows each spotlight
+    // A fantasy or power card follows each spotlight, alternating between them.
+    if (fl && pl) dueKind = (topN % 2 === 0) ? 'power' : 'fantasy';
+    else if (fl) dueKind = 'fantasy';
+    else if (pl) dueKind = 'power';
     if (sl && topN % 3 === 0) return pool.stats[si++ % sl];
     if (tl) return pool.tops[ti++ % tl];
     if (sl) return pool.stats[si++ % sl];
@@ -2578,9 +2585,10 @@ fetch('data.json', { cache: 'no-store' })
     // Fantasy cards need fantasy.json — load it in the background and slot the
     // cards in once it arrives (pool is assigned by the caller before this runs).
     if (!FANTASY_DATA) ensureFantasy().then(() => { if (pool){ pool.fantasy = buildFantasyItems(); prefetchAhead(); } }).catch(() => {});
+    if (!POWER_DATA) ensurePower().then(() => { if (pool){ pool.power = buildPowerItems(); prefetchAhead(); } }).catch(() => {});
     // Only goal moment-cards cycle individually; assists are represented by the
     // top-assist spotlight cards (in `tops`), not as single-assist cards.
-    return { moments: shuffle(out.filter(x => x.kind === 'goal')), tops, stats: shuffle(stats), fantasy: buildFantasyItems() };
+    return { moments: shuffle(out.filter(x => x.kind === 'goal')), tops, stats: shuffle(stats), fantasy: buildFantasyItems(), power: buildPowerItems() };
   }
 
   // Real tournament goals/assists per FIFA person id (for the fantasy cards).
@@ -2605,6 +2613,27 @@ fetch('data.json', { cache: 'no-store' })
         pic: picById(p.fid), owned: p.o, pts: p.pts, avg: p.avg, price: p.pr, pos: p.pos, st: p.st,
         goals: ga.g, assists: ga.a };
     });
+  }
+
+  // Power-ranking spotlight cards: each standout player once, headlining the
+  // category they rank highest in (top 15 outfielders per category, top 10 GKs).
+  function buildPowerItems(){
+    if (!POWER_DATA) return [];
+    const of = POWER_DATA.of || [], gk = POWER_DATA.gk || [];
+    const rankOf = (arr, key) => { const m = {}; arr.filter(p => p[key] != null).slice().sort((a, b) => b[key] - a[key]).forEach((p, i) => m[p.i] = i + 1); return m; };
+    const R = { a: rankOf(of, 'a'), c: rankOf(of, 'c'), d: rankOf(of, 'd') }, LB = { a: 'Attacking', c: 'Creativity', d: 'Defending' };
+    const out = of.map(p => {
+      let best = null;
+      ['a', 'c', 'd'].forEach(k => { const r = R[k][p.i]; if (r && (!best || r < best.rank)) best = { k, rank: r, score: p[k] }; });
+      if (!best) return null;
+      return { kind: 'power', name: p.p, team: p.t, iso: (TEAMDIR[p.t] || {}).iso, pic: p.pic || picById(p.i),
+        cat: LB[best.k], lead: best.score, rank: best.rank, gk: false, pills: [['Att', p.a], ['Cre', p.c], ['Def', p.d]] };
+    }).filter(x => x && x.rank <= 15);
+    const gr = rankOf(gk, 'dg');
+    const gks = gk.map(p => ({ kind: 'power', name: p.p, team: p.t, iso: (TEAMDIR[p.t] || {}).iso, pic: p.pic || picById(p.i),
+      cat: 'Goalkeeper', lead: p.dg, rank: gr[p.i], gk: true, pills: [['Goal', p.dg], ['Poss', p.ip]] }))
+      .filter(x => x.lead != null && x.rank <= 10);
+    return out.concat(gks);
   }
 
   // Real drawn extent of the bracket, measured over crest/label-sized elements
@@ -2650,6 +2679,7 @@ fetch('data.json', { cache: 'no-store' })
   function takeoverItems(kind){
     if (!pool) pool = buildPool();
     if (kind === 'fantasy') return (pool.fantasy || []).slice();
+    if (kind === 'power') return (pool.power || []).slice().sort((a, b) => b.lead - a.lead);
     return (pool.tops || []).filter(x => x.kind === kind).slice().sort((a, b) => b.total - a.total);
   }
   function openTakeover(kind){
@@ -2702,6 +2732,7 @@ fetch('data.json', { cache: 'no-store' })
 
   function make(item, w){
     if (item.kind === 'fantasy') return makeFantasy(item, w);
+    if (item.kind === 'power') return makePower(item, w);
     if (item.kind === 'stat') return makeStat(item, w);
     if (item.kind === 'topscorer' || item.kind === 'topassist') return makeTop(item, w);
     return makeMoment(item, w);
@@ -2754,6 +2785,48 @@ fetch('data.json', { cache: 'no-store' })
     b.appendChild(el('div', 'padding:1px 15px 13px;font-size:11.5px;color:' + sub + ';', (bits.length ? bits.join(' · ') + ' at WC 2026' : 'Fantasy points · ownership · price') + note));
     b.style.pointerEvents = 'auto'; b.style.cursor = 'pointer';   // easter egg: full-screen the list
     b.addEventListener('click', () => openTakeover('fantasy'));
+    return b;
+  }
+
+  // FIFA Power Ranking spotlight — same shape as the Fantasy card, but a
+  // light-blue theme with a glow. Headline is the player's best category score.
+  function makePower(item, w){
+    const dark = state.bgTheme === 'Dark', PWR = '#22b0f0';
+    const bg = dark ? 'rgba(15,25,33,.98)' : 'rgba(255,255,255,.99)';
+    const fg = dark ? '#eaf4fb' : '#12222c', sub = dark ? 'rgba(206,226,238,.62)' : 'rgba(46,74,92,.62)';
+    const b = el('div', ''); b.className = 'wc-bubble';
+    b.style.cssText += 'position:fixed;z-index:60;width:' + w + 'px;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;pointer-events:none;' +
+      'border-radius:16px;background:' + bg + ';color:' + fg + ';box-shadow:0 0 22px ' + PWR + '66,0 16px 42px rgba(6,60,95,.34);border:1.5px solid ' + PWR + "88;font-family:'Barlow',system-ui,sans-serif;";
+    const hero = el('div', 'position:relative;width:100%;height:' + (belowMode ? 132 : 162) + 'px;overflow:hidden;background:' + (dark ? 'rgba(34,176,240,.16)' : 'rgba(34,176,240,.08)') + ';');
+    const url = photoUrl(item);
+    if (url){
+      const im = document.createElement('img'); im.decoding = 'async'; im.alt = '';
+      im.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transform:translateY(28px);opacity:0;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .5s ease;';
+      const reveal = () => requestAnimationFrame(() => { im.style.transform = 'translateY(0)'; im.style.opacity = '1'; });
+      im.addEventListener('load', reveal); im.src = url; if (im.complete && im.naturalWidth) reveal();
+      hero.appendChild(im);
+    } else if (item.iso){
+      const f = flagImg(item.iso, 100); f.style.width = '100%'; f.style.height = '100%'; f.style.opacity = '.45'; hero.appendChild(f);
+    }
+    hero.appendChild(el('div', 'position:absolute;left:0;right:0;bottom:0;height:78px;background:linear-gradient(180deg,' + (dark ? 'rgba(15,25,33,0),rgba(15,25,33,.98)' : 'rgba(255,255,255,0),rgba(255,255,255,.99)') + ');'));
+    hero.appendChild(el('div', 'position:absolute;top:10px;left:12px;background:' + PWR + ";color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:5px;box-shadow:0 2px 12px " + PWR + '99;', '⚡ Power Ranking'));
+    const num = el('div', 'position:absolute;top:7px;right:12px;display:flex;flex-direction:column;align-items:flex-end;line-height:.82;text-shadow:0 1px 6px rgba(0,0,0,.4),0 0 3px rgba(255,255,255,.3);');
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:38px;color:" + PWR + ';', item.lead.toFixed(2)));
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:" + PWR + ';', item.cat));
+    hero.appendChild(num);
+    const nm = el('div', 'position:absolute;left:13px;bottom:22px;display:flex;align-items:center;gap:7px;');
+    nm.appendChild(el('span', 'font-weight:800;font-size:19px;', item.name));
+    if (item.iso) nm.appendChild(flagImg(item.iso, 18));
+    hero.appendChild(nm);
+    hero.appendChild(el('div', "position:absolute;left:13px;bottom:7px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;color:" + sub + ';', '#' + item.rank + ' ' + item.cat + (item.gk ? '' : ' among outfielders')));
+    b.appendChild(hero);
+    const pills = el('div', 'display:flex;gap:7px;padding:11px 13px 7px;');
+    const pill = (label, val) => { const p = el('div', 'flex:1;text-align:center;background:' + (dark ? 'rgba(34,176,240,.14)' : 'rgba(34,176,240,.08)') + ';border:1px solid ' + PWR + '33;border-radius:9px;padding:7px 3px;'); p.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;line-height:1;color:" + PWR + ';', val == null ? '–' : (+val).toFixed(2))); p.appendChild(el('div', 'font-size:8.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:' + sub + ';margin-top:3px;', label)); return p; };
+    item.pills.forEach(([label, val]) => pills.appendChild(pill(label, val)));
+    b.appendChild(pills);
+    b.appendChild(el('div', 'padding:1px 15px 13px;font-size:11.5px;color:' + sub + ';', 'Rated 0–10 · FIFA Power Rankings powered by Aramco'));
+    b.style.pointerEvents = 'auto'; b.style.cursor = 'pointer';   // easter egg: full-screen the list
+    b.addEventListener('click', () => openTakeover('power'));
     return b;
   }
 
