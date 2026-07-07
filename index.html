@@ -2731,8 +2731,8 @@ fetch('data.json', { cache: 'no-store' })
     hero.appendChild(el('div', 'position:absolute;left:0;right:0;bottom:0;height:78px;background:linear-gradient(180deg,' + (dark ? 'rgba(24,20,38,0),rgba(24,20,38,.98)' : 'rgba(255,255,255,0),rgba(255,255,255,.99)') + ');'));
     hero.appendChild(el('div', 'position:absolute;top:10px;left:12px;background:' + FAN + ";color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:5px;box-shadow:0 2px 10px " + FAN + '77;', '★ FIFA Fantasy'));
     const num = el('div', 'position:absolute;top:7px;right:12px;display:flex;flex-direction:column;align-items:flex-end;line-height:.82;text-shadow:0 1px 6px rgba(0,0,0,.4),0 0 3px rgba(255,255,255,.3);');
-    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:44px;color:" + FAN + ';', item.owned + '%'));
-    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.5px;color:" + FAN + ';', 'OWNED'));
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:33px;color:" + FAN + ';', item.owned + '%'));
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:1.5px;color:" + FAN + ';', 'OWNED'));
     hero.appendChild(num);
     const nm = el('div', 'position:absolute;left:13px;bottom:22px;display:flex;align-items:center;gap:7px;');
     nm.appendChild(el('span', 'font-weight:800;font-size:19px;', item.name));
