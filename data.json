@@ -3131,7 +3131,170 @@
     "L:2:0": {
       "date": "Jul 7",
       "time": "02:00",
-      "venue": "Seattle Stadium"
+      "venue": "Seattle Stadium",
+      "score": "4–1",
+      "winner": "BEL",
+      "ref": "Adham Mohammad Tumah Makhadmeh",
+      "att": 66925,
+      "form": {
+        "USA": "3-5-2",
+        "BEL": "4-2-3-1"
+      },
+      "num": 94,
+      "goals": [
+        {
+          "t": "BEL",
+          "p": "De Ketelaere",
+          "m": "9'",
+          "id": "448362",
+          "a": "Raskin",
+          "aid": "495349",
+          "desc": "Belgium started brightly and have taken the lead with less then ten minutes on the clock as USA fail to clear their lines and Charles De Ketelaere converts from short range.",
+          "dp": 0
+        },
+        {
+          "t": "USA",
+          "p": "Tillman",
+          "m": "31'",
+          "id": "448214",
+          "desc": "Malik Tillman levels the scores for USA with another brilliant free-kick, which is deflected and wrong-foots Thibaut Courtois and flies into the net. Seattle Stadium is going bananas!",
+          "dp": 0
+        },
+        {
+          "t": "BEL",
+          "p": "De Ketelaere",
+          "m": "33'",
+          "id": "448362",
+          "a": "Trossard",
+          "aid": "448355",
+          "desc": "Just like that, USA are a goal behind once again. In almost a replica of the opener, Trossard attacks down the left wing and crosses for De Ketelaere who rises above Tim Ream and heads home.   The Americans had the lead for barely a minute there.",
+          "dp": 0
+        },
+        {
+          "t": "BEL",
+          "p": "Vanaken",
+          "m": "57'",
+          "id": "448343",
+          "a": "De Ketelaere",
+          "aid": "448362",
+          "desc": "Belgium have extended their lead as USA goalkeeper Matt Freese comes out of his area, tries to control the ball then loses it and Hans Vanaken slots into the empty net from distance. A moment to forget for Freese.",
+          "dp": 0
+        },
+        {
+          "t": "BEL",
+          "p": "Lukaku",
+          "m": "90'+3'",
+          "id": "358112",
+          "a": "Vanaken",
+          "aid": "448343",
+          "desc": "Veteran forward Romelu Lukaku puts the icing on the cake in stoppage time with a brilliant strike into the corner past Matt Freese. USA have been completely outplayed here.",
+          "dp": 0
+        }
+      ],
+      "cards": [
+        {
+          "m": "35'",
+          "p": "Mckennie",
+          "t": "USA",
+          "c": "Y",
+          "id": "390259"
+        },
+        {
+          "m": "69'",
+          "p": "Tillman",
+          "t": "USA",
+          "c": "Y",
+          "id": "448214"
+        }
+      ],
+      "line": {
+        "USA": {
+          "xi": [
+            "499913",
+            "406280",
+            "419062",
+            "441251",
+            "339510",
+            "464542",
+            "390238",
+            "390259",
+            "448214",
+            "390267",
+            "466624"
+          ],
+          "subs": [
+            [
+              "419068",
+              "406280",
+              ""
+            ],
+            [
+              "499912",
+              "390267",
+              "59'"
+            ],
+            [
+              "419082",
+              "390238",
+              "72'"
+            ],
+            [
+              "390276",
+              "466624",
+              "90'+2'"
+            ],
+            [
+              "486390",
+              "441251",
+              "90'+2'"
+            ]
+          ],
+          "cap": "339510"
+        },
+        "BEL": {
+          "xi": [
+            "358106",
+            "448360",
+            "448373",
+            "411443",
+            "514166",
+            "401444",
+            "495349",
+            "448364",
+            "448355",
+            "448377",
+            "448362"
+          ],
+          "subs": [
+            [
+              "448343",
+              "448364",
+              "21'"
+            ],
+            [
+              "358112",
+              "448362",
+              "67'"
+            ],
+            [
+              "448341",
+              "448377",
+              "67'"
+            ],
+            [
+              "433092",
+              "448355",
+              "89'"
+            ],
+            [
+              "290821",
+              "495349",
+              "89'"
+            ]
+          ],
+          "cap": "401444"
+        }
+      }
     },
     "L:2:1": {
       "date": "Jul 6",
