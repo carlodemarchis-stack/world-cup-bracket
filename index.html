@@ -2067,30 +2067,31 @@ function openScorersModal(){
                 // fantasy part fills in once the feed is available (prefetched).
                 const bioEl = el('div', 'font-size:11px;color:' + pal.sub + ';padding:1px 0 6px;');
                 if (bio.length) bioEl.appendChild(document.createTextNode(bio.join('  ·  ')));
-                const fEl = el('span');
+                // Bio · FANTASY · POWER all on the one line; each half fills in
+                // once its feed is available (both are prefetched on modal open).
+                const fEl = el('span'), pEl = el('span');
                 bioEl.appendChild(fEl);
+                bioEl.appendChild(pEl);
                 pd.appendChild(bioEl);
                 const fillFan = () => {
                   const fp = fantasyByFid(pl.id);
                   if (!fp) return;
                   fEl.textContent = '';
-                  if (bio.length) fEl.appendChild(document.createTextNode('  ·  '));
+                  fEl.appendChild(document.createTextNode('  ·  '));
                   fEl.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.4px;color:" + accent + ';', 'FANTASY'));
                   fEl.appendChild(document.createTextNode('  owned ' + fp.o + '% · ' + fp.pts + ' pts · $' + (fp.pr != null ? fp.pr : '–')));
                 };
                 if (FANTASY_DATA) fillFan(); else ensureFantasy().then(fillFan).catch(() => {});
-                // FIFA Power Ranking line (0-10 per category), its own line below.
-                const pwrEl = el('div', 'font-size:11px;color:' + pal.sub + ';padding:0 0 6px;');
-                pd.appendChild(pwrEl);
                 const fillPwr = () => {
                   const pr = powerByFid(pl.id);
                   if (!pr) return;
-                  pwrEl.textContent = '';
-                  pwrEl.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.4px;color:" + accent + ';', 'POWER'));
+                  pEl.textContent = '';
+                  pEl.appendChild(document.createTextNode('  ·  '));
+                  pEl.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.4px;color:" + accent + ';', 'POWER'));
                   const parts = pr.cat === 'gk'
                     ? [['Goal', pr.dg], ['Poss', pr.ip]]
                     : [['Att', pr.a], ['Cre', pr.c], ['Def', pr.d]];
-                  pwrEl.appendChild(document.createTextNode('  ' + parts.map(([l, v]) => l + ' ' + (v != null ? v.toFixed(2) : '–')).join(' · ')));
+                  pEl.appendChild(document.createTextNode('  ' + parts.map(([l, v]) => l + ' ' + (v != null ? v.toFixed(2) : '–')).join(' · ')));
                 };
                 if (POWER_DATA) fillPwr(); else ensurePower().then(fillPwr).catch(() => {});
                 const lg = papp[pl.id] || [];
