@@ -922,6 +922,26 @@ function fantasyByFid(id){
   }
   return FANTASY_DATA._byFid[String(id)] || null;
 }
+// FIFA Power Rankings (powerranking.json) — lazy-loaded once, shared by the
+// Power tab and the per-player power line in the Players tab.
+let POWER_DATA = null;
+function ensurePower(){
+  if (POWER_DATA) return Promise.resolve(POWER_DATA);
+  if (!ensurePower._p) ensurePower._p = fetch('powerranking.json')
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(d => { POWER_DATA = d; return d; });
+  return ensurePower._p;
+}
+// FIFA person id -> power-ranking entry ({cat:'of', a,c,d} or {cat:'gk', dg,ip}).
+function powerByFid(id){
+  if (!POWER_DATA) return null;
+  if (!POWER_DATA._byFid){
+    POWER_DATA._byFid = {};
+    (POWER_DATA.of || []).forEach(p => { POWER_DATA._byFid[String(p.i)] = Object.assign({ cat: 'of' }, p); });
+    (POWER_DATA.gk || []).forEach(p => { POWER_DATA._byFid[String(p.i)] = Object.assign({ cat: 'gk' }, p); });
+  }
+  return POWER_DATA._byFid[String(id)] || null;
+}
 // Map every FIFA player id to their headshot URL, built once from the squads.
 let PIC_BY_ID = null;
 function picById(id){
@@ -2059,6 +2079,20 @@ function openScorersModal(){
                   fEl.appendChild(document.createTextNode('  owned ' + fp.o + '% · ' + fp.pts + ' pts · $' + (fp.pr != null ? fp.pr : '–')));
                 };
                 if (FANTASY_DATA) fillFan(); else ensureFantasy().then(fillFan).catch(() => {});
+                // FIFA Power Ranking line (0-10 per category), its own line below.
+                const pwrEl = el('div', 'font-size:11px;color:' + pal.sub + ';padding:0 0 6px;');
+                pd.appendChild(pwrEl);
+                const fillPwr = () => {
+                  const pr = powerByFid(pl.id);
+                  if (!pr) return;
+                  pwrEl.textContent = '';
+                  pwrEl.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.4px;color:" + accent + ';', 'POWER'));
+                  const parts = pr.cat === 'gk'
+                    ? [['Goal', pr.dg], ['Poss', pr.ip]]
+                    : [['Att', pr.a], ['Cre', pr.c], ['Def', pr.d]];
+                  pwrEl.appendChild(document.createTextNode('  ' + parts.map(([l, v]) => l + ' ' + (v != null ? v.toFixed(2) : '–')).join(' · ')));
+                };
+                if (POWER_DATA) fillPwr(); else ensurePower().then(fillPwr).catch(() => {});
                 const lg = papp[pl.id] || [];
                 lg.forEach(e => {
                   const oi = TEAMDIR[e.opp] || { iso: '' };
@@ -2133,6 +2167,54 @@ function openScorersModal(){
   };
 
   // FIFA Fantasy player pool — per-position, ordered by ownership % or points.
+  // Power tab: FIFA Power Rankings (powered by Aramco) — every player's 0-10
+  // rating. A category selector ranks the photo list by that score.
+  const powerView = () => {
+    const box = el('div', 'margin-top:8px;');
+    // key -> {label, group ('of'|'gk'), field, others:[[field,label]...]}
+    const CATS = {
+      a: { label: 'Attacking', group: 'of', field: 'a', others: [['c', 'CRE'], ['d', 'DEF']] },
+      c: { label: 'Creativity', group: 'of', field: 'c', others: [['a', 'ATT'], ['d', 'DEF']] },
+      d: { label: 'Defending', group: 'of', field: 'd', others: [['a', 'ATT'], ['c', 'CRE']] },
+      gk: { label: 'Goalkeeper', group: 'gk', field: 'dg', others: [['ip', 'POSS']] },
+    };
+    let cat = 'a';
+    const bar = el('div', 'display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 9px;'), btns = {};
+    const btnCss = on => 'flex:none;border:1px solid ' + (on ? accent : pal.line) + ';background:' + (on ? accent : 'transparent') + ';color:' + (on ? '#fff' : pal.sub) + ";border-radius:20px;padding:4px 12px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.4px;";
+    Object.keys(CATS).forEach(k => { const b = document.createElement('button'); b.type = 'button'; b.textContent = CATS[k].label; b.onclick = () => { cat = k; paint(); }; btns[k] = b; bar.appendChild(b); });
+    box.appendChild(bar);
+    const listBox = el('div'); box.appendChild(listBox);
+    function paint(){
+      Object.keys(CATS).forEach(k => btns[k].style.cssText = btnCss(k === cat));
+      listBox.textContent = '';
+      if (!POWER_DATA){ listBox.appendChild(el('div', 'margin-top:16px;font-size:13px;color:' + pal.sub + ';', 'Loading power rankings…')); return; }
+      const C = CATS[cat];
+      const rows = (POWER_DATA[C.group] || []).filter(p => p[C.field] != null).slice()
+        .sort((x, y) => y[C.field] - x[C.field]);
+      rows.forEach((p, i) => {
+        const info = TEAMDIR[p.t] || { name: p.t, iso: '' };
+        const row = el('div', 'display:flex;align-items:center;gap:10px;padding:6px 2px;border-bottom:1px solid ' + pal.line + ';');
+        row.appendChild(el('span', "width:20px;flex:none;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:" + pal.sub + ';text-align:right;', String(i + 1)));
+        row.appendChild(avatarImg(p.pic || picById(p.i), 32, pal.line));
+        const nm = el('div', 'flex:1;min-width:0;');
+        const top = el('div', 'display:flex;align-items:center;gap:6px;');
+        if (info.iso) top.appendChild(flagImg(info.iso, 15));
+        top.appendChild(el('div', 'font-size:12.5px;font-weight:600;color:' + pal.text + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', p.p));
+        nm.appendChild(top);
+        const sub = C.others.map(([f, lbl]) => lbl + ' ' + (p[f] != null ? p[f].toFixed(2) : '–')).join('  ·  ');
+        nm.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.3px;color:" + pal.sub + ';margin-top:1px;', sub));
+        row.appendChild(nm);
+        row.appendChild(el('span', "flex:none;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:19px;color:" + accent + ';width:44px;text-align:right;', p[C.field].toFixed(2)));
+        listBox.appendChild(row);
+      });
+      listBox.appendChild(el('div', 'margin-top:9px;font-size:10px;color:' + pal.sub + ';text-align:center;', rows.length + ' players · FIFA Power Rankings powered by Aramco · scored 0–10 over ' + (POWER_DATA.n || '') + ' matches'));
+    }
+    paint();
+    if (!POWER_DATA) ensurePower().then(paint)
+      .catch(() => { listBox.textContent = ''; listBox.appendChild(el('div', 'margin-top:16px;font-size:13px;color:' + pal.sub + ';', 'Could not load power rankings.')); });
+    return box;
+  };
+
   const fantasyView = () => {
     const box = el('div', 'margin-top:8px;');
     let pos = 'FWD', sortKey = 'o';
@@ -2194,7 +2276,7 @@ function openScorersModal(){
   const show = key => {
     Object.keys(btns).forEach(k => { btns[k].style.cssText = tabCss(k === key); });
     content.textContent = '';
-    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches], players: [playersView, Object.keys(DATA.squads || {})], referees: [refereesView, matches.filter(x => x.ref)], fantasy: [fantasyView, [1]], totals: [totalsView, matches] }[key];
+    const special = { attendance: [attendanceView, matches.filter(x => x.att)], var: [varView, varEvents], cards: [cardsView, cardEvents], matches: [matchesView, matches], players: [playersView, Object.keys(DATA.squads || {})], referees: [refereesView, matches.filter(x => x.ref)], power: [powerView, [1]], fantasy: [fantasyView, [1]], totals: [totalsView, matches] }[key];
     if (special){
       content.appendChild(special[1].length ? special[0]() : el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
       return;
@@ -2203,13 +2285,14 @@ function openScorersModal(){
     if (items.length) content.appendChild(list(items, 15, key));
     else content.appendChild(el('div', 'margin-top:14px;font-size:13px;color:' + pal.sub + ';', 'Nothing recorded yet.'));
   };
-  [['goals', 'Goals'], ['assists', 'Assists'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches'], ['players', 'Players'], ['attendance', 'Attendance'], ['referees', 'Referees'], ['fantasy', 'Fantasy'], ['totals', 'Totals']].forEach(([k, lbl]) => {
+  [['goals', 'Goals'], ['assists', 'Assists'], ['cards', 'Cards'], ['var', 'VAR'], ['matches', 'Matches'], ['players', 'Players'], ['attendance', 'Att.'], ['referees', 'Refs'], ['power', 'Power'], ['fantasy', 'Fantasy'], ['totals', 'Totals']].forEach(([k, lbl]) => {
     const b = document.createElement('button'); b.type = 'button'; b.textContent = lbl;
     b.onclick = () => show(k); btns[k] = b; tabBar.appendChild(b);
   });
   panel.appendChild(tabBar);
   panel.appendChild(content);
   ensureFantasy().catch(() => {});   // warm the fantasy feed for the Players + Fantasy tabs
+  ensurePower().catch(() => {});     // warm the power feed for the Players + Power tabs
   show('goals');
   overlay.appendChild(panel);
   modalEl = overlay;
