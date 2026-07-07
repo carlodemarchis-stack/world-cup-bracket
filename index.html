@@ -2644,61 +2644,51 @@ fetch('data.json', { cache: 'no-store' })
   // —— Easter egg: click a Top-scorer / Top-assist / Fantasy card and its whole
   // list blows up full-screen (over the circle); a click anywhere dismisses it. ——
   let takeoverEl = null;
-  function idDir(){
-    if (idDir._c) return idDir._c;
-    const d = {};
-    Object.entries(DATA.squads || {}).forEach(([code, sq]) => (sq || []).forEach(p => {
-      if (p.id != null) d[String(p.id)] = { name: p.p, team: code, iso: (TEAMDIR[code] || {}).iso, pic: p.pic };
-    }));
-    return idDir._c = d;
-  }
-  function boardFor(kind){
-    if (kind === 'fantasy'){
-      const rows = (FANTASY_DATA ? FANTASY_DATA.players.slice().sort((a, b) => b.o - a.o || b.pts - a.pts) : [])
-        .map(p => ({ name: p.n, team: p.t, iso: (FANTASY_DATA.teams[p.t] || {}).iso, pic: picById(p.fid), val: p.o + '%', sub: p.pts + ' pts' }));
-      return { title: 'FIFA Fantasy', kicker: '★ Most selected', accent: '#7c4dff', rows };
-    }
-    const g = kind === 'topassist' ? 'a' : 'g', t = goalTally(), dir = idDir();
-    const rows = Object.keys(t).filter(id => t[id][g] > 0)
-      .sort((x, y) => t[y][g] - t[x][g])
-      .map(id => { const d = dir[id] || {}; return { name: d.name || '—', team: d.team, iso: d.iso, pic: d.pic || picById(id), val: String(t[id][g]) }; });
-    return kind === 'topassist'
-      ? { title: 'Top Assists', kicker: 'Assist leaders', accent: state.accentColor, rows }
-      : { title: 'Top Scorers', kicker: 'Goal leaders', accent: state.accentColor, rows };
+  // The full-screen items for a clicked card: the top-scorer/assist spotlight
+  // cards (biggest tally first) or the top fantasy cards — the same cards that
+  // cycle, just laid out as a full grid.
+  function takeoverItems(kind){
+    if (!pool) pool = buildPool();
+    if (kind === 'fantasy') return (pool.fantasy || []).slice();
+    return (pool.tops || []).filter(x => x.kind === kind).slice().sort((a, b) => b.total - a.total);
   }
   function openTakeover(kind){
     closeTakeover();
     clearCurrent();
-    const dark = state.bgTheme === 'Dark', B = boardFor(kind);
-    const bg = dark ? '#141310' : '#faf7f0', fg = dark ? '#f4efe2' : '#1c1813';
-    const sub = dark ? 'rgba(228,222,206,.55)' : 'rgba(70,62,48,.6)', line = dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.07)';
+    const items = takeoverItems(kind);
+    if (!items.length) return;
+    const dark = state.bgTheme === 'Dark';
+    const bg = dark ? '#141310' : '#faf7f0', sub = dark ? 'rgba(228,222,206,.5)' : 'rgba(70,62,48,.5)';
     const ov = el('div', '');
-    ov.style.cssText = 'position:fixed;inset:0;z-index:300;background:' + bg + ';color:' + fg + ";font-family:'Barlow',system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;cursor:pointer;overflow:hidden;opacity:0;transition:opacity .3s ease;padding:max(24px,4vh) 18px 16px;box-sizing:border-box;";
-    const head = el('div', 'flex:none;text-align:center;margin-bottom:10px;');
-    head.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:" + B.accent + ';', B.kicker));
-    head.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(30px,7vw,54px);letter-spacing:1px;text-transform:uppercase;line-height:1;", B.title));
-    ov.appendChild(head);
-    const list = el('div', 'width:100%;max-width:620px;flex:1;display:flex;flex-direction:column;justify-content:flex-start;min-height:0;');
-    const N = Math.max(6, Math.min(B.rows.length, Math.floor((window.innerHeight - 150) / 62)));
-    B.rows.slice(0, N).forEach((r, i) => {
-      const row = el('div', 'display:flex;align-items:center;gap:13px;flex:1 1 0;max-height:96px;min-height:0;border-top:1px solid ' + line + ';padding:0 4px;');
-      row.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;width:32px;flex:none;text-align:right;color:" + (i < 3 ? B.accent : sub) + ';', String(i + 1)));
-      row.appendChild(avatarImg(r.pic, 40, line));
-      if (r.iso) row.appendChild(flagImg(r.iso, 24));
-      const nm = el('div', 'flex:1;min-width:0;');
-      nm.appendChild(el('div', 'font-weight:800;font-size:clamp(15px,3.6vw,21px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', r.name));
-      nm.appendChild(el('div', 'font-size:12px;color:' + sub + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;', (TEAMDIR[r.team] || {}).name || r.team || ''));
-      row.appendChild(nm);
-      if (r.sub) row.appendChild(el('div', 'font-size:12px;color:' + sub + ';flex:none;text-align:right;', r.sub));
-      row.appendChild(el('div', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(24px,6vw,40px);color:" + B.accent + ';flex:none;min-width:52px;text-align:right;', r.val));
-      list.appendChild(row);
-    });
-    ov.appendChild(list);
-    ov.appendChild(el('div', 'flex:none;margin-top:9px;font-size:11px;letter-spacing:.5px;color:' + sub + ';', 'Tap anywhere to close'));
+    ov.style.cssText = 'position:fixed;inset:0;z-index:300;background:' + bg + ";font-family:'Barlow',system-ui,sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;opacity:0;transition:opacity .3s ease;";
+    // Two rows of real cards, sized to fill the width, then the whole grid is
+    // scaled down uniformly so both rows fit the height.
+    const vw = window.innerWidth, vh = window.innerHeight, gap = 14;
+    const cardW = vw < 640 ? 190 : 244;
+    const cols = Math.max(2, Math.min(6, Math.floor((vw - 24 + gap) / (cardW + gap))));
+    const N = Math.min(items.length, cols * 2);
+    const grid = el('div', 'display:flex;flex-wrap:wrap;align-items:flex-start;align-content:center;justify-content:center;gap:' + gap + 'px;');
+    grid.style.width = (cols * (cardW + gap) - gap) + 'px';
+    const savedBelow = belowMode; belowMode = false;   // build full-height cards
+    for (let i = 0; i < N; i++){
+      const card = make(items[i], cardW);
+      card.classList.add('show');
+      card.style.position = 'static'; card.style.left = ''; card.style.top = ''; card.style.zIndex = 'auto';
+      card.style.margin = '0'; card.style.flex = 'none'; card.style.width = cardW + 'px';
+      card.style.opacity = '1'; card.style.transform = 'none'; card.style.pointerEvents = 'none';
+      grid.appendChild(card);
+    }
+    belowMode = savedBelow;
+    ov.appendChild(grid);
+    ov.appendChild(el('div', 'position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.5px;color:' + sub + ';pointer-events:none;', 'Tap anywhere to close'));
     ov.addEventListener('click', closeTakeover);
     document.body.appendChild(ov);
     takeoverEl = ov;
-    requestAnimationFrame(() => { ov.style.opacity = '1'; });
+    requestAnimationFrame(() => {
+      const s = Math.min(1, (vw - 24) / grid.scrollWidth, (vh - 40) / grid.scrollHeight);
+      if (s < 1){ grid.style.transformOrigin = 'center center'; grid.style.transform = 'scale(' + s.toFixed(3) + ')'; }
+      ov.style.opacity = '1';
+    });
     ov._onKey = e => { if (e.key === 'Escape') closeTakeover(); };
     addEventListener('keydown', ov._onKey);
   }
