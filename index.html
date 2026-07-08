@@ -2560,11 +2560,11 @@ fetch('data.json', { cache: 'no-store' })
     const allTop = [];
     Object.keys(goalLog).forEach(pid => {
       const pic = picById(pid); if (!pic) return;
-      allTop.push({ kind: 'topscorer', name: pInfo[pid].name, team: pInfo[pid].team, pic, total: goalLog[pid].length, log: goalLog[pid] });
+      allTop.push({ kind: 'topscorer', id: String(pid), name: pInfo[pid].name, team: pInfo[pid].team, pic, total: goalLog[pid].length, log: goalLog[pid] });
     });
     Object.keys(assistLog).forEach(pid => {
       const pic = picById(pid); if (!pic) return;
-      allTop.push({ kind: 'topassist', name: aInfo[pid].name, team: aInfo[pid].team, pic, total: assistLog[pid].length, log: assistLog[pid] });
+      allTop.push({ kind: 'topassist', id: String(pid), name: aInfo[pid].name, team: aInfo[pid].team, pic, total: assistLog[pid].length, log: assistLog[pid] });
     });
     const shuffle = arr => { for (let i = arr.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = arr[i]; arr[i] = arr[j]; arr[j] = t; } return arr; };
     // Rotation top cards (2+ only): front-load the biggest tallies, then
@@ -2618,7 +2618,7 @@ fetch('data.json', { cache: 'no-store' })
     return FANTASY_DATA.players.slice().sort((a, b) => b.o - a.o || b.pts - a.pts).map(p => {
       posRank[p.pos] = (posRank[p.pos] || 0) + 1;
       const ga = tally[String(p.fid)] || { g: 0, a: 0 };
-      return { kind: 'fantasy', rank: posRank[p.pos], name: p.n, team: p.t, iso: (FANTASY_DATA.teams[p.t] || {}).iso,
+      return { kind: 'fantasy', id: String(p.fid), rank: posRank[p.pos], name: p.n, team: p.t, iso: (FANTASY_DATA.teams[p.t] || {}).iso,
         pic: picById(p.fid), owned: p.o, pts: p.pts, avg: p.avg, price: p.pr, pos: p.pos, st: p.st,
         goals: ga.g, assists: ga.a };
     }).slice(0, 100);
@@ -2635,11 +2635,11 @@ fetch('data.json', { cache: 'no-store' })
       let best = null;
       ['a', 'c', 'd'].forEach(k => { const r = R[k][p.i]; if (r && (!best || r < best.rank)) best = { k, rank: r, score: p[k] }; });
       if (!best) return null;
-      return { kind: 'power', name: p.p, team: p.t, iso: (TEAMDIR[p.t] || {}).iso, pic: p.pic || picById(p.i),
+      return { kind: 'power', id: String(p.i), name: p.p, team: p.t, iso: (TEAMDIR[p.t] || {}).iso, pic: p.pic || picById(p.i),
         cat: LB[best.k], lead: best.score, rank: best.rank, gk: false, pills: [['Att', p.a], ['Cre', p.c], ['Def', p.d]] };
     }).filter(x => x && x.rank <= 15);
     const gr = rankOf(gk, 'dg');
-    const gks = gk.map(p => ({ kind: 'power', name: p.p, team: p.t, iso: (TEAMDIR[p.t] || {}).iso, pic: p.pic || picById(p.i),
+    const gks = gk.map(p => ({ kind: 'power', id: String(p.i), name: p.p, team: p.t, iso: (TEAMDIR[p.t] || {}).iso, pic: p.pic || picById(p.i),
       cat: 'Goalkeeper', lead: p.dg, rank: gr[p.i], gk: true, pills: [['Goal', p.dg], ['Poss', p.ip]] }))
       .filter(x => x.lead != null && x.rank <= 10);
     return out.concat(gks);
@@ -2748,11 +2748,17 @@ fetch('data.json', { cache: 'no-store' })
         const end = Math.min(items.length, shown + PAGE);
         const savedBelow = belowMode; belowMode = false;
         for (let i = shown; i < end; i++){
-          const c = make(items[i], cardW);
+          const it = items[i];
+          const c = make(it, cardW);
           c.classList.add('show');
           c.style.position = 'static'; c.style.left = ''; c.style.top = ''; c.style.zIndex = 'auto';
           c.style.margin = '0'; c.style.width = cardW + 'px'; c.style.opacity = '1'; c.style.transform = 'none'; c.style.pointerEvents = 'none';
-          grid.appendChild(c);
+          // Wrap so a click opens the player's card set (the card's own click is inert).
+          const wrap = el('div', 'cursor:pointer;');
+          wrap.style.width = cardW + 'px';
+          wrap.appendChild(c);
+          wrap.onclick = () => openPlayerCards(it.id);
+          grid.appendChild(wrap);
         }
         belowMode = savedBelow;
         shown = end;
@@ -2784,6 +2790,60 @@ fetch('data.json', { cache: 'no-store' })
     if (ov._onKey) removeEventListener('keydown', ov._onKey);
     ov.style.opacity = '0';
     setTimeout(() => ov.remove(), 300);
+  }
+
+  // Clicking a board card opens a modal with every card that exists for that same
+  // player: their top-scorer / top-assist / power-ranking / fantasy cards.
+  let playerModalEl = null;
+  function playerCards(id){
+    if (!id || !pool) return [];
+    const out = [];
+    const st = (pool.allTop || []).find(x => x.id === id && x.kind === 'topscorer');
+    const as = (pool.allTop || []).find(x => x.id === id && x.kind === 'topassist');
+    const pw = (pool.power || []).find(x => x.id === id);
+    const fn = (pool.fantasy || []).find(x => x.id === id);
+    if (st) out.push(st);
+    if (as) out.push(as);
+    if (pw) out.push(pw);
+    if (fn) out.push(fn);
+    return out;
+  }
+  function openPlayerCards(id){
+    const cards = playerCards(id);
+    if (!cards.length) return;
+    closePlayerCards();
+    const ov = el('div', '');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:320;background:rgba(0,0,0,.62);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .25s ease;padding:16px;box-sizing:border-box;';
+    const x = el('div', 'position:absolute;top:14px;right:16px;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:21px;font-weight:800;color:#fff;background:rgba(255,255,255,.2);box-shadow:0 3px 12px rgba(0,0,0,.35);');
+    x.textContent = '✕'; x.setAttribute('aria-label', 'Close'); x.onclick = closePlayerCards;
+    ov.appendChild(x);
+    ov.appendChild(el('div', "flex:none;color:#fff;text-align:center;margin-bottom:14px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(22px,4vw,34px);letter-spacing:.5px;text-shadow:0 2px 10px rgba(0,0,0,.5);", cards[0].name));
+    const vw = window.innerWidth, gap = 14;
+    const cardW = Math.min(240, Math.floor((vw - 32 - (Math.min(cards.length, 4) - 1) * gap) / Math.min(cards.length, 4)));
+    const row = el('div', 'display:flex;flex-wrap:wrap;gap:' + gap + 'px;justify-content:center;align-items:flex-start;max-width:100%;max-height:78vh;overflow:auto;');
+    const savedBelow = belowMode; belowMode = false;
+    cards.forEach(it => {
+      const c = make(it, cardW);
+      c.classList.add('show');
+      c.style.position = 'static'; c.style.left = ''; c.style.top = ''; c.style.zIndex = 'auto';
+      c.style.margin = '0'; c.style.width = cardW + 'px'; c.style.opacity = '1'; c.style.transform = 'none'; c.style.pointerEvents = 'none';
+      row.appendChild(c);
+    });
+    belowMode = savedBelow;
+    ov.appendChild(row);
+    ov.addEventListener('click', e => { if (e.target === ov || e.target === row) closePlayerCards(); });
+    document.body.appendChild(ov);
+    playerModalEl = ov;
+    requestAnimationFrame(() => { ov.style.opacity = '1'; });
+    ov._onKey = e => { if (e.key === 'Escape'){ e.stopImmediatePropagation(); closePlayerCards(); } };
+    addEventListener('keydown', ov._onKey, true);
+  }
+  function closePlayerCards(){
+    if (!playerModalEl) return;
+    const ov = playerModalEl; playerModalEl = null;
+    if (ov._onKey) removeEventListener('keydown', ov._onKey, true);
+    ov.style.opacity = '0';
+    setTimeout(() => ov.remove(), 250);
   }
 
   function make(item, w){
