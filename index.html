@@ -2609,15 +2609,19 @@ fetch('data.json', { cache: 'no-store' })
   }
   const POSLONG = { GK: 'goalkeeper', DEF: 'defender', MID: 'midfielder', FWD: 'forward' };
   // Top 100 players by ownership, each with their real WC goals/assists joined in.
+  // `rank` is the player's rank *within their position* by ownership (so a card
+  // reads e.g. "#1 most-selected midfielder", not their overall position).
   function buildFantasyItems(){
     if (!FANTASY_DATA) return [];
     const tally = goalTally();
-    return FANTASY_DATA.players.slice().sort((a, b) => b.o - a.o || b.pts - a.pts).slice(0, 100).map((p, i) => {
+    const posRank = {};
+    return FANTASY_DATA.players.slice().sort((a, b) => b.o - a.o || b.pts - a.pts).map(p => {
+      posRank[p.pos] = (posRank[p.pos] || 0) + 1;
       const ga = tally[String(p.fid)] || { g: 0, a: 0 };
-      return { kind: 'fantasy', rank: i + 1, name: p.n, team: p.t, iso: (FANTASY_DATA.teams[p.t] || {}).iso,
+      return { kind: 'fantasy', rank: posRank[p.pos], name: p.n, team: p.t, iso: (FANTASY_DATA.teams[p.t] || {}).iso,
         pic: picById(p.fid), owned: p.o, pts: p.pts, avg: p.avg, price: p.pr, pos: p.pos, st: p.st,
         goals: ga.g, assists: ga.a };
-    });
+    }).slice(0, 100);
   }
 
   // Power-ranking spotlight cards: each standout player once, headlining the
@@ -2689,8 +2693,8 @@ fetch('data.json', { cache: 'no-store' })
   const TAKEOVER_SCREENS = [
     { kind: 'topscorer', title: 'Top Scorers' },
     { kind: 'topassist', title: 'Top Assists' },
-    { kind: 'fantasy', title: 'FIFA Fantasy' },
-    { kind: 'power', title: 'Power Rankings' }
+    { kind: 'power', title: 'Power Rankings' },
+    { kind: 'fantasy', title: 'FIFA Fantasy' }
   ];
   function openTakeover(kind){
     closeTakeover();
@@ -2929,7 +2933,7 @@ fetch('data.json', { cache: 'no-store' })
     hero.appendChild(el('div', 'position:absolute;top:10px;left:12px;background:' + accent + ';color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:5px;', isScorer ? 'Top scorer' : 'Top assists'));
     const num = el('div', 'position:absolute;top:6px;right:12px;display:flex;flex-direction:column;align-items:flex-end;line-height:.85;text-shadow:0 1px 5px rgba(0,0,0,.45),0 0 3px rgba(255,255,255,.35);');
     num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:52px;color:" + accent + ';', String(item.total)));
-    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:" + accent + ';', isScorer ? 'GOALS' : 'ASSISTS'));
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:" + accent + ';', (isScorer ? 'GOAL' : 'ASSIST') + (item.total === 1 ? '' : 'S')));
     hero.appendChild(num);
     const nm = el('div', 'position:absolute;left:13px;bottom:8px;display:flex;align-items:center;gap:7px;');
     nm.appendChild(el('span', 'font-weight:800;font-size:19px;', item.name));
