@@ -2720,26 +2720,44 @@ fetch('data.json', { cache: 'no-store' })
     ov.appendChild(scroll);
     const tabBtns = {};
     const tabCss = (on, acc) => 'flex:none;border:1.5px solid ' + (on ? acc : idle) + ';background:' + (on ? acc : 'transparent') + ';color:' + (on ? '#fff' : idleTxt) + ";border-radius:22px;padding:5px 15px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.6px;text-transform:uppercase;";
+    const PAGE = 50;
     function paint(k){
       const scr = TAKEOVER_SCREENS.find(s => s.kind === k) || TAKEOVER_SCREENS[0];
       titleEl.textContent = scr.title;
+      const acc = accentFor(k);
       Object.keys(tabBtns).forEach(kk => { tabBtns[kk].style.cssText = tabCss(kk === k, accentFor(kk)); });
       scroll.textContent = '';
-      const items = takeoverItems(k).slice(0, 50);
+      const items = takeoverItems(k);
       const vw = window.innerWidth, gap = 12;
       const cols = Math.max(2, Math.min(5, Math.floor((vw - 32 + gap) / (204 + gap))));
       const cardW = Math.floor((Math.min(vw - 32, 1340) - (cols - 1) * gap) / cols);
       const grid = el('div', 'display:grid;grid-template-columns:repeat(' + cols + ',' + cardW + 'px);gap:' + gap + 'px;justify-content:center;align-items:start;margin:0 auto;');
-      const savedBelow = belowMode; belowMode = false;
-      items.forEach(it => {
-        const c = make(it, cardW);
-        c.classList.add('show');
-        c.style.position = 'static'; c.style.left = ''; c.style.top = ''; c.style.zIndex = 'auto';
-        c.style.margin = '0'; c.style.width = cardW + 'px'; c.style.opacity = '1'; c.style.transform = 'none'; c.style.pointerEvents = 'none';
-        grid.appendChild(c);
-      });
-      belowMode = savedBelow;
       scroll.appendChild(grid);
+      // "Load more" — reveal the next 50 each click, looping until all are shown.
+      const moreWrap = el('div', 'display:flex;justify-content:center;padding:16px 0 4px;');
+      const moreBtn = document.createElement('button'); moreBtn.type = 'button';
+      moreBtn.style.cssText = 'border:1.5px solid ' + acc + ';background:transparent;color:' + acc + ";cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.6px;text-transform:uppercase;padding:8px 24px;border-radius:24px;";
+      moreWrap.appendChild(moreBtn);
+      scroll.appendChild(moreWrap);
+      let shown = 0;
+      const addBatch = () => {
+        const end = Math.min(items.length, shown + PAGE);
+        const savedBelow = belowMode; belowMode = false;
+        for (let i = shown; i < end; i++){
+          const c = make(items[i], cardW);
+          c.classList.add('show');
+          c.style.position = 'static'; c.style.left = ''; c.style.top = ''; c.style.zIndex = 'auto';
+          c.style.margin = '0'; c.style.width = cardW + 'px'; c.style.opacity = '1'; c.style.transform = 'none'; c.style.pointerEvents = 'none';
+          grid.appendChild(c);
+        }
+        belowMode = savedBelow;
+        shown = end;
+        const left = items.length - shown;
+        if (left <= 0) moreWrap.style.display = 'none';
+        else moreBtn.textContent = 'Load ' + Math.min(PAGE, left) + ' more';
+      };
+      moreBtn.onclick = addBatch;
+      addBatch();          // first 50
       scroll.scrollTop = 0;
     }
     TAKEOVER_SCREENS.forEach(s => {
