@@ -2555,21 +2555,21 @@ fetch('data.json', { cache: 'no-store' })
         }
       });
     });
-    // Top-scorer / top-assist spotlight cards for anyone on 2+ of either.
+    // Spotlight cards for every scorer / assister that has a photo. The ambient
+    // rotation only uses the 2+ tallies, but the Top Cards board lists them all.
+    const allTop = [];
     Object.keys(goalLog).forEach(pid => {
-      if (goalLog[pid].length < 2) return;
       const pic = picById(pid); if (!pic) return;
-      out.push({ kind: 'topscorer', name: pInfo[pid].name, team: pInfo[pid].team, pic, total: goalLog[pid].length, log: goalLog[pid] });
+      allTop.push({ kind: 'topscorer', name: pInfo[pid].name, team: pInfo[pid].team, pic, total: goalLog[pid].length, log: goalLog[pid] });
     });
     Object.keys(assistLog).forEach(pid => {
-      if (assistLog[pid].length < 2) return;
       const pic = picById(pid); if (!pic) return;
-      out.push({ kind: 'topassist', name: aInfo[pid].name, team: aInfo[pid].team, pic, total: assistLog[pid].length, log: assistLog[pid] });
+      allTop.push({ kind: 'topassist', name: aInfo[pid].name, team: aInfo[pid].team, pic, total: assistLog[pid].length, log: assistLog[pid] });
     });
     const shuffle = arr => { for (let i = arr.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = arr[i]; arr[i] = arr[j]; arr[j] = t; } return arr; };
-    // Top cards: front-load the biggest tallies, then interleave a high and a low
-    // one so it opens strong but keeps mixing high and low stats.
-    const topsSorted = shuffle(out.filter(x => x.kind === 'topscorer' || x.kind === 'topassist')).sort((a, b) => b.total - a.total);
+    // Rotation top cards (2+ only): front-load the biggest tallies, then
+    // interleave a high and a low one so it opens strong but keeps mixing.
+    const topsSorted = shuffle(allTop.filter(x => x.total >= 2)).sort((a, b) => b.total - a.total);
     const half = Math.ceil(topsSorted.length / 2), hi = topsSorted.slice(0, half), lo = topsSorted.slice(half), tops = [];
     for (let i = 0; i < hi.length; i++){ tops.push(hi[i]); if (lo[i]) tops.push(lo[i]); }
     // Stat cards — a subset of the totals, one number at a time.
@@ -2593,7 +2593,7 @@ fetch('data.json', { cache: 'no-store' })
     if (!POWER_DATA) ensurePower().then(() => { if (pool){ pool.power = buildPowerItems(); prefetchAhead(); } }).catch(() => {});
     // Only goal moment-cards cycle individually; assists are represented by the
     // top-assist spotlight cards (in `tops`), not as single-assist cards.
-    return { moments: shuffle(out.filter(x => x.kind === 'goal')), tops, stats: shuffle(stats), fantasy: buildFantasyItems(), power: buildPowerItems() };
+    return { moments: shuffle(out.filter(x => x.kind === 'goal')), tops, allTop, stats: shuffle(stats), fantasy: buildFantasyItems(), power: buildPowerItems() };
   }
 
   // Real tournament goals/assists per FIFA person id (for the fantasy cards).
@@ -2684,7 +2684,7 @@ fetch('data.json', { cache: 'no-store' })
     if (!pool) pool = buildPool();
     if (kind === 'fantasy') return (pool.fantasy || []).slice();
     if (kind === 'power') return (pool.power || []).slice().sort((a, b) => b.lead - a.lead);
-    return (pool.tops || []).filter(x => x.kind === kind).slice().sort((a, b) => b.total - a.total);
+    return (pool.allTop || []).filter(x => x.kind === kind).slice().sort((a, b) => b.total - a.total || a.name.localeCompare(b.name));
   }
   const TAKEOVER_SCREENS = [
     { kind: 'topscorer', title: 'Top Scorers' },
