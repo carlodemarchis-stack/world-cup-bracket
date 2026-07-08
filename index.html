@@ -2445,7 +2445,7 @@ fetch('data.json', { cache: 'no-store' })
   const mq = q => !!(window.matchMedia && matchMedia(q).matches);   // evaluated live
   const IDLE_MS = 6000;
   let lastActive = Date.now(), pool = null, mi = 0, ti = 0, si = 0, fi = 0, pi = 0, topN = 0, mLeft = 2 + Math.floor(Math.random() * 2), dueKind = null, current = null, nextAt = 0;
-  let paused = false, hist = [], hp = -1, belowMode = false;   // belowMode = mobile, card under the circle
+  let paused = false, hist = [], hp = -1, belowMode = false, listMode = false;   // belowMode = mobile card under circle; listMode = card is in the ranked board grid
   // Preload the big card photos a few ahead so they never pop in empty.
   const PREF = new Set();
   const photoUrl = item => item.pic ? item.pic + '?&io=transform:fit,width:340&quality=86' : null;
@@ -2753,6 +2753,7 @@ fetch('data.json', { cache: 'no-store' })
       const addBatch = () => {
         const end = Math.min(items.length, shown + PAGE);
         const savedBelow = belowMode; belowMode = false;
+        const savedList = listMode; listMode = true;   // hide the redundant rank on scorer/assist cards
         for (let i = shown; i < end; i++){
           const it = items[i];
           const c = make(it, cardW);
@@ -2766,7 +2767,7 @@ fetch('data.json', { cache: 'no-store' })
           wrap.onclick = () => openPlayerCards(it.id);
           grid.appendChild(wrap);
         }
-        belowMode = savedBelow;
+        belowMode = savedBelow; listMode = savedList;
         shown = end;
         const left = items.length - shown;
         if (left <= 0) moreWrap.style.display = 'none';
@@ -3001,11 +3002,14 @@ fetch('data.json', { cache: 'no-store' })
     num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:52px;color:" + accent + ';', String(item.total)));
     num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:" + accent + ';', (isScorer ? 'GOAL' : 'ASSIST') + (item.total === 1 ? '' : 'S')));
     hero.appendChild(num);
-    const nm = el('div', 'position:absolute;left:13px;bottom:22px;display:flex;align-items:center;gap:7px;');
+    // Rank is redundant in the ranked board grid — only show it in the ambient
+    // bubble and the single-player modal.
+    const showRank = item.rank && !listMode;
+    const nm = el('div', 'position:absolute;left:13px;bottom:' + (showRank ? 22 : 8) + 'px;display:flex;align-items:center;gap:7px;');
     nm.appendChild(el('span', 'font-weight:800;font-size:19px;', item.name));
     if (TEAMDIR[item.team] && TEAMDIR[item.team].iso) nm.appendChild(flagImg(TEAMDIR[item.team].iso, 18));
     hero.appendChild(nm);
-    if (item.rank) hero.appendChild(el('div', "position:absolute;left:13px;bottom:7px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;color:" + sub + ';', '#' + item.rank + (isScorer ? ' for goals' : ' for assists')));
+    if (showRank) hero.appendChild(el('div', "position:absolute;left:13px;bottom:7px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;color:" + sub + ';', '#' + item.rank + (isScorer ? ' for goals' : ' for assists')));
     b.appendChild(hero);
     // Goal / assist log — like the Goals & Assists tabs.
     const list = el('div', 'padding:8px 14px 12px;display:flex;flex-direction:column;');
