@@ -2566,6 +2566,12 @@ fetch('data.json', { cache: 'no-store' })
       const pic = picById(pid); if (!pic) return;
       allTop.push({ kind: 'topassist', id: String(pid), name: aInfo[pid].name, team: aInfo[pid].team, pic, total: assistLog[pid].length, log: assistLog[pid] });
     });
+    // Rank within each category (competition ranking — equal tallies share a rank).
+    ['topscorer', 'topassist'].forEach(kind => {
+      const list = allTop.filter(x => x.kind === kind).sort((a, b) => b.total - a.total);
+      let rk = 0, prev = null;
+      list.forEach((it, i) => { if (it.total !== prev){ rk = i + 1; prev = it.total; } it.rank = rk; });
+    });
     const shuffle = arr => { for (let i = arr.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = arr[i]; arr[i] = arr[j]; arr[j] = t; } return arr; };
     // Rotation top cards (2+ only): front-load the biggest tallies, then
     // interleave a high and a low one so it opens strong but keeps mixing.
@@ -2995,10 +3001,11 @@ fetch('data.json', { cache: 'no-store' })
     num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:52px;color:" + accent + ';', String(item.total)));
     num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:" + accent + ';', (isScorer ? 'GOAL' : 'ASSIST') + (item.total === 1 ? '' : 'S')));
     hero.appendChild(num);
-    const nm = el('div', 'position:absolute;left:13px;bottom:8px;display:flex;align-items:center;gap:7px;');
+    const nm = el('div', 'position:absolute;left:13px;bottom:22px;display:flex;align-items:center;gap:7px;');
     nm.appendChild(el('span', 'font-weight:800;font-size:19px;', item.name));
     if (TEAMDIR[item.team] && TEAMDIR[item.team].iso) nm.appendChild(flagImg(TEAMDIR[item.team].iso, 18));
     hero.appendChild(nm);
+    if (item.rank) hero.appendChild(el('div', "position:absolute;left:13px;bottom:7px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;color:" + sub + ';', '#' + item.rank + (isScorer ? ' for goals' : ' for assists')));
     b.appendChild(hero);
     // Goal / assist log — like the Goals & Assists tabs.
     const list = el('div', 'padding:8px 14px 12px;display:flex;flex-direction:column;');
