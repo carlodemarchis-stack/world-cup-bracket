@@ -794,6 +794,11 @@ function buildBracket(v){
     b.onclick = () => { state[key] = !state[key]; paint(); after(); };
     return b;
   };
+  const topCardsBtn = document.createElement('button'); topCardsBtn.type = 'button';
+  topCardsBtn.textContent = 'Top Cards';
+  topCardsBtn.style.cssText = "background:transparent;border:1px solid " + state.accentColor + ';color:' + state.accentColor + ";cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.6px;text-transform:uppercase;padding:3px 11px;border-radius:20px;line-height:1;";
+  topCardsBtn.onclick = () => { if (window.wcbCards && window.wcbCards.openTop) window.wcbCards.openTop('topscorer'); };
+  row2.appendChild(topCardsBtn);
   row2.appendChild(mkToggle('Show scores', 'showResults', () => render()));
   row2.appendChild(mkToggle('Show eliminated', 'showEliminated', () => applyElim()));
 
@@ -2670,55 +2675,84 @@ fetch('data.json', { cache: 'no-store' })
       (Date.now() - lastActive) >= IDLE_MS;
   }
 
-  // —— Easter egg: click a Top-scorer / Top-assist / Fantasy card and its whole
-  // list blows up full-screen (over the circle); a click anywhere dismisses it. ——
+  // —— Full-screen "Top Cards" board — opened from the footer button or by
+  // clicking a Top-scorer / Top-assist / Fantasy / Power spotlight card. Centred
+  // title, a switcher between the four boards, and a scrollable 5-wide grid
+  // (up to 50 cards), with a clear close X. ——
   let takeoverEl = null;
-  // The full-screen items for a clicked card: the top-scorer/assist spotlight
-  // cards (biggest tally first) or the top fantasy cards — the same cards that
-  // cycle, just laid out as a full grid.
   function takeoverItems(kind){
     if (!pool) pool = buildPool();
     if (kind === 'fantasy') return (pool.fantasy || []).slice();
     if (kind === 'power') return (pool.power || []).slice().sort((a, b) => b.lead - a.lead);
     return (pool.tops || []).filter(x => x.kind === kind).slice().sort((a, b) => b.total - a.total);
   }
+  const TAKEOVER_SCREENS = [
+    { kind: 'topscorer', title: 'Top Scorers' },
+    { kind: 'topassist', title: 'Top Assists' },
+    { kind: 'fantasy', title: 'FIFA Fantasy' },
+    { kind: 'power', title: 'Power Rankings' }
+  ];
   function openTakeover(kind){
     closeTakeover();
     clearCurrent();
-    const items = takeoverItems(kind);
-    if (!items.length) return;
+    if (!pool) pool = buildPool();
     const dark = state.bgTheme === 'Dark';
-    const bg = dark ? '#141310' : '#faf7f0', sub = dark ? 'rgba(228,222,206,.5)' : 'rgba(70,62,48,.5)';
+    const bg = dark ? '#141310' : '#faf7f0';
+    const titleCol = dark ? '#f4efe2' : '#111';
+    const idle = dark ? 'rgba(255,255,255,.22)' : 'rgba(0,0,0,.16)';
+    const idleTxt = dark ? 'rgba(228,222,206,.7)' : 'rgba(50,44,34,.62)';
+    const accentFor = k => k === 'fantasy' ? '#7c4dff' : k === 'power' ? '#22b0f0' : state.accentColor;
     const ov = el('div', '');
-    ov.style.cssText = 'position:fixed;inset:0;z-index:300;background:' + bg + ";font-family:'Barlow',system-ui,sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;opacity:0;transition:opacity .3s ease;";
-    // Two rows of real cards, sized to fill the width, then the whole grid is
-    // scaled down uniformly so both rows fit the height.
-    const vw = window.innerWidth, vh = window.innerHeight, gap = 14;
-    const cardW = vw < 640 ? 190 : 244;
-    const cols = Math.max(2, Math.min(6, Math.floor((vw - 24 + gap) / (cardW + gap))));
-    const N = Math.min(items.length, cols * 2);
-    const grid = el('div', 'display:flex;flex-wrap:wrap;align-items:flex-start;align-content:center;justify-content:center;gap:' + gap + 'px;');
-    grid.style.width = (cols * (cardW + gap) - gap) + 'px';
-    const savedBelow = belowMode; belowMode = false;   // build full-height cards
-    for (let i = 0; i < N; i++){
-      const card = make(items[i], cardW);
-      card.classList.add('show');
-      card.style.position = 'static'; card.style.left = ''; card.style.top = ''; card.style.zIndex = 'auto';
-      card.style.margin = '0'; card.style.flex = 'none'; card.style.width = cardW + 'px';
-      card.style.opacity = '1'; card.style.transform = 'none'; card.style.pointerEvents = 'none';
-      grid.appendChild(card);
+    ov.style.cssText = 'position:fixed;inset:0;z-index:300;background:' + bg + ";font-family:'Barlow',system-ui,sans-serif;display:flex;flex-direction:column;opacity:0;transition:opacity .3s ease;";
+    // Top bar: centred title + a very clear close X at top-right.
+    const bar = el('div', 'position:relative;flex:none;padding:16px 62px 2px;');
+    const titleEl = el('div', "text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(26px,5vw,44px);letter-spacing:1px;text-transform:uppercase;line-height:1;color:" + titleCol + ';');
+    bar.appendChild(titleEl);
+    const x = el('div', 'position:absolute;top:10px;right:14px;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:21px;font-weight:800;line-height:1;color:#fff;background:' + (dark ? 'rgba(255,255,255,.18)' : 'rgba(0,0,0,.75)') + ';box-shadow:0 3px 12px rgba(0,0,0,.3);');
+    x.textContent = '✕'; x.setAttribute('aria-label', 'Close'); x.onclick = closeTakeover;
+    bar.appendChild(x);
+    ov.appendChild(bar);
+    // Switcher between the boards.
+    const tabsRow = el('div', 'flex:none;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:8px 12px 10px;');
+    ov.appendChild(tabsRow);
+    // Scrollable grid (5 across, up to 50 cards).
+    const scroll = el('div', 'flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:2px 16px 22px;');
+    ov.appendChild(scroll);
+    const tabBtns = {};
+    const tabCss = (on, acc) => 'flex:none;border:1.5px solid ' + (on ? acc : idle) + ';background:' + (on ? acc : 'transparent') + ';color:' + (on ? '#fff' : idleTxt) + ";border-radius:22px;padding:5px 15px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.6px;text-transform:uppercase;";
+    function paint(k){
+      const scr = TAKEOVER_SCREENS.find(s => s.kind === k) || TAKEOVER_SCREENS[0];
+      titleEl.textContent = scr.title;
+      Object.keys(tabBtns).forEach(kk => { tabBtns[kk].style.cssText = tabCss(kk === k, accentFor(kk)); });
+      scroll.textContent = '';
+      const items = takeoverItems(k).slice(0, 50);
+      const vw = window.innerWidth, gap = 12;
+      const cols = Math.max(2, Math.min(5, Math.floor((vw - 32 + gap) / (204 + gap))));
+      const cardW = Math.floor((Math.min(vw - 32, 1340) - (cols - 1) * gap) / cols);
+      const grid = el('div', 'display:grid;grid-template-columns:repeat(' + cols + ',' + cardW + 'px);gap:' + gap + 'px;justify-content:center;align-items:start;margin:0 auto;');
+      const savedBelow = belowMode; belowMode = false;
+      items.forEach(it => {
+        const c = make(it, cardW);
+        c.classList.add('show');
+        c.style.position = 'static'; c.style.left = ''; c.style.top = ''; c.style.zIndex = 'auto';
+        c.style.margin = '0'; c.style.width = cardW + 'px'; c.style.opacity = '1'; c.style.transform = 'none'; c.style.pointerEvents = 'none';
+        grid.appendChild(c);
+      });
+      belowMode = savedBelow;
+      scroll.appendChild(grid);
+      scroll.scrollTop = 0;
     }
-    belowMode = savedBelow;
-    ov.appendChild(grid);
-    ov.appendChild(el('div', 'position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.5px;color:' + sub + ';pointer-events:none;', 'Tap anywhere to close'));
-    ov.addEventListener('click', closeTakeover);
+    TAKEOVER_SCREENS.forEach(s => {
+      if (!takeoverItems(s.kind).length) return;
+      const btn = document.createElement('button'); btn.type = 'button'; btn.textContent = s.title;
+      btn.onclick = () => paint(s.kind);
+      tabBtns[s.kind] = btn; tabsRow.appendChild(btn);
+    });
+    if (!Object.keys(tabBtns).length) return;   // no data yet
     document.body.appendChild(ov);
     takeoverEl = ov;
-    requestAnimationFrame(() => {
-      const s = Math.min(1, (vw - 24) / grid.scrollWidth, (vh - 40) / grid.scrollHeight);
-      if (s < 1){ grid.style.transformOrigin = 'center center'; grid.style.transform = 'scale(' + s.toFixed(3) + ')'; }
-      ov.style.opacity = '1';
-    });
+    paint(tabBtns[kind] ? kind : Object.keys(tabBtns)[0]);
+    requestAnimationFrame(() => { ov.style.opacity = '1'; });
     ov._onKey = e => { if (e.key === 'Escape') closeTakeover(); };
     addEventListener('keydown', ov._onKey);
   }
@@ -3051,7 +3085,8 @@ fetch('data.json', { cache: 'no-store' })
   }
   // Footer buttons drive the same controls as the arrow keys.
   window.wcbCards = { next: () => step(1), prev: () => step(-1),
-    toggle: () => setPaused(!paused), isPaused: () => paused };
+    toggle: () => setPaused(!paused), isPaused: () => paused,
+    openTop: k => openTakeover(k || 'topscorer') };
 
   // Manual override: → next · ← back · ↓ stop (if running) · ↑ restart (if stopped).
   addEventListener('keydown', e => {
