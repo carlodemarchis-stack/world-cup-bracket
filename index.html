@@ -726,7 +726,7 @@ function buildBracket(v){
   confedSel.title = 'Spotlight one confederation';
   confedSel.setAttribute('aria-label', 'Confederation');
   confedSel.style.cssText = 'font:inherit;font-size:10px;text-transform:none;letter-spacing:normal;color:inherit;background:transparent;border:1px solid currentColor;border-radius:6px;padding:2px 5px;cursor:pointer;opacity:.7;';
-  [['all', 'All teams']].concat(CONFED_LIST.map(c => [c, c])).forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; if (v === confedFilter) o.selected = true; confedSel.appendChild(o); });
+  [['all', 'All Confederations']].concat(CONFED_LIST.map(c => [c, c])).forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; if (v === confedFilter) o.selected = true; confedSel.appendChild(o); });
   confedSel.onchange = () => { confedFilter = confedSel.value; applyConfed(confedFilter); };
   row1.appendChild(confedSel);
 
