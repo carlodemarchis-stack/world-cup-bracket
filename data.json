@@ -4106,7 +4106,130 @@
     "L:3:1": {
       "date": "Jul 9",
       "time": "22:00",
-      "venue": "Boston Stadium"
+      "venue": "Boston Stadium",
+      "score": "2–0",
+      "winner": "FRA",
+      "ref": "Facundo TELLO",
+      "att": 63811,
+      "form": {
+        "FRA": "4-2-3-1",
+        "MAR": "4-2-3-1"
+      },
+      "num": 97,
+      "goals": [
+        {
+          "t": "FRA",
+          "p": "Mbappe",
+          "m": "60'",
+          "id": "389867",
+          "a": "Doue",
+          "aid": "464114",
+          "desc": "Mbappé put France ahead with a superb strike — Doué slipped him the ball and the 2018 world champion bent a right-footed effort into the net.",
+          "dp": 1
+        },
+        {
+          "t": "FRA",
+          "p": "Dembele",
+          "m": "66'",
+          "id": "398680",
+          "a": "Mbappe",
+          "aid": "389867",
+          "desc": "Dembélé doubled the lead with a brilliant run and finish to hand France firm control. At this same Boston Stadium he had earlier hit a hat-trick inside the first 32 minutes of a 4-1 win over Norway — the No7 showing that electric quality once again.",
+          "dp": 1
+        }
+      ],
+      "cards": [
+        {
+          "m": "63'",
+          "p": "Diop",
+          "t": "MAR",
+          "c": "Y",
+          "id": "403083"
+        }
+      ],
+      "line": {
+        "FRA": {
+          "xi": [
+            "448332",
+            "368860",
+            "389876",
+            "430707",
+            "419177",
+            "485677",
+            "402047",
+            "398680",
+            "389867",
+            "485655",
+            "464114"
+          ],
+          "subs": [
+            [
+              "483549",
+              "485677",
+              "71'"
+            ],
+            [
+              "403094",
+              "389867",
+              "77'"
+            ],
+            [
+              "484860",
+              "464114",
+              "77'"
+            ],
+            [
+              "464055",
+              "430707",
+              "87'"
+            ]
+          ],
+          "cap": "389867"
+        },
+        "MAR": {
+          "xi": [
+            "356956",
+            "400721",
+            "411680",
+            "403083",
+            "424071",
+            "485760",
+            "494293",
+            "441307",
+            "448612",
+            "485740",
+            "430740"
+          ],
+          "subs": [
+            [
+              "372266",
+              "485760",
+              "62'"
+            ],
+            [
+              "433426",
+              "448612",
+              "62'"
+            ],
+            [
+              "485756",
+              "424071",
+              "74'"
+            ],
+            [
+              "505112",
+              "430740",
+              "74'"
+            ],
+            [
+              "524320",
+              "494293",
+              "85'"
+            ]
+          ],
+          "cap": "400721"
+        }
+      }
     },
     "L:4:0": {
       "date": "Jul 14",
