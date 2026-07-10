@@ -4101,7 +4101,157 @@
     "L:3:0": {
       "date": "Jul 10",
       "time": "21:00",
-      "venue": "Los Angeles Stadium"
+      "venue": "Los Angeles Stadium",
+      "score": "2–1",
+      "winner": "ESP",
+      "ref": "Michael Oliver",
+      "att": 70492,
+      "form": {
+        "ESP": "4-2-3-1",
+        "BEL": "4-2-3-1"
+      },
+      "num": 98,
+      "goals": [
+        {
+          "t": "ESP",
+          "p": "Ruiz",
+          "m": "30'",
+          "id": "430718",
+          "desc": "Yamal goes on the outside and finds Pedro Porro, who cuts a teasing low ball into the penalty area. Dani Olmo hits it first time, forcing a save from Thibaut Courtois, but it's parried straight to Fabian Ruiz, who drives the rebound into the roof of the net.",
+          "dp": 0
+        },
+        {
+          "t": "BEL",
+          "p": "De Ketelaere",
+          "m": "41'",
+          "id": "448362",
+          "a": "Castagne",
+          "aid": "411443",
+          "desc": "Spain concede for the first time at World Cup 2026. La Roja don't fully clear their lines as Belgium enjoy a sustained spell of possession in and around the penalty area. Timothy Castagne clips in an inviting cross from the right for Charles De Ketelaere, who gets in front of Pau Cubarsi and powers a header past Unai Simon.",
+          "dp": 0
+        },
+        {
+          "t": "ESP",
+          "p": "Merino",
+          "m": "88'",
+          "id": "430733",
+          "desc": "Incredible. The Spain substitute puts his team on the brink of the World Cup semi-finals. Senne Lammens spills Pau Cubarsi's long-range effort, and there's Mikel Merino with a real poacher's finish. Talk about super sub!",
+          "dp": 0
+        }
+      ],
+      "cards": [
+        {
+          "m": "43'",
+          "p": "Cubarsi",
+          "t": "ESP",
+          "c": "Y",
+          "id": "474973"
+        },
+        {
+          "m": "85'",
+          "p": "De Bruyne",
+          "t": "BEL",
+          "c": "Y",
+          "id": "358120"
+        },
+        {
+          "m": "90'+3'",
+          "p": "Laporte",
+          "t": "ESP",
+          "c": "Y",
+          "id": "335999"
+        },
+        {
+          "m": "90'+5'",
+          "p": "Witsel",
+          "t": "BEL",
+          "c": "Y",
+          "id": "290821"
+        }
+      ],
+      "line": {
+        "ESP": {
+          "xi": [
+            "430753",
+            "430144",
+            "335999",
+            "474973",
+            "430735",
+            "430718",
+            "447860",
+            "411375",
+            "430750",
+            "484320",
+            "430751"
+          ],
+          "subs": [
+            [
+              "405545",
+              "447860",
+              "55'"
+            ],
+            [
+              "423646",
+              "430718",
+              "55'"
+            ],
+            [
+              "447855",
+              "430751",
+              "79'"
+            ],
+            [
+              "430733",
+              "430750",
+              "86'"
+            ]
+          ],
+          "cap": "411375"
+        },
+        "BEL": {
+          "xi": [
+            "358106",
+            "448360",
+            "448373",
+            "411443",
+            "514166",
+            "358120",
+            "448343",
+            "495349",
+            "448355",
+            "448341",
+            "448362"
+          ],
+          "subs": [
+            [
+              "358112",
+              "448343",
+              "60'"
+            ],
+            [
+              "290821",
+              "448355",
+              "60'"
+            ],
+            [
+              "506088",
+              "448373",
+              "60'"
+            ],
+            [
+              "495348",
+              "358106",
+              "71'"
+            ],
+            [
+              "433092",
+              "358120",
+              "86'"
+            ]
+          ],
+          "cap": "358120"
+        }
+      }
     },
     "L:3:1": {
       "date": "Jul 9",
