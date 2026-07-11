@@ -3461,7 +3461,162 @@
     "R:3:0": {
       "date": "Jul 11",
       "time": "23:00",
-      "venue": "Miami Stadium"
+      "venue": "Miami Stadium",
+      "score": "2–1",
+      "winner": "ENG",
+      "et": true,
+      "ref": "Clément Turpin",
+      "att": 64478,
+      "form": {
+        "NOR": "4-1-2-3",
+        "ENG": "4-2-3-1"
+      },
+      "num": 99,
+      "goals": [
+        {
+          "t": "NOR",
+          "p": "Schjelderup",
+          "m": "36'",
+          "id": "494626",
+          "desc": "Norway take a 1-0 lead! It's a thunder strike from Andreas Schjelderup, who fires at goal and banks it in off the post! After serving up two assists against Brazil, the 22-year-old produced an immaculate finish!",
+          "dp": 0
+        },
+        {
+          "t": "ENG",
+          "p": "Bellingham",
+          "m": "45'+2'",
+          "id": "448202",
+          "a": "Gordon",
+          "aid": "448189",
+          "desc": "It's 1-1! Great work from Gordon down the left wing, he finds Bellingham, and the Real Madrid man weaves his way past two defenders and hammers home a left-footed finish.",
+          "dp": 0
+        },
+        {
+          "t": "ENG",
+          "p": "Bellingham",
+          "m": "93'",
+          "id": "448202",
+          "desc": "Bellingham again! Nyland is unable to hold onto a shot from distance and Bellingham swoops in and fires it home! What a reaction to give his side the lead. It's back-to-back braces for Bellingham!",
+          "dp": 0
+        }
+      ],
+      "var": [
+        {
+          "m": "56'",
+          "d": "Goal disallowed"
+        },
+        {
+          "m": "101'",
+          "d": "Penalty cancelled"
+        }
+      ],
+      "cards": [
+        {
+          "m": "117'",
+          "p": "Ajer",
+          "t": "NOR",
+          "c": "Y",
+          "id": "483516"
+        }
+      ],
+      "line": {
+        "NOR": {
+          "xi": [
+            "373235",
+            "483516",
+            "483505",
+            "491244",
+            "483442",
+            "404645",
+            "400716",
+            "494626",
+            "398588",
+            "419652",
+            "483496"
+          ],
+          "subs": [
+            [
+              "483497",
+              "483496",
+              "60'"
+            ],
+            [
+              "477470",
+              "398588",
+              "67'"
+            ],
+            [
+              "483448",
+              "494626",
+              "67'"
+            ],
+            [
+              "494625",
+              "483505",
+              "90'"
+            ],
+            [
+              "419672",
+              "491244",
+              ""
+            ],
+            [
+              "419662",
+              "419652",
+              ""
+            ]
+          ],
+          "cap": "400716"
+        },
+        "ENG": {
+          "xi": [
+            "336022",
+            "403049",
+            "463780",
+            "369434",
+            "405841",
+            "433097",
+            "481610",
+            "448202",
+            "369419",
+            "448189",
+            "489732"
+          ],
+          "subs": [
+            [
+              "473113",
+              "433097",
+              ""
+            ],
+            [
+              "448196",
+              "489732",
+              ""
+            ],
+            [
+              "439641",
+              "448189",
+              "71'"
+            ],
+            [
+              "506329",
+              "463780",
+              "86'"
+            ],
+            [
+              "492716",
+              "403049",
+              "89'"
+            ],
+            [
+              "494345",
+              "448202",
+              "111'"
+            ]
+          ],
+          "cap": "369419"
+        }
+      }
     },
     "R:3:1": {
       "date": "Jul 12",
