@@ -2444,7 +2444,7 @@ fetch('data.json', { cache: 'no-store' })
 (function(){
   const mq = q => !!(window.matchMedia && matchMedia(q).matches);   // evaluated live
   const IDLE_MS = 6000;
-  let lastActive = Date.now(), pool = null, mi = 0, ti = 0, si = 0, fi = 0, pi = 0, topN = 0, mLeft = 2 + Math.floor(Math.random() * 2), dueKind = null, current = null, nextAt = 0;
+  let lastActive = 0, pool = null, mi = 0, ti = 0, si = 0, fi = 0, pi = 0, topN = 0, mLeft = 2 + Math.floor(Math.random() * 2), dueKind = null, current = null, nextAt = 0;   // lastActive=0 so load isn't treated as "recent activity" — no idle delay before the opener
   let paused = false, hist = [], hp = -1, belowMode = false, listMode = false, introDone = false;   // belowMode = mobile card under circle; listMode = card is in the ranked board grid; introDone = the 4-card opener has run
   // Preload the big card photos a few ahead so they never pop in empty.
   const PREF = new Set();
@@ -3221,7 +3221,7 @@ fetch('data.json', { cache: 'no-store' })
     prefetchAhead();
     return true;
   }
-  function autoNext(){ if (!pool) pool = buildPool(); if (!introDone){ introDone = true; if (spawnIntro()) return; } const it = pickForward(); if (it) spawn(it); }
+  function autoNext(){ if (!pool) pool = buildPool(); const it = pickForward(); if (it) spawn(it); }   // the opener is fired by kickstart(); this only does the normal one-at-a-time rotation
   function step(dir){ introDone = true; if (!pool) pool = buildPool(); const it = dir > 0 ? pickForward() : pickBack(); if (!it) return; clearCurrent(); spawn(it); }
   function setPaused(v){
     if (v === paused) return;
@@ -3246,13 +3246,26 @@ fetch('data.json', { cache: 'no-store' })
 
   // Build the pool and warm the first cards' photos before the first bubble.
   setTimeout(() => { if (DATA && !pool){ pool = buildPool(); prefetchAhead(); } }, 2500);
+  // Fire the 4-card opener as soon as the bracket is drawn and both feeds are
+  // loaded — the very first cards don't wait out the idle period.
+  function kickstart(){
+    if (introDone) return;
+    if (!DATA || !document.querySelector('#app [data-confed]')){ setTimeout(kickstart, 150); return; }   // wait for the bracket to draw
+    if (paused || document.hidden || modalEl || mq('(prefers-reduced-motion: reduce)')) return;          // the idle loop will pick it up later
+    if (!pool){ pool = buildPool(); prefetchAhead(); }
+    introDone = true;
+    if (!spawnIntro()){ const it = pickForward(); if (it) spawn(it); }
+  }
+  Promise.all([ensureFantasy().catch(() => {}), ensurePower().catch(() => {})]).then(kickstart);
+  setTimeout(kickstart, 1500);   // fallback in case a feed never resolves
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) kickstart(); });   // loaded in a background tab? open the moment it's shown
   setInterval(() => {
     if (paused) return;
     if (current){
       if (modalEl || document.hidden || (Date.now() - lastActive) < IDLE_MS) dismiss(current);
       return;
     }
-    if (quiet() && Date.now() >= nextAt) autoNext();
+    if (introDone && quiet() && Date.now() >= nextAt) autoNext();   // opener (kickstart) goes first; then normal rotation
   }, 1400);
 })();
 </script>
