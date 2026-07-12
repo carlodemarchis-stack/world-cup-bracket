@@ -2445,7 +2445,7 @@ fetch('data.json', { cache: 'no-store' })
   const mq = q => !!(window.matchMedia && matchMedia(q).matches);   // evaluated live
   const IDLE_MS = 6000;
   let lastActive = Date.now(), pool = null, mi = 0, ti = 0, si = 0, fi = 0, pi = 0, topN = 0, mLeft = 2 + Math.floor(Math.random() * 2), dueKind = null, current = null, nextAt = 0;
-  let paused = false, hist = [], hp = -1, belowMode = false, listMode = false;   // belowMode = mobile card under circle; listMode = card is in the ranked board grid
+  let paused = false, hist = [], hp = -1, belowMode = false, listMode = false, introDone = false;   // belowMode = mobile card under circle; listMode = card is in the ranked board grid; introDone = the 4-card opener has run
   // Preload the big card photos a few ahead so they never pop in empty.
   const PREF = new Set();
   const photoUrl = item => item.pic ? item.pic + '?&io=transform:fit,width:340&quality=86' : null;
@@ -3128,8 +3128,9 @@ fetch('data.json', { cache: 'no-store' })
     if (!b) return;
     clearTimeout(b._t);
     nextAt = Date.now() + 1000;   // short gap before the next one
-    b.classList.remove('show'); b.classList.add('hide');
-    setTimeout(() => { b.remove(); if (current === b) current = null; }, 750);
+    const group = [b].concat(b._extra || []);   // intro shows 4 cards as one group
+    group.forEach(e => { e.classList.remove('show'); e.classList.add('hide'); });
+    setTimeout(() => { group.forEach(e => e.remove()); if (current === b) current = null; }, 750);
   }
 
   function spawn(item){
@@ -3166,9 +3167,62 @@ fetch('data.json', { cache: 'no-store' })
     return it;
   }
   function pickBack(){ if (hp > 0){ hp--; return hist[hp]; } return null; }
-  function clearCurrent(){ if (current){ clearTimeout(current._t); current.remove(); current = null; } }
-  function autoNext(){ if (!pool) pool = buildPool(); const it = pickForward(); if (it) spawn(it); }
-  function step(dir){ if (!pool) pool = buildPool(); const it = dir > 0 ? pickForward() : pickBack(); if (!it) return; clearCurrent(); spawn(it); }
+  function clearCurrent(){ if (current){ clearTimeout(current._t); [current].concat(current._extra || []).forEach(e => e.remove()); current = null; } }
+
+  // Grand opening: the four category leaders at once — top scorer (top-left),
+  // top assister (bottom-left), power #1 (top-right), fantasy #1 (bottom-right) —
+  // then the normal one-at-a-time rotation takes over.
+  function introItems(){
+    if (!pool) return [];
+    const ts = (pool.allTop || []).filter(x => x.kind === 'topscorer').sort((a, b) => b.total - a.total)[0];
+    const ta = (pool.allTop || []).filter(x => x.kind === 'topassist').sort((a, b) => b.total - a.total)[0];
+    const pw = (pool.power || []).slice().sort((a, b) => b.lead - a.lead)[0];
+    const fn = (pool.fantasy || [])[0];
+    return [ts, ta, pw, fn];
+  }
+  // Bracket circle extent from the crest/match boxes only — unlike contentBounds
+  // it ignores the top-right controls, so both side gutters come out symmetric.
+  function bracketBounds(){
+    const els = document.querySelectorAll('#app [data-confed], #app [data-elim]');
+    if (!els.length) return contentBounds();
+    let L = Infinity, R = -Infinity, T = Infinity, B = -Infinity;
+    els.forEach(e => { const r = e.getBoundingClientRect(); if (r.width < 8) return; if (r.left < L) L = r.left; if (r.right > R) R = r.right; if (r.top < T) T = r.top; if (r.bottom > B) B = r.bottom; });
+    return isFinite(L) ? { left: L, right: R, top: T, bottom: B } : null;
+  }
+  function spawnIntro(){
+    const c = bracketBounds(); if (!c) return false;
+    const vw = window.innerWidth, vh = window.innerHeight, pad = 14, edge = 8, minW = 236, gap = 10;
+    const leftW = c.left - pad - edge, rightW = vw - c.right - pad - edge;
+    if (leftW < minW || rightW < minW) return false;   // needs both side gutters (wide screens)
+    const cardW = Math.min(256, leftW - 6, rightW - 6);
+    const items = introItems();
+    const layout = [
+      { it: items[0], side: 'L', slot: 0 }, { it: items[1], side: 'L', slot: 1 },
+      { it: items[2], side: 'R', slot: 0 }, { it: items[3], side: 'R', slot: 1 }
+    ].filter(q => q.it);
+    if (layout.length < 2) return false;
+    const yTop = Math.max(92, c.top + 2);
+    const availH = Math.min(vh - 12, c.bottom + 46) - yTop, budget = (availH - gap) / 2;
+    const leftX = edge + Math.max(0, (leftW - cardW) / 2), rightX = c.right + pad + Math.max(0, (rightW - cardW) / 2);
+    const els = [], savedBelow = belowMode; belowMode = false;
+    layout.forEach(q => {
+      const b = make(q.it, cardW);
+      document.body.appendChild(b);
+      const h = b.offsetHeight || 320, scale = Math.min(1, budget / h);
+      if (scale < 1) b.style.setProperty('--wc-scale', scale.toFixed(3));
+      const x = q.side === 'L' ? leftX : rightX, y = yTop + q.slot * (budget + gap);
+      b.style.left = Math.round(x) + 'px'; b.style.top = Math.round(y) + 'px';
+      requestAnimationFrame(() => b.classList.add('show'));
+      els.push(b);
+    });
+    belowMode = savedBelow;
+    current = els[0]; current._extra = els.slice(1);
+    if (!paused) current._t = setTimeout(() => dismiss(current), 16000);
+    prefetchAhead();
+    return true;
+  }
+  function autoNext(){ if (!pool) pool = buildPool(); if (!introDone){ introDone = true; if (spawnIntro()) return; } const it = pickForward(); if (it) spawn(it); }
+  function step(dir){ introDone = true; if (!pool) pool = buildPool(); const it = dir > 0 ? pickForward() : pickBack(); if (!it) return; clearCurrent(); spawn(it); }
   function setPaused(v){
     if (v === paused) return;
     paused = v;
