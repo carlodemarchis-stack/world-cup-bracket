@@ -3221,8 +3221,37 @@ fetch('data.json', { cache: 'no-store' })
     prefetchAhead();
     return true;
   }
-  function autoNext(){ if (!pool) pool = buildPool(); const it = pickForward(); if (it) spawn(it); }   // the opener is fired by kickstart(); this only does the normal one-at-a-time rotation
-  function step(dir){ introDone = true; if (!pool) pool = buildPool(); const it = dir > 0 ? pickForward() : pickBack(); if (!it) return; clearCurrent(); spawn(it); }
+  // After the opener the rotation shows a pair — one card in each side gutter,
+  // vertically centred on the circle. Falls back to a single card if there isn't
+  // room on both sides (narrow screens).
+  function spawnPair(dir){
+    const pick = (dir < 0) ? pickBack : pickForward;
+    const c = bracketBounds(), vw = window.innerWidth, vh = window.innerHeight, pad = 14, edge = 8, minW = 236;
+    const leftW = c ? c.left - pad - edge : 0, rightW = c ? vw - c.right - pad - edge : 0;
+    if (!c || leftW < minW || rightW < minW){ const it = pick(); if (it) spawn(it); return; }   // narrow: single card
+    const cardW = Math.min(256, leftW - 6, rightW - 6);
+    const cY = (Math.max(90, c.top) + Math.min(vh, c.bottom)) / 2;   // vertical centre of the circle
+    const xs = [edge + Math.max(0, (leftW - cardW) / 2), c.right + pad + Math.max(0, (rightW - cardW) / 2)];
+    const els = [], savedBelow = belowMode; belowMode = false;
+    xs.forEach(x => {
+      const it = pick(); if (!it) return;
+      const b = make(it, cardW);
+      document.body.appendChild(b);
+      const h = b.offsetHeight || 320, scale = Math.min(1, (vh - 24) / h);
+      if (scale < 1) b.style.setProperty('--wc-scale', scale.toFixed(3));
+      b.style.left = Math.round(x) + 'px';
+      b.style.top = Math.round(cY - (h * scale) / 2) + 'px';   // vertically centred
+      requestAnimationFrame(() => b.classList.add('show'));
+      els.push(b);
+    });
+    belowMode = savedBelow;
+    if (!els.length) return;
+    current = els[0]; current._extra = els.slice(1);
+    if (!paused) current._t = setTimeout(() => dismiss(current), 15000);
+    prefetchAhead();
+  }
+  function autoNext(){ if (!pool) pool = buildPool(); spawnPair(1); }   // opener fired by kickstart(); rotation shows a left+right pair
+  function step(dir){ introDone = true; if (!pool) pool = buildPool(); clearCurrent(); spawnPair(dir); }
   function setPaused(v){
     if (v === paused) return;
     paused = v;
