@@ -446,7 +446,7 @@ function renderVals(P, DATA) {
         // this segment "starts from" occ (its team); pending segments carry the
         // confeds still alive below, so a confed's onward path stays lit.
         const confed = occ ? confedOf(occ) : [...leafAliveConfeds(side, L, k)].join(' ');
-        links.push(trimmed(c, par, crestVB(L, k), crestVB(L+1, Math.floor(k/2)), { stroke, w, lstyle, confed }));
+        links.push(trimmed(c, par, crestVB(L, k), crestVB(L+1, Math.floor(k/2)), { stroke, w, lstyle, confed, node: side+':'+L+':'+k }));
       }
     }
     const fin = nodePos(side,4,0);
@@ -454,7 +454,7 @@ function renderVals(P, DATA) {
     const finLit = !!champ && !!sfWin && champ === sfWin;
     links.push(trimmed(fin, { x:C, y:C }, crestVB(4, 0), 0, { stroke: finLit?accent:T.linkColor, w: finLit?3:1.8,
       lstyle: finLit?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'',
-      confed: sfWin ? confedOf(sfWin) : [...leafAliveConfeds(side, 4, 0)].join(' ') }));
+      confed: sfWin ? confedOf(sfWin) : [...leafAliveConfeds(side, 4, 0)].join(' '), node: side+':4:0' }));
   });
 
   const rootStyle = 'position:relative;min-height:100vh;background:'+T.rootBg+';padding:30px 16px 44px;font-family:Barlow,system-ui,sans-serif;box-sizing:border-box;';
@@ -561,6 +561,7 @@ function buildBracket(v){
     const ln = svg('line', { x1:l.x1, y1:l.y1, x2:l.x2, y2:l.y2, stroke:l.stroke, 'stroke-width':l.w, 'stroke-linecap':'round' });
     if (l.lstyle) ln.setAttribute('style', l.lstyle);
     ln.setAttribute('data-confed', l.confed || '');
+    if (l.node) ln.setAttribute('data-node', l.node);
     s.appendChild(ln);
   });
   art.appendChild(s);
@@ -2529,16 +2530,37 @@ function buildStory(){
 }
 // Real bracket rendered to a snapshot: temporarily hide KO results played after
 // `maxNum`, rebuild the bracket DOM, grab just the circle, then restore.
-function circleSnapshot(maxNum){
+function circleSnapshot(maxNum, focusId){
   const props = { accentColor: state.accentColor, showNames: state.showNames, title: state.title, kicker: state.kicker, bgTheme: state.bgTheme, nodeStyle: state.nodeStyle, showResults: true, sectionGap: state.sectionGap, quarterGap: state.quarterGap };
   const slots=[]; const g=o=>{ if(o) slots.push(o); };
   Object.values(DATA.r32||{}).forEach(g); Object.values(DATA.schedule||{}).forEach(g); g(DATA.final); g(DATA.thirdPlace);
   const stash=[];
   slots.forEach(o=>{ if((o.num||0)>maxNum && (o.score||o.winner)){ stash.push([o,o.score,o.winner]); o.score=null; o.winner=null; } });
   let stageEl=null;
-  try{ const root=buildBracket(renderVals(props, DATA)); stageEl=root.children[1]; }catch(e){ console.warn('circleSnapshot', e); }
+  try{ const root=buildBracket(renderVals(props, DATA)); stageEl=root.children[1]; if(focusId) focusBracket(stageEl, focusId); }catch(e){ console.warn('circleSnapshot', e); }
   stash.forEach(([o,sc,w])=>{ o.score=sc; o.winner=w; });
   return stageEl;
+}
+// Light up only the bracket sub-tree that produced the given match; grey everything else.
+// focusId is a match slot id ('R:1:0' … 'R:4:0'), 'final' (whole tree) or 'third'.
+function focusBracket(stageEl, focusId){
+  const art = stageEl && stageEl.querySelector('#bracket-art'); if(!art) return;
+  if(focusId==='final') return;   // every path leads to the final — nothing to grey
+  const litM=new Set(), litT=new Set(), litN=new Set();
+  if(focusId==='third'){ litM.add('third'); }
+  else {
+    const [side,Ls,ks]=focusId.split(':'), L=+Ls, k=+ks;
+    for(let l=1;l<=L;l++){ const span=Math.pow(2,L-l); for(let j=k*span;j<(k+1)*span;j++) litM.add(side+':'+l+':'+j); }
+    const base=(side==='R'?0:16), leafSpan=Math.pow(2,L);
+    for(let j=k*leafSpan;j<(k+1)*leafSpan;j++){ const t=(DATA.teams||[])[base+j]; if(t) litT.add(t.code); }
+    for(let l=0;l<L;l++){ const span=Math.pow(2,L-l); for(let j=k*span;j<(k+1)*span;j++) litN.add(side+':'+l+':'+j); }
+  }
+  const DIM=';opacity:.12;filter:grayscale(.9);';
+  art.querySelectorAll('[data-match]').forEach(e=>{ if(!litM.has(e.dataset.match)) e.style.cssText+=DIM; });
+  art.querySelectorAll('[data-team]').forEach(e=>{ if(!litT.has(e.dataset.team)) e.style.cssText+=DIM; });
+  art.querySelectorAll('line[data-node]').forEach(l=>{ if(!litN.has(l.getAttribute('data-node'))) l.setAttribute('opacity','.08'); });
+  // grey the context chrome (team-name labels, centre ball/pulse, third-place chip) — keep the SVG link layer
+  [...art.children].forEach(c=>{ if(c.tagName==='DIV' && !(c.dataset&&(c.dataset.match||c.dataset.team))) c.style.cssText+=DIM; });
 }
 // -- beat rendering (light cinematic) --
 const sCentre = inner => '<div style="position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">'+inner+'</div>';
@@ -2719,7 +2741,7 @@ function renderStory(){
   const b=storyBeats[si]; const st=document.getElementById('wcStage');
   if(b.k==='circle'){
     st.innerHTML='<div style="position:absolute;inset:0;'+sBg(STY.GREEN)+'"></div>';
-    const snap=circleSnapshot(b.num);
+    const snap=circleSnapshot(b.num, b.m.id);
     if(snap){ snap.style.margin='0'; snap.style.width='760px';
       const box=el('div','position:absolute;left:50%;top:54%;transform:translate(-50%,-50%) scale(.86);width:760px;'); box.appendChild(snap);
       st.appendChild(box); }
