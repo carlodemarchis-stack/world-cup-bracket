@@ -2504,9 +2504,23 @@ function buildStory(){
     ev.filter(e=>e.half===2).forEach(e=>beats.push({k:'event',m,e}));
     beats.push({k:'full',m});
     if(/^Group /.test(m.round)){ trk.apply(m); beats.push({k:'table',group:m.round.slice(6),rows:trk.table(m.round.slice(6)),m}); }
+    else beats.push({k:'circle',m,num:m.num});   // KO: show the real bracket updated to this match
   });
   beats.push(DATA.final&&DATA.final.winner ? {k:'champ',code:DATA.final.winner} : {k:'end'});
   return beats;
+}
+// Real bracket rendered to a snapshot: temporarily hide KO results played after
+// `maxNum`, rebuild the bracket DOM, grab just the circle, then restore.
+function circleSnapshot(maxNum){
+  const props = { accentColor: state.accentColor, showNames: state.showNames, title: state.title, kicker: state.kicker, bgTheme: state.bgTheme, nodeStyle: state.nodeStyle, showResults: true, sectionGap: state.sectionGap, quarterGap: state.quarterGap };
+  const slots=[]; const g=o=>{ if(o) slots.push(o); };
+  Object.values(DATA.r32||{}).forEach(g); Object.values(DATA.schedule||{}).forEach(g); g(DATA.final); g(DATA.thirdPlace);
+  const stash=[];
+  slots.forEach(o=>{ if((o.num||0)>maxNum && (o.score||o.winner)){ stash.push([o,o.score,o.winner]); o.score=null; o.winner=null; } });
+  let stageEl=null;
+  try{ const root=buildBracket(renderVals(props, DATA)); stageEl=root.children[1]; }catch(e){ console.warn('circleSnapshot', e); }
+  stash.forEach(([o,sc,w])=>{ o.score=sc; o.winner=w; });
+  return stageEl;
 }
 // -- beat rendering (light cinematic) --
 const sCentre = inner => '<div style="position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">'+inner+'</div>';
@@ -2584,7 +2598,7 @@ function beatHTML(b){
       (e.desc?'<div style="display:flex;gap:11px;margin-top:6px;"><div style="width:3px;background:'+accent+';border-radius:3px;"></div><div style="font-size:17px;font-style:italic;color:#3f382e;line-height:1.4;">'+e.desc+'</div></div>':'')+
     '</div></div>';
 }
-function beatDur(b){ return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,half:2200,full:3800,table:3800,champ:7000,end:6000}[b.k]||3500; }
+function beatDur(b){ return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,half:2200,full:3800,table:3800,circle:4600,champ:7000,end:6000}[b.k]||3500; }
 
 // -- player --
 let storyOv=null, storyBeats=null, si=0, storyTimer=null, storyPlaying=true, storySpeed=1;
@@ -2618,7 +2632,17 @@ function launchStory(){
 }
 function prefetchStory(){ for(let k=si;k<Math.min(si+4,storyBeats.length);k++){ const b=storyBeats[k]; if(b.k==='event'&&b.e&&b.e.sid){ const u=shero(picById(b.e.sid),760); if(u){const im=new Image();im.src=u;} } } }
 function renderStory(){
-  const b=storyBeats[si]; document.getElementById('wcStage').innerHTML=beatHTML(b);
+  const b=storyBeats[si]; const st=document.getElementById('wcStage');
+  if(b.k==='circle'){
+    st.innerHTML='<div style="position:absolute;inset:0;'+sBg(STY.GREEN)+'"></div>';
+    const snap=circleSnapshot(b.num);
+    if(snap){ snap.style.margin='0'; snap.style.width='760px';
+      const box=el('div','position:absolute;left:50%;top:54%;transform:translate(-50%,-50%) scale(.86);width:760px;'); box.appendChild(snap);
+      st.appendChild(box); }
+    const cap=el('div','position:absolute;top:14px;left:0;right:0;text-align:center;z-index:3;');
+    cap.innerHTML='<div class="sc" style="font-weight:800;font-size:30px;color:'+STY.INK+';">'+b.m.round+' · '+b.m.a+' '+b.m.aGoals+'–'+b.m.bGoals+' '+b.m.b+'</div><div class="sk" style="color:'+STY.GREEN+';font-size:11px;">The bracket updates</div>';
+    st.appendChild(cap);
+  } else { st.innerHTML=beatHTML(b); }
   const chap=[...storyBeats].slice(0,si+1).reverse().find(x=>x.k==='chapter');
   document.getElementById('wcLbl').innerHTML='<b>'+(si+1)+'/'+storyBeats.length+'</b> · '+(chap?chap.label:'—');
   document.getElementById('wcBar').style.width=((si+1)/storyBeats.length*100).toFixed(1)+'%';
