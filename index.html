@@ -2482,9 +2482,9 @@ function storyMatches(){
 function sEvents(m){
   const ev=[], cnt={[m.a]:0,[m.b]:0};
   (m.goals||[]).forEach(g=>{ if(g.t in cnt)cnt[g.t]++; const run=cnt[m.a]+'–'+cnt[m.b];
-    if(!g.p||g.p.indexOf('(o.g.)')>=0){ ev.push({type:'og',team:g.t,min:g.m,half:sHalf(g.m),run}); return; }
+    if(!g.p||g.p.indexOf('(o.g.)')>=0){ ev.push({type:'og',team:(g.t===m.a?m.b:m.a),creditTeam:g.t,scorer:(g.p||'').replace(/\s*\(o\.g\.\)\s*/i,'').trim(),sid:g.id||null,min:g.m,half:sHalf(g.m),run}); return; }
     ev.push({type:'goal',team:g.t,scorer:g.p,sid:g.id,min:g.m,half:sHalf(g.m),assist:g.a||null,aid:g.aid||null,pen:!!g.pen,desc:g.desc||null,run}); });
-  (m.cards||[]).forEach(c=>{ if(c.c==='R') ev.push({type:'red',team:c.t,player:c.p,min:c.m,half:sHalf(c.m)}); });
+  (m.cards||[]).forEach(c=>{ if(c.c==='R') ev.push({type:'red',team:c.t,player:c.p,sid:c.id||null,min:c.m,half:sHalf(c.m)}); });
   return ev.sort((a,b)=>(parseInt(a.min)||0)-(parseInt(b.min)||0));
 }
 const sHT = m => { let A=0,B=0; (m.goals||[]).forEach(g=>{ if(sHalf(g.m)===1){ if(g.t===m.a)A++; else if(g.t===m.b)B++; } }); return A+'–'+B; };
@@ -2493,10 +2493,16 @@ function sTracker(){ const T={}; return {
     const A=rec(m.a),B=rec(m.b); A.gf+=m.aGoals;A.ga+=m.bGoals;B.gf+=m.bGoals;B.ga+=m.aGoals;
     if(m.aGoals>m.bGoals){A.w++;A.pts+=3;B.l++;}else if(m.aGoals<m.bGoals){B.w++;B.pts+=3;A.l++;}else{A.d++;B.d++;A.pts++;B.pts++;} },
   table(g){ return Object.values(T[g]||{}).map(r=>Object.assign({gd:r.gf-r.ga},r)).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf); } }; }
+const KO_CHAP={'Quarter-final':'Quarter-finals','Semi-final':'Semi-finals','Third-place play-off':'Third Place','Final':'The Final'};
 function buildStory(){
   const ms=storyMatches(), beats=[{k:'intro',n:ms.length}], trk=sTracker(); let phase=null;
-  ms.forEach(m=>{ const chap=/^Group /.test(m.round)?'Group Stage':m.round;
-    if(chap!==phase){ beats.push({k:'chapter',label:chap}); phase=chap; }
+  // Group matchday map: 4-team groups play 6 matches → matchday = floor(indexInGroup/2)+1
+  const gmd={}, byG={};
+  ms.filter(m=>/^Group /.test(m.round)).forEach(m=>{ const g=m.round.slice(6); (byG[g]=byG[g]||[]).push(m); });
+  Object.values(byG).forEach(arr=>arr.sort((a,b)=>(a.num||0)-(b.num||0)).forEach((m,i)=>{ gmd[m.id]='Matchday '+(Math.floor(i/2)+1); }));
+  ms.forEach(m=>{ const grp=/^Group /.test(m.round);
+    const chap=grp?gmd[m.id]:(KO_CHAP[m.round]||m.round);
+    if(chap!==phase){ beats.push({k:'chapter',label:chap,sub:grp?'Group Stage':'Knockout'}); phase=chap; }
     beats.push({k:'present',m});
     const ev=sEvents(m);
     ev.filter(e=>e.half===1).forEach(e=>beats.push({k:'event',m,e}));
@@ -2535,7 +2541,7 @@ function beatHTML(b){
     '<div class="sc" style="font-weight:700;font-size:26px;letter-spacing:8px;color:'+STY.GOLD+';text-transform:uppercase;">— The Film —</div>'+
     '<div class="sc" style="margin-top:26px;color:'+STY.SUB+';font-size:20px;letter-spacing:2px;">'+b.n+' matches · match by match, to the final</div>');
   if(b.k==='chapter'){ const up=b.label.toUpperCase(); return '<div style="position:absolute;inset:0;'+sBg(STY.GREEN)+'"></div>'+sCentre(
-    '<div class="sk" style="color:'+STY.GREEN+';letter-spacing:7px;">Chapter</div>'+
+    '<div class="sk" style="color:'+STY.GREEN+';letter-spacing:7px;">'+(b.sub||'Chapter')+'</div>'+
     '<div class="sc" style="font-weight:800;font-size:120px;color:'+STY.INK+';line-height:.9;margin-top:6px;">'+up+'</div>'); }
   if(b.k==='present'){ const m=b.m,A=tin(m.a),B=tin(m.b),col=(c)=>'<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;">'+
       '<img class="sfl" style="height:auto;width:180px;" src="'+sflag(c.iso,640)+'">'+
@@ -2579,12 +2585,14 @@ function beatHTML(b){
     '<div class="sk" style="color:'+STY.SUB+';margin-top:18px;">The story updates as the tournament unfolds</div>');
   // event: goal / red / own-goal
   const m=b.m,e=b.e;
-  if(e.type==='red') return '<div style="position:absolute;inset:0;background:radial-gradient(80% 80% at 50% 40%,#f7dedb 0%,#faf7f0 72%);"></div>'+sCentre(
-    '<div style="width:132px;height:186px;border-radius:12px;background:linear-gradient(160deg,#ff5b52,#d0322a);margin-bottom:28px;box-shadow:0 16px 40px rgba(224,70,63,.4);transform:rotate(8deg);"></div>'+
+  if(e.type==='red'){ const rpic=e.sid?picById(e.sid):null;
+    return '<div style="position:absolute;inset:0;background:radial-gradient(80% 80% at 50% 40%,#f7dedb 0%,#faf7f0 72%);"></div>'+sCentre(
+    (rpic?'<div style="position:relative;margin-bottom:22px;"><div style="width:160px;height:160px;border-radius:50%;overflow:hidden;background:#eee6d6;box-shadow:0 14px 38px rgba(224,70,63,.35);"><img src="'+sface(rpic)+'" style="width:100%;height:100%;object-fit:cover;object-position:top;"></div><div style="position:absolute;right:-8px;bottom:-2px;width:50px;height:68px;border-radius:8px;background:linear-gradient(160deg,#ff5b52,#d0322a);box-shadow:0 8px 18px rgba(224,70,63,.5);transform:rotate(10deg);border:3px solid #faf7f0;"></div></div>'
+      :'<div style="width:132px;height:186px;border-radius:12px;background:linear-gradient(160deg,#ff5b52,#d0322a);margin-bottom:28px;box-shadow:0 16px 40px rgba(224,70,63,.4);transform:rotate(8deg);"></div>')+
     '<div class="sc" style="font-weight:800;font-size:82px;color:'+STY.RED+';letter-spacing:2px;">RED CARD</div>'+
-    '<div style="display:flex;align-items:center;gap:13px;margin-top:8px;"><img class="sfl" src="'+sflag(tin(e.team).iso)+'"><div class="sc" style="font-weight:800;font-size:42px;color:'+STY.INK+';">'+e.player+'</div><span class="spill">'+e.min+'</span></div>');
+    '<div style="display:flex;align-items:center;gap:13px;margin-top:8px;"><img class="sfl" src="'+sflag(tin(e.team).iso)+'"><div class="sc" style="font-weight:800;font-size:42px;color:'+STY.INK+';">'+e.player+'</div><span class="spill">'+e.min+'</span></div>'); }
   const accent = e.type==='og' ? STY.SUB : STY.GREEN;
-  const pic = e.type==='goal' ? picById(e.sid) : null;
+  const pic = (e.type==='goal'||e.type==='og') && e.sid ? picById(e.sid) : null;
   const A=tin(m.a),B=tin(m.b);
   return '<div style="position:absolute;inset:0;'+sBg(accent)+'"></div>'+
     (pic?'<img src="'+shero(pic,760)+'" style="position:absolute;right:4px;bottom:0;height:95%;width:42%;object-fit:contain;object-position:bottom right;filter:drop-shadow(-8px 20px 30px rgba(0,0,0,.28));z-index:1;">':'')+
@@ -2597,6 +2605,7 @@ function beatHTML(b){
     '<div style="position:absolute;left:64px;top:192px;"><div class="sc" style="font-weight:800;font-size:150px;color:'+accent+';line-height:.8;">'+e.min+'</div><div class="sk" style="color:'+STY.SUB+';font-size:13px;margin-top:4px;letter-spacing:3px;">Minute</div></div>'+
     '<div style="position:absolute;left:64px;bottom:64px;max-width:580px;width:580px;">'+
       '<div style="display:flex;align-items:center;gap:13px;max-width:580px;"><div class="sc" style="font-weight:800;font-size:66px;color:'+STY.INK+';line-height:.9;">'+(e.scorer||'')+'</div><img class="sfl" src="'+sflag(tin(e.team).iso)+'"></div>'+
+      (e.type==='og'?'<div style="display:inline-flex;align-items:center;gap:9px;margin:12px 0;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:40px;padding:6px 16px;box-shadow:0 4px 14px rgba(0,0,0,.1);"><img class="sfl" style="height:22px;" src="'+sflag(tin(e.creditTeam).iso)+'"><span class="sc" style="font-weight:700;font-size:16px;color:'+STY.SUB+';letter-spacing:.3px;">Counts for '+tin(e.creditTeam).name+'</span></div>':'')+
       (e.assist?'<div style="display:inline-flex;align-items:center;gap:10px;margin:12px 0;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:40px;padding:6px 16px 6px 6px;box-shadow:0 4px 14px rgba(0,0,0,.1);">'+
         '<div class="sav">'+(e.aid&&picById(e.aid)?'<img src="'+sface(picById(e.aid))+'">':'')+'</div>'+
         '<div style="line-height:1;"><div class="sc" style="font-weight:700;font-size:11px;letter-spacing:1px;color:'+STY.SUB+';text-transform:uppercase;">Assist</div><div class="sc" style="font-weight:700;font-size:19px;color:'+STY.INK+';margin-top:2px;">'+e.assist+'</div></div></div>':'')+
@@ -2625,7 +2634,7 @@ function launchStory(){
   storyBeats = buildStory();
   computeStoryDays(storyBeats);
   const dTotal=Math.max(1,storyDays.length);
-  let dTicks=''; for(let d=0;d<storyDays.length;d++){ dTicks+='<i data-d="'+d+'" style="position:absolute;left:'+((d+0.5)/dTotal*100).toFixed(2)+'%;top:50%;transform:translate(-50%,-50%);width:2px;height:7px;background:rgba(240,235,221,.28);border-radius:1px;"></i>'; }
+  let dTicks=''; for(let d=0;d<storyDays.length;d++){ dTicks+='<i data-d="'+d+'" title="'+storyDays[d]+'" style="position:absolute;left:'+((d+0.5)/dTotal*100).toFixed(2)+'%;top:50%;transform:translate(-50%,-50%);width:2px;height:7px;background:rgba(240,235,221,.28);border-radius:1px;"></i>'; }
   const daysBar='<div id="wcDays"><div id="wcDaysTrack">'+dTicks+'<span id="wcBall">⚽</span></div><span id="wcDate"></span></div>';
   const ov=el('div',''); ov.id='wcStory';
   ov.innerHTML =
@@ -2641,13 +2650,19 @@ function launchStory(){
     '#wcLbl{min-width:200px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;}#wcLbl b{color:#cf9c1e;}'+
     '#wcDays{position:fixed;top:0;left:0;right:0;height:36px;z-index:402;background:linear-gradient(#1c1813,rgba(28,24,19,.9));display:flex;align-items:center;gap:14px;padding:0 22px;box-shadow:0 2px 10px rgba(0,0,0,.35);}'+
     '#wcDaysTrack{position:relative;flex:1;height:14px;}#wcDaysTrack::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:rgba(240,235,221,.13);transform:translateY(-50%);border-radius:1px;}'+
-    '#wcBall{position:absolute;left:0;top:50%;transform:translate(-50%,-50%);font-size:15px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6));transition:left .3s cubic-bezier(.4,0,.2,1);}'+
+    '#wcDaysTrack{cursor:pointer;}#wcDaysTrack i{cursor:pointer;}'+
+    '#wcBall{position:absolute;left:0;top:50%;transform:translate(-50%,-50%);font-size:15px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6));transition:left .3s cubic-bezier(.4,0,.2,1);pointer-events:none;}'+
     '#wcDate{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;color:#cf9c1e;min-width:58px;text-align:right;}</style>'+
     '<div id="wcStage"></div>'+daysBar+
     '<div id="wcCtl"><button id="wcClose" title="Close">✕</button><button onclick="storyGo(-1)">◀</button><button id="wcPlay" onclick="storyToggle()">❚❚</button><button onclick="storyGo(1)">▶</button>'+
     '<div id="wcLbl"></div><button id="wcSpeed" onclick="storyCycleSpeed()">1×</button><button onclick="storyChapters()">☰</button></div>';
   document.body.appendChild(ov); storyOv=ov; modalEl=ov;
   document.getElementById('wcClose').onclick=closeStory;
+  const track=document.getElementById('wcDaysTrack');
+  if(track){ track.title='Click to jump to a day';
+    track.onclick=ev=>{ const r=track.getBoundingClientRect(); const f=(ev.clientX-r.left)/r.width;
+      const d=Math.max(0,Math.min(storyDays.length-1,Math.floor(f*storyDays.length)));
+      const idx=storyBeatDay.indexOf(d); if(idx>=0) storyJump(idx); }; }
   ov._fit=()=>{ const s=Math.min(window.innerWidth/1280,(window.innerHeight-114)/720); document.getElementById('wcStage').style.transform='scale('+s.toFixed(3)+')'; };
   ov._fit(); addEventListener('resize',ov._fit);
   ov._key=e=>{ if(e.key==='Escape')closeStory(); else if(e.key==='ArrowRight'){e.preventDefault();storyGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();storyGo(-1);} else if(e.key===' '){e.preventDefault();storyToggle();} };
@@ -2678,6 +2693,7 @@ function renderStory(){
 }
 function schedNext(){ clearTimeout(storyTimer); if(!storyPlaying)return; storyTimer=setTimeout(()=>storyGo(1), beatDur(storyBeats[si])/storySpeed); }
 function storyGo(d){ if(!storyOv)return; const n=si+d; if(n<0||n>=storyBeats.length){ if(d>0)storyToggle(); return; } si=n; renderStory(); schedNext(); }
+function storyJump(n){ if(!storyOv)return; si=Math.max(0,Math.min(storyBeats.length-1,n)); renderStory(); schedNext(); }
 function storyToggle(){ storyPlaying=!storyPlaying; document.getElementById('wcPlay').textContent=storyPlaying?'❚❚':'▶'; if(storyPlaying)schedNext(); else clearTimeout(storyTimer); }
 function storyCycleSpeed(){ storySpeed=({1:1.5,1.5:2,2:3,3:1})[storySpeed]||1; document.getElementById('wcSpeed').textContent=storySpeed+'×'; schedNext(); }
 function storyChapters(){
