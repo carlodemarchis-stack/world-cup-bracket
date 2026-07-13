@@ -2582,20 +2582,20 @@ function beatHTML(b){
   const pic = e.type==='goal' ? picById(e.sid) : null;
   const A=tin(m.a),B=tin(m.b);
   return '<div style="position:absolute;inset:0;'+sBg(accent)+'"></div>'+
-    (pic?'<img src="'+shero(pic,760)+'" style="position:absolute;right:36px;bottom:0;height:108%;object-fit:contain;object-position:bottom;filter:drop-shadow(-8px 20px 30px rgba(0,0,0,.28));z-index:1;">':'')+
+    (pic?'<img src="'+shero(pic,760)+'" style="position:absolute;right:4px;bottom:0;height:106%;width:42%;object-fit:contain;object-position:bottom right;filter:drop-shadow(-8px 20px 30px rgba(0,0,0,.28));z-index:1;">':'')+
     '<div style="position:relative;z-index:2;height:100%;">'+
     '<div style="position:absolute;left:64px;top:56px;"><span class="sbadge" style="background:'+accent+';">'+(e.type==='og'?'⚽ OWN GOAL':(e.pen?'⚽ PENALTY':'⚽ GOAL'))+'</span></div>'+
     '<div style="position:absolute;left:64px;top:122px;display:flex;align-items:center;gap:12px;">'+
       '<img class="sfl" src="'+sflag(A.iso)+'"><span class="sc" style="font-weight:800;font-size:38px;color:'+STY.INK+';">'+m.a+'</span>'+
       '<span class="sc" style="font-weight:800;font-size:48px;color:'+accent+';">'+e.run+'</span>'+
       '<span class="sc" style="font-weight:800;font-size:38px;color:'+STY.INK+';">'+m.b+'</span><img class="sfl" src="'+sflag(B.iso)+'"></div>'+
-    '<div style="position:absolute;right:58px;top:50px;"><div class="sc" style="font-weight:800;font-size:140px;color:'+accent+';line-height:.8;">'+e.min+'</div></div>'+
-    '<div style="position:absolute;left:64px;bottom:72px;max-width:640px;">'+
-      '<div style="display:flex;align-items:center;gap:13px;"><div class="sc" style="font-weight:800;font-size:70px;color:'+STY.INK+';line-height:.9;">'+(e.scorer||'')+'</div><img class="sfl" src="'+sflag(tin(e.team).iso)+'"></div>'+
+    '<div style="position:absolute;left:64px;top:192px;"><div class="sc" style="font-weight:800;font-size:150px;color:'+accent+';line-height:.8;">'+e.min+'</div><div class="sk" style="color:'+STY.SUB+';font-size:13px;margin-top:4px;letter-spacing:3px;">Minute</div></div>'+
+    '<div style="position:absolute;left:64px;bottom:64px;max-width:580px;width:580px;">'+
+      '<div style="display:flex;align-items:center;gap:13px;max-width:580px;"><div class="sc" style="font-weight:800;font-size:66px;color:'+STY.INK+';line-height:.9;">'+(e.scorer||'')+'</div><img class="sfl" src="'+sflag(tin(e.team).iso)+'"></div>'+
       (e.assist?'<div style="display:inline-flex;align-items:center;gap:10px;margin:12px 0;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:40px;padding:6px 16px 6px 6px;box-shadow:0 4px 14px rgba(0,0,0,.1);">'+
         '<div class="sav">'+(e.aid&&picById(e.aid)?'<img src="'+sface(picById(e.aid))+'">':'')+'</div>'+
         '<div style="line-height:1;"><div class="sc" style="font-weight:700;font-size:11px;letter-spacing:1px;color:'+STY.SUB+';text-transform:uppercase;">Assist</div><div class="sc" style="font-weight:700;font-size:19px;color:'+STY.INK+';margin-top:2px;">'+e.assist+'</div></div></div>':'')+
-      (e.desc?'<div style="display:flex;gap:11px;margin-top:6px;"><div style="width:3px;background:'+accent+';border-radius:3px;"></div><div style="font-size:17px;font-style:italic;color:#3f382e;line-height:1.4;">'+e.desc+'</div></div>':'')+
+      (e.desc?'<div style="max-width:560px;border-left:3px solid '+accent+';padding-left:12px;margin-top:8px;font-size:17px;font-style:italic;color:#3f382e;line-height:1.42;">'+e.desc+'</div>':'')+
     '</div></div>';
 }
 function beatDur(b){ return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,half:2200,full:3800,table:3800,circle:4600,champ:7000,end:6000}[b.k]||3500; }
@@ -2667,6 +2667,9 @@ function storyChapters(){
 }
 function closeStory(){ if(!storyOv)return; clearTimeout(storyTimer); removeEventListener('resize',storyOv._fit); removeEventListener('keydown',storyOv._key); storyOv.remove(); storyOv=null; if(modalEl&&modalEl.id==='wcStory')modalEl=null; const c=document.getElementById('wcChap'); if(c)c.remove(); }
 window.launchStory=launchStory; window.storyGo=storyGo; window.storyToggle=storyToggle; window.storyCycleSpeed=storyCycleSpeed; window.storyChapters=storyChapters;
+// Deep-link: ?film=N auto-opens the movie paused at beat N (for testing/sharing).
+(function(){ const f=new URLSearchParams(location.search).get('film'); if(f===null)return;
+  const t=setInterval(()=>{ if(DATA&&document.querySelector('#app [data-confed]')){ clearInterval(t); launchStory(); const n=parseInt(f,10)||0; if(n>0){ storyToggle(); storyGo(n); } } }, 200); })();
 
 // ---- Ambient side-gutter bubbles --------------------------------------------
 // One bubble at a time, desktop only, and only when the page is quiet (no
