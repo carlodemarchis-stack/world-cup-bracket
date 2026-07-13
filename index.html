@@ -2551,11 +2551,16 @@ function beatHTML(b){
         (m.ref?'<span class="spill" style="margin:0 5px;">🎽 '+m.ref+'</span>':'')+'</div></div>'; }
   if(b.k==='half') return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
     '<div class="sk" style="color:'+STY.GOLD+';">Half time</div><div style="margin-top:18px;">'+sScore(Object.assign({},b.m,{aGoals:b.score.split('–')[0],bGoals:b.score.split('–')[1]}),STY.INK)+'</div>');
-  if(b.k==='full'){ const m=b.m, scr=(m.goals||[]).filter(g=>g.p&&g.p.indexOf('(o.g.)')<0).map(g=>g.p.split(' ').slice(-1)[0]+" "+g.m).join(' · ');
+  if(b.k==='full'){ const m=b.m;
+    const gl=(m.goals||[]).filter(g=>g.p&&g.p.indexOf('(o.g.)')<0);
+    const fmt=g=>g.p.split(' ').slice(-1)[0]+" "+g.m;
+    const colFor=(code,align)=>'<div style="flex:1;text-align:'+align+';">'+
+      '<div class="sc" style="font-weight:800;font-size:19px;letter-spacing:1px;color:'+STY.INK+';margin-bottom:7px;">'+code+'</div>'+
+      (gl.filter(g=>g.t===code).map(fmt).map(s=>'<div style="color:'+STY.SUB+';font-size:18px;line-height:1.55;">'+s+'</div>').join('')||'<div style="color:'+STY.SUB+';font-size:16px;opacity:.5;">—</div>')+'</div>';
     return '<div style="position:absolute;inset:0;'+sBg(STY.GREEN)+'"></div>'+sCentre(
       '<div class="sk" style="color:'+STY.GREEN+';">Full time</div><div style="margin-top:16px;">'+sScore(m,STY.INK)+'</div>'+
       (m.pens?'<div class="sc" style="margin-top:14px;color:'+STY.SUB+';font-size:20px;font-weight:700;">Penalties '+(m.penScore||'')+'</div>':'')+
-      (scr?'<div style="margin-top:16px;color:'+STY.SUB+';font-size:18px;max-width:900px;">⚽ '+scr+'</div>':'')); }
+      (gl.length?'<div style="margin-top:24px;display:flex;align-items:flex-start;gap:80px;width:720px;">'+colFor(m.a,'left')+colFor(m.b,'right')+'</div>':'')); }
   if(b.k==='table'){ const rows=b.rows.map((r,i)=>'<div style="display:flex;align-items:center;gap:14px;padding:11px 20px;border-radius:9px;background:'+(i<2?'rgba(47,158,87,.1)':'#fff')+';box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:6px;">'+
       '<div class="sc" style="width:26px;font-weight:800;font-size:24px;color:'+(i<2?STY.GREEN:STY.SUB)+';">'+(i+1)+'</div>'+
       '<img class="sfl" style="height:26px;" src="'+sflag(tin(r.c).iso)+'"><div class="sc" style="flex:1;font-weight:700;font-size:24px;color:'+STY.INK+';">'+r.c+'</div>'+
