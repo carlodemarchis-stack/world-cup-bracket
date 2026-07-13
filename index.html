@@ -1334,7 +1334,9 @@ function resolveMatch(id){
   if (id === 'final'){
     const f = DATA.final || {}, a = winnerOfNode('R', 4, 0), b = winnerOfNode('L', 4, 0);
     if (f.score) return playedFrom('Final', a, b, f);
-    return { round: 'Final', a, b, date: f.date, time: f.time, venue: f.venue, played: false };
+    // Finalists = the two semi-final winners; show each SF's candidates until played.
+    return { round: 'Final', a, b, date: f.date, time: f.time, venue: f.venue, played: false,
+      candA: nodeCandidates('R', 4, 0), candB: nodeCandidates('L', 4, 0) };
   }
   if (id === 'third'){
     const tp = DATA.thirdPlace || {}, a = sfLoser('R'), b = sfLoser('L');
