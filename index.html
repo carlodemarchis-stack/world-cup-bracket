@@ -2602,12 +2602,29 @@ function beatDur(b){ return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,
 
 // -- player --
 let storyOv=null, storyBeats=null, si=0, storyTimer=null, storyPlaying=true, storySpeed=1;
+let storyDays=[], storyBeatDay=[], storyBeatFrac=[];
+// Build the day axis for the top timeline: one entry per distinct match-day, plus
+// per-beat (dayIndex, fractional position 0..1) so the ball cursor can glide along.
+function computeStoryDays(beats){
+  storyDays=[]; storyBeatDay=new Array(beats.length); storyBeatFrac=new Array(beats.length);
+  const idxByDate={};
+  beats.forEach((b,i)=>{ const d=b.m&&b.m.date; if(d&&!(d in idxByDate)){ idxByDate[d]=storyDays.length; storyDays.push(d); } });
+  let cur=0;
+  beats.forEach((b,i)=>{ const d=b.m&&b.m.date; if(d!=null&&(d in idxByDate)) cur=idxByDate[d]; storyBeatDay[i]=cur; });
+  const total=Math.max(1,storyDays.length), cnt={}, seen={};
+  beats.forEach((b,i)=>{ const d=storyBeatDay[i]; cnt[d]=(cnt[d]||0)+1; });
+  beats.forEach((b,i)=>{ const d=storyBeatDay[i], j=(seen[d]=(seen[d]||0), seen[d]++), k=cnt[d]; storyBeatFrac[i]=(d+(j+0.5)/k)/total; });
+}
 function launchStory(){
   if(storyOv) return;
   storyBeats = buildStory();
+  computeStoryDays(storyBeats);
+  const dTotal=Math.max(1,storyDays.length);
+  let dTicks=''; for(let d=0;d<storyDays.length;d++){ dTicks+='<i data-d="'+d+'" style="position:absolute;left:'+((d+0.5)/dTotal*100).toFixed(2)+'%;top:50%;transform:translate(-50%,-50%);width:2px;height:7px;background:rgba(240,235,221,.28);border-radius:1px;"></i>'; }
+  const daysBar='<div id="wcDays"><div id="wcDaysTrack">'+dTicks+'<span id="wcBall">⚽</span></div><span id="wcDate"></span></div>';
   const ov=el('div',''); ov.id='wcStory';
   ov.innerHTML =
-    '<style>#wcStory{position:fixed;inset:0;z-index:400;background:#c9c4ba;display:flex;align-items:center;justify-content:center;font-family:Barlow,system-ui,sans-serif;}'+
+    '<style>#wcStory{position:fixed;inset:0;z-index:400;background:#c9c4ba;display:flex;align-items:center;justify-content:center;font-family:Barlow,system-ui,sans-serif;box-sizing:border-box;padding-top:44px;}'+
     '#wcStage{width:1280px;height:720px;position:relative;overflow:hidden;background:#faf7f0;box-shadow:0 30px 90px rgba(0,0,0,.55);}'+
     '#wcStory .sc{font-family:"Barlow Condensed",sans-serif;}#wcStory .sk{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:#6b6256;}'+
     '#wcStory .sfl{height:34px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,.25);object-fit:cover;}'+
@@ -2617,13 +2634,16 @@ function launchStory(){
     '#wcCtl{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:401;display:flex;align-items:center;gap:8px;background:#1c1813;border-radius:40px;padding:8px 12px;font-family:"Barlow Condensed",sans-serif;color:#f0ebdd;}'+
     '#wcCtl button{background:transparent;border:none;color:#f0ebdd;cursor:pointer;font:inherit;font-size:17px;padding:6px 11px;border-radius:20px;}#wcCtl button:hover{background:rgba(255,255,255,.12);}'+
     '#wcLbl{min-width:200px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;}#wcLbl b{color:#cf9c1e;}'+
-    '#wcBar{position:fixed;top:0;left:0;height:3px;background:#cf9c1e;z-index:402;transition:width .2s linear;}</style>'+
-    '<div id="wcStage"></div><div id="wcBar"></div>'+
+    '#wcDays{position:fixed;top:0;left:0;right:0;height:36px;z-index:402;background:linear-gradient(#1c1813,rgba(28,24,19,.9));display:flex;align-items:center;gap:14px;padding:0 22px;box-shadow:0 2px 10px rgba(0,0,0,.35);}'+
+    '#wcDaysTrack{position:relative;flex:1;height:14px;}#wcDaysTrack::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:rgba(240,235,221,.13);transform:translateY(-50%);border-radius:1px;}'+
+    '#wcBall{position:absolute;left:0;top:50%;transform:translate(-50%,-50%);font-size:15px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6));transition:left .3s cubic-bezier(.4,0,.2,1);}'+
+    '#wcDate{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;color:#cf9c1e;min-width:58px;text-align:right;}</style>'+
+    '<div id="wcStage"></div>'+daysBar+
     '<div id="wcCtl"><button id="wcClose" title="Close">✕</button><button onclick="storyGo(-1)">◀</button><button id="wcPlay" onclick="storyToggle()">❚❚</button><button onclick="storyGo(1)">▶</button>'+
     '<div id="wcLbl"></div><button id="wcSpeed" onclick="storyCycleSpeed()">1×</button><button onclick="storyChapters()">☰</button></div>';
   document.body.appendChild(ov); storyOv=ov; modalEl=ov;
   document.getElementById('wcClose').onclick=closeStory;
-  ov._fit=()=>{ const s=Math.min(window.innerWidth/1280,(window.innerHeight-70)/720); document.getElementById('wcStage').style.transform='scale('+s.toFixed(3)+')'; };
+  ov._fit=()=>{ const s=Math.min(window.innerWidth/1280,(window.innerHeight-114)/720); document.getElementById('wcStage').style.transform='scale('+s.toFixed(3)+')'; };
   ov._fit(); addEventListener('resize',ov._fit);
   ov._key=e=>{ if(e.key==='Escape')closeStory(); else if(e.key==='ArrowRight'){e.preventDefault();storyGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();storyGo(-1);} else if(e.key===' '){e.preventDefault();storyToggle();} };
   addEventListener('keydown',ov._key);
@@ -2645,7 +2665,9 @@ function renderStory(){
   } else { st.innerHTML=beatHTML(b); }
   const chap=[...storyBeats].slice(0,si+1).reverse().find(x=>x.k==='chapter');
   document.getElementById('wcLbl').innerHTML='<b>'+(si+1)+'/'+storyBeats.length+'</b> · '+(chap?chap.label:'—');
-  document.getElementById('wcBar').style.width=((si+1)/storyBeats.length*100).toFixed(1)+'%';
+  const ball=document.getElementById('wcBall'); if(ball) ball.style.left=((storyBeatFrac[si]||0)*100).toFixed(2)+'%';
+  const dt=document.getElementById('wcDate'); if(dt) dt.textContent=storyDays[storyBeatDay[si]]||'';
+  document.querySelectorAll('#wcDaysTrack i').forEach(t=>{ const on=+t.dataset.d===storyBeatDay[si]; t.style.background=on?'#cf9c1e':'rgba(240,235,221,.28)'; t.style.height=on?'11px':'7px'; });
   document.getElementById('wcPlay').textContent=storyPlaying?'❚❚':'▶';
   prefetchStory();
 }
