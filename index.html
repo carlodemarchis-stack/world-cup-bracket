@@ -2538,10 +2538,10 @@ function beatHTML(b){
     '<div class="sk" style="color:'+STY.GREEN+';letter-spacing:7px;">Chapter</div>'+
     '<div class="sc" style="font-weight:800;font-size:120px;color:'+STY.INK+';line-height:.9;margin-top:6px;">'+up+'</div>'); }
   if(b.k==='present'){ const m=b.m,A=tin(m.a),B=tin(m.b),col=(c)=>'<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;">'+
-      '<img class="sfl" style="height:auto;width:180px;" src="'+sflag(c.code,640)+'">'+
+      '<img class="sfl" style="height:auto;width:180px;" src="'+sflag(c.iso,640)+'">'+
       '<div class="sc" style="font-weight:800;font-size:46px;color:'+STY.INK+';text-align:center;line-height:.95;">'+c.name.toUpperCase()+'</div>'+
       (c.form?'<div class="spill">'+c.form+'</div>':'')+'</div>';
-    const fA={code:m.a,name:A.name,form:(m.form||{})[m.a]}, fB={code:m.b,name:B.name,form:(m.form||{})[m.b]};
+    const fA={code:m.a,iso:A.iso,name:A.name,form:(m.form||{})[m.a]}, fB={code:m.b,iso:B.iso,name:B.name,form:(m.form||{})[m.b]};
     return '<div style="position:absolute;inset:0;'+sBg(STY.BLUE)+'"></div><div style="position:relative;z-index:1;height:100%;">'+
       '<div style="position:absolute;top:46px;left:0;right:0;text-align:center;"><div class="sk" style="color:'+STY.BLUE+';">'+m.round+(m.date?' · '+m.date:'')+'</div></div>'+
       '<div style="position:absolute;left:60px;right:60px;top:120px;bottom:130px;display:flex;align-items:center;">'+col(fA)+'<div style="flex:0 0 130px;text-align:center;"><div class="sc" style="font-weight:800;font-size:60px;color:#bcae97;">VS</div></div>'+col(fB)+'</div>'+
@@ -2582,7 +2582,7 @@ function beatHTML(b){
   const pic = e.type==='goal' ? picById(e.sid) : null;
   const A=tin(m.a),B=tin(m.b);
   return '<div style="position:absolute;inset:0;'+sBg(accent)+'"></div>'+
-    (pic?'<img src="'+shero(pic,760)+'" style="position:absolute;right:4px;bottom:0;height:106%;width:42%;object-fit:contain;object-position:bottom right;filter:drop-shadow(-8px 20px 30px rgba(0,0,0,.28));z-index:1;">':'')+
+    (pic?'<img src="'+shero(pic,760)+'" style="position:absolute;right:4px;bottom:0;height:95%;width:42%;object-fit:contain;object-position:bottom right;filter:drop-shadow(-8px 20px 30px rgba(0,0,0,.28));z-index:1;">':'')+
     '<div style="position:relative;z-index:2;height:100%;">'+
     '<div style="position:absolute;left:64px;top:56px;"><span class="sbadge" style="background:'+accent+';">'+(e.type==='og'?'⚽ OWN GOAL':(e.pen?'⚽ PENALTY':'⚽ GOAL'))+'</span></div>'+
     '<div style="position:absolute;left:64px;top:122px;display:flex;align-items:center;gap:12px;">'+
