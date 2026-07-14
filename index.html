@@ -1319,7 +1319,7 @@ function playedFrom(round, a, b, s){
   const g = String(s.score || '').split('–'), aWon = s.winner === a;
   return { round, a, b, played: true, winner: s.winner,
     aGoals: aWon ? g[0] : g[1], bGoals: aWon ? g[1] : g[0], goals: s.goals || [],
-    et: s.et, pens: s.pens, penScore: s.penScore, date: s.date, venue: s.venue,
+    et: s.et, pens: s.pens, penScore: s.penScore, penalties: s.penalties, date: s.date, venue: s.venue,
     highlights: s.highlights, ref: s.ref, att: s.att, form: s.form, var: s.var, cards: s.cards, num: s.num, line: s.line };
 }
 function sfLoser(side){
