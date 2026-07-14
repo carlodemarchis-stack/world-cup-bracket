@@ -2512,7 +2512,10 @@ const KO_OVERVIEW={'Round of 32':{title:'32 Teams Qualified',sub:'The knockout b
   'Semi-finals':{title:'Semi-finals',sub:'4 teams remain'},
   'The Final':{title:'The Final',sub:'Two teams left standing'}};
 function buildStory(){
-  const ms=storyMatches(), beats=[{k:'intro',n:ms.length}], trk=sTracker(); let phase=null, lastNum=0;
+  const ms=storyMatches();
+  // Total tournament matches: every group fixture (played or not) + 32 knockout ties (R32 16, R16 8, QF 4, SF 2, 3rd 1, Final 1).
+  const totalMatches=Object.values(DATA.groups||{}).reduce((a,g)=>a+((g.matches||[]).length||0),0)+32;
+  const beats=[{k:'intro',n:totalMatches}], trk=sTracker(); let phase=null, lastNum=0;
   // Group matchday map: 4-team groups play 6 matches → matchday = floor(indexInGroup/2)+1
   const gmd={}, byG={};
   ms.filter(m=>/^Group /.test(m.round)).forEach(m=>{ const g=m.round.slice(6); (byG[g]=byG[g]||[]).push(m); });
