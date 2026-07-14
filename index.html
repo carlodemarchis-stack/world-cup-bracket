@@ -2481,6 +2481,17 @@ function storyMatches(){
   const out=[]; ids.forEach(id=>{ const m=resolveMatch(id); if(m&&m.played) out.push(Object.assign({id},m)); });
   return out.sort((a,b)=>(a.num||0)-(b.num||0));
 }
+// Not-yet-played knockout ties that are at least partly defined (≥1 team known), in bracket order.
+function storyUpcoming(){
+  const ids=[];
+  for(const s of ['R','L']) for(let k=0;k<8;k++) ids.push(s+':1:'+k);
+  for(const s of ['R','L']) for(let k=0;k<4;k++) ids.push(s+':2:'+k);
+  for(const s of ['R','L']) for(let k=0;k<2;k++) ids.push(s+':3:'+k);
+  for(const s of ['R','L']) ids.push(s+':4:0');
+  ids.push('third','final');
+  const out=[]; ids.forEach(id=>{ const m=resolveMatch(id); if(m&&!m.played&&(m.a||m.b)) out.push(Object.assign({id},m)); });
+  return out;
+}
 function sEvents(m){
   const ev=[], cnt={[m.a]:0,[m.b]:0};
   (m.goals||[]).forEach(g=>{ if(g.t in cnt)cnt[g.t]++; const run=cnt[m.a]+'–'+cnt[m.b];
@@ -2541,13 +2552,18 @@ function buildTeamStory(team){
       beats.push({k:'circle',m,num:m.num});
     }
   });
+  // Upcoming ties this team is (partly) confirmed for — preview them next.
+  const upTeam=storyUpcoming().filter(m=>m.a===team||m.b===team);
+  upTeam.forEach(m=>{ const chap=KO_CHAP[m.round]||m.round;
+    if(chap!==phase){ beats.push({k:'chapter',label:chap,sub:'Upcoming'}); phase=chap; }
+    beats.push({k:'upcoming',m}); });
   const champ=(DATA.final||{}).winner;
   if(champ===team){ beats.push({k:'champ',code:team}); }
-  else if(ms.length){ const ko=ms.filter(m=>!/^Group /.test(m.round)); let title,sub;
+  else if(!upTeam.length && ms.length){   // no more games scheduled → they're out (or done)
+    const ko=ms.filter(m=>!/^Group /.test(m.round)); let title,sub;
     if(!ko.length){ title='Group Stage'; sub='The journey ends in the group stage'; }
     else { const lk=ko[ko.length-1];
-      if(lk.winner===team){ const nx={'Round of 32':'the Round of 16','Round of 16':'the Quarter-finals','Quarter-final':'the Semi-finals','Semi-final':'the Final'}[lk.round]; title='Still Standing'; sub=nx?'Through to '+nx:'Still in the hunt'; }
-      else if(lk.round==='Final'){ title='Runners-up'; sub='So close to glory'; }
+      if(lk.round==='Final'){ title='Runners-up'; sub='So close to glory'; }
       else if(lk.round==='Third-place play-off'){ title=lk.winner===team?'Third Place':'Fourth Place'; sub='The bronze-medal match'; }
       else { title='Out in the '+(KO_CHAP[lk.round]||lk.round); sub='The journey ends here'; }
     }
@@ -2602,6 +2618,10 @@ function buildStory(team){
   if(phase!==null){ const L=sLeadersData(ms,lastNum);
     beats.push({k:'leaders',kind:'scorer',after:phase,list:L.scorers});
     beats.push({k:'leaders',kind:'assist',after:phase,list:L.assists}); }
+  // Still-to-come: preview the scheduled ties that are at least partly defined.
+  storyUpcoming().forEach(m=>{ const chap=KO_CHAP[m.round]||m.round;
+    if(chap!==phase){ beats.push({k:'chapter',label:chap,sub:'Upcoming'}); phase=chap; }
+    beats.push({k:'upcoming',m}); });
   beats.push(DATA.final&&DATA.final.winner ? {k:'champ',code:DATA.final.winner} : {k:'end'});
   return beats;
 }
@@ -2789,6 +2809,18 @@ function beatHTML(b){
         (meta.length?'<div class="sc" style="margin-top:7px;color:'+STY.SUB+";font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;letter-spacing:.5px;\">"+meta.join('&nbsp;&nbsp;·&nbsp;&nbsp;')+'</div>':'')+
       '</div>'+
       '<div style="position:absolute;left:60px;right:60px;top:84px;bottom:30px;display:flex;align-items:center;">'+col(fA)+'<div style="flex:0 0 84px;text-align:center;"><div class="sc" style="font-weight:800;font-size:52px;color:#bcae97;">VS</div></div>'+col(fB)+'</div></div>'; }
+  if(b.k==='upcoming'){ const m=b.m,A=m.a?tin(m.a):null,B=m.b?tin(m.b):null;
+    const side=(code,t)=>'<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;">'+
+      (t?'<img class="sfl" style="height:auto;width:150px;box-shadow:0 10px 30px rgba(0,0,0,.22);" src="'+sflag(t.iso,640)+'">'
+        :'<div style="width:150px;height:100px;border-radius:8px;background:rgba(0,0,0,.05);border:2px dashed rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:60px;color:#c3bba8;">?</div>')+
+      '<div class="sc" style="font-weight:800;font-size:46px;color:'+(t?STY.INK:'#b7ad98')+';text-align:center;line-height:.95;">'+(t?t.name.toUpperCase():'TBD')+'</div></div>';
+    return '<div style="position:absolute;inset:0;'+sBg(STY.BLUE)+'"></div><div style="position:relative;z-index:1;height:100%;">'+
+      '<div style="position:absolute;top:54px;left:0;right:0;text-align:center;"><span class="sbadge" style="background:'+STY.BLUE+';">⏱ Upcoming</span>'+
+        '<div class="sk" style="color:'+STY.BLUE+';margin-top:16px;">'+m.round+(m.date?' · '+m.date:'')+(m.time?' · '+m.time:'')+'</div></div>'+
+      '<div style="position:absolute;left:60px;right:60px;top:150px;bottom:130px;display:flex;align-items:center;">'+side(m.a,A)+'<div style="flex:0 0 120px;text-align:center;"><div class="sc" style="font-weight:800;font-size:58px;color:#bcae97;">VS</div></div>'+side(m.b,B)+'</div>'+
+      '<div style="position:absolute;left:0;right:0;bottom:60px;text-align:center;">'+
+        (m.venue?'<span class="spill" style="margin:0 5px;">🏟 '+m.venue+'</span>':'')+
+        (m.time?'<span class="spill" style="margin:0 5px;">⏰ Kick-off '+m.time+'</span>':'')+'</div></div>'; }
   if(b.k==='half'){ const m=b.m,hs=b.score.split('–'); return sResultCard(m,{title:'Half time',color:STY.GOLD,aG:hs[0],bG:hs[1],scorerMax:45}); }
   if(b.k==='full'){ const m=b.m; return sResultCard(m,{title:'Full time',color:STY.GREEN,aG:m.aGoals,bG:m.bGoals,qualify:qualifyLine(m),epic:true,highlights:m.highlights}); }
   if(b.k==='rtime'){ const m=b.m; return sResultCard(m,{title:'End of regular time',color:STY.GOLD,aG:b.score[0],bG:b.score[1],scorerMax:90}); }
@@ -2862,7 +2894,7 @@ function beatHTML(b){
       (e.desc?'<div style="max-width:560px;border-left:3px solid '+accent+';padding-left:12px;margin-top:8px;font-size:17px;font-style:italic;color:#3f382e;line-height:1.42;">'+e.desc+'</div>':'')+
     '</div></div>';
 }
-function beatDur(b){ if(b.k==='circle'&&b.overview) return 5600; return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,half:2200,full:3800,rtime:3400,etime:3400,pens:4600,table:3800,circle:4600,leaders:5600,champ:7000,teamend:6000,end:6000}[b.k]||3500; }
+function beatDur(b){ if(b.k==='circle'&&b.overview) return 5600; return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,upcoming:4000,half:2200,full:3800,rtime:3400,etime:3400,pens:4600,table:3800,circle:4600,leaders:5600,champ:7000,teamend:6000,end:6000}[b.k]||3500; }
 
 // -- player --
 let storyOv=null, storyBeats=null, si=0, storyTimer=null, storyPlaying=true, storySpeed=1, storyTeam=null;
