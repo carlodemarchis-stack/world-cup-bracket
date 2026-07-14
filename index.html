@@ -2649,16 +2649,26 @@ function sResultCard(m,opts){
 // otherwise the converted tally from penScore (per-kick data isn't in the FIFA feed).
 function sPensCard(m){ const A=tin(m.a),B=tin(m.b); const parts=(m.penScore||'').split(/[–-]/); const pa=(parts[0]||'').trim(),pb=(parts[1]||'').trim();
   const seq=Array.isArray(m.penalties)&&m.penalties.length;
-  const dots=n=>{ n=parseInt(n)||0; let s=''; for(let i=0;i<n;i++) s+='<span style="width:16px;height:16px;border-radius:50%;background:'+STY.VIOLET+';display:inline-block;box-shadow:0 2px 6px rgba(0,0,0,.2);"></span>'; return s; };
-  const seqCol=code=>'<div style="text-align:left;">'+(m.penalties.filter(p=>p.t===code).map(p=>'<div style="display:flex;align-items:center;gap:9px;margin:6px 0;"><span style="width:15px;height:15px;border-radius:50%;flex:none;background:'+(p.scored?'#2f9e57':'#d0322a')+';"></span><span class="sc" style="font-size:19px;color:'+STY.INK+';">'+(p.player||'')+'</span></div>').join('')||'—')+'</div>';
+  const sq={}; [m.a,m.b].forEach(c=>(DATA.squads&&DATA.squads[c]||[]).forEach(p=>sq[p.id]=p));
+  const GRN='#2f9e57',RED='#d0322a';
+  const kick=p=>{ const col=p.scored?GRN:RED, pic=p.id?picById(p.id):null, nm=p.id&&sq[p.id]?String(sq[p.id].p||'').split(' ').slice(-1)[0]:(p.player||'');
+    return '<div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:62px;">'+
+      '<div style="position:relative;width:48px;height:48px;border-radius:50%;overflow:hidden;background:#eee6d6;border:3px solid '+col+';box-shadow:0 3px 9px rgba(0,0,0,.22);">'+
+        (pic?'<img src="'+sface(pic)+'" style="width:100%;height:100%;object-fit:cover;">':'')+
+        '<div style="position:absolute;bottom:-3px;right:-4px;width:18px;height:18px;border-radius:50%;background:'+col+';color:#fff;font-size:11px;font-weight:900;line-height:18px;text-align:center;border:2px solid #faf7f0;">'+(p.scored?'✓':'✕')+'</div></div>'+
+      '<div class="sc" style="font-size:11px;font-weight:700;color:'+STY.INK+';max-width:62px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+nm+'</div></div>'; };
+  const dots=(n,filled)=>{ n=parseInt(n)||0; let s=''; for(let i=0;i<n;i++) s+='<span style="width:16px;height:16px;border-radius:50%;background:'+(filled?GRN:STY.VIOLET)+';display:inline-block;box-shadow:0 2px 6px rgba(0,0,0,.2);"></span>'; return s; };
+  const row=code=>'<div style="display:flex;align-items:center;gap:12px;margin:7px 0;">'+
+    '<div style="width:78px;flex:none;display:flex;align-items:center;justify-content:flex-end;gap:7px;"><span class="sc" style="font-weight:800;font-size:20px;color:'+STY.INK+';">'+code+'</span><img class="sfl" style="height:20px;" src="'+sflag(tin(code).iso)+'"></div>'+
+    '<div style="display:flex;gap:7px;">'+m.penalties.filter(p=>p.t===code).map(kick).join('')+'</div></div>';
   return matchRefBar(m,+m.aGoals,+m.bGoals)+'<div style="position:absolute;inset:0;'+sBg(STY.VIOLET)+'"></div>'+sCentre(
     '<div class="sk" style="color:'+STY.VIOLET+';letter-spacing:7px;">Penalty shoot-out</div>'+
-    '<div style="display:flex;align-items:center;gap:18px;margin-top:14px;"><img class="sfl" src="'+sflag(A.iso)+'"><span class="sc" style="font-weight:800;font-size:42px;color:'+STY.INK+';">'+m.a+'</span>'+
-      '<span class="sc" style="font-weight:900;font-size:64px;color:'+STY.VIOLET+';">'+pa+'–'+pb+'</span>'+
-      '<span class="sc" style="font-weight:800;font-size:42px;color:'+STY.INK+';">'+m.b+'</span><img class="sfl" src="'+sflag(B.iso)+'"></div>'+
-    (seq?'<div style="margin-top:22px;display:flex;gap:70px;">'+seqCol(m.a)+seqCol(m.b)+'</div>'
-        :'<div style="margin-top:26px;display:flex;align-items:flex-start;gap:56px;"><div style="display:flex;gap:9px;max-width:220px;flex-wrap:wrap;justify-content:center;">'+dots(pa)+'</div><div style="display:flex;gap:9px;max-width:220px;flex-wrap:wrap;justify-content:center;">'+dots(pb)+'</div></div>')+
-    (m.winner?'<div class="sc" style="margin-top:26px;font-weight:800;font-size:26px;color:'+STY.VIOLET+';">'+(qualifyLine(m)||tin(m.winner).name+' advance')+'</div>':''));
+    '<div style="display:flex;align-items:center;gap:16px;margin-top:12px;"><img class="sfl" src="'+sflag(A.iso)+'"><span class="sc" style="font-weight:800;font-size:38px;color:'+STY.INK+';">'+m.a+'</span>'+
+      '<span class="sc" style="font-weight:900;font-size:60px;color:'+STY.VIOLET+';">'+pa+'–'+pb+'</span>'+
+      '<span class="sc" style="font-weight:800;font-size:38px;color:'+STY.INK+';">'+m.b+'</span><img class="sfl" src="'+sflag(B.iso)+'"></div>'+
+    (seq?'<div style="margin-top:20px;">'+row(m.a)+row(m.b)+'</div>'
+        :'<div style="margin-top:24px;display:flex;align-items:flex-start;gap:56px;"><div style="display:flex;gap:9px;max-width:220px;flex-wrap:wrap;justify-content:center;">'+dots(pa,1)+'</div><div style="display:flex;gap:9px;max-width:220px;flex-wrap:wrap;justify-content:center;">'+dots(pb,1)+'</div></div>')+
+    (m.winner?'<div class="sc" style="margin-top:24px;font-weight:800;font-size:26px;color:'+STY.VIOLET+';">'+(qualifyLine(m)||tin(m.winner).name+' advance')+'</div>':''));
 }
 function beatHTML(b){
   if(b.k==='intro') return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
@@ -2712,10 +2722,7 @@ function beatHTML(b){
   const pic = (e.type==='goal'||e.type==='og') && e.sid ? picById(e.sid) : null;
   const rr=(e.run||'0–0').split('–');
   return matchRefBar(m,rr[0],rr[1])+'<div style="position:absolute;inset:0;'+sBg(accent)+'"></div>'+
-    (pic?'<div style="position:absolute;right:96px;top:calc(50% + 24px);transform:translateY(-50%);z-index:1;">'+
-        '<div style="position:absolute;inset:-26px;border-radius:50%;background:radial-gradient(circle,'+accent+'2e 0%,transparent 70%);"></div>'+
-        '<div style="position:relative;width:400px;height:400px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.9);border:7px solid #fff;box-shadow:0 24px 60px rgba(0,0,0,.30),0 0 0 4px '+accent+'55;">'+
-          '<img src="'+sface(pic,900)+'" style="width:100%;height:100%;object-fit:cover;object-position:center;"></div></div>':'')+
+    (pic?'<img src="'+shero(pic,760)+'" style="position:absolute;right:4px;top:60px;bottom:0;width:42%;object-fit:contain;object-position:bottom right;filter:drop-shadow(-8px 20px 30px rgba(0,0,0,.28));z-index:1;">':'')+
     '<div style="position:relative;z-index:2;height:100%;">'+
     '<div style="position:absolute;left:64px;top:78px;"><span class="sbadge" style="background:'+accent+';">'+(e.type==='og'?'⚽ OWN GOAL':(e.pen?'⚽ PENALTY':'⚽ GOAL'))+'</span></div>'+
     '<div style="position:absolute;left:64px;top:150px;"><div class="sc" style="font-weight:800;font-size:150px;color:'+accent+';line-height:.8;">'+e.min+'</div><div class="sk" style="color:'+STY.SUB+';font-size:13px;margin-top:4px;letter-spacing:3px;">Minute</div></div>'+
@@ -2787,7 +2794,7 @@ function launchStory(){
   si=0; storyPlaying=true; renderStory(); schedNext();
   prefetchStory();
 }
-function prefetchStory(){ for(let k=si;k<Math.min(si+4,storyBeats.length);k++){ const b=storyBeats[k]; if(b.k==='event'&&b.e&&b.e.sid){ const u=sface(picById(b.e.sid),640); if(u){const im=new Image();im.src=u;} } } }
+function prefetchStory(){ for(let k=si;k<Math.min(si+4,storyBeats.length);k++){ const b=storyBeats[k]; if(b.k==='event'&&b.e&&b.e.sid){ const u=shero(picById(b.e.sid),760); if(u){const im=new Image();im.src=u;} } } }
 function renderStory(){
   const b=storyBeats[si]; const st=document.getElementById('wcStage');
   if(b.k==='circle'){

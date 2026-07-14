@@ -273,7 +273,22 @@ def fetch_timeline(ids, id2code):
     cards.sort(key=lambda c: c["_k"])
     for c in cards:
         c.pop("_k", None)
-    return goals, var, cards
+
+    # Penalty shoot-out kicks (Period 11): Type 41 = scored, Type 60 = missed.
+    # Kept in kick order; store facts only (team, player id, scored) — no narrative.
+    pens = []
+    for e in events:
+        if e.get("Period") != 11 or e.get("Type") not in (41, 60):
+            continue
+        tc = id2code.get(str(e.get("IdTeam")))
+        if not tc:
+            continue
+        entry = {"t": tc, "scored": e.get("Type") == 41}
+        pid = str(e.get("IdPlayer") or "")
+        if pid:
+            entry["id"] = pid
+        pens.append(entry)
+    return goals, var, cards, pens
 
 
 def fetch_lineups(ids, id2code):
@@ -438,7 +453,7 @@ def enrich(slot, res, changes, label):
     if not res.get("ids"):
         return
     if not slot.get("goals"):
-        g, varev, cardsev = fetch_timeline(res["ids"], res["id2code"])
+        g, varev, cardsev, pensev = fetch_timeline(res["ids"], res["id2code"])
         if g:
             slot["goals"] = g
             changes.append(f"{label}: +{len(g)} scorer(s)")
@@ -448,11 +463,14 @@ def enrich(slot, res, changes, label):
         if cardsev and not slot.get("cards"):
             slot["cards"] = cardsev
             changes.append(f"{label}: +{len(cardsev)} card(s)")
+        if pensev and slot.get("pens") and not slot.get("penalties"):
+            slot["penalties"] = pensev
+            changes.append(f"{label}: +{len(pensev)} penalties")
     elif REFRESH_GOALS:
         # Re-fetch and merge: backfill assists, add any goals we were missing
         # (e.g. penalties FIFA types separately), plus VAR + cards — keeping
         # curated scorer names.
-        fresh, varev, cardsev = fetch_timeline(res["ids"], res["id2code"])
+        fresh, varev, cardsev, pensev = fetch_timeline(res["ids"], res["id2code"])
         if varev and slot.get("var") != varev:   # refresh may add adjacent-event context
             slot["var"] = varev
             changes.append(f"{label}: VAR x{len(varev)}")
@@ -480,6 +498,17 @@ def enrich(slot, res, changes, label):
                 slot["goals"].append(fg)
                 changes.append(f"{label}: +goal {fg['p']} {fg['m']}")
         slot["goals"].sort(key=lambda g: _minute_key(g.get("m", "")))
+        if pensev and slot.get("pens") and not slot.get("penalties"):
+            slot["penalties"] = pensev
+            changes.append(f"{label}: +{len(pensev)} penalties")
+
+    # Penalty shoot-out kicks — backfill once for any pens match still missing them
+    # (settled matches skip the timeline fetch above, so fetch just for penalties).
+    if slot.get("pens") and not slot.get("penalties") and res.get("ids"):
+        _, _, _, pensev = fetch_timeline(res["ids"], res["id2code"])
+        if pensev:
+            slot["penalties"] = pensev
+            changes.append(f"{label}: +{len(pensev)} penalties")
 
     # Lineups (starting XI + subs) — fill once per match, refresh on demand.
     if "line" not in slot or REFRESH_GOALS or REFRESH_LINEUPS:

@@ -1240,7 +1240,49 @@
           "cap": "344654"
         }
       },
-      "highlights": "https://www.youtube.com/watch?v=olBx2GK7kZI&list=PLBRLtDhTHh5o"
+      "highlights": "https://www.youtube.com/watch?v=olBx2GK7kZI&list=PLBRLtDhTHh5o",
+      "penalties": [
+        {
+          "t": "AUS",
+          "scored": false,
+          "id": "430442"
+        },
+        {
+          "t": "EGY",
+          "scored": true,
+          "id": "483183"
+        },
+        {
+          "t": "AUS",
+          "scored": true,
+          "id": "355775"
+        },
+        {
+          "t": "EGY",
+          "scored": true,
+          "id": "344661"
+        },
+        {
+          "t": "AUS",
+          "scored": true,
+          "id": "406606"
+        },
+        {
+          "t": "EGY",
+          "scored": true,
+          "id": "344654"
+        },
+        {
+          "t": "AUS",
+          "scored": false,
+          "id": "504931"
+        },
+        {
+          "t": "EGY",
+          "scored": true,
+          "id": "483182"
+        }
+      ]
     },
     "R:1:6": {
       "date": "Jul 3",
@@ -2304,7 +2346,59 @@
           ],
           "cap": "400721"
         }
-      }
+      },
+      "penalties": [
+        {
+          "t": "NED",
+          "scored": true,
+          "id": "448149"
+        },
+        {
+          "t": "MAR",
+          "scored": false,
+          "id": "485740"
+        },
+        {
+          "t": "NED",
+          "scored": false,
+          "id": "478364"
+        },
+        {
+          "t": "MAR",
+          "scored": true,
+          "id": "433426"
+        },
+        {
+          "t": "NED",
+          "scored": true,
+          "id": "448159"
+        },
+        {
+          "t": "MAR",
+          "scored": true,
+          "id": "494293"
+        },
+        {
+          "t": "NED",
+          "scored": false,
+          "id": "484859"
+        },
+        {
+          "t": "MAR",
+          "scored": false,
+          "id": "400721"
+        },
+        {
+          "t": "NED",
+          "scored": false,
+          "id": "489518"
+        },
+        {
+          "t": "MAR",
+          "scored": true,
+          "id": "448598"
+        }
+      ]
     },
     "L:1:5": {
       "score": "1–0",
@@ -2753,7 +2847,69 @@
           ],
           "cap": "369744"
         }
-      }
+      },
+      "penalties": [
+        {
+          "t": "GER",
+          "scored": false,
+          "id": "411367"
+        },
+        {
+          "t": "PAR",
+          "scored": true,
+          "id": "495046"
+        },
+        {
+          "t": "GER",
+          "scored": true,
+          "id": "386413"
+        },
+        {
+          "t": "PAR",
+          "scored": true,
+          "id": "369744"
+        },
+        {
+          "t": "GER",
+          "scored": true,
+          "id": "429642"
+        },
+        {
+          "t": "PAR",
+          "scored": true,
+          "id": "424422"
+        },
+        {
+          "t": "GER",
+          "scored": false,
+          "id": "498416"
+        },
+        {
+          "t": "PAR",
+          "scored": false,
+          "id": "369768"
+        },
+        {
+          "t": "GER",
+          "scored": true,
+          "id": "395471"
+        },
+        {
+          "t": "PAR",
+          "scored": false,
+          "id": "394829"
+        },
+        {
+          "t": "GER",
+          "scored": false,
+          "id": "401378"
+        },
+        {
+          "t": "PAR",
+          "scored": true,
+          "id": "520066"
+        }
+      ]
     }
   },
   "_schedule": "Kickoff date/time for the inner rounds, keyed 'side:L:k' (L=2 R16, L=3 QF, L=4 SF). Add {score, winner} here the same way once these are played to light them up.",
@@ -3456,7 +3612,59 @@
           "cap": "269058"
         }
       },
-      "highlights": "https://www.youtube.com/watch?v=pZ1Fh5Dnk3U&list=PLBRLtDhTHh5o"
+      "highlights": "https://www.youtube.com/watch?v=pZ1Fh5Dnk3U&list=PLBRLtDhTHh5o",
+      "penalties": [
+        {
+          "t": "COL",
+          "scored": true,
+          "id": "356704"
+        },
+        {
+          "t": "SUI",
+          "scored": true,
+          "id": "311558"
+        },
+        {
+          "t": "COL",
+          "scored": false,
+          "id": "386013"
+        },
+        {
+          "t": "SUI",
+          "scored": true,
+          "id": "448112"
+        },
+        {
+          "t": "COL",
+          "scored": true,
+          "id": "405755"
+        },
+        {
+          "t": "SUI",
+          "scored": false,
+          "id": "405178"
+        },
+        {
+          "t": "COL",
+          "scored": false,
+          "id": "418881"
+        },
+        {
+          "t": "SUI",
+          "scored": true,
+          "id": "448104"
+        },
+        {
+          "t": "COL",
+          "scored": true,
+          "id": "428886"
+        },
+        {
+          "t": "SUI",
+          "scored": true,
+          "id": "448131"
+        }
+      ]
     },
     "R:3:0": {
       "date": "Jul 11",
