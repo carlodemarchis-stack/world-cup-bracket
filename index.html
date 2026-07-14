@@ -2653,8 +2653,8 @@ function hlBtn(url){ return url?'<a href="'+url+'" target="_blank" rel="noopener
 // opts.epic → dramatic full-whistle treatment (huge score + spotlight); the actual Final turns gold.
 function sResultCard(m,opts){
   const A=tin(m.a),B=tin(m.b),aG=opts.aG,bG=opts.bG;
-  const gl=(m.goals||[]).filter(g=>g.p&&g.p.indexOf('(o.g.)')<0&&(opts.scorerMax==null||(parseInt(g.m)||0)<=opts.scorerMax)&&(opts.scorerMin==null||(parseInt(g.m)||0)>=opts.scorerMin));
-  const fmt=g=>g.p.split(' ').slice(-1)[0]+" "+g.m;
+  const gl=(m.goals||[]).filter(g=>g.p&&(opts.scorerMax==null||(parseInt(g.m)||0)<=opts.scorerMax)&&(opts.scorerMin==null||(parseInt(g.m)||0)>=opts.scorerMin));
+  const fmt=g=>{ const og=g.p.indexOf('(o.g.)')>=0, nm=(og?g.p.replace(/\s*\(o\.g\.\)\s*/i,'').trim():g.p).split(' ').slice(-1)[0]; return nm+' '+g.m+(og?' (OG)':''); };
   const face=g=>{ const pic=g.id?picById(g.id):null; return '<div style="width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none;background:#eee6d6;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.18);">'+(pic?'<img src="'+sface(pic)+'" style="width:100%;height:100%;object-fit:cover;">':'')+'</div>'; };
   const row=(g,align)=>align==='right'
     ? '<div style="display:flex;align-items:center;gap:9px;justify-content:flex-end;margin:7px 0;"><span class="sc" style="color:'+STY.SUB+';font-size:18px;">'+fmt(g)+'</span>'+face(g)+'</div>'
