@@ -2465,7 +2465,7 @@ fetch('data.json', { cache: 'no-store' })
 const STY = { GREEN:'#2f9e57', ORANGE:'#ef8a34', BLUE:'#1499d6', GOLD:'#cf9c1e', RED:'#d0322a', VIOLET:'#7c4dff', INK:'#1c1813', SUB:'#6b6256' };
 const sflag = (iso,w) => iso ? 'https://flagcdn.com/w'+(w||320)+'/'+iso+'.png' : '';
 const shero = (pic,w) => pic ? pic+'?&io=transform:fit,width:'+(w||720)+'&quality=90' : '';
-const sface = pic => pic ? pic+'?&io=transform:fill,aspectratio:1x1,width:200,gravity:top&quality=85' : '';
+const sface = (pic,w) => pic ? pic+'?&io=transform:fill,aspectratio:1x1,width:'+(w||200)+',gravity:top&quality=88' : '';
 const tin = c => TEAMDIR[c] || { name:c, iso:'' };
 const sBg = t => 'background:radial-gradient(120% 90% at 50% -5%,'+t+'20 0%,#faf7f0 52%,#f1ebde 100%);';
 const sHalf = min => (parseInt(String(min),10)||0) <= 45 ? 1 : 2;
@@ -2711,7 +2711,10 @@ function beatHTML(b){
   const pic = (e.type==='goal'||e.type==='og') && e.sid ? picById(e.sid) : null;
   const rr=(e.run||'0–0').split('–');
   return matchRefBar(m,rr[0],rr[1])+'<div style="position:absolute;inset:0;'+sBg(accent)+'"></div>'+
-    (pic?'<img src="'+shero(pic,760)+'" style="position:absolute;right:4px;top:60px;bottom:0;width:42%;object-fit:contain;object-position:bottom right;filter:drop-shadow(-8px 20px 30px rgba(0,0,0,.28));z-index:1;">':'')+
+    (pic?'<div style="position:absolute;right:96px;top:calc(50% + 24px);transform:translateY(-50%);z-index:1;">'+
+        '<div style="position:absolute;inset:-26px;border-radius:50%;background:radial-gradient(circle,'+accent+'2e 0%,transparent 70%);"></div>'+
+        '<div style="position:relative;width:400px;height:400px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.9);border:7px solid #fff;box-shadow:0 24px 60px rgba(0,0,0,.30),0 0 0 4px '+accent+'55;">'+
+          '<img src="'+sface(pic,640)+'" style="width:100%;height:100%;object-fit:cover;object-position:top;"></div></div>':'')+
     '<div style="position:relative;z-index:2;height:100%;">'+
     '<div style="position:absolute;left:64px;top:78px;"><span class="sbadge" style="background:'+accent+';">'+(e.type==='og'?'⚽ OWN GOAL':(e.pen?'⚽ PENALTY':'⚽ GOAL'))+'</span></div>'+
     '<div style="position:absolute;left:64px;top:150px;"><div class="sc" style="font-weight:800;font-size:150px;color:'+accent+';line-height:.8;">'+e.min+'</div><div class="sk" style="color:'+STY.SUB+';font-size:13px;margin-top:4px;letter-spacing:3px;">Minute</div></div>'+
@@ -2783,7 +2786,7 @@ function launchStory(){
   si=0; storyPlaying=true; renderStory(); schedNext();
   prefetchStory();
 }
-function prefetchStory(){ for(let k=si;k<Math.min(si+4,storyBeats.length);k++){ const b=storyBeats[k]; if(b.k==='event'&&b.e&&b.e.sid){ const u=shero(picById(b.e.sid),760); if(u){const im=new Image();im.src=u;} } } }
+function prefetchStory(){ for(let k=si;k<Math.min(si+4,storyBeats.length);k++){ const b=storyBeats[k]; if(b.k==='event'&&b.e&&b.e.sid){ const u=sface(picById(b.e.sid),640); if(u){const im=new Image();im.src=u;} } } }
 function renderStory(){
   const b=storyBeats[si]; const st=document.getElementById('wcStage');
   if(b.k==='circle'){
