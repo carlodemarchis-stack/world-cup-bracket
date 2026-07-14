@@ -2583,6 +2583,30 @@ function matchRefBar(m,aS,bS){ const A=tin(m.a),B=tin(m.b);
       meta.map(x=>'<span>'+x+'</span>').join('<span style="opacity:.35;">·</span>')+
     '</div></div>';
 }
+// Pre-match tactical line-up: player photos placed by formation on a pitch (GK at the back).
+function sPitch(m,code){
+  const line=(m.line||{})[code]; if(!line||!line.xi||!line.xi.length) return '';
+  const sq={}; (DATA.squads&&DATA.squads[code]||[]).forEach(p=>sq[p.id]=p); const cap=line.cap;
+  const xi=line.xi.slice(), form=(m.form&&m.form[code])||'';
+  let rows=null;
+  if(/^\d+(-\d+)+$/.test(form)){ const parts=form.split('-').map(Number); if(1+parts.reduce((a,b)=>a+b,0)===xi.length) rows=[1].concat(parts); }
+  if(!rows){ rows=[1]; let rem=xi.length-1; while(rem>0){ const n=Math.min(4,rem); rows.push(n); rem-=n; } }
+  let idx=0;
+  const rowHtml=rows.map(cnt=>{ let cells=''; for(let i=0;i<cnt&&idx<xi.length;i++){ const id=xi[idx++],p=sq[id]||{},num=p.n!=null?p.n:'',nm=String(p.p||id).split(' ').slice(-1)[0];
+      cells+='<div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:0;">'+
+        '<div style="position:relative;width:50px;height:50px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.85);box-shadow:0 3px 9px rgba(0,0,0,.28);border:2px solid #fff;">'+
+          (picById(id)?'<img src="'+sface(picById(id))+'" style="width:100%;height:100%;object-fit:cover;object-position:top;">':'')+
+          (num!==''?'<div style="position:absolute;bottom:-3px;left:-5px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:9px;background:'+STY.INK+";color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;line-height:16px;text-align:center;border:1.5px solid #fff;\">"+num+'</div>':'')+
+          (id===cap?'<div style="position:absolute;top:-3px;right:-5px;width:16px;height:16px;border-radius:50%;background:'+STY.BLUE+';color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;border:1.5px solid #fff;">C</div>':'')+
+        '</div>'+
+        '<div class="sc" style="font-size:12px;font-weight:700;color:#fff;white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 3px rgba(0,0,0,.6);">'+nm+'</div>'+
+      '</div>'; }
+    return '<div style="display:flex;justify-content:center;gap:5px;width:100%;">'+cells+'</div>'; });
+  return '<div style="width:314px;height:412px;box-sizing:border-box;padding:16px 8px;display:flex;flex-direction:column;justify-content:space-between;border-radius:16px;overflow:hidden;position:relative;'+
+    'background:repeating-linear-gradient(180deg,#329c58 0 41px,#2c9051 41px 82px);border:1px solid rgba(0,0,0,.14);box-shadow:0 12px 30px rgba(0,0,0,.16);">'+
+    '<div style="position:absolute;left:50%;top:16px;transform:translateX(-50%);width:70px;height:34px;border:2px solid rgba(255,255,255,.25);border-top:none;border-radius:0 0 6px 6px;"></div>'+
+    rowHtml.reverse().join('')+'</div>';   // reverse so GK renders at the bottom
+}
 // Bold qualification line for a decided knockout tie ("Canada advance to the Quarter-finals").
 function qualifyLine(m){ if(!m.winner||/^Group /.test(m.round)) return '';
   const w=tin(m.winner).name;
@@ -2591,14 +2615,31 @@ function qualifyLine(m){ if(!m.winner||/^Group /.test(m.round)) return '';
   const NEXT={'Round of 32':'the Round of 16','Round of 16':'the Quarter-finals','Quarter-final':'the Semi-finals','Semi-final':'the Final'};
   return NEXT[m.round]?w+' advance to '+NEXT[m.round]:''; }
 // Result summary card (full time / end of regular time / after extra time) with scorers split home|away.
+// opts.epic → dramatic full-whistle treatment (huge score + spotlight); the actual Final turns gold.
 function sResultCard(m,opts){
+  const A=tin(m.a),B=tin(m.b),aG=opts.aG,bG=opts.bG;
   const gl=(m.goals||[]).filter(g=>g.p&&g.p.indexOf('(o.g.)')<0&&(opts.scorerMax==null||(parseInt(g.m)||0)<=opts.scorerMax)&&(opts.scorerMin==null||(parseInt(g.m)||0)>=opts.scorerMin));
   const fmt=g=>g.p.split(' ').slice(-1)[0]+" "+g.m;
   const colFor=(code,align)=>'<div style="flex:1;text-align:'+align+';">'+
     '<div class="sc" style="font-weight:800;font-size:19px;letter-spacing:1px;color:'+STY.INK+';margin-bottom:7px;">'+code+'</div>'+
     (gl.filter(g=>g.t===code).map(fmt).map(s=>'<div style="color:'+STY.SUB+';font-size:18px;line-height:1.55;">'+s+'</div>').join('')||'<div style="color:'+STY.SUB+';font-size:16px;opacity:.5;">—</div>')+'</div>';
-  return matchRefBar(m,opts.aG,opts.bG)+'<div style="position:absolute;inset:0;'+sBg(opts.color)+'"></div>'+sCentre(
-    '<div class="sk" style="color:'+opts.color+';">'+opts.title+'</div><div style="margin-top:16px;">'+sScore(m,STY.INK,opts.aG,opts.bG)+'</div>'+
+  if(opts.epic){
+    const isFinal=(m.round==='Final'), col=isFinal?STY.GOLD:opts.color;
+    const win=m.winner, wa=win&&win===m.a, wb=win&&win===m.b;
+    const side=(code,iso,won)=>'<div style="display:flex;flex-direction:column;align-items:center;gap:10px;'+(win&&!won?'opacity:.55;':'')+'">'+
+        '<img class="sfl" style="height:74px;'+(won?'box-shadow:0 8px 26px '+col+'88;border-radius:4px;':'')+'" src="'+sflag(iso,320)+'">'+
+        '<span class="sc" style="font-weight:800;font-size:40px;color:'+STY.INK+';">'+code+'</span></div>';
+    return matchRefBar(m,aG,bG)+'<div style="position:absolute;inset:0;'+sBg(col)+'"></div>'+
+      '<div style="position:absolute;inset:0;background:radial-gradient(58% 52% at 50% 40%,'+col+'26 0%,transparent 70%);"></div>'+sCentre(
+      '<div class="sk" style="color:'+col+';letter-spacing:7px;">'+(isFinal?'🏆 '+opts.title:opts.title)+'</div>'+
+      '<div style="margin-top:22px;display:flex;align-items:center;gap:34px;">'+side(m.a,A.iso,wa)+
+        '<span class="sc" style="font-weight:900;font-size:132px;line-height:.78;color:'+col+';filter:drop-shadow(0 10px 26px '+col+'66);">'+aG+'–'+bG+'</span>'+
+        side(m.b,B.iso,wb)+'</div>'+
+      (gl.length?'<div style="margin-top:28px;display:flex;align-items:flex-start;gap:90px;width:780px;">'+colFor(m.a,'left')+colFor(m.b,'right')+'</div>':'')+
+      (opts.qualify?'<div class="sc" style="margin-top:30px;font-weight:900;font-size:'+(isFinal?42:30)+'px;color:'+col+';filter:drop-shadow(0 4px 12px '+col+'55);">'+opts.qualify+'</div>':''));
+  }
+  return matchRefBar(m,aG,bG)+'<div style="position:absolute;inset:0;'+sBg(opts.color)+'"></div>'+sCentre(
+    '<div class="sk" style="color:'+opts.color+';">'+opts.title+'</div><div style="margin-top:16px;">'+sScore(m,STY.INK,aG,bG)+'</div>'+
     (opts.note?'<div class="sc" style="margin-top:14px;color:'+STY.SUB+';font-size:20px;font-weight:700;">'+opts.note+'</div>':'')+
     (gl.length?'<div style="margin-top:24px;display:flex;align-items:flex-start;gap:80px;width:720px;">'+colFor(m.a,'left')+colFor(m.b,'right')+'</div>':'')+
     (opts.qualify?'<div class="sc" style="margin-top:26px;font-weight:800;font-size:26px;color:'+opts.color+';">'+opts.qualify+'</div>':''));
@@ -2628,25 +2669,17 @@ function beatHTML(b){
     '<div class="sk" style="color:'+STY.GREEN+';letter-spacing:7px;">'+(b.sub||'Chapter')+'</div>'+
     '<div class="sc" style="font-weight:800;font-size:120px;color:'+STY.INK+';line-height:.9;margin-top:6px;">'+up+'</div>'); }
   if(b.k==='present'){ const m=b.m,A=tin(m.a),B=tin(m.b);
-    const xiList=(code,align)=>{ const line=(m.line||{})[code]; if(!line||!line.xi||!line.xi.length) return '';
-      const sq={}; (DATA.squads&&DATA.squads[code]||[]).forEach(p=>sq[p.id]=p); const cap=line.cap;
-      const rows=line.xi.map(id=>{ const p=sq[id]||{}, num=p.n!=null?p.n:'', nm=String(p.p||id).split(' ').slice(-1)[0];
-        return '<div style="display:flex;align-items:center;gap:8px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';font-size:15px;color:'+STY.INK+';line-height:1.5;">'+
-          (align==='right'?'':'<span class="sc" style="display:inline-block;width:20px;text-align:right;font-weight:700;color:'+STY.SUB+';font-size:13px;">'+num+'</span>')+
-          '<span class="sc" style="font-weight:600;">'+nm+(id===cap?' <span style="font-size:10px;font-weight:800;color:'+STY.BLUE+';">(C)</span>':'')+'</span>'+
-          (align==='right'?'<span class="sc" style="display:inline-block;width:20px;text-align:left;font-weight:700;color:'+STY.SUB+';font-size:13px;">'+num+'</span>':'')+'</div>'; }).join('');
-      return '<div style="margin-top:12px;text-align:'+align+';"><div class="sk" style="color:'+STY.BLUE+';font-size:10px;margin-bottom:6px;letter-spacing:3px;">Starting XI</div>'+rows+'</div>'; };
-    const col=(c,align)=>'<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:9px;">'+
-      '<img class="sfl" style="height:auto;width:110px;" src="'+sflag(c.iso,640)+'">'+
-      '<div class="sc" style="font-weight:800;font-size:34px;color:'+STY.INK+';text-align:center;line-height:.95;">'+c.name.toUpperCase()+'</div>'+
-      (c.form?'<div class="spill">'+c.form+'</div>':'')+xiList(c.code,align)+'</div>';
+    const col=(c)=>'<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">'+
+      '<img class="sfl" style="height:auto;width:66px;" src="'+sflag(c.iso,320)+'">'+
+      '<div class="sc" style="font-weight:800;font-size:30px;color:'+STY.INK+';text-align:center;line-height:.95;">'+c.name.toUpperCase()+'</div>'+
+      (c.form?'<div class="spill">'+c.form+'</div>':'')+sPitch(m,c.code)+'</div>';
     const fA={code:m.a,iso:A.iso,name:A.name,form:(m.form||{})[m.a]}, fB={code:m.b,iso:B.iso,name:B.name,form:(m.form||{})[m.b]};
     return '<div style="position:absolute;inset:0;'+sBg(STY.BLUE)+'"></div><div style="position:relative;z-index:1;height:100%;">'+
-      '<div style="position:absolute;top:34px;left:0;right:0;text-align:center;"><div class="sk" style="color:'+STY.BLUE+';">'+m.round+(m.date?' · '+m.date:'')+'</div></div>'+
-      '<div style="position:absolute;left:70px;right:70px;top:76px;bottom:64px;display:flex;align-items:flex-start;">'+col(fA,'left')+'<div style="flex:0 0 90px;text-align:center;padding-top:70px;"><div class="sc" style="font-weight:800;font-size:50px;color:#bcae97;">VS</div></div>'+col(fB,'right')+'</div></div>'; }
+      '<div style="position:absolute;top:30px;left:0;right:0;text-align:center;"><div class="sk" style="color:'+STY.BLUE+';">'+m.round+(m.date?' · '+m.date:'')+'</div></div>'+
+      '<div style="position:absolute;left:60px;right:60px;top:64px;bottom:34px;display:flex;align-items:center;">'+col(fA)+'<div style="flex:0 0 84px;text-align:center;"><div class="sc" style="font-weight:800;font-size:52px;color:#bcae97;">VS</div></div>'+col(fB)+'</div></div>'; }
   if(b.k==='half'){ const m=b.m,hs=b.score.split('–'); return matchRefBar(m,hs[0],hs[1])+'<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
     '<div class="sk" style="color:'+STY.GOLD+';">Half time</div><div style="margin-top:18px;">'+sScore(m,STY.INK,hs[0],hs[1])+'</div>'); }
-  if(b.k==='full'){ const m=b.m; return sResultCard(m,{title:'Full time',color:STY.GREEN,aG:m.aGoals,bG:m.bGoals,qualify:qualifyLine(m)}); }
+  if(b.k==='full'){ const m=b.m; return sResultCard(m,{title:'Full time',color:STY.GREEN,aG:m.aGoals,bG:m.bGoals,qualify:qualifyLine(m),epic:true}); }
   if(b.k==='rtime'){ const m=b.m; return sResultCard(m,{title:'End of regular time',color:STY.GOLD,aG:b.score[0],bG:b.score[1],scorerMax:90}); }
   if(b.k==='etime'){ const m=b.m; return sResultCard(m,{title:'After extra time',color:STY.ORANGE,aG:b.score[0],bG:b.score[1],scorerMin:91,qualify:(m.pens?'':qualifyLine(m))}); }
   if(b.k==='pens'){ return sPensCard(b.m); }
