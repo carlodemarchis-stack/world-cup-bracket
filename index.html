@@ -2724,9 +2724,13 @@ function beatHTML(b){
       '<div class="sc" style="font-weight:800;font-size:30px;color:'+STY.INK+';text-align:center;line-height:.95;">'+c.name.toUpperCase()+'</div>'+
       (c.form?'<div class="spill">'+c.form+'</div>':'')+sPitch(m,c.code)+'</div>';
     const fA={code:m.a,iso:A.iso,name:A.name,form:(m.form||{})[m.a]}, fB={code:m.b,iso:B.iso,name:B.name,form:(m.form||{})[m.b]};
+    const meta=[]; if(m.venue)meta.push('🏟 '+m.venue); if(m.att)meta.push('👥 '+(+m.att).toLocaleString('en-US')); if(m.ref)meta.push('🎽 '+m.ref);
     return '<div style="position:absolute;inset:0;'+sBg(STY.BLUE)+'"></div><div style="position:relative;z-index:1;height:100%;">'+
-      '<div style="position:absolute;top:30px;left:0;right:0;text-align:center;"><div class="sk" style="color:'+STY.BLUE+';">'+m.round+(m.date?' · '+m.date:'')+'</div></div>'+
-      '<div style="position:absolute;left:60px;right:60px;top:64px;bottom:34px;display:flex;align-items:center;">'+col(fA)+'<div style="flex:0 0 84px;text-align:center;"><div class="sc" style="font-weight:800;font-size:52px;color:#bcae97;">VS</div></div>'+col(fB)+'</div></div>'; }
+      '<div style="position:absolute;top:24px;left:0;right:0;text-align:center;">'+
+        '<div class="sk" style="color:'+STY.BLUE+';">'+m.round+(m.date?' · '+m.date:'')+(m.time?' · '+m.time:'')+'</div>'+
+        (meta.length?'<div class="sc" style="margin-top:7px;color:'+STY.SUB+";font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;letter-spacing:.5px;\">"+meta.join('&nbsp;&nbsp;·&nbsp;&nbsp;')+'</div>':'')+
+      '</div>'+
+      '<div style="position:absolute;left:60px;right:60px;top:84px;bottom:30px;display:flex;align-items:center;">'+col(fA)+'<div style="flex:0 0 84px;text-align:center;"><div class="sc" style="font-weight:800;font-size:52px;color:#bcae97;">VS</div></div>'+col(fB)+'</div></div>'; }
   if(b.k==='half'){ const m=b.m,hs=b.score.split('–'); return sResultCard(m,{title:'Half time',color:STY.GOLD,aG:hs[0],bG:hs[1],scorerMax:45}); }
   if(b.k==='full'){ const m=b.m; return sResultCard(m,{title:'Full time',color:STY.GREEN,aG:m.aGoals,bG:m.bGoals,qualify:qualifyLine(m),epic:true,highlights:m.highlights}); }
   if(b.k==='rtime'){ const m=b.m; return sResultCard(m,{title:'End of regular time',color:STY.GOLD,aG:b.score[0],bG:b.score[1],scorerMax:90}); }
