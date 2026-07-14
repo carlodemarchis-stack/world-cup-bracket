@@ -4933,7 +4933,148 @@
     "L:4:0": {
       "date": "Jul 14",
       "time": "21:00",
-      "venue": "Dallas Stadium"
+      "venue": "Dallas Stadium",
+      "score": "2–0",
+      "winner": "ESP",
+      "ref": "Ivan Arcides Barton Cisneros",
+      "att": 70176,
+      "form": {
+        "FRA": "4-2-3-1",
+        "ESP": "4-1-2-3"
+      },
+      "num": 101,
+      "goals": [
+        {
+          "t": "ESP",
+          "p": "Oyarzabal",
+          "m": "22'",
+          "id": "430751",
+          "pen": true,
+          "desc": "Spain go ahead from the spot. Oyarzabal stays ice-cool and rifles his penalty into the top corner, giving Maignan no chance — 1-0.",
+          "dp": 1
+        },
+        {
+          "t": "ESP",
+          "p": "Porro",
+          "m": "58'",
+          "id": "430144",
+          "a": "Olmo",
+          "aid": "430750",
+          "desc": "A slick move doubles the lead. Porro feeds Dani Olmo and keeps running; Olmo threads a clever reverse pass back into his path and Porro finishes calmly.",
+          "dp": 1
+        }
+      ],
+      "cards": [
+        {
+          "m": "8'",
+          "p": "Rabiot",
+          "t": "FRA",
+          "c": "Y",
+          "id": "402047"
+        },
+        {
+          "m": "31'",
+          "p": "Cucurella",
+          "t": "ESP",
+          "c": "Y",
+          "id": "430735"
+        },
+        {
+          "m": "86'",
+          "p": "Mbappe",
+          "t": "FRA",
+          "c": "Y",
+          "id": "389867"
+        }
+      ],
+      "line": {
+        "FRA": {
+          "xi": [
+            "448332",
+            "368860",
+            "389876",
+            "430707",
+            "419177",
+            "405893",
+            "402047",
+            "398680",
+            "389867",
+            "485655",
+            "484860"
+          ],
+          "subs": [
+            [
+              "405881",
+              "419177",
+              "30'"
+            ],
+            [
+              "485677",
+              "402047",
+              ""
+            ],
+            [
+              "464114",
+              "484860",
+              "57'"
+            ],
+            [
+              "431861",
+              "485655",
+              "72'"
+            ],
+            [
+              "408042",
+              "368860",
+              "72'"
+            ]
+          ],
+          "cap": "389867"
+        },
+        "ESP": {
+          "xi": [
+            "430753",
+            "430144",
+            "335999",
+            "474973",
+            "430735",
+            "430718",
+            "447860",
+            "411375",
+            "430750",
+            "484320",
+            "430751"
+          ],
+          "subs": [
+            [
+              "405545",
+              "430751",
+              "74'"
+            ],
+            [
+              "423646",
+              "430718",
+              "77'"
+            ],
+            [
+              "430733",
+              "430750",
+              "77'"
+            ],
+            [
+              "447855",
+              "447860",
+              "83'"
+            ],
+            [
+              "382739",
+              "430144",
+              "83'"
+            ]
+          ],
+          "cap": "411375"
+        }
+      }
     }
   },
   "final": {
