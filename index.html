@@ -2465,7 +2465,8 @@ fetch('data.json', { cache: 'no-store' })
 const STY = { GREEN:'#2f9e57', ORANGE:'#ef8a34', BLUE:'#1499d6', GOLD:'#cf9c1e', RED:'#d0322a', VIOLET:'#7c4dff', INK:'#1c1813', SUB:'#6b6256' };
 const sflag = (iso,w) => iso ? 'https://flagcdn.com/w'+(w||320)+'/'+iso+'.png' : '';
 const shero = (pic,w) => pic ? pic+'?&io=transform:fit,width:'+(w||720)+'&quality=90' : '';
-const sface = (pic,w) => pic ? pic+'?&io=transform:fill,aspectratio:1x1,width:'+(w||200)+',gravity:top&quality=88' : '';
+// Wide top-band crop (like avatarImg): grabs just the head, so cover-cropping to a square gives a tight face.
+const sface = (pic,w) => pic ? pic+'?&io=transform:fill,aspectratio:3x1,width:'+(w||300)+',gravity:top&quality=88' : '';
 const tin = c => TEAMDIR[c] || { name:c, iso:'' };
 const sBg = t => 'background:radial-gradient(120% 90% at 50% -5%,'+t+'20 0%,#faf7f0 52%,#f1ebde 100%);';
 const sHalf = min => (parseInt(String(min),10)||0) <= 45 ? 1 : 2;
@@ -2714,7 +2715,7 @@ function beatHTML(b){
     (pic?'<div style="position:absolute;right:96px;top:calc(50% + 24px);transform:translateY(-50%);z-index:1;">'+
         '<div style="position:absolute;inset:-26px;border-radius:50%;background:radial-gradient(circle,'+accent+'2e 0%,transparent 70%);"></div>'+
         '<div style="position:relative;width:400px;height:400px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.9);border:7px solid #fff;box-shadow:0 24px 60px rgba(0,0,0,.30),0 0 0 4px '+accent+'55;">'+
-          '<img src="'+sface(pic,640)+'" style="width:100%;height:100%;object-fit:cover;object-position:top;"></div></div>':'')+
+          '<img src="'+sface(pic,900)+'" style="width:100%;height:100%;object-fit:cover;object-position:center;"></div></div>':'')+
     '<div style="position:relative;z-index:2;height:100%;">'+
     '<div style="position:absolute;left:64px;top:78px;"><span class="sbadge" style="background:'+accent+';">'+(e.type==='og'?'⚽ OWN GOAL':(e.pen?'⚽ PENALTY':'⚽ GOAL'))+'</span></div>'+
     '<div style="position:absolute;left:64px;top:150px;"><div class="sc" style="font-weight:800;font-size:150px;color:'+accent+';line-height:.8;">'+e.min+'</div><div class="sk" style="color:'+STY.SUB+';font-size:13px;margin-top:4px;letter-spacing:3px;">Minute</div></div>'+
