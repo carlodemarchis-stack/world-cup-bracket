@@ -2511,7 +2511,52 @@ const KO_OVERVIEW={'Round of 32':{title:'32 Teams Qualified',sub:'The knockout b
   'Quarter-finals':{title:'Quarter-finals',sub:'8 teams remain'},
   'Semi-finals':{title:'Semi-finals',sub:'4 teams remain'},
   'The Final':{title:'The Final',sub:'Two teams left standing'}};
-function buildStory(){
+// Full group standings at a point in time (all group fixtures ≤ maxNum, not just one team's).
+function groupTableAt(ms,group,maxNum){ const trk=sTracker();
+  ms.filter(m=>m.round==='Group '+group&&(m.num||0)<=maxNum).forEach(m=>trk.apply(m));
+  return trk.table(group); }
+// Single-team cut: only this team's matches, group tables after group games, circle after KO games,
+// then an ending card (champion / eliminated at <round> / still standing). Leaves the full film untouched.
+function buildTeamStory(team){
+  const allMs=storyMatches(), ms=allMs.filter(m=>m.a===team||m.b===team);
+  const beats=[{k:'intro',team,n:ms.length}]; let phase=null;
+  ms.forEach(m=>{ const grp=/^Group /.test(m.round);
+    const chap=grp?'Group Stage':(KO_CHAP[m.round]||m.round);
+    if(chap!==phase){ beats.push({k:'chapter',label:chap,sub:grp?'Group Stage':'Knockout'}); phase=chap; }
+    beats.push({k:'present',m});
+    const ev=sEvents(m), mn=e=>parseInt(e.min)||0;
+    ev.filter(e=>mn(e)<=45).forEach(e=>beats.push({k:'event',m,e}));
+    beats.push({k:'half',m,score:sHT(m)});
+    ev.filter(e=>mn(e)>45&&mn(e)<=90).forEach(e=>beats.push({k:'event',m,e}));
+    if(grp){
+      beats.push({k:'full',m});
+      beats.push({k:'table',group:m.round.slice(6),rows:groupTableAt(allMs,m.round.slice(6),m.num),m});
+    } else {
+      const et=!!m.et, pens=!!(m.pens||m.penScore);
+      if(et||pens){ beats.push({k:'rtime',m,score:sScoreAt(m,90)});
+        ev.filter(e=>mn(e)>90).forEach(e=>beats.push({k:'event',m,e}));
+        beats.push({k:'etime',m,score:[+m.aGoals,+m.bGoals]});
+        if(pens) beats.push({k:'pens',m});
+      } else { beats.push({k:'full',m}); }
+      beats.push({k:'circle',m,num:m.num});
+    }
+  });
+  const champ=(DATA.final||{}).winner;
+  if(champ===team){ beats.push({k:'champ',code:team}); }
+  else if(ms.length){ const ko=ms.filter(m=>!/^Group /.test(m.round)); let title,sub;
+    if(!ko.length){ title='Group Stage'; sub='The journey ends in the group stage'; }
+    else { const lk=ko[ko.length-1];
+      if(lk.winner===team){ const nx={'Round of 32':'the Round of 16','Round of 16':'the Quarter-finals','Quarter-final':'the Semi-finals','Semi-final':'the Final'}[lk.round]; title='Still Standing'; sub=nx?'Through to '+nx:'Still in the hunt'; }
+      else if(lk.round==='Final'){ title='Runners-up'; sub='So close to glory'; }
+      else if(lk.round==='Third-place play-off'){ title=lk.winner===team?'Third Place':'Fourth Place'; sub='The bronze-medal match'; }
+      else { title='Out in the '+(KO_CHAP[lk.round]||lk.round); sub='The journey ends here'; }
+    }
+    beats.push({k:'teamend',team,title,sub});
+  }
+  return beats;
+}
+function buildStory(team){
+  if(team) return buildTeamStory(team);
   const ms=storyMatches();
   // Total tournament matches: every group fixture (played or not) + 32 knockout ties (R32 16, R16 8, QF 4, SF 2, 3rd 1, Final 1).
   const totalMatches=Object.values(DATA.groups||{}).reduce((a,g)=>a+((g.matches||[]).length||0),0)+32;
@@ -2710,11 +2755,24 @@ function sPensCard(m){ const A=tin(m.a),B=tin(m.b); const parts=(m.penScore||'')
     (m.winner?'<div class="sc" style="margin-top:24px;font-weight:800;font-size:26px;color:'+STY.VIOLET+';">'+(qualifyLine(m)||tin(m.winner).name+' advance')+'</div>':'')+hlBtn(m.highlights));
 }
 function beatHTML(b){
-  if(b.k==='intro') return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
+  if(b.k==='intro'){
+    if(b.team){ const c=tin(b.team); return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
+      '<img class="sfl" style="height:auto;width:130px;margin-bottom:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);" src="'+sflag(c.iso,640)+'">'+
+      '<div class="sk" style="letter-spacing:9px;color:'+STY.SUB+';">'+c.name.toUpperCase()+'</div>'+
+      '<div class="sc" style="font-weight:800;font-size:120px;color:'+STY.INK+';line-height:.88;margin:8px 0;">ROAD TO<br>THE FINAL</div>'+
+      '<div class="sc" style="font-weight:700;font-size:24px;letter-spacing:6px;color:'+STY.GOLD+';text-transform:uppercase;">— '+c.name+"'s Journey —</div>"+
+      '<div class="sc" style="margin-top:24px;color:'+STY.SUB+';font-size:20px;letter-spacing:2px;">'+b.n+' match'+(b.n===1?'':'es')+' · every goal, to the end</div>'); }
+    return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
     '<div class="sk" style="letter-spacing:9px;">Canada · Mexico · USA · 2026</div>'+
     '<div class="sc" style="font-weight:800;font-size:140px;color:'+STY.INK+';line-height:.88;margin:12px 0 8px;">ROAD TO<br>THE FINAL</div>'+
     '<div class="sc" style="font-weight:700;font-size:26px;letter-spacing:8px;color:'+STY.GOLD+';text-transform:uppercase;">— The Film —</div>'+
-    '<div class="sc" style="margin-top:26px;color:'+STY.SUB+';font-size:20px;letter-spacing:2px;">'+b.n+' matches · match by match, to the final</div>');
+    '<div class="sc" style="margin-top:26px;color:'+STY.SUB+';font-size:20px;letter-spacing:2px;">'+b.n+' matches · match by match, to the final</div>'); }
+  if(b.k==='teamend'){ const c=tin(b.team), gold=/Champions|Standing|Third|Runners/.test(b.title);
+    return '<div style="position:absolute;inset:0;'+sBg(gold?STY.GOLD:STY.VIOLET)+'"></div>'+sCentre(
+      '<img class="sfl" style="height:auto;width:120px;margin-bottom:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);" src="'+sflag(c.iso,640)+'">'+
+      '<div class="sk" style="letter-spacing:8px;color:'+STY.SUB+';">'+c.name.toUpperCase()+'</div>'+
+      '<div class="sc" style="font-weight:900;font-size:78px;color:'+STY.INK+';line-height:.92;margin:10px 0 6px;">'+b.title.toUpperCase()+'</div>'+
+      '<div class="sc" style="color:'+STY.SUB+';font-size:22px;letter-spacing:1px;">'+b.sub+'</div>'); }
   if(b.k==='chapter'){ const up=b.label.toUpperCase(); return '<div style="position:absolute;inset:0;'+sBg(STY.GREEN)+'"></div>'+sCentre(
     '<div class="sk" style="color:'+STY.GREEN+';letter-spacing:7px;">'+(b.sub||'Chapter')+'</div>'+
     '<div class="sc" style="font-weight:800;font-size:120px;color:'+STY.INK+';line-height:.9;margin-top:6px;">'+up+'</div>'); }
@@ -2804,10 +2862,10 @@ function beatHTML(b){
       (e.desc?'<div style="max-width:560px;border-left:3px solid '+accent+';padding-left:12px;margin-top:8px;font-size:17px;font-style:italic;color:#3f382e;line-height:1.42;">'+e.desc+'</div>':'')+
     '</div></div>';
 }
-function beatDur(b){ if(b.k==='circle'&&b.overview) return 5600; return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,half:2200,full:3800,rtime:3400,etime:3400,pens:4600,table:3800,circle:4600,leaders:5600,champ:7000,end:6000}[b.k]||3500; }
+function beatDur(b){ if(b.k==='circle'&&b.overview) return 5600; return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,half:2200,full:3800,rtime:3400,etime:3400,pens:4600,table:3800,circle:4600,leaders:5600,champ:7000,teamend:6000,end:6000}[b.k]||3500; }
 
 // -- player --
-let storyOv=null, storyBeats=null, si=0, storyTimer=null, storyPlaying=true, storySpeed=1;
+let storyOv=null, storyBeats=null, si=0, storyTimer=null, storyPlaying=true, storySpeed=1, storyTeam=null;
 let storyDays=[], storyBeatDay=[], storyBeatFrac=[];
 // Build the day axis for the top timeline: one entry per distinct match-day, plus
 // per-beat (dayIndex, fractional position 0..1) so the ball cursor can glide along.
@@ -2823,8 +2881,10 @@ function computeStoryDays(beats){
 }
 function launchStory(){
   if(storyOv) return;
-  storyBeats = buildStory();
+  storyBeats = buildStory(storyTeam);
   computeStoryDays(storyBeats);
+  const allTeams=[...new Set(storyMatches().flatMap(m=>[m.a,m.b]))].filter(Boolean).sort((a,b)=>tin(a).name.localeCompare(tin(b).name));
+  const teamOpts='<option value="">🎬 Full film</option>'+allTeams.map(c=>'<option value="'+c+'"'+(c===storyTeam?' selected':'')+'>'+tin(c).name+'</option>').join('');
   const dTotal=Math.max(1,storyDays.length);
   let dTicks=''; for(let d=0;d<storyDays.length;d++){ dTicks+='<i data-d="'+d+'" title="'+storyDays[d]+'" style="position:absolute;left:'+((d+0.5)/dTotal*100).toFixed(2)+'%;top:50%;transform:translate(-50%,-50%);width:2px;height:7px;background:rgba(240,235,221,.28);border-radius:1px;"></i>'; }
   const daysBar='<div id="wcDays"><div id="wcDaysTrack">'+dTicks+'<span id="wcBall">⚽</span></div><span id="wcDate"></span></div>';
@@ -2839,6 +2899,7 @@ function launchStory(){
     '#wcStory .sav{width:40px;height:40px;border-radius:50%;overflow:hidden;background:#eee6d6;flex:none;box-shadow:0 3px 10px rgba(0,0,0,.2);}#wcStory .sav img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;}'+
     '#wcCtl{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:401;display:flex;align-items:center;gap:8px;background:#1c1813;border-radius:40px;padding:8px 12px;font-family:"Barlow Condensed",sans-serif;color:#f0ebdd;}'+
     '#wcCtl button{background:transparent;border:none;color:#f0ebdd;cursor:pointer;font:inherit;font-size:17px;padding:6px 11px;border-radius:20px;}#wcCtl button:hover{background:rgba(255,255,255,.12);}'+
+    '#wcTeam{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f0ebdd;font:inherit;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:20px;padding:6px 10px;cursor:pointer;max-width:150px;}#wcTeam option{color:#1c1813;text-transform:none;}'+
     '#wcLbl{min-width:200px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;}#wcLbl b{color:#cf9c1e;}'+
     '#wcDays{position:fixed;top:0;left:0;right:0;height:36px;z-index:402;background:linear-gradient(#1c1813,rgba(28,24,19,.9));display:flex;align-items:center;gap:14px;padding:0 22px;box-shadow:0 2px 10px rgba(0,0,0,.35);}'+
     '#wcDaysTrack{position:relative;flex:1;height:14px;}#wcDaysTrack::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:rgba(240,235,221,.13);transform:translateY(-50%);border-radius:1px;}'+
@@ -2847,9 +2908,10 @@ function launchStory(){
     '#wcDate{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;color:#cf9c1e;min-width:58px;text-align:right;}</style>'+
     '<div id="wcStage"></div>'+daysBar+
     '<div id="wcCtl"><button id="wcClose" title="Close">✕</button><button onclick="storyGo(-1)">◀</button><button id="wcPlay" onclick="storyToggle()">❚❚</button><button onclick="storyGo(1)">▶</button>'+
-    '<div id="wcLbl"></div><button id="wcSpeed" onclick="storyCycleSpeed()">1×</button><button onclick="storyChapters()">☰</button></div>';
+    '<div id="wcLbl"></div><select id="wcTeam" title="Watch one team">'+teamOpts+'</select><button id="wcSpeed" onclick="storyCycleSpeed()">1×</button><button onclick="storyChapters()">☰</button></div>';
   document.body.appendChild(ov); storyOv=ov; modalEl=ov;
   document.getElementById('wcClose').onclick=closeStory;
+  document.getElementById('wcTeam').onchange=e=>rebuildStory(e.target.value||null);
   const track=document.getElementById('wcDaysTrack');
   if(track){ track.title='Click to jump to a day';
     track.onclick=ev=>{ const r=track.getBoundingClientRect(); const f=(ev.clientX-r.left)/r.width;
@@ -2888,6 +2950,15 @@ function renderStory(){
 function schedNext(){ clearTimeout(storyTimer); if(!storyPlaying)return; storyTimer=setTimeout(()=>storyGo(1), beatDur(storyBeats[si])/storySpeed); }
 function storyGo(d){ if(!storyOv)return; const n=si+d; if(n<0||n>=storyBeats.length){ if(d>0)storyToggle(); return; } si=n; renderStory(); schedNext(); }
 function storyJump(n){ if(!storyOv)return; si=Math.max(0,Math.min(storyBeats.length-1,n)); renderStory(); schedNext(); }
+// Switch between the full film and a single-team cut (from the ▾ team selector or ?team=).
+function rebuildStory(team){ if(!storyOv)return; storyTeam=team||null;
+  storyBeats=buildStory(storyTeam); computeStoryDays(storyBeats);
+  const track=document.getElementById('wcDaysTrack');
+  if(track){ const dTotal=Math.max(1,storyDays.length); let dTicks='';
+    for(let d=0;d<storyDays.length;d++){ dTicks+='<i data-d="'+d+'" title="'+storyDays[d]+'" style="position:absolute;left:'+((d+0.5)/dTotal*100).toFixed(2)+'%;top:50%;transform:translate(-50%,-50%);width:2px;height:7px;background:rgba(240,235,221,.28);border-radius:1px;"></i>'; }
+    track.innerHTML=dTicks+'<span id="wcBall">⚽</span>'; }
+  const sel=document.getElementById('wcTeam'); if(sel&&sel.value!==(storyTeam||'')) sel.value=storyTeam||'';
+  si=0; storyPlaying=true; renderStory(); schedNext(); }
 function storyToggle(){ storyPlaying=!storyPlaying; document.getElementById('wcPlay').textContent=storyPlaying?'❚❚':'▶'; if(storyPlaying)schedNext(); else clearTimeout(storyTimer); }
 function storyCycleSpeed(){ storySpeed=({1:1.5,1.5:2,2:3,3:1})[storySpeed]||1; document.getElementById('wcSpeed').textContent=storySpeed+'×'; schedNext(); }
 function storyChapters(){
@@ -2904,9 +2975,11 @@ function storyChapters(){
 }
 function closeStory(){ if(!storyOv)return; clearTimeout(storyTimer); removeEventListener('resize',storyOv._fit); removeEventListener('keydown',storyOv._key); storyOv.remove(); storyOv=null; if(modalEl&&modalEl.id==='wcStory')modalEl=null; const c=document.getElementById('wcChap'); if(c)c.remove(); }
 window.launchStory=launchStory; window.storyGo=storyGo; window.storyToggle=storyToggle; window.storyCycleSpeed=storyCycleSpeed; window.storyChapters=storyChapters;
-// Deep-link: ?film=N auto-opens the movie paused at beat N (for testing/sharing).
-(function(){ const f=new URLSearchParams(location.search).get('film'); if(f===null)return;
-  const t=setInterval(()=>{ if(DATA&&document.querySelector('#app [data-confed]')){ clearInterval(t); launchStory(); const n=parseInt(f,10)||0; if(n>0){ storyToggle(); storyGo(n); } } }, 200); })();
+// Deep-link: ?film=N opens the movie at beat N; ?team=CODE opens that team's single-team cut.
+(function(){ const q=new URLSearchParams(location.search), f=q.get('film'), tm=q.get('team'); if(f===null&&!tm)return;
+  const t=setInterval(()=>{ if(DATA&&document.querySelector('#app [data-confed]')){ clearInterval(t);
+    if(tm) storyTeam=tm.toUpperCase();
+    launchStory(); const n=parseInt(f,10)||0; if(n>0){ storyToggle(); storyGo(n); } } }, 200); })();
 
 // ---- Ambient side-gutter bubbles --------------------------------------------
 // One bubble at a time, desktop only, and only when the page is quiet (no
