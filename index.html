@@ -2975,10 +2975,11 @@ function storyChapters(){
 }
 function closeStory(){ if(!storyOv)return; clearTimeout(storyTimer); removeEventListener('resize',storyOv._fit); removeEventListener('keydown',storyOv._key); storyOv.remove(); storyOv=null; if(modalEl&&modalEl.id==='wcStory')modalEl=null; const c=document.getElementById('wcChap'); if(c)c.remove(); }
 window.launchStory=launchStory; window.storyGo=storyGo; window.storyToggle=storyToggle; window.storyCycleSpeed=storyCycleSpeed; window.storyChapters=storyChapters;
-// Deep-link: ?film=N opens the movie at beat N; ?team=CODE opens that team's single-team cut.
+// Deep-link: ?film=N opens the movie at beat N; ?team=CODE opens that team's cut;
+// ?team=film (or ?film with no value) auto-plays the full film straight away.
 (function(){ const q=new URLSearchParams(location.search), f=q.get('film'), tm=q.get('team'); if(f===null&&!tm)return;
   const t=setInterval(()=>{ if(DATA&&document.querySelector('#app [data-confed]')){ clearInterval(t);
-    if(tm) storyTeam=tm.toUpperCase();
+    if(tm && tm.toLowerCase()!=='film') storyTeam=tm.toUpperCase();   // 'film' = the full film, not a team
     launchStory(); const n=parseInt(f,10)||0; if(n>0){ storyToggle(); storyGo(n); } } }, 200); })();
 
 // ---- Ambient side-gutter bubbles --------------------------------------------
