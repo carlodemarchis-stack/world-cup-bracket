@@ -2583,6 +2583,13 @@ function matchRefBar(m,aS,bS){ const A=tin(m.a),B=tin(m.b);
       meta.map(x=>'<span>'+x+'</span>').join('<span style="opacity:.35;">·</span>')+
     '</div></div>';
 }
+// Bold qualification line for a decided knockout tie ("Canada advance to the Quarter-finals").
+function qualifyLine(m){ if(!m.winner||/^Group /.test(m.round)) return '';
+  const w=tin(m.winner).name;
+  if(m.round==='Final') return w+' are World Champions! 🏆';
+  if(m.round==='Third-place play-off') return w+' finish third';
+  const NEXT={'Round of 32':'the Round of 16','Round of 16':'the Quarter-finals','Quarter-final':'the Semi-finals','Semi-final':'the Final'};
+  return NEXT[m.round]?w+' advance to '+NEXT[m.round]:''; }
 // Result summary card (full time / end of regular time / after extra time) with scorers split home|away.
 function sResultCard(m,opts){
   const gl=(m.goals||[]).filter(g=>g.p&&g.p.indexOf('(o.g.)')<0&&(opts.scorerMax==null||(parseInt(g.m)||0)<=opts.scorerMax)&&(opts.scorerMin==null||(parseInt(g.m)||0)>=opts.scorerMin));
@@ -2593,7 +2600,8 @@ function sResultCard(m,opts){
   return matchRefBar(m,opts.aG,opts.bG)+'<div style="position:absolute;inset:0;'+sBg(opts.color)+'"></div>'+sCentre(
     '<div class="sk" style="color:'+opts.color+';">'+opts.title+'</div><div style="margin-top:16px;">'+sScore(m,STY.INK,opts.aG,opts.bG)+'</div>'+
     (opts.note?'<div class="sc" style="margin-top:14px;color:'+STY.SUB+';font-size:20px;font-weight:700;">'+opts.note+'</div>':'')+
-    (gl.length?'<div style="margin-top:24px;display:flex;align-items:flex-start;gap:80px;width:720px;">'+colFor(m.a,'left')+colFor(m.b,'right')+'</div>':''));
+    (gl.length?'<div style="margin-top:24px;display:flex;align-items:flex-start;gap:80px;width:720px;">'+colFor(m.a,'left')+colFor(m.b,'right')+'</div>':'')+
+    (opts.qualify?'<div class="sc" style="margin-top:26px;font-weight:800;font-size:26px;color:'+opts.color+';">'+opts.qualify+'</div>':''));
 }
 // Penalty shoot-out card. Renders the real kick sequence if m.penalties=[{t,player,scored}] exists,
 // otherwise the converted tally from penScore (per-kick data isn't in the FIFA feed).
@@ -2608,7 +2616,7 @@ function sPensCard(m){ const A=tin(m.a),B=tin(m.b); const parts=(m.penScore||'')
       '<span class="sc" style="font-weight:800;font-size:42px;color:'+STY.INK+';">'+m.b+'</span><img class="sfl" src="'+sflag(B.iso)+'"></div>'+
     (seq?'<div style="margin-top:22px;display:flex;gap:70px;">'+seqCol(m.a)+seqCol(m.b)+'</div>'
         :'<div style="margin-top:26px;display:flex;align-items:flex-start;gap:56px;"><div style="display:flex;gap:9px;max-width:220px;flex-wrap:wrap;justify-content:center;">'+dots(pa)+'</div><div style="display:flex;gap:9px;max-width:220px;flex-wrap:wrap;justify-content:center;">'+dots(pb)+'</div></div>')+
-    (m.winner?'<div class="sc" style="margin-top:26px;font-weight:800;font-size:26px;color:'+STY.INK+';">'+tin(m.winner).name+' advance</div>':''));
+    (m.winner?'<div class="sc" style="margin-top:26px;font-weight:800;font-size:26px;color:'+STY.VIOLET+';">'+(qualifyLine(m)||tin(m.winner).name+' advance')+'</div>':''));
 }
 function beatHTML(b){
   if(b.k==='intro') return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
@@ -2619,23 +2627,28 @@ function beatHTML(b){
   if(b.k==='chapter'){ const up=b.label.toUpperCase(); return '<div style="position:absolute;inset:0;'+sBg(STY.GREEN)+'"></div>'+sCentre(
     '<div class="sk" style="color:'+STY.GREEN+';letter-spacing:7px;">'+(b.sub||'Chapter')+'</div>'+
     '<div class="sc" style="font-weight:800;font-size:120px;color:'+STY.INK+';line-height:.9;margin-top:6px;">'+up+'</div>'); }
-  if(b.k==='present'){ const m=b.m,A=tin(m.a),B=tin(m.b),col=(c)=>'<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;">'+
-      '<img class="sfl" style="height:auto;width:180px;" src="'+sflag(c.iso,640)+'">'+
-      '<div class="sc" style="font-weight:800;font-size:46px;color:'+STY.INK+';text-align:center;line-height:.95;">'+c.name.toUpperCase()+'</div>'+
-      (c.form?'<div class="spill">'+c.form+'</div>':'')+'</div>';
+  if(b.k==='present'){ const m=b.m,A=tin(m.a),B=tin(m.b);
+    const xiList=(code,align)=>{ const line=(m.line||{})[code]; if(!line||!line.xi||!line.xi.length) return '';
+      const sq={}; (DATA.squads&&DATA.squads[code]||[]).forEach(p=>sq[p.id]=p); const cap=line.cap;
+      const rows=line.xi.map(id=>{ const p=sq[id]||{}, num=p.n!=null?p.n:'', nm=String(p.p||id).split(' ').slice(-1)[0];
+        return '<div style="display:flex;align-items:center;gap:8px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';font-size:15px;color:'+STY.INK+';line-height:1.5;">'+
+          (align==='right'?'':'<span class="sc" style="display:inline-block;width:20px;text-align:right;font-weight:700;color:'+STY.SUB+';font-size:13px;">'+num+'</span>')+
+          '<span class="sc" style="font-weight:600;">'+nm+(id===cap?' <span style="font-size:10px;font-weight:800;color:'+STY.BLUE+';">(C)</span>':'')+'</span>'+
+          (align==='right'?'<span class="sc" style="display:inline-block;width:20px;text-align:left;font-weight:700;color:'+STY.SUB+';font-size:13px;">'+num+'</span>':'')+'</div>'; }).join('');
+      return '<div style="margin-top:12px;text-align:'+align+';"><div class="sk" style="color:'+STY.BLUE+';font-size:10px;margin-bottom:6px;letter-spacing:3px;">Starting XI</div>'+rows+'</div>'; };
+    const col=(c,align)=>'<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:9px;">'+
+      '<img class="sfl" style="height:auto;width:110px;" src="'+sflag(c.iso,640)+'">'+
+      '<div class="sc" style="font-weight:800;font-size:34px;color:'+STY.INK+';text-align:center;line-height:.95;">'+c.name.toUpperCase()+'</div>'+
+      (c.form?'<div class="spill">'+c.form+'</div>':'')+xiList(c.code,align)+'</div>';
     const fA={code:m.a,iso:A.iso,name:A.name,form:(m.form||{})[m.a]}, fB={code:m.b,iso:B.iso,name:B.name,form:(m.form||{})[m.b]};
     return '<div style="position:absolute;inset:0;'+sBg(STY.BLUE)+'"></div><div style="position:relative;z-index:1;height:100%;">'+
-      '<div style="position:absolute;top:46px;left:0;right:0;text-align:center;"><div class="sk" style="color:'+STY.BLUE+';">'+m.round+(m.date?' · '+m.date:'')+'</div></div>'+
-      '<div style="position:absolute;left:60px;right:60px;top:120px;bottom:130px;display:flex;align-items:center;">'+col(fA)+'<div style="flex:0 0 130px;text-align:center;"><div class="sc" style="font-weight:800;font-size:60px;color:#bcae97;">VS</div></div>'+col(fB)+'</div>'+
-      '<div style="position:absolute;left:0;right:0;bottom:52px;text-align:center;">'+
-        (m.venue?'<span class="spill" style="margin:0 5px;">🏟 '+m.venue+'</span>':'')+
-        (m.att?'<span class="spill" style="margin:0 5px;">👥 '+Number(m.att).toLocaleString()+'</span>':'')+
-        (m.ref?'<span class="spill" style="margin:0 5px;">🎽 '+m.ref+'</span>':'')+'</div></div>'; }
+      '<div style="position:absolute;top:34px;left:0;right:0;text-align:center;"><div class="sk" style="color:'+STY.BLUE+';">'+m.round+(m.date?' · '+m.date:'')+'</div></div>'+
+      '<div style="position:absolute;left:70px;right:70px;top:76px;bottom:64px;display:flex;align-items:flex-start;">'+col(fA,'left')+'<div style="flex:0 0 90px;text-align:center;padding-top:70px;"><div class="sc" style="font-weight:800;font-size:50px;color:#bcae97;">VS</div></div>'+col(fB,'right')+'</div></div>'; }
   if(b.k==='half'){ const m=b.m,hs=b.score.split('–'); return matchRefBar(m,hs[0],hs[1])+'<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
     '<div class="sk" style="color:'+STY.GOLD+';">Half time</div><div style="margin-top:18px;">'+sScore(m,STY.INK,hs[0],hs[1])+'</div>'); }
-  if(b.k==='full'){ const m=b.m; return sResultCard(m,{title:'Full time',color:STY.GREEN,aG:m.aGoals,bG:m.bGoals}); }
+  if(b.k==='full'){ const m=b.m; return sResultCard(m,{title:'Full time',color:STY.GREEN,aG:m.aGoals,bG:m.bGoals,qualify:qualifyLine(m)}); }
   if(b.k==='rtime'){ const m=b.m; return sResultCard(m,{title:'End of regular time',color:STY.GOLD,aG:b.score[0],bG:b.score[1],scorerMax:90}); }
-  if(b.k==='etime'){ const m=b.m; return sResultCard(m,{title:'After extra time',color:STY.ORANGE,aG:b.score[0],bG:b.score[1],scorerMin:91}); }
+  if(b.k==='etime'){ const m=b.m; return sResultCard(m,{title:'After extra time',color:STY.ORANGE,aG:b.score[0],bG:b.score[1],scorerMin:91,qualify:(m.pens?'':qualifyLine(m))}); }
   if(b.k==='pens'){ return sPensCard(b.m); }
   if(b.k==='table'){ const rows=b.rows.map((r,i)=>'<div style="display:flex;align-items:center;gap:14px;padding:11px 20px;border-radius:9px;background:'+(i<2?'rgba(47,158,87,.1)':'#fff')+';box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:6px;">'+
       '<div class="sc" style="width:26px;font-weight:800;font-size:24px;color:'+(i<2?STY.GREEN:STY.SUB)+';">'+(i+1)+'</div>'+
@@ -2669,6 +2682,7 @@ function beatHTML(b){
     '<div style="position:relative;z-index:2;height:100%;">'+
     '<div style="position:absolute;left:64px;top:78px;"><span class="sbadge" style="background:'+accent+';">'+(e.type==='og'?'⚽ OWN GOAL':(e.pen?'⚽ PENALTY':'⚽ GOAL'))+'</span></div>'+
     '<div style="position:absolute;left:64px;top:150px;"><div class="sc" style="font-weight:800;font-size:150px;color:'+accent+';line-height:.8;">'+e.min+'</div><div class="sk" style="color:'+STY.SUB+';font-size:13px;margin-top:4px;letter-spacing:3px;">Minute</div></div>'+
+    '<div style="position:absolute;left:64px;top:330px;display:flex;align-items:baseline;gap:12px;"><span class="sc" style="font-weight:800;font-size:30px;color:'+STY.INK+';">'+m.a+'</span><span class="sc" style="font-weight:900;font-size:76px;color:'+accent+';line-height:.8;">'+e.run+'</span><span class="sc" style="font-weight:800;font-size:30px;color:'+STY.INK+';">'+m.b+'</span></div>'+
     '<div style="position:absolute;left:64px;bottom:64px;max-width:580px;width:580px;">'+
       '<div style="display:flex;align-items:center;gap:13px;max-width:580px;"><div class="sc" style="font-weight:800;font-size:66px;color:'+STY.INK+';line-height:.9;">'+(e.scorer||'')+'</div><img class="sfl" src="'+sflag(tin(e.team).iso)+'"></div>'+
       (e.type==='og'?'<div style="display:inline-flex;align-items:center;gap:9px;margin:12px 0;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:40px;padding:6px 16px;box-shadow:0 4px 14px rgba(0,0,0,.1);"><img class="sfl" style="height:22px;" src="'+sflag(tin(e.creditTeam).iso)+'"><span class="sc" style="font-weight:700;font-size:16px;color:'+STY.SUB+';letter-spacing:.3px;">Counts for '+tin(e.creditTeam).name+'</span></div>':'')+
