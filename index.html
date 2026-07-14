@@ -2496,15 +2496,25 @@ function sTracker(){ const T={}; return {
     if(m.aGoals>m.bGoals){A.w++;A.pts+=3;B.l++;}else if(m.aGoals<m.bGoals){B.w++;B.pts+=3;A.l++;}else{A.d++;B.d++;A.pts++;B.pts++;} },
   table(g){ return Object.values(T[g]||{}).map(r=>Object.assign({gd:r.gf-r.ga},r)).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf); } }; }
 const KO_CHAP={'Quarter-final':'Quarter-finals','Semi-final':'Semi-finals','Third-place play-off':'Third Place','Final':'The Final'};
+// Full-bracket overview shown when a knockout phase begins (title + who's left).
+const KO_OVERVIEW={'Round of 32':{title:'32 Teams Qualified',sub:'The knockout bracket is set'},
+  'Round of 16':{title:'Round of 16',sub:'16 teams remain'},
+  'Quarter-finals':{title:'Quarter-finals',sub:'8 teams remain'},
+  'Semi-finals':{title:'Semi-finals',sub:'4 teams remain'},
+  'The Final':{title:'The Final',sub:'Two teams left standing'}};
 function buildStory(){
-  const ms=storyMatches(), beats=[{k:'intro',n:ms.length}], trk=sTracker(); let phase=null;
+  const ms=storyMatches(), beats=[{k:'intro',n:ms.length}], trk=sTracker(); let phase=null, lastNum=0;
   // Group matchday map: 4-team groups play 6 matches → matchday = floor(indexInGroup/2)+1
   const gmd={}, byG={};
   ms.filter(m=>/^Group /.test(m.round)).forEach(m=>{ const g=m.round.slice(6); (byG[g]=byG[g]||[]).push(m); });
   Object.values(byG).forEach(arr=>arr.sort((a,b)=>(a.num||0)-(b.num||0)).forEach((m,i)=>{ gmd[m.id]='Matchday '+(Math.floor(i/2)+1); }));
   ms.forEach(m=>{ const grp=/^Group /.test(m.round); if(grp) m.md=gmd[m.id];
     const chap=grp?gmd[m.id]:(KO_CHAP[m.round]||m.round);
-    if(chap!==phase){ beats.push({k:'chapter',label:chap,sub:grp?'Group Stage':'Knockout'}); phase=chap; }
+    if(chap!==phase){
+      const ov=KO_OVERVIEW[chap];   // full-bracket overview at the start of each KO phase
+      if(ov) beats.push({k:'circle',overview:true,num:lastNum,title:ov.title,sub:ov.sub});
+      beats.push({k:'chapter',label:chap,sub:grp?'Group Stage':'Knockout'}); phase=chap;
+    }
     beats.push({k:'present',m});
     const ev=sEvents(m), mn=e=>parseInt(e.min)||0;
     ev.filter(e=>mn(e)<=45).forEach(e=>beats.push({k:'event',m,e}));
@@ -2525,6 +2535,7 @@ function buildStory(){
       }
       beats.push({k:'circle',m,num:m.num});   // KO: show the real bracket updated to this match
     }
+    lastNum=m.num||lastNum;
   });
   beats.push(DATA.final&&DATA.final.winner ? {k:'champ',code:DATA.final.winner} : {k:'end'});
   return beats;
@@ -2740,7 +2751,7 @@ function beatHTML(b){
       (e.desc?'<div style="max-width:560px;border-left:3px solid '+accent+';padding-left:12px;margin-top:8px;font-size:17px;font-style:italic;color:#3f382e;line-height:1.42;">'+e.desc+'</div>':'')+
     '</div></div>';
 }
-function beatDur(b){ return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,half:2200,full:3800,rtime:3400,etime:3400,pens:4600,table:3800,circle:4600,champ:7000,end:6000}[b.k]||3500; }
+function beatDur(b){ if(b.k==='circle'&&b.overview) return 5600; return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,half:2200,full:3800,rtime:3400,etime:3400,pens:4600,table:3800,circle:4600,champ:7000,end:6000}[b.k]||3500; }
 
 // -- player --
 let storyOv=null, storyBeats=null, si=0, storyTimer=null, storyPlaying=true, storySpeed=1;
@@ -2803,12 +2814,14 @@ function renderStory(){
   const b=storyBeats[si]; const st=document.getElementById('wcStage');
   if(b.k==='circle'){
     st.innerHTML='<div style="position:absolute;inset:0;'+sBg(STY.GREEN)+'"></div>';
-    const snap=circleSnapshot(b.num, b.m.id);
+    const snap=circleSnapshot(b.num, b.overview?null:b.m.id);
     if(snap){ snap.style.margin='0'; snap.style.width='760px';
       const box=el('div','position:absolute;left:50%;top:54%;transform:translate(-50%,-50%) scale(.86);width:760px;'); box.appendChild(snap);
       st.appendChild(box); }
     const cap=el('div','position:absolute;top:14px;left:0;right:0;text-align:center;z-index:3;');
-    cap.innerHTML='<div class="sc" style="font-weight:800;font-size:30px;color:'+STY.INK+';">'+b.m.round+' · '+b.m.a+' '+b.m.aGoals+'–'+b.m.bGoals+' '+b.m.b+'</div><div class="sk" style="color:'+STY.GREEN+';font-size:11px;">The bracket updates</div>';
+    cap.innerHTML=b.overview
+      ? '<div class="sc" style="font-weight:800;font-size:34px;color:'+STY.INK+';">'+b.title+'</div><div class="sk" style="color:'+STY.BLUE+';font-size:12px;letter-spacing:4px;">'+b.sub+'</div>'
+      : '<div class="sc" style="font-weight:800;font-size:30px;color:'+STY.INK+';">'+b.m.round+' · '+b.m.a+' '+b.m.aGoals+'–'+b.m.bGoals+' '+b.m.b+'</div><div class="sk" style="color:'+STY.GREEN+';font-size:11px;">The bracket updates</div>';
     st.appendChild(cap);
   } else { st.innerHTML=beatHTML(b); }
   const chap=[...storyBeats].slice(0,si+1).reverse().find(x=>x.k==='chapter');
