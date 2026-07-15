@@ -4030,7 +4030,165 @@
     "R:4:0": {
       "date": "Jul 15",
       "time": "21:00",
-      "venue": "Atlanta Stadium"
+      "venue": "Atlanta Stadium",
+      "score": "2–1",
+      "winner": "ARG",
+      "ref": "Ismail Elfath",
+      "form": {
+        "ENG": "4-2-3-1",
+        "ARG": "4-4-2"
+      },
+      "num": 102,
+      "goals": [
+        {
+          "t": "ENG",
+          "p": "Gordon",
+          "m": "55'",
+          "id": "448189",
+          "a": "Rogers",
+          "aid": "492716",
+          "desc": "Anthony Gordon gave England the lead just before the hour, finishing Morgan Rogers's assist.",
+          "dp": 1
+        },
+        {
+          "t": "ARG",
+          "p": "Fernandez",
+          "m": "85'",
+          "id": "448252",
+          "a": "Messi",
+          "aid": "229397",
+          "desc": "Enzo Fernandez levelled for Argentina, drilling cleanly through a crowd of bodies past Pickford after a short corner worked by Messi.",
+          "dp": 1
+        },
+        {
+          "t": "ARG",
+          "p": "Martinez",
+          "m": "90'+2'",
+          "id": "402920",
+          "a": "Messi",
+          "aid": "229397",
+          "desc": "Lautaro Martinez won it in stoppage time, powering home a close-range header after Messi recovered possession and delivered a devastating cross.",
+          "dp": 1
+        }
+      ],
+      "cards": [
+        {
+          "m": "37'",
+          "p": "Anderson",
+          "t": "ENG",
+          "c": "Y",
+          "id": "481610"
+        },
+        {
+          "m": "42'",
+          "p": "Martinez",
+          "t": "ARG",
+          "c": "Y",
+          "id": "402921"
+        },
+        {
+          "m": "51'",
+          "p": "Romero",
+          "t": "ARG",
+          "c": "Y",
+          "id": "431196"
+        },
+        {
+          "m": "90'+4'",
+          "p": "De Paul",
+          "t": "ARG",
+          "c": "Y",
+          "id": "428882"
+        }
+      ],
+      "line": {
+        "ENG": {
+          "xi": [
+            "336022",
+            "369434",
+            "405841",
+            "439641",
+            "506329",
+            "433097",
+            "481610",
+            "448202",
+            "492716",
+            "369419",
+            "448189"
+          ],
+          "subs": [
+            [
+              "403049",
+              "448189",
+              "72'"
+            ],
+            [
+              "494345",
+              "439641",
+              "82'"
+            ],
+            [
+              "463780",
+              "433097",
+              "82'"
+            ],
+            [
+              "448198",
+              "369434",
+              "90'+6'"
+            ],
+            [
+              "401470",
+              "506329",
+              "90'+6'"
+            ]
+          ],
+          "cap": "369419"
+        },
+        "ARG": {
+          "xi": [
+            "308300",
+            "308322",
+            "402921",
+            "431196",
+            "402925",
+            "332847",
+            "430628",
+            "448252",
+            "416081",
+            "229397",
+            "485595"
+          ],
+          "subs": [
+            [
+              "430631",
+              "332847",
+              "64'"
+            ],
+            [
+              "310116",
+              "402921",
+              "72'"
+            ],
+            [
+              "402926",
+              "402925",
+              "72'"
+            ],
+            [
+              "428882",
+              "485595",
+              "72'"
+            ],
+            [
+              "402920",
+              "308322",
+              "81'"
+            ]
+          ],
+          "cap": "229397"
+        }
+      }
     },
     "L:2:0": {
       "date": "Jul 7",
