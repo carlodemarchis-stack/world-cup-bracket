@@ -1179,8 +1179,8 @@ function openCredits(){
       'This whole project is an interactive web adaptation of '+A('https://x.com/EmilioSansolini/status/2072091332483453026','Emilio Sansolini')+'’s original <em>Road to the Final</em> infographic. The core idea is entirely his — one single radial diagram of the entire knockout bracket, the “road to the final” concept spiralling into the trophy, and the whole visual language. Please go and admire the '+A('https://x.com/EmilioSansolini/status/2072091332483453026','original artwork')+' and follow his brilliant work at '+A('https://x.com/EmilioSansolini','@EmilioSansolini')+'.')+
     sec('Web adaptation, live data & the Film',
       'Built and maintained by '+A('https://aguywithascarf.substack.com/','Carlo De Marchis — “A guy with a scarf”')+': the interactive bracket, the automatic live-data sync, and the WC Movie (“Road to the Final — The Film”).')+
-    sec('Match visuals — Alexander Bogachev',
-      'The gorgeous per-match visual on each result card is the work of '+A('https://wc26.bogachev.fr/','Alexander Bogachev')+'. Every thumbnail links straight to his '+A('https://wc26.bogachev.fr/','World Cup 2026 match pages')+' — do explore them, they’re superb.')+
+    sec('Football Data Portraits — Alexander Bogachev',
+      'The gorgeous per-match visual on each result card is a Football Data Portrait by '+A('https://wc26.bogachev.fr/','Alexander Bogachev')+'. Every thumbnail links straight to his '+A('https://wc26.bogachev.fr/','World Cup 2026 match pages')+' — do explore them, they’re superb.')+
     sec('Sources of information',
       'Everything updates automatically from official public feeds:'+
       '<ul style="margin:8px 0 0;padding-left:18px;line-height:1.6;">'+
@@ -2789,7 +2789,9 @@ function matchFooter(m,url){
   const b=(DATA.bogachev||{})[m&&m.id];
   if(!url&&!b) return '';
   const hl=url?'<a href="'+url+'" target="_blank" rel="noopener" style="pointer-events:auto;display:inline-flex;align-items:center;gap:9px;padding:10px 20px;border-radius:24px;background:#ff0000;color:#fff;text-decoration:none;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:15px;letter-spacing:.6px;text-transform:uppercase;box-shadow:0 5px 16px rgba(255,0,0,.32);"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>Watch highlights</a>':'';
-  const bog=b?'<a href="'+b.url+'" target="_blank" rel="noopener" title="Match visual by Alexander Bogachev" style="pointer-events:auto;display:inline-flex;flex-direction:column;align-items:center;gap:5px;text-decoration:none;"><img src="'+b.img+'" alt="Match visual by Alexander Bogachev" style="height:92px;width:auto;border-radius:9px;box-shadow:0 6px 18px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.1);display:block;"><span class="sc" style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:'+STY.SUB+';">Viz by Alexander Bogachev ↗</span></a>':'';
+  const bog=b?'<a href="'+b.url+'" target="_blank" rel="noopener" title="Football Data Portraits by Alexander Bogachev" style="pointer-events:auto;display:inline-flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none;">'+
+    '<div style="background:#14110c;padding:8px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.32);"><img src="'+b.img+'" alt="Football Data Portraits by Alexander Bogachev" style="height:98px;width:auto;border-radius:6px;display:block;"></div>'+
+    '<span class="sc" style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:'+STY.SUB+';text-align:center;line-height:1.35;">Football Data Portraits by<br><span style="color:'+STY.INK+';">Alexander Bogachev</span> ↗</span></a>':'';
   return '<div style="margin-top:24px;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;">'+hl+bog+'</div>';
 }
 // "Watch highlights" button only (used where no Bogachev viz footer is wanted).
