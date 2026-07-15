@@ -2808,9 +2808,8 @@ function matchFooter(m,url){
 }
 // "Watch highlights" button only (used where no Bogachev viz footer is wanted).
 function hlBtn(url){ return url?'<a href="'+url+'" target="_blank" rel="noopener" style="pointer-events:auto;display:inline-flex;align-items:center;gap:9px;margin-top:26px;padding:10px 20px;border-radius:24px;background:#ff0000;color:#fff;text-decoration:none;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:15px;letter-spacing:.6px;text-transform:uppercase;box-shadow:0 5px 16px rgba(255,0,0,.32);"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>Watch highlights</a>':''; }
-// Trionda match-ball icon (same three-blade mark as the bracket centre) — flags the goal columns.
-function sBall(s){ s=s||22; const bl='M50 50 C 40 44 34 20 50 9 C 66 20 60 44 50 50 Z';
-  return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 100 100" style="display:block;flex:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));"><circle cx="50" cy="50" r="46" fill="#fbfbf9" stroke="rgba(0,0,0,.12)" stroke-width="2"/><path d="'+bl+'" fill="#e5322b"/><path d="'+bl+'" fill="#0a9c53" transform="rotate(120 50 50)"/><path d="'+bl+'" fill="#1f6cb0" transform="rotate(240 50 50)"/><circle cx="50" cy="50" r="6" fill="#fff"/></svg>'; }
+// Trionda match-ball icon (official ball.png) — flags the goal columns.
+function sBall(s){ s=s||22; return '<img src="ball.png" alt="" style="width:'+s+'px;height:'+s+'px;display:block;flex:none;object-fit:contain;filter:drop-shadow(0 1px 2px rgba(0,0,0,.2));">'; }
 // Result summary card (full time / end of regular time / after extra time) with scorers split home|away.
 // opts.epic → dramatic full-whistle treatment (huge score + spotlight); the actual Final turns gold.
 function sResultCard(m,opts){
