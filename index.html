@@ -2517,6 +2517,16 @@ function sLeadersData(ms,maxNum){ const sc={},as={};
       if(g.a){ const k=g.aid||g.a; (as[k]=as[k]||{id:g.aid||'',name:g.a,team:g.t,log:[]}).log.push({stage:st,opp,min:g.m,scorer:g.p}); } }); });
   const top=o=>Object.values(o).map(e=>(e.n=e.log.length,e)).sort((a,b)=>b.n-a.n).slice(0,5);
   return {scorers:top(sc),assists:top(as)}; }
+// Champion squad tournament stats: apps (started or came on), goals, assists per player.
+function sChampSquad(team){
+  const ms=storyMatches().filter(m=>m.a===team||m.b===team), stat={};
+  const get=id=>stat[id]=stat[id]||{apps:0,g:0,a:0};
+  ms.forEach(m=>{ const line=(m.line||{})[team]||{};
+    new Set([...(line.xi||[]),...((line.subs||[]).map(s=>s[0]).filter(Boolean))]).forEach(id=>get(id).apps++);
+    (m.goals||[]).forEach(g=>{ if(g.t!==team) return; if(g.id&&g.p&&g.p.indexOf('(o.g.)')<0) get(g.id).g++; if(g.aid) get(g.aid).a++; }); });
+  return ((DATA.squads&&DATA.squads[team])||[]).map(p=>Object.assign({id:p.id,name:p.p,num:p.n},stat[p.id]||{apps:0,g:0,a:0}))
+    .sort((a,b)=>b.apps-a.apps||b.g-a.g||b.a-a.a||(a.num||99)-(b.num||99));
+}
 const KO_CHAP={'Quarter-final':'Quarter-finals','Semi-final':'Semi-finals','Third-place play-off':'Third Place','Final':'The Final'};
 // Full-bracket overview shown when a knockout phase begins (title + who's left).
 const KO_OVERVIEW={'Round of 32':{title:'32 Teams Qualified',sub:'The knockout bracket is set'},
@@ -2560,7 +2570,7 @@ function buildTeamStory(team){
     if(chap!==phase){ beats.push({k:'chapter',label:chap,sub:'Upcoming'}); phase=chap; }
     beats.push({k:'upcoming',m}); });
   const champ=(DATA.final||{}).winner;
-  if(champ===team){ beats.push({k:'champ',code:team}); }
+  if(champ===team){ beats.push({k:'champ',code:team}); beats.push({k:'champsquad',team,players:sChampSquad(team)}); }
   else if(!upTeam.length && ms.length){   // no more games scheduled → they're out (or done)
     const ko=ms.filter(m=>!/^Group /.test(m.round)); let title,sub;
     if(!ko.length){ title='Group Stage'; sub='The journey ends in the group stage'; }
@@ -2617,14 +2627,18 @@ function buildStory(team){
     }
     lastNum=m.num||lastNum;
   });
-  if(phase!==null){ const L=sLeadersData(ms,lastNum);
+  // Leaderboard only once the current phase is fully over (no scheduled tie still in it);
+  // after the final that makes this the tournament's Golden Boot / top-assist card.
+  if(phase!==null && !storyUpcoming().some(m=>(KO_CHAP[m.round]||m.round)===phase)){
+    const L=sLeadersData(ms,lastNum);
     beats.push({k:'leaders',kind:'scorer',after:phase,list:L.scorers});
     beats.push({k:'leaders',kind:'assist',after:phase,list:L.assists}); }
   // Still-to-come: preview the scheduled ties that are at least partly defined.
   storyUpcoming().forEach(m=>{ const chap=KO_CHAP[m.round]||m.round;
     if(chap!==phase){ beats.push({k:'chapter',label:chap,sub:'Upcoming'}); phase=chap; }
     beats.push({k:'upcoming',m}); });
-  beats.push(DATA.final&&DATA.final.winner ? {k:'champ',code:DATA.final.winner} : {k:'end'});
+  if(DATA.final&&DATA.final.winner){ beats.push({k:'champ',code:DATA.final.winner}); beats.push({k:'champsquad',team:DATA.final.winner,players:sChampSquad(DATA.final.winner)}); }
+  else beats.push({k:'end'});
   return beats;
 }
 // Real bracket rendered to a snapshot: temporarily hide KO results played after
@@ -2867,6 +2881,18 @@ function beatHTML(b){
     '<div class="sk" style="color:'+STY.GOLD+';letter-spacing:8px;">World Champions</div>'+
     '<img class="sfl" style="height:auto;width:150px;margin-top:14px;" src="'+sflag(c.iso,640)+'">'+
     '<div class="sc" style="font-weight:900;font-size:120px;color:'+STY.GOLD+';line-height:.86;margin-top:12px;">'+c.name.toUpperCase()+'</div>'); }
+  if(b.k==='champsquad'){ const c=tin(b.team);
+    const cell=p=>{ const pic=p.id?picById(p.id):null;
+      return '<div style="display:flex;align-items:center;gap:9px;background:#fff;border-radius:11px;padding:6px 10px;box-shadow:0 4px 12px rgba(0,0,0,.09);">'+
+        '<div style="width:40px;height:40px;flex:none;border-radius:50%;overflow:hidden;background:#eee6d6;border:2px solid '+STY.GOLD+';">'+(pic?'<img src="'+sface(pic)+'" style="width:100%;height:100%;object-fit:cover;">':'')+'</div>'+
+        '<div style="min-width:0;text-align:left;">'+
+          '<div class="sc" style="font-weight:700;font-size:15px;color:'+STY.INK+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;">'+(p.num!=null?'<span style="color:'+STY.SUB+';">'+p.num+'</span> ':'')+p.name.split(' ').slice(-1)[0]+'</div>'+
+          '<div class="sc" style="font-size:12px;color:'+STY.SUB+';white-space:nowrap;">'+p.apps+' apps · '+p.g+'⚽ · '+p.a+'◎</div>'+
+        '</div></div>'; };
+    return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
+      '<div class="sk" style="color:'+STY.GOLD+';letter-spacing:7px;">🏆 World Champions</div>'+
+      '<div style="display:flex;align-items:center;gap:14px;margin:8px 0 18px;"><img class="sfl" style="height:42px;" src="'+sflag(c.iso)+'"><div class="sc" style="font-weight:900;font-size:52px;color:'+STY.INK+';">'+c.name.toUpperCase()+'</div></div>'+
+      '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;width:1180px;">'+b.players.map(cell).join('')+'</div>'); }
   if(b.k==='end') return '<div style="position:absolute;inset:0;'+sBg(STY.VIOLET)+'"></div>'+sCentre(
     '<div class="sc" style="font-weight:800;font-size:90px;color:'+STY.INK+';line-height:.9;">TO BE<br>CONTINUED</div>'+
     '<div class="sk" style="color:'+STY.SUB+';margin-top:18px;">The story updates as the tournament unfolds</div>');
@@ -2896,7 +2922,7 @@ function beatHTML(b){
       (e.desc?'<div style="max-width:560px;border-left:3px solid '+accent+';padding-left:12px;margin-top:8px;font-size:17px;font-style:italic;color:#3f382e;line-height:1.42;">'+e.desc+'</div>':'')+
     '</div></div>';
 }
-function beatDur(b){ if(b.k==='circle'&&b.overview) return 5600; return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,upcoming:4000,half:2200,full:3800,rtime:3400,etime:3400,pens:4600,table:3800,circle:4600,leaders:5600,champ:7000,teamend:6000,end:6000}[b.k]||3500; }
+function beatDur(b){ if(b.k==='circle'&&b.overview) return 5600; return b.k==='event'?(b.e&&b.e.desc?5200:4200):{intro:3600,chapter:2400,present:4200,upcoming:4000,half:2200,full:3800,rtime:3400,etime:3400,pens:4600,table:3800,circle:4600,leaders:5600,champ:7000,champsquad:9000,teamend:6000,end:6000}[b.k]||3500; }
 
 // -- player --
 let storyOv=null, storyBeats=null, si=0, storyTimer=null, storyPlaying=true, storySpeed=1, storyTeam=null;
