@@ -2828,13 +2828,17 @@ function sResultCard(m,opts){
     const side=(code,iso,won)=>'<div style="display:flex;flex-direction:column;align-items:center;gap:10px;'+(win&&!won?'opacity:.55;':'')+'">'+
         '<img class="sfl" style="height:74px;'+(won?'box-shadow:0 8px 26px '+col+'88;border-radius:4px;':'')+'" src="'+sflag(iso,320)+'">'+
         '<span class="sc" style="font-weight:800;font-size:40px;color:'+STY.INK+';">'+code+'</span></div>';
+    // Scorers pinned to the far left/right edges so the centre block (score + qualify + links)
+    // stays put no matter how many goals were scored.
+    const sideScorers=gl.length?
+      '<div style="position:absolute;left:50px;top:50%;transform:translateY(-50%);width:280px;z-index:2;">'+colFor(m.a,'left')+'</div>'+
+      '<div style="position:absolute;right:50px;top:50%;transform:translateY(-50%);width:280px;z-index:2;">'+colFor(m.b,'right')+'</div>':'';
     return matchRefBar(m,aG,bG)+'<div style="position:absolute;inset:0;'+sBg(col)+'"></div>'+
-      '<div style="position:absolute;inset:0;background:radial-gradient(58% 52% at 50% 40%,'+col+'26 0%,transparent 70%);"></div>'+sCentre(
+      '<div style="position:absolute;inset:0;background:radial-gradient(58% 52% at 50% 40%,'+col+'26 0%,transparent 70%);"></div>'+sideScorers+sCentre(
       '<div class="sk" style="color:'+col+';letter-spacing:7px;">'+(isFinal?'🏆 '+opts.title:opts.title)+'</div>'+
       '<div style="margin-top:22px;display:flex;align-items:center;gap:34px;">'+side(m.a,A.iso,wa)+
         '<span class="sc" style="font-weight:900;font-size:132px;line-height:.78;color:'+col+';filter:drop-shadow(0 10px 26px '+col+'66);">'+aG+'–'+bG+'</span>'+
         side(m.b,B.iso,wb)+'</div>'+
-      (gl.length?'<div style="margin-top:28px;display:flex;align-items:flex-start;gap:90px;width:780px;">'+colFor(m.a,'left')+colFor(m.b,'right')+'</div>':'')+
       (opts.qualify?'<div class="sc" style="margin-top:30px;font-weight:900;font-size:'+(isFinal?42:30)+'px;color:'+col+';filter:drop-shadow(0 4px 12px '+col+'55);">'+opts.qualify+'</div>':'')+hl);
   }
   return matchRefBar(m,aG,bG)+'<div style="position:absolute;inset:0;'+sBg(opts.color)+'"></div>'+sCentre(
