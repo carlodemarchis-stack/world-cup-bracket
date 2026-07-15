@@ -2892,7 +2892,7 @@ function beatHTML(b){
     return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
       '<div class="sk" style="color:'+STY.GOLD+';letter-spacing:7px;">🏆 World Champions</div>'+
       '<div style="display:flex;align-items:center;gap:14px;margin:8px 0 18px;"><img class="sfl" style="height:42px;" src="'+sflag(c.iso)+'"><div class="sc" style="font-weight:900;font-size:52px;color:'+STY.INK+';">'+c.name.toUpperCase()+'</div></div>'+
-      '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;width:1180px;">'+b.players.map(cell).join('')+'</div>'); }
+      '<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;width:1180px;">'+b.players.map(cell).join('')+'</div>'); }
   if(b.k==='end') return '<div style="position:absolute;inset:0;'+sBg(STY.VIOLET)+'"></div>'+sCentre(
     '<div class="sc" style="font-weight:800;font-size:90px;color:'+STY.INK+';line-height:.9;">TO BE<br>CONTINUED</div>'+
     '<div class="sk" style="color:'+STY.SUB+';margin-top:18px;">The story updates as the tournament unfolds</div>');
