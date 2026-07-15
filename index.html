@@ -2784,15 +2784,27 @@ function qualifyLine(m){ if(!m.winner||/^Group /.test(m.round)) return '';
   if(m.round==='Third-place play-off') return w+' finish third';
   const NEXT={'Round of 32':'the Round of 16','Round of 16':'the Quarter-finals','Quarter-final':'the Semi-finals','Semi-final':'the Final'};
   return NEXT[m.round]?w+' advance to '+NEXT[m.round]:''; }
-// Final-card footer: "Watch highlights" (YouTube) + Alexander Bogachev's match-viz thumbnail (credited link).
+// Final-card footer: two balanced columns — YouTube highlights (real video thumbnail, FIFA channel)
+// and Alexander Bogachev's Football Data Portrait — each a button + thumbnail + credit.
 function matchFooter(m,url){
   const b=(DATA.bogachev||{})[m&&m.id];
   if(!url&&!b) return '';
-  const hl=url?'<a href="'+url+'" target="_blank" rel="noopener" style="pointer-events:auto;display:inline-flex;align-items:center;gap:9px;padding:10px 20px;border-radius:24px;background:#ff0000;color:#fff;text-decoration:none;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:15px;letter-spacing:.6px;text-transform:uppercase;box-shadow:0 5px 16px rgba(255,0,0,.32);"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>Watch highlights</a>':'';
-  const bog=b?'<a href="'+b.url+'" target="_blank" rel="noopener" title="Football Data Portraits by Alexander Bogachev" style="pointer-events:auto;display:inline-flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none;">'+
-    '<div style="background:#14110c;padding:8px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.32);"><img src="'+b.img+'" alt="Football Data Portraits by Alexander Bogachev" style="height:98px;width:auto;border-radius:6px;display:block;"></div>'+
-    '<span class="sc" style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:'+STY.SUB+';text-align:center;line-height:1.35;">Football Data Portraits by<br><span style="color:'+STY.INK+';">Alexander Bogachev</span> ↗</span></a>':'';
-  return '<div style="margin-top:24px;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;">'+hl+bog+'</div>';
+  const vid=url?((url.match(/[?&]v=([^&]+)/)||[])[1]||null):null;
+  const play='<svg width="13" height="13" viewBox="0 0 24 24" fill="#fff" style="flex:none;"><path d="M8 5v14l11-7z"/></svg>';
+  const btn=(bg,label)=>'<span style="display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border-radius:24px;background:'+bg+';color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:14px;letter-spacing:.7px;text-transform:uppercase;box-shadow:0 5px 15px rgba(0,0,0,.28);">'+play+label+'</span>';
+  const credit=t=>'<span class="sc" style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:'+STY.SUB+';text-align:center;line-height:1.35;">'+t+'</span>';
+  const col=inner=>'<div style="display:flex;flex-direction:column;align-items:center;gap:11px;width:210px;">'+inner+'</div>';
+  const yt=url?'<a href="'+url+'" target="_blank" rel="noopener" style="pointer-events:auto;text-decoration:none;">'+col(
+      btn('#ff0000','Watch Highlights')+
+      '<div style="position:relative;border-radius:9px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.28);">'+
+        (vid?'<img src="https://img.youtube.com/vi/'+vid+'/mqdefault.jpg" alt="Match highlights" style="height:90px;width:auto;display:block;">':'')+
+        '<span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:rgba(255,0,0,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.45);"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></div>'+
+      credit('FIFA.com<br><span style="color:'+STY.INK+';">Official YouTube channel</span> ↗'))+'</a>':'';
+  const bog=b?'<a href="'+b.url+'" target="_blank" rel="noopener" title="Football Data Portraits by Alexander Bogachev" style="pointer-events:auto;text-decoration:none;">'+col(
+      btn('#14110c','Relive')+
+      '<div style="background:#14110c;padding:7px;border-radius:11px;box-shadow:0 8px 22px rgba(0,0,0,.3);"><img src="'+b.img+'" alt="Football Data Portraits by Alexander Bogachev" style="height:90px;width:auto;border-radius:5px;display:block;"></div>'+
+      credit('Football Data Portraits by<br><span style="color:'+STY.INK+';">Alexander Bogachev</span> ↗'))+'</a>':'';
+  return '<div style="margin-top:22px;display:flex;align-items:flex-start;justify-content:center;gap:46px;flex-wrap:wrap;">'+yt+bog+'</div>';
 }
 // "Watch highlights" button only (used where no Bogachev viz footer is wanted).
 function hlBtn(url){ return url?'<a href="'+url+'" target="_blank" rel="noopener" style="pointer-events:auto;display:inline-flex;align-items:center;gap:9px;margin-top:26px;padding:10px 20px;border-radius:24px;background:#ff0000;color:#fff;text-decoration:none;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:15px;letter-spacing:.6px;text-transform:uppercase;box-shadow:0 5px 16px rgba(255,0,0,.32);"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>Watch highlights</a>':''; }
