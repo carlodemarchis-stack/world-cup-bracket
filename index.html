@@ -1190,7 +1190,14 @@ function openCredits(){
       '<li>Match highlights — FIFA’s official '+A('https://www.youtube.com/playlist?list=PLBRLtDhTHh5o','YouTube playlist')+'.</li>'+
       '<li>Player photos — FIFA media library; flags — '+A('https://flagcdn.com','flagcdn.com')+'.</li></ul>')+
     sec('Built with',
-      'Designed and developed with '+A('https://claude.com/','Claude (Anthropic)')+' — <strong>Claude Design</strong> for the visual design and <strong>Claude Code</strong> for the build — and hosted on '+A('https://pages.github.com/','GitHub Pages')+'. A single self-contained page, vanilla JavaScript.');
+      'Designed and developed with '+A('https://claude.com/','Claude (Anthropic)')+' — <strong>Claude Design</strong> for the visual design and <strong>Claude Code</strong> for the build — and hosted on '+A('https://pages.github.com/','GitHub Pages')+'. A single self-contained page, vanilla JavaScript.')+
+    '<div style="margin-top:24px;border-top:1px solid '+pal.line+';padding-top:16px;">'+
+      '<div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:'+pal.head+';margin-bottom:8px;">A note &amp; a disclaimer</div>'+
+      '<div style="font-size:13.5px;line-height:1.6;color:'+pal.sub+';">'+
+        'This is an <strong style="color:'+pal.text+';">independent, non-profit fan project</strong>, made purely to share a love of football and sports technology — and to give fans one single page to relive the World Cup, match by match. It brings together data, images and ideas from many creators, all used with respect and credited above. I’m fully aware I’m building on other people’s work, and I’m grateful for it. If you hold the rights to anything shown here and would rather it wasn’t, please just '+A('https://aguywithascarf.substack.com/','get in touch')+' and I’ll remove it right away — even if it would be a genuine pity to lose it.'+
+        '<div style="margin-top:12px;">And a personal note: '+A('https://claude.com/','Claude')+' helped me enormously here — enough to make me feel like I had a big UX and dev team behind me again — but this also took plenty of my own brain-power and more than a few late nights. Made with love.</div>'+
+        '<div style="margin-top:12px;font-family:\'Barlow\',sans-serif;font-style:italic;color:'+pal.text+';">— Carlo De Marchis, “A guy with a scarf”</div>'+
+      '</div></div>';
   const x = document.createElement('button');
   x.textContent = '×'; x.type = 'button'; x.setAttribute('aria-label', 'Close');
   x.style.cssText = 'position:absolute;top:10px;right:14px;border:none;background:transparent;color:'+pal.text+';font-size:26px;line-height:1;cursor:pointer;opacity:.55;';
