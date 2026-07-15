@@ -727,6 +727,12 @@ function buildBracket(v){
   emilio.textContent = '(here)';
   emilio.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:2px;';
   credit.appendChild(emilio);
+  credit.appendChild(document.createTextNode('  ·  '));
+  const creditsLink = document.createElement('a');
+  creditsLink.href = '#'; creditsLink.textContent = 'Credits';
+  creditsLink.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:2px;font-weight:600;cursor:pointer;';
+  creditsLink.onclick = e => { e.preventDefault(); openCredits(); };
+  credit.appendChild(creditsLink);
   credit.style.cssText = 'flex:1 1 260px;min-width:0;text-align:left;';
   footer.appendChild(credit);
 
@@ -1151,6 +1157,49 @@ function matchDetailBlock(m, pal, accent){
 let modalEl = null;
 function closeTeamModal(){ if (modalEl){ modalEl.remove(); modalEl = null; document.removeEventListener('keydown', modalKey); } }
 function modalKey(e){ if (e.key === 'Escape') closeTeamModal(); }
+
+// Credits / about page — opened from the footer link.
+function openCredits(){
+  const dark = state.bgTheme === 'Dark', accent = state.accentColor;
+  const pal = dark
+    ? { panel:'#1b1a12', text:'#f4efe2', sub:'rgba(228,222,206,.62)', line:'rgba(255,255,255,.12)', head:'#e0b64a' }
+    : { panel:'#fffdf8', text:'#1c1813', sub:'rgba(70,62,48,.72)', line:'rgba(0,0,0,.09)', head:'#b8860b' };
+  const A = (href,txt) => '<a href="'+href+'" target="_blank" rel="noopener noreferrer" style="color:'+accent+';text-decoration:underline;text-underline-offset:2px;">'+txt+'</a>';
+  const sec = (title,body) => '<div style="margin-top:22px;border-top:1px solid '+pal.line+';padding-top:16px;">'+
+    '<div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:'+pal.head+';margin-bottom:8px;">'+title+'</div>'+
+    '<div style="font-size:14.5px;line-height:1.55;color:'+pal.text+';">'+body+'</div></div>';
+  const overlay = el('div', 'position:fixed;left:0;top:0;width:100%;height:100vh;height:100dvh;z-index:120;display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;background:rgba(6,6,8,.6);');
+  overlay.id = 'credits-modal';
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  const panel = el('div', "position:relative;width:min(94vw,560px);max-height:88vh;max-height:88dvh;overflow:auto;background:"+pal.panel+";color:"+pal.text+";border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.5);font-family:'Barlow',system-ui,sans-serif;padding:24px 26px 28px;");
+  panel.innerHTML =
+    '<div style="font-weight:800;font-size:30px;letter-spacing:-.5px;">Credits</div>'+
+    '<div style="font-size:13px;color:'+pal.sub+';margin-top:2px;letter-spacing:.3px;">Road to the Final · FIFA World Cup 2026</div>'+
+    sec('Original design — Emilio Sansolini',
+      'This whole project is an interactive web adaptation of '+A('https://x.com/EmilioSansolini/status/2072091332483453026','Emilio Sansolini')+'’s original <em>Road to the Final</em> infographic. The core idea is entirely his — one single radial diagram of the entire knockout bracket, the “road to the final” concept spiralling into the trophy, and the whole visual language. Please go and admire the '+A('https://x.com/EmilioSansolini/status/2072091332483453026','original artwork')+' and follow his brilliant work at '+A('https://x.com/EmilioSansolini','@EmilioSansolini')+'.')+
+    sec('Web adaptation, live data & the Film',
+      'Built and maintained by '+A('https://aguywithascarf.substack.com/','Carlo De Marchis — “A guy with a scarf”')+': the interactive bracket, the automatic live-data sync, and the WC Movie (“Road to the Final — The Film”).')+
+    sec('Alex Bogarchev',
+      '<strong>Alex Bogarchev</strong> — <span style="color:'+pal.sub+';">credit &amp; link to be added when his work is included.</span>')+
+    sec('Sources of information',
+      'Everything updates automatically from official public feeds:'+
+      '<ul style="margin:8px 0 0;padding-left:18px;line-height:1.6;">'+
+      '<li>'+A('https://www.fifa.com/','FIFA public API')+' — fixtures, scores &amp; winners, lineups, goals &amp; assists, cards, penalty shoot-outs, referees, attendances and formations.</li>'+
+      '<li>FIFA player ratings — powering the <em>Power Rankings</em> tab.</li>'+
+      '<li>FIFA Fantasy — powering the <em>Fantasy</em> tab.</li>'+
+      '<li>Match highlights — FIFA’s official '+A('https://www.youtube.com/playlist?list=PLBRLtDhTHh5o','YouTube playlist')+'.</li>'+
+      '<li>Player photos — FIFA media library; flags — '+A('https://flagcdn.com','flagcdn.com')+'.</li></ul>')+
+    sec('Built with',
+      'Designed and developed with '+A('https://claude.com/','Claude (Anthropic)')+' — <strong>Claude Design</strong> for the visual design and <strong>Claude Code</strong> for the build — and hosted on '+A('https://pages.github.com/','GitHub Pages')+'. A single self-contained page, vanilla JavaScript.');
+  const x = document.createElement('button');
+  x.textContent = '×'; x.type = 'button'; x.setAttribute('aria-label', 'Close');
+  x.style.cssText = 'position:absolute;top:10px;right:14px;border:none;background:transparent;color:'+pal.text+';font-size:26px;line-height:1;cursor:pointer;opacity:.55;';
+  x.onclick = () => overlay.remove();
+  panel.appendChild(x);
+  overlay.appendChild(panel); document.body.appendChild(overlay);
+  const esc = e => { if (e.key === 'Escape'){ overlay.remove(); document.removeEventListener('keydown', esc); } };
+  document.addEventListener('keydown', esc);
+}
 function openTeamModal(code){
   if (!DATA || !GRP_OF[code]) return;
   closeTeamModal();
