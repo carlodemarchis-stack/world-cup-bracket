@@ -2809,7 +2809,7 @@ function sResultCard(m,opts){
   const colFor=(code,align)=>'<div style="flex:1;">'+
     '<div class="sc" style="font-weight:800;font-size:19px;letter-spacing:1px;color:'+STY.INK+';margin-bottom:9px;text-align:'+align+';">'+code+'</div>'+
     (gl.filter(g=>g.t===code).map(g=>row(g,align)).join('')||'<div style="color:'+STY.SUB+';font-size:16px;opacity:.5;text-align:'+align+';">—</div>')+'</div>';
-  const hl=matchFooter(m,opts.highlights);
+  const hl=opts.final?matchFooter(m,opts.highlights):'';   // highlights + Bogachev viz only on the match's final card
   if(opts.epic){
     const isFinal=(m.round==='Final'), col=isFinal?STY.GOLD:opts.color;
     const win=m.winner, wa=win&&win===m.a, wb=win&&win===m.b;
@@ -2904,11 +2904,11 @@ function beatHTML(b){
         (m.venue?'<span class="spill" style="margin:0 5px;">🏟 '+m.venue+'</span>':'')+
         (m.time?'<span class="spill" style="margin:0 5px;">⏰ Kick-off '+m.time+'</span>':'')+'</div></div>'; }
   if(b.k==='half'){ const m=b.m,hs=b.score.split('–'); return sResultCard(m,{title:'Half time',color:STY.GOLD,aG:hs[0],bG:hs[1],scorerMax:45}); }
-  if(b.k==='full'){ const m=b.m; return sResultCard(m,{title:'Full time',color:STY.GREEN,aG:m.aGoals,bG:m.bGoals,qualify:qualifyLine(m),epic:true,highlights:m.highlights}); }
+  if(b.k==='full'){ const m=b.m; return sResultCard(m,{title:'Full time',color:STY.GREEN,aG:m.aGoals,bG:m.bGoals,qualify:qualifyLine(m),epic:true,highlights:m.highlights,final:true}); }
   if(b.k==='rtime'){ const m=b.m; return sResultCard(m,{title:'End of regular time',color:STY.GOLD,aG:b.score[0],bG:b.score[1],scorerMax:90}); }
   if(b.k==='etime'){ const m=b.m; return m.pens
     ? sResultCard(m,{title:'After extra time',color:STY.ORANGE,aG:b.score[0],bG:b.score[1],scorerMin:91})   // going to pens: intermediate, ET goals only
-    : sResultCard(m,{title:'After extra time',color:STY.ORANGE,aG:b.score[0],bG:b.score[1],epic:true,qualify:qualifyLine(m),highlights:m.highlights}); }   // ET-decided: this is the final card
+    : sResultCard(m,{title:'After extra time',color:STY.ORANGE,aG:b.score[0],bG:b.score[1],epic:true,qualify:qualifyLine(m),highlights:m.highlights,final:true}); }   // ET-decided: this is the final card
   if(b.k==='pens'){ return sPensCard(b.m); }
   if(b.k==='table'){ const rows=b.rows.map((r,i)=>'<div style="display:flex;align-items:center;gap:14px;padding:11px 20px;border-radius:9px;background:'+(i<2?'rgba(47,158,87,.1)':'#fff')+';box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:6px;">'+
       '<div class="sc" style="width:26px;font-weight:800;font-size:24px;color:'+(i<2?STY.GREEN:STY.SUB)+';">'+(i+1)+'</div>'+
