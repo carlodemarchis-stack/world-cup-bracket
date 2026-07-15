@@ -29132,5 +29132,411 @@
         "wt": 80
       }
     ]
+  },
+  "bogachev": {
+    "G:A:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953853.webp",
+      "url": "https://wc26.bogachev.fr/m/mex-saf/"
+    },
+    "G:A:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976987.webp",
+      "url": "https://wc26.bogachev.fr/m/sko-cze/"
+    },
+    "G:A:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976985.webp",
+      "url": "https://wc26.bogachev.fr/m/cze-saf/"
+    },
+    "G:A:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953854.webp",
+      "url": "https://wc26.bogachev.fr/m/mex-sko/"
+    },
+    "G:A:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976986.webp",
+      "url": "https://wc26.bogachev.fr/m/cze-mex/"
+    },
+    "G:A:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953855.webp",
+      "url": "https://wc26.bogachev.fr/m/saf-sko/"
+    },
+    "G:B:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976989.webp",
+      "url": "https://wc26.bogachev.fr/m/can-ban/"
+    },
+    "G:B:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953856.webp",
+      "url": "https://wc26.bogachev.fr/m/qat-swi/"
+    },
+    "G:B:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976988.webp",
+      "url": "https://wc26.bogachev.fr/m/swi-ban/"
+    },
+    "G:B:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953857.webp",
+      "url": "https://wc26.bogachev.fr/m/can-qat/"
+    },
+    "G:B:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953858.webp",
+      "url": "https://wc26.bogachev.fr/m/swi-can/"
+    },
+    "G:B:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976990.webp",
+      "url": "https://wc26.bogachev.fr/m/ban-qat/"
+    },
+    "G:C:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953860.webp",
+      "url": "https://wc26.bogachev.fr/m/bra-mor/"
+    },
+    "G:C:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953859.webp",
+      "url": "https://wc26.bogachev.fr/m/hai-sco/"
+    },
+    "G:C:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953861.webp",
+      "url": "https://wc26.bogachev.fr/m/sco-mor/"
+    },
+    "G:C:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953862.webp",
+      "url": "https://wc26.bogachev.fr/m/bra-hai/"
+    },
+    "G:C:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953863.webp",
+      "url": "https://wc26.bogachev.fr/m/sco-bra/"
+    },
+    "G:C:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953864.webp",
+      "url": "https://wc26.bogachev.fr/m/mor-hai/"
+    },
+    "G:D:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953865.webp",
+      "url": "https://wc26.bogachev.fr/m/usa-par/"
+    },
+    "G:D:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976983.webp",
+      "url": "https://wc26.bogachev.fr/m/aus-tur/"
+    },
+    "G:D:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953866.webp",
+      "url": "https://wc26.bogachev.fr/m/usa-aus/"
+    },
+    "G:D:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976984.webp",
+      "url": "https://wc26.bogachev.fr/m/tur-par/"
+    },
+    "G:D:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976982.webp",
+      "url": "https://wc26.bogachev.fr/m/tur-usa/"
+    },
+    "G:D:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953867.webp",
+      "url": "https://wc26.bogachev.fr/m/par-aus/"
+    },
+    "G:E:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953868.webp",
+      "url": "https://wc26.bogachev.fr/m/ger-cur/"
+    },
+    "G:E:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953869.webp",
+      "url": "https://wc26.bogachev.fr/m/ico-ecu/"
+    },
+    "G:E:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953871.webp",
+      "url": "https://wc26.bogachev.fr/m/ger-ico/"
+    },
+    "G:E:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953870.webp",
+      "url": "https://wc26.bogachev.fr/m/ecu-cur/"
+    },
+    "G:E:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953873.webp",
+      "url": "https://wc26.bogachev.fr/m/cur-ico/"
+    },
+    "G:E:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953872.webp",
+      "url": "https://wc26.bogachev.fr/m/ecu-ger/"
+    },
+    "G:F:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953874.webp",
+      "url": "https://wc26.bogachev.fr/m/net-jap/"
+    },
+    "G:F:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976979.webp",
+      "url": "https://wc26.bogachev.fr/m/swe-tun/"
+    },
+    "G:F:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976980.webp",
+      "url": "https://wc26.bogachev.fr/m/net-swe/"
+    },
+    "G:F:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953906.webp",
+      "url": "https://wc26.bogachev.fr/m/tun-jap/"
+    },
+    "G:F:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976981.webp",
+      "url": "https://wc26.bogachev.fr/m/jap-swe/"
+    },
+    "G:F:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953875.webp",
+      "url": "https://wc26.bogachev.fr/m/tun-net/"
+    },
+    "G:G:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953876.webp",
+      "url": "https://wc26.bogachev.fr/m/bel-egy/"
+    },
+    "G:G:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953877.webp",
+      "url": "https://wc26.bogachev.fr/m/ira-nze/"
+    },
+    "G:G:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953879.webp",
+      "url": "https://wc26.bogachev.fr/m/bel-ira/"
+    },
+    "G:G:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953878.webp",
+      "url": "https://wc26.bogachev.fr/m/nze-egy/"
+    },
+    "G:G:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953880.webp",
+      "url": "https://wc26.bogachev.fr/m/egy-ira/"
+    },
+    "G:G:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953881.webp",
+      "url": "https://wc26.bogachev.fr/m/nze-bel/"
+    },
+    "G:H:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953882.webp",
+      "url": "https://wc26.bogachev.fr/m/spa-cve/"
+    },
+    "G:H:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953883.webp",
+      "url": "https://wc26.bogachev.fr/m/sar-uru/"
+    },
+    "G:H:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953884.webp",
+      "url": "https://wc26.bogachev.fr/m/spa-sar/"
+    },
+    "G:H:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953885.webp",
+      "url": "https://wc26.bogachev.fr/m/uru-cve/"
+    },
+    "G:H:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953886.webp",
+      "url": "https://wc26.bogachev.fr/m/cve-sar/"
+    },
+    "G:H:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953887.webp",
+      "url": "https://wc26.bogachev.fr/m/uru-spa/"
+    },
+    "G:I:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953888.webp",
+      "url": "https://wc26.bogachev.fr/m/fra-sen/"
+    },
+    "G:I:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976997.webp",
+      "url": "https://wc26.bogachev.fr/m/ira-nor/"
+    },
+    "G:I:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976995.webp",
+      "url": "https://wc26.bogachev.fr/m/fra-ira/"
+    },
+    "G:I:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953889.webp",
+      "url": "https://wc26.bogachev.fr/m/nor-sen/"
+    },
+    "G:I:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953890.webp",
+      "url": "https://wc26.bogachev.fr/m/nor-fra/"
+    },
+    "G:I:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976996.webp",
+      "url": "https://wc26.bogachev.fr/m/sen-ira/"
+    },
+    "G:J:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953892.webp",
+      "url": "https://wc26.bogachev.fr/m/arg-alg/"
+    },
+    "G:J:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953891.webp",
+      "url": "https://wc26.bogachev.fr/m/aus-jor/"
+    },
+    "G:J:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953894.webp",
+      "url": "https://wc26.bogachev.fr/m/arg-aus/"
+    },
+    "G:J:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953893.webp",
+      "url": "https://wc26.bogachev.fr/m/jor-alg/"
+    },
+    "G:J:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953896.webp",
+      "url": "https://wc26.bogachev.fr/m/alg-aus/"
+    },
+    "G:J:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953895.webp",
+      "url": "https://wc26.bogachev.fr/m/jor-arg/"
+    },
+    "G:K:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976991.webp",
+      "url": "https://wc26.bogachev.fr/m/por-dco/"
+    },
+    "G:K:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953897.webp",
+      "url": "https://wc26.bogachev.fr/m/uzb-col/"
+    },
+    "G:K:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953898.webp",
+      "url": "https://wc26.bogachev.fr/m/por-uzb/"
+    },
+    "G:K:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976992.webp",
+      "url": "https://wc26.bogachev.fr/m/col-dco/"
+    },
+    "G:K:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953899.webp",
+      "url": "https://wc26.bogachev.fr/m/col-por/"
+    },
+    "G:K:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1976993.webp",
+      "url": "https://wc26.bogachev.fr/m/dco-uzb/"
+    },
+    "G:L:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953900.webp",
+      "url": "https://wc26.bogachev.fr/m/eng-cro/"
+    },
+    "G:L:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953901.webp",
+      "url": "https://wc26.bogachev.fr/m/gha-pan/"
+    },
+    "G:L:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953903.webp",
+      "url": "https://wc26.bogachev.fr/m/eng-gha/"
+    },
+    "G:L:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953902.webp",
+      "url": "https://wc26.bogachev.fr/m/pan-cro/"
+    },
+    "G:L:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953904.webp",
+      "url": "https://wc26.bogachev.fr/m/pan-eng/"
+    },
+    "G:L:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1953905.webp",
+      "url": "https://wc26.bogachev.fr/m/cro-gha/"
+    },
+    "L:1:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1992065.webp",
+      "url": "https://wc26.bogachev.fr/m/bel-sen/"
+    },
+    "L:1:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1990730.webp",
+      "url": "https://wc26.bogachev.fr/m/usa-ban/"
+    },
+    "L:1:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1992067.webp",
+      "url": "https://wc26.bogachev.fr/m/spa-aus/"
+    },
+    "L:1:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1992063.webp",
+      "url": "https://wc26.bogachev.fr/m/por-cro/"
+    },
+    "L:1:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1990731.webp",
+      "url": "https://wc26.bogachev.fr/m/net-mor/"
+    },
+    "L:1:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1988523.webp",
+      "url": "https://wc26.bogachev.fr/m/saf-can/"
+    },
+    "L:1:6": {
+      "img": "https://wc26.bogachev.fr/thumbs/1990969.webp",
+      "url": "https://wc26.bogachev.fr/m/fra-swe/"
+    },
+    "L:1:7": {
+      "img": "https://wc26.bogachev.fr/thumbs/1990970.webp",
+      "url": "https://wc26.bogachev.fr/m/ger-par/"
+    },
+    "L:2:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1995348.webp",
+      "url": "https://wc26.bogachev.fr/m/usa-bel/"
+    },
+    "L:2:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1998192.webp",
+      "url": "https://wc26.bogachev.fr/m/por-spa/"
+    },
+    "L:2:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1993367.webp",
+      "url": "https://wc26.bogachev.fr/m/can-mor/"
+    },
+    "L:2:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1994739.webp",
+      "url": "https://wc26.bogachev.fr/m/par-fra/"
+    },
+    "L:3:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1998994.webp",
+      "url": "https://wc26.bogachev.fr/m/spa-bel/"
+    },
+    "L:3:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1998582.webp",
+      "url": "https://wc26.bogachev.fr/m/fra-mor/"
+    },
+    "L:4:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/2002449.webp",
+      "url": "https://wc26.bogachev.fr/m/fra-spa/"
+    },
+    "R:1:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1990729.webp",
+      "url": "https://wc26.bogachev.fr/m/bra-jap/"
+    },
+    "R:1:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1990967.webp",
+      "url": "https://wc26.bogachev.fr/m/ico-nor/"
+    },
+    "R:1:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1992061.webp",
+      "url": "https://wc26.bogachev.fr/m/mex-ecu/"
+    },
+    "R:1:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1992064.webp",
+      "url": "https://wc26.bogachev.fr/m/eng-dco/"
+    },
+    "R:1:4": {
+      "img": "https://wc26.bogachev.fr/thumbs/1990968.webp",
+      "url": "https://wc26.bogachev.fr/m/arg-cve/"
+    },
+    "R:1:5": {
+      "img": "https://wc26.bogachev.fr/thumbs/1990971.webp",
+      "url": "https://wc26.bogachev.fr/m/aus-egy/"
+    },
+    "R:1:6": {
+      "img": "https://wc26.bogachev.fr/thumbs/1992066.webp",
+      "url": "https://wc26.bogachev.fr/m/swi-alg/"
+    },
+    "R:1:7": {
+      "img": "https://wc26.bogachev.fr/thumbs/1992062.webp",
+      "url": "https://wc26.bogachev.fr/m/col-gha/"
+    },
+    "R:2:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1993896.webp",
+      "url": "https://wc26.bogachev.fr/m/bra-nor/"
+    },
+    "R:2:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1995347.webp",
+      "url": "https://wc26.bogachev.fr/m/mex-eng/"
+    },
+    "R:2:2": {
+      "img": "https://wc26.bogachev.fr/thumbs/1998571.webp",
+      "url": "https://wc26.bogachev.fr/m/arg-egy/"
+    },
+    "R:2:3": {
+      "img": "https://wc26.bogachev.fr/thumbs/1998572.webp",
+      "url": "https://wc26.bogachev.fr/m/swi-col/"
+    },
+    "R:3:0": {
+      "img": "https://wc26.bogachev.fr/thumbs/1998901.webp",
+      "url": "https://wc26.bogachev.fr/m/nor-eng/"
+    },
+    "R:3:1": {
+      "img": "https://wc26.bogachev.fr/thumbs/1999238.webp",
+      "url": "https://wc26.bogachev.fr/m/arg-swi/"
+    }
   }
 }
