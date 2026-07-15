@@ -471,15 +471,17 @@ function renderVals(P, DATA) {
       if (champT){ const wn = makeTeam(champT, { x:C, y:C + 78, a:0 }, 46, true, false); wn.match = 'final'; teamNodes.push(wn); }
       if (showResults && f.score) innerCards.push(makeInnerCard(C, C + 78 - 24, { score:f.score, pens:f.pens, penScore:f.penScore, match:'final' }));
     } else {
-      innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:f.date, time:f.time, match:'final' }));   // upcoming final always shown
+      // Finalists once known: the two semi-final winners (either side may still be TBD).
+      innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:f.date, time:f.time, match:'final', ta:wonAt('R',4,0), tb:wonAt('L',4,0) }));
     }
   }
   // Third-place play-off: a standalone chip above the trophy (the two SF losers;
   // disconnected from the main path to the final).
+  const sfLoserOf = S => { const w = wonAt(S,4,0); if(!w) return null; const a = wonAt(S,3,0), b = wonAt(S,3,1); return w===a ? b : (w===b ? a : null); };
   if (DATA.thirdPlace){
     const tp = DATA.thirdPlace;
     if (showResults && tp.winner && tp.score) innerCards.push(makeInnerCard(C, C - 108, { score:tp.score, pens:tp.pens, penScore:tp.penScore, match:'third' }));
-    else innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:tp.date, time:tp.time, match:'third' }));
+    else innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:tp.date, time:tp.time, match:'third', ta:sfLoserOf('R'), tb:sfLoserOf('L') }));
   }
 
   // ---- Group-stage eliminated teams: two outer side arcs, like parentheses.
