@@ -2525,7 +2525,7 @@ fetch('data.json', { cache: 'no-store' })
 //  picById, TEAMDIR. Beats: intro · chapter · presentation · goal/red · HT ·
 //  FT · group standings · champion. Autoplay + prev/next + chapters.
 // ============================================================================
-const STY = { GREEN:'#2f9e57', ORANGE:'#ef8a34', BLUE:'#1499d6', GOLD:'#cf9c1e', RED:'#d0322a', VIOLET:'#7c4dff', TEAL:'#0fa3a3', INK:'#1c1813', SUB:'#6b6256' };
+const STY = { GREEN:'#2f9e57', ORANGE:'#ef8a34', BLUE:'#1499d6', GOLD:'#cf9c1e', RED:'#d0322a', VIOLET:'#7c4dff', PURPLE:'#9c27b0', INK:'#1c1813', SUB:'#6b6256' };
 const sflag = (iso,w) => iso ? 'https://flagcdn.com/w'+(w||320)+'/'+iso+'.png' : '';
 const shero = (pic,w) => pic ? pic+'?&io=transform:fit,width:'+(w||720)+'&quality=90' : '';
 // Wide top-band crop (like avatarImg): grabs just the head, so cover-cropping to a square gives a tight face.
@@ -2956,7 +2956,7 @@ function beatHTML(b){
       '<div class="sc" style="font-weight:800;font-size:46px;color:'+STY.INK+';">GROUP '+b.group+'</div><div class="sk" style="color:'+STY.BLUE+';margin-bottom:14px;">Standings</div>'+
       '<div style="width:720px;">'+rows+'</div>'); }
   if(b.k==='leaders'){
-    const scorer=b.kind==='scorer', keeper=b.kind==='keeper', accent=keeper?STY.TEAL:(scorer?STY.GREEN:STY.ORANGE), unit=keeper?'SAVES':(scorer?'GOALS':'ASSISTS'), badge=keeper?'Golden Glove':(scorer?'Top Scorer':'Top Assists');
+    const scorer=b.kind==='scorer', keeper=b.kind==='keeper', accent=keeper?STY.PURPLE:(scorer?STY.GREEN:STY.ORANGE), unit=keeper?'SAVES':(scorer?'GOALS':'ASSISTS'), badge=keeper?'Golden Glove':(scorer?'Top Scorer':'Top Assists');
     const card=p=>{ const pic=p.id?picById(p.id):null;
       const log=p.log.map((g,i)=>'<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-family:\'Barlow Condensed\',sans-serif;font-size:12px;'+(i?'border-top:1px solid rgba(0,0,0,.07);':'')+'">'+
         '<span style="font-weight:700;font-size:9px;letter-spacing:.3px;color:'+accent+';width:26px;flex:none;">'+g.stage+'</span>'+
@@ -3000,15 +3000,18 @@ function beatHTML(b){
     '<div class="sk" style="color:'+STY.SUB+';margin-top:18px;">The story updates as the tournament unfolds</div>');
   // event: goal / red / own-goal / save
   const m=b.m,e=b.e;
-  if(e.type==='save'){ const kp=e.sid?picById(e.sid):null; const ss=sScoreAt(m,parseInt(e.min)||0);
-    const kobj=((DATA.squads&&DATA.squads[e.team])||[]).find(p=>p.id===e.sid); const kn=kobj?String(kobj.p).split(' ').slice(-1)[0]:'';
-    return matchRefBar(m,ss[0],ss[1])+'<div style="position:absolute;inset:0;'+sBg(STY.TEAL)+'"></div>'+
-      '<div style="position:absolute;inset:0;background:radial-gradient(60% 55% at 50% 40%,'+STY.TEAL+'22 0%,transparent 70%);"></div>'+sCentre(
-      (kp?'<div style="position:relative;margin-bottom:20px;"><div style="width:170px;height:170px;border-radius:50%;overflow:hidden;background:#eee6d6;border:5px solid #fff;box-shadow:0 14px 40px '+STY.TEAL+'55;"><img src="'+sface(kp,520)+'" style="width:100%;height:100%;object-fit:cover;object-position:top;"></div><div style="position:absolute;right:-8px;bottom:-6px;font-size:46px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.3));">🧤</div></div>'
-        :'<div style="font-size:120px;line-height:1;margin-bottom:8px;">🧤</div>')+
-      '<div class="sc" style="font-weight:900;font-size:82px;color:'+STY.TEAL+';letter-spacing:3px;">SAVE</div>'+
-      (kn?'<div style="display:flex;align-items:center;gap:13px;margin-top:6px;"><img class="sfl" src="'+sflag(tin(e.team).iso)+'"><div class="sc" style="font-weight:800;font-size:40px;color:'+STY.INK+';">'+kn+'</div><span class="spill">'+e.min+'</span></div>':'')+
-      (e.desc?'<div style="max-width:640px;margin-top:16px;font-size:19px;font-style:italic;color:#3f382e;line-height:1.45;border-left:3px solid '+STY.TEAL+';padding-left:14px;text-align:left;">'+e.desc+'</div>':'')); }
+  if(e.type==='save'){ const P=STY.PURPLE, kp=e.sid?picById(e.sid):null, ss=sScoreAt(m,parseInt(e.min)||0);
+    const kobj=((DATA.squads&&DATA.squads[e.team])||[]).find(p=>p.id===e.sid); const kn=kobj?String(kobj.p).split(' ').slice(-1)[0]:(e.t||'');
+    // mirror of the goal card: keeper full-body photo on the LEFT, data on the RIGHT.
+    return matchRefBar(m,ss[0],ss[1])+'<div style="position:absolute;inset:0;'+sBg(P)+'"></div>'+
+      (kp?'<img src="'+shero(kp,760)+'" style="position:absolute;left:4px;top:60px;bottom:0;width:42%;object-fit:contain;object-position:bottom left;filter:drop-shadow(8px 20px 30px rgba(0,0,0,.28));z-index:1;">':'')+
+      '<div style="position:relative;z-index:2;height:100%;">'+
+      '<div style="position:absolute;right:64px;top:78px;"><span class="sbadge" style="background:'+P+';">🧤 SAVE</span></div>'+
+      '<div style="position:absolute;right:64px;top:150px;text-align:right;"><div class="sc" style="font-weight:800;font-size:150px;color:'+P+';line-height:.8;">'+e.min+'</div><div class="sk" style="color:'+STY.SUB+';font-size:13px;margin-top:4px;letter-spacing:3px;">Minute</div></div>'+
+      '<div style="position:absolute;right:64px;bottom:64px;max-width:580px;width:580px;">'+
+        '<div style="display:flex;align-items:center;gap:13px;justify-content:flex-end;"><div class="sc" style="font-weight:800;font-size:66px;color:'+STY.INK+';line-height:.9;">'+kn+'</div><img class="sfl" src="'+sflag(tin(e.team).iso)+'"></div>'+
+        (e.desc?'<div style="max-width:560px;margin-left:auto;margin-top:12px;font-size:17px;font-style:italic;color:#3f382e;line-height:1.42;border-right:3px solid '+P+';padding-right:14px;text-align:right;">'+e.desc+'</div>':'')+
+      '</div></div>'; }
   if(e.type==='red'){ const rpic=e.sid?picById(e.sid):null; const rs=sScoreAt(m,parseInt(e.min)||0);
     return matchRefBar(m,rs[0],rs[1])+'<div style="position:absolute;inset:0;background:radial-gradient(80% 80% at 50% 40%,#f7dedb 0%,#faf7f0 72%);"></div>'+sCentre(
     (rpic?'<div style="position:relative;margin-bottom:22px;"><div style="width:160px;height:160px;border-radius:50%;overflow:hidden;background:#eee6d6;box-shadow:0 14px 38px rgba(224,70,63,.35);"><img src="'+sface(rpic)+'" style="width:100%;height:100%;object-fit:cover;object-position:top;"></div><div style="position:absolute;right:-8px;bottom:-2px;width:50px;height:68px;border-radius:8px;background:linear-gradient(160deg,#ff5b52,#d0322a);box-shadow:0 8px 18px rgba(224,70,63,.5);transform:rotate(10deg);border:3px solid #faf7f0;"></div></div>'
