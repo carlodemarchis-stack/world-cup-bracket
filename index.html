@@ -2579,6 +2579,15 @@ function sLeadersData(ms,maxNum){ const sc={},as={};
       if(g.a){ const k=g.aid||g.a; (as[k]=as[k]||{id:g.aid||'',name:g.a,team:g.t,log:[]}).log.push({stage:st,opp,min:g.m,scorer:g.p}); } }); });
   const top=o=>Object.values(o).map(e=>(e.n=e.log.length,e)).sort((a,b)=>b.n-a.n).slice(0,5);
   return {scorers:top(sc),assists:top(as)}; }
+// Golden Glove: cumulative keeper save totals (from savesCount) up to maxNum, with a per-match log.
+function sGloveData(ms,maxNum){ const kp={};
+  const stageAbbr=r=>/^Group /.test(r)?'GRP':({'Round of 32':'R32','Round of 16':'R16','Quarter-final':'QF','Semi-final':'SF','Final':'F','Third-place play-off':'3P'})[r]||r;
+  ms.forEach(m=>{ if((m.num||0)>maxNum) return; const st=stageAbbr(m.round);
+    (m.savesCount||[]).forEach(s=>{ const opp=s.t===m.a?m.b:m.a, k=s.id||s.t;
+      const ko=(DATA.squads&&DATA.squads[s.t]||[]).find(p=>p.id===s.id);
+      (kp[k]=kp[k]||{id:s.id||'',name:ko?ko.p:s.t,team:s.t,log:[],n:0});
+      kp[k].log.push({stage:st,opp,saves:s.n}); kp[k].n+=s.n; }); });
+  return Object.values(kp).sort((a,b)=>b.n-a.n).slice(0,5); }
 // Champion squad tournament stats: apps (started or came on), goals, assists per player.
 function sChampSquad(team){
   const ms=storyMatches().filter(m=>m.a===team||m.b===team), stat={};
@@ -2662,6 +2671,7 @@ function buildStory(team){
         const L=sLeadersData(ms,lastNum);
         beats.push({k:'leaders',kind:'scorer',after:phase,list:L.scorers});
         beats.push({k:'leaders',kind:'assist',after:phase,list:L.assists});
+        const gg=sGloveData(ms,lastNum); if(gg.length) beats.push({k:'leaders',kind:'keeper',after:phase,list:gg});
       }
       const ov=KO_OVERVIEW[chap];   // full-bracket overview at the start of each KO phase
       if(ov) beats.push({k:'circle',overview:true,num:lastNum,title:ov.title,sub:ov.sub});
@@ -2694,7 +2704,8 @@ function buildStory(team){
   if(phase!==null && !storyUpcoming().some(m=>(KO_CHAP[m.round]||m.round)===phase)){
     const L=sLeadersData(ms,lastNum);
     beats.push({k:'leaders',kind:'scorer',after:phase,list:L.scorers});
-    beats.push({k:'leaders',kind:'assist',after:phase,list:L.assists}); }
+    beats.push({k:'leaders',kind:'assist',after:phase,list:L.assists});
+    const gg=sGloveData(ms,lastNum); if(gg.length) beats.push({k:'leaders',kind:'keeper',after:phase,list:gg}); }
   // Still-to-come: preview the scheduled ties that are at least partly defined.
   storyUpcoming().forEach(m=>{ const chap=KO_CHAP[m.round]||m.round;
     if(chap!==phase){ beats.push({k:'chapter',label:chap,sub:'Upcoming'}); phase=chap; }
@@ -2945,14 +2956,14 @@ function beatHTML(b){
       '<div class="sc" style="font-weight:800;font-size:46px;color:'+STY.INK+';">GROUP '+b.group+'</div><div class="sk" style="color:'+STY.BLUE+';margin-bottom:14px;">Standings</div>'+
       '<div style="width:720px;">'+rows+'</div>'); }
   if(b.k==='leaders'){
-    const scorer=b.kind==='scorer', accent=scorer?STY.GREEN:STY.ORANGE, unit=scorer?'GOALS':'ASSISTS', badge=scorer?'Top Scorer':'Top Assists';
+    const scorer=b.kind==='scorer', keeper=b.kind==='keeper', accent=keeper?STY.TEAL:(scorer?STY.GREEN:STY.ORANGE), unit=keeper?'SAVES':(scorer?'GOALS':'ASSISTS'), badge=keeper?'Golden Glove':(scorer?'Top Scorer':'Top Assists');
     const card=p=>{ const pic=p.id?picById(p.id):null;
       const log=p.log.map((g,i)=>'<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-family:\'Barlow Condensed\',sans-serif;font-size:12px;'+(i?'border-top:1px solid rgba(0,0,0,.07);':'')+'">'+
         '<span style="font-weight:700;font-size:9px;letter-spacing:.3px;color:'+accent+';width:26px;flex:none;">'+g.stage+'</span>'+
         '<span style="color:'+STY.SUB+';flex:none;">v</span>'+
         '<img class="sfl" style="height:12px;flex:none;" src="'+sflag(tin(g.opp).iso)+'">'+
         '<span style="font-weight:700;color:'+STY.INK+';flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+g.opp+'</span>'+
-        '<span style="font-weight:700;color:'+STY.INK+';flex:none;">'+g.min+'</span>'+
+        '<span style="font-weight:700;color:'+STY.INK+';flex:none;">'+(keeper?(g.saves+' '+(g.saves===1?'save':'saves')):g.min)+'</span>'+
         (g.pen?'<span style="font-weight:700;color:'+accent+';flex:none;font-size:10px;">(pen)</span>':'')+
       '</div>').join('');
       return '<div style="width:224px;flex:none;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 14px 34px rgba(0,0,0,.16);border:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column;">'+
@@ -2966,7 +2977,7 @@ function beatHTML(b){
         '<div style="padding:6px 12px 10px;">'+log+'</div></div>'; };
     return '<div style="position:absolute;inset:0;'+sBg(accent)+'"></div>'+sCentre(
       '<div class="sk" style="color:'+STY.BLUE+';letter-spacing:5px;">After '+b.after+'</div>'+
-      '<div class="sc" style="font-weight:900;font-size:40px;color:'+STY.INK+';margin:6px 0 18px;">'+(scorer?'TOP SCORERS':'TOP ASSISTS')+'</div>'+
+      '<div class="sc" style="font-weight:900;font-size:40px;color:'+STY.INK+';margin:6px 0 18px;">'+(keeper?'🧤 GOLDEN GLOVE':(scorer?'TOP SCORERS':'TOP ASSISTS'))+'</div>'+
       '<div style="display:flex;gap:13px;justify-content:center;align-items:flex-start;">'+(b.list.length?b.list.map(card).join(''):'<div class="sc" style="color:'+STY.SUB+';opacity:.6;">—</div>')+'</div>'); }
   if(b.k==='champ'){ const c=tin(b.code); return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
     '<div class="sk" style="color:'+STY.GOLD+';letter-spacing:8px;">World Champions</div>'+
