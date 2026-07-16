@@ -29778,5 +29778,1312 @@
       "img": "https://wc26.bogachev.fr/thumbs/1999238.webp",
       "url": "https://wc26.bogachev.fr/m/arg-swi/"
     }
+  },
+  "saves": {
+    "ARG|SUI": [
+      {
+        "id": "448107",
+        "t": "SUI",
+        "m": "90'+8'",
+        "desc": "Gregor Kobel got down brilliantly, very late, to push away Martinez's acrobatic attempt from a corner."
+      }
+    ],
+    "AUS|EGY": [
+      {
+        "id": "494557",
+        "t": "AUS",
+        "m": "90'+4'",
+        "desc": "A superlative late save from Beach clawed out Rabia's point-blank header."
+      }
+    ],
+    "AUS|PAR": [
+      {
+        "id": "494531",
+        "t": "PAR",
+        "m": "45'+2'",
+        "desc": "Orlando Gill showed sharp reflexes to punch away Volpato's effort under pressure."
+      }
+    ],
+    "AUT|ESP": [
+      {
+        "id": "371739",
+        "t": "AUT",
+        "m": "33'",
+        "desc": "A brilliant one-handed save from Schlager kept out Oyarzabal's snap-shot from distance."
+      }
+    ],
+    "BEL|ESP": [
+      {
+        "id": "358106",
+        "t": "BEL",
+        "m": "35'",
+        "desc": "Courtois got down to his right to beat away Yamal's free-kick bound for the bottom corner."
+      }
+    ],
+    "BEL|IRN": [
+      {
+        "id": "358106",
+        "t": "BEL",
+        "m": "53'",
+        "desc": "Thibaut Courtois flung himself full-stretch to deny a fierce Mehdi Taremi strike."
+      },
+      {
+        "id": "380007",
+        "t": "IRN",
+        "m": "86'",
+        "desc": "Alireza Beiranvand got down smartly to keep out De Cuyper's firm drive."
+      }
+    ],
+    "BRA|NOR": [
+      {
+        "id": "373235",
+        "t": "NOR",
+        "m": "85'",
+        "desc": "More Nyland brilliance - he raced back to tip a looping, misjudged clearance off his own line."
+      }
+    ],
+    "COD|ENG": [
+      {
+        "id": "441313",
+        "t": "COD",
+        "m": "53'",
+        "desc": "Lionel Mpasi made a fine double save, beating out Bellingham's shot and then the rebound."
+      }
+    ],
+    "CRO|ENG": [
+      {
+        "id": "369029",
+        "t": "CRO",
+        "m": "10'",
+        "desc": "Dominik Livakovic flew to his left to beat away Harry Kane's effort."
+      },
+      {
+        "id": "369029",
+        "t": "CRO",
+        "m": "55'",
+        "desc": "Livakovic pulled off a remarkable double save from a corner, thwarting O'Reilly then Gordon with cat-like reactions."
+      }
+    ],
+    "ENG|NOR": [
+      {
+        "id": "373235",
+        "t": "NOR",
+        "m": "45'+3'",
+        "desc": "Nyland got down low to deny Kane's fierce strike."
+      }
+    ],
+    "ESP|POR": [
+      {
+        "id": "403001",
+        "t": "POR",
+        "m": "16'",
+        "desc": "Terrific back-to-back saves from Diogo Costa kept Portugal level."
+      },
+      {
+        "id": "430753",
+        "t": "ESP",
+        "m": "37'",
+        "desc": "Unai Simon answered with an impressive double save of his own to keep Spain in it."
+      }
+    ],
+    "FRA|MAR": [
+      {
+        "id": "356956",
+        "t": "MAR",
+        "m": "4'",
+        "desc": "Bounou was busy early, reacting sharply to deny France an opener from a header."
+      },
+      {
+        "id": "448332",
+        "t": "FRA",
+        "m": "83'",
+        "desc": "Mike Maignan produced his finest of the day to deny Morocco an opener."
+      }
+    ],
+    "FRA|SEN": [
+      {
+        "id": "433806",
+        "t": "SEN",
+        "m": "74'",
+        "desc": "Edouard Mendy denied Doue with a smart save at his feet."
+      }
+    ],
+    "HAI|MAR": [
+      {
+        "id": "295922",
+        "t": "HAI",
+        "m": "59'",
+        "desc": "What a stop from Placide - the Haiti captain sprang to his right to claw out a certain goal."
+      },
+      {
+        "id": "356956",
+        "t": "MAR",
+        "m": "90'+5'",
+        "desc": "Bounou pulled off a terrific late save to deny Nazon's free-kick."
+      }
+    ],
+    "IRQ|SEN": [
+      {
+        "id": "347085",
+        "t": "IRQ",
+        "m": "90'+5'",
+        "desc": "A brilliant stretched stop from Jalal Hassan denied Ndiaye a second."
+      }
+    ],
+    "JPN|TUN": [
+      {
+        "id": "433365",
+        "t": "TUN",
+        "m": "10'",
+        "desc": "Aymen Dahmen produced a spectacular save, a strong left hand keeping the ball out on the line."
+      }
+    ],
+    "MAR|NED": [
+      {
+        "id": "424081",
+        "t": "NED",
+        "m": "21'",
+        "desc": "Bart Verbruggen tipped a driven effort over the bar."
+      },
+      {
+        "id": "424081",
+        "t": "NED",
+        "m": "96'",
+        "desc": "Verbruggen came up huge again in extra time, thwarting Rahimi from close range."
+      }
+    ],
+    "NOR|SEN": [
+      {
+        "id": "433806",
+        "t": "SEN",
+        "m": "3'",
+        "desc": "Edouard Mendy reacted brilliantly on his line to keep out Ajer's header from a corner."
+      },
+      {
+        "id": "433806",
+        "t": "SEN",
+        "m": "37'",
+        "desc": "Mendy did it again, denying Odegaard from point-blank range after slick Norway build-up."
+      }
+    ],
+    "POR|UZB": [
+      {
+        "id": "479110",
+        "t": "UZB",
+        "m": "58'",
+        "desc": "Abduvohid Nematov made himself big to deny Ronaldo a hat-trick after Bruno Fernandes's clever free-kick."
+      },
+      {
+        "id": "479110",
+        "t": "UZB",
+        "m": "74'",
+        "desc": "Nematov denied Ronaldo again, this time from the captain's volley."
+      }
+    ]
+  },
+  "savesCount": {
+    "ALG|ARG": [
+      {
+        "id": "389879",
+        "t": "ALG",
+        "n": 4
+      }
+    ],
+    "ALG|AUT": [
+      {
+        "id": "477817",
+        "t": "ALG",
+        "n": 3
+      },
+      {
+        "id": "371739",
+        "t": "AUT",
+        "n": 1
+      }
+    ],
+    "ALG|JOR": [
+      {
+        "id": "389879",
+        "t": "ALG",
+        "n": 5
+      },
+      {
+        "id": "397894",
+        "t": "JOR",
+        "n": 8
+      }
+    ],
+    "ALG|SUI": [
+      {
+        "id": "448107",
+        "t": "SUI",
+        "n": 3
+      },
+      {
+        "id": "389879",
+        "t": "ALG",
+        "n": 3
+      }
+    ],
+    "ARG|AUT": [
+      {
+        "id": "371739",
+        "t": "AUT",
+        "n": 3
+      },
+      {
+        "id": "308300",
+        "t": "ARG",
+        "n": 1
+      }
+    ],
+    "ARG|CPV": [
+      {
+        "id": "308300",
+        "t": "ARG",
+        "n": 3
+      },
+      {
+        "id": "364752",
+        "t": "CPV",
+        "n": 7
+      }
+    ],
+    "ARG|EGY": [
+      {
+        "id": "416906",
+        "t": "EGY",
+        "n": 8
+      }
+    ],
+    "ARG|ENG": [
+      {
+        "id": "336022",
+        "t": "ENG",
+        "n": 4
+      },
+      {
+        "id": "308300",
+        "t": "ARG",
+        "n": 1
+      }
+    ],
+    "ARG|JOR": [
+      {
+        "id": "397894",
+        "t": "JOR",
+        "n": 2
+      },
+      {
+        "id": "308300",
+        "t": "ARG",
+        "n": 1
+      }
+    ],
+    "ARG|SUI": [
+      {
+        "id": "308300",
+        "t": "ARG",
+        "n": 5
+      },
+      {
+        "id": "448107",
+        "t": "SUI",
+        "n": 3
+      }
+    ],
+    "AUS|EGY": [
+      {
+        "id": "494557",
+        "t": "AUS",
+        "n": 4
+      },
+      {
+        "id": "416906",
+        "t": "EGY",
+        "n": 2
+      }
+    ],
+    "AUS|PAR": [
+      {
+        "id": "494531",
+        "t": "PAR",
+        "n": 4
+      },
+      {
+        "id": "494557",
+        "t": "AUS",
+        "n": 2
+      }
+    ],
+    "AUS|TUR": [
+      {
+        "id": "494557",
+        "t": "AUS",
+        "n": 1
+      }
+    ],
+    "AUS|USA": [
+      {
+        "id": "499913",
+        "t": "USA",
+        "n": 2
+      },
+      {
+        "id": "494557",
+        "t": "AUS",
+        "n": 1
+      }
+    ],
+    "AUT|ESP": [
+      {
+        "id": "371739",
+        "t": "AUT",
+        "n": 5
+      }
+    ],
+    "AUT|JOR": [
+      {
+        "id": "371739",
+        "t": "AUT",
+        "n": 2
+      },
+      {
+        "id": "397894",
+        "t": "JOR",
+        "n": 1
+      }
+    ],
+    "BEL|EGY": [
+      {
+        "id": "358106",
+        "t": "BEL",
+        "n": 1
+      },
+      {
+        "id": "416906",
+        "t": "EGY",
+        "n": 2
+      }
+    ],
+    "BEL|ESP": [
+      {
+        "id": "430753",
+        "t": "ESP",
+        "n": 1
+      },
+      {
+        "id": "358106",
+        "t": "BEL",
+        "n": 4
+      },
+      {
+        "id": "495348",
+        "t": "BEL",
+        "n": 2
+      }
+    ],
+    "BEL|IRN": [
+      {
+        "id": "380007",
+        "t": "IRN",
+        "n": 7
+      },
+      {
+        "id": "358106",
+        "t": "BEL",
+        "n": 4
+      }
+    ],
+    "BEL|NZL": [
+      {
+        "id": "368535",
+        "t": "NZL",
+        "n": 5
+      },
+      {
+        "id": "358106",
+        "t": "BEL",
+        "n": 2
+      }
+    ],
+    "BEL|SEN": [
+      {
+        "id": "448821",
+        "t": "SEN",
+        "n": 3
+      },
+      {
+        "id": "358106",
+        "t": "BEL",
+        "n": 2
+      }
+    ],
+    "BEL|USA": [
+      {
+        "id": "499913",
+        "t": "USA",
+        "n": 3
+      },
+      {
+        "id": "358106",
+        "t": "BEL",
+        "n": 2
+      }
+    ],
+    "BIH|CAN": [
+      {
+        "id": "482978",
+        "t": "BIH",
+        "n": 2
+      }
+    ],
+    "BIH|QAT": [
+      {
+        "id": "419459",
+        "t": "QAT",
+        "n": 3
+      },
+      {
+        "id": "482978",
+        "t": "BIH",
+        "n": 2
+      }
+    ],
+    "BIH|SUI": [
+      {
+        "id": "448107",
+        "t": "SUI",
+        "n": 2
+      },
+      {
+        "id": "482978",
+        "t": "BIH",
+        "n": 2
+      }
+    ],
+    "BIH|USA": [
+      {
+        "id": "499913",
+        "t": "USA",
+        "n": 1
+      },
+      {
+        "id": "482978",
+        "t": "BIH",
+        "n": 3
+      }
+    ],
+    "BRA|HAI": [
+      {
+        "id": "295922",
+        "t": "HAI",
+        "n": 2
+      },
+      {
+        "id": "308370",
+        "t": "BRA",
+        "n": 3
+      }
+    ],
+    "BRA|JPN": [
+      {
+        "id": "405530",
+        "t": "JPN",
+        "n": 7
+      },
+      {
+        "id": "308370",
+        "t": "BRA",
+        "n": 1
+      }
+    ],
+    "BRA|MAR": [
+      {
+        "id": "356956",
+        "t": "MAR",
+        "n": 3
+      }
+    ],
+    "BRA|NOR": [
+      {
+        "id": "373235",
+        "t": "NOR",
+        "n": 4
+      },
+      {
+        "id": "308370",
+        "t": "BRA",
+        "n": 3
+      }
+    ],
+    "BRA|SCO": [
+      {
+        "id": "411301",
+        "t": "SCO",
+        "n": 4
+      },
+      {
+        "id": "308370",
+        "t": "BRA",
+        "n": 4
+      }
+    ],
+    "CAN|MAR": [
+      {
+        "id": "356956",
+        "t": "MAR",
+        "n": 3
+      },
+      {
+        "id": "331732",
+        "t": "CAN",
+        "n": 1
+      }
+    ],
+    "CAN|QAT": [
+      {
+        "id": "419459",
+        "t": "QAT",
+        "n": 6
+      }
+    ],
+    "CAN|RSA": [
+      {
+        "id": "331732",
+        "t": "CAN",
+        "n": 2
+      },
+      {
+        "id": "395986",
+        "t": "RSA",
+        "n": 5
+      }
+    ],
+    "CAN|SUI": [
+      {
+        "id": "331732",
+        "t": "CAN",
+        "n": 2
+      },
+      {
+        "id": "448107",
+        "t": "SUI",
+        "n": 3
+      }
+    ],
+    "CIV|CUW": [
+      {
+        "id": "405873",
+        "t": "CIV",
+        "n": 2
+      },
+      {
+        "id": "390650",
+        "t": "CUW",
+        "n": 1
+      }
+    ],
+    "CIV|ECU": [
+      {
+        "id": "441236",
+        "t": "ECU",
+        "n": 2
+      },
+      {
+        "id": "405873",
+        "t": "CIV",
+        "n": 1
+      }
+    ],
+    "CIV|GER": [
+      {
+        "id": "405873",
+        "t": "CIV",
+        "n": 5
+      },
+      {
+        "id": "228912",
+        "t": "GER",
+        "n": 2
+      }
+    ],
+    "CIV|NOR": [
+      {
+        "id": "373235",
+        "t": "NOR",
+        "n": 3
+      },
+      {
+        "id": "405873",
+        "t": "CIV",
+        "n": 3
+      }
+    ],
+    "COD|COL": [
+      {
+        "id": "441313",
+        "t": "COD",
+        "n": 7
+      },
+      {
+        "id": "360642",
+        "t": "COL",
+        "n": 2
+      }
+    ],
+    "COD|ENG": [
+      {
+        "id": "336022",
+        "t": "ENG",
+        "n": 2
+      },
+      {
+        "id": "441313",
+        "t": "COD",
+        "n": 7
+      }
+    ],
+    "COD|UZB": [
+      {
+        "id": "441313",
+        "t": "COD",
+        "n": 1
+      },
+      {
+        "id": "479110",
+        "t": "UZB",
+        "n": 1
+      }
+    ],
+    "COL|GHA": [
+      {
+        "id": "386473",
+        "t": "GHA",
+        "n": 5
+      }
+    ],
+    "COL|POR": [
+      {
+        "id": "403001",
+        "t": "POR",
+        "n": 5
+      },
+      {
+        "id": "360642",
+        "t": "COL",
+        "n": 2
+      }
+    ],
+    "COL|SUI": [
+      {
+        "id": "448107",
+        "t": "SUI",
+        "n": 2
+      },
+      {
+        "id": "360642",
+        "t": "COL",
+        "n": 1
+      }
+    ],
+    "COL|UZB": [
+      {
+        "id": "479077",
+        "t": "UZB",
+        "n": 3
+      },
+      {
+        "id": "360642",
+        "t": "COL",
+        "n": 1
+      }
+    ],
+    "CPV|ESP": [
+      {
+        "id": "364752",
+        "t": "CPV",
+        "n": 1
+      }
+    ],
+    "CPV|KSA": [
+      {
+        "id": "396885",
+        "t": "KSA",
+        "n": 3
+      },
+      {
+        "id": "364752",
+        "t": "CPV",
+        "n": 3
+      }
+    ],
+    "CPV|URU": [
+      {
+        "id": "229498",
+        "t": "URU",
+        "n": 2
+      }
+    ],
+    "CRO|ENG": [
+      {
+        "id": "369029",
+        "t": "CRO",
+        "n": 6
+      },
+      {
+        "id": "336022",
+        "t": "ENG",
+        "n": 4
+      }
+    ],
+    "CRO|GHA": [
+      {
+        "id": "494349",
+        "t": "GHA",
+        "n": 1
+      }
+    ],
+    "CRO|PAN": [
+      {
+        "id": "369029",
+        "t": "CRO",
+        "n": 2
+      },
+      {
+        "id": "441241",
+        "t": "PAN",
+        "n": 2
+      }
+    ],
+    "CRO|POR": [
+      {
+        "id": "369029",
+        "t": "CRO",
+        "n": 2
+      },
+      {
+        "id": "403001",
+        "t": "POR",
+        "n": 4
+      }
+    ],
+    "CUW|ECU": [
+      {
+        "id": "390650",
+        "t": "CUW",
+        "n": 11
+      },
+      {
+        "id": "441236",
+        "t": "ECU",
+        "n": 4
+      }
+    ],
+    "CUW|GER": [
+      {
+        "id": "390650",
+        "t": "CUW",
+        "n": 2
+      },
+      {
+        "id": "228912",
+        "t": "GER",
+        "n": 1
+      }
+    ],
+    "CZE|KOR": [
+      {
+        "id": "484012",
+        "t": "CZE",
+        "n": 5
+      },
+      {
+        "id": "274281",
+        "t": "KOR",
+        "n": 2
+      }
+    ],
+    "CZE|MEX": [
+      {
+        "id": "484012",
+        "t": "CZE",
+        "n": 2
+      },
+      {
+        "id": "485070",
+        "t": "MEX",
+        "n": 1
+      }
+    ],
+    "CZE|RSA": [
+      {
+        "id": "395986",
+        "t": "RSA",
+        "n": 2
+      },
+      {
+        "id": "484012",
+        "t": "CZE",
+        "n": 1
+      }
+    ],
+    "ECU|GER": [
+      {
+        "id": "228912",
+        "t": "GER",
+        "n": 3
+      },
+      {
+        "id": "441236",
+        "t": "ECU",
+        "n": 2
+      }
+    ],
+    "ECU|MEX": [
+      {
+        "id": "485070",
+        "t": "MEX",
+        "n": 1
+      },
+      {
+        "id": "441236",
+        "t": "ECU",
+        "n": 1
+      }
+    ],
+    "EGY|IRN": [
+      {
+        "id": "380007",
+        "t": "IRN",
+        "n": 3
+      },
+      {
+        "id": "416906",
+        "t": "EGY",
+        "n": 3
+      }
+    ],
+    "EGY|NZL": [
+      {
+        "id": "416906",
+        "t": "EGY",
+        "n": 4
+      },
+      {
+        "id": "368535",
+        "t": "NZL",
+        "n": 6
+      }
+    ],
+    "ENG|GHA": [
+      {
+        "id": "494349",
+        "t": "GHA",
+        "n": 2
+      }
+    ],
+    "ENG|MEX": [
+      {
+        "id": "336022",
+        "t": "ENG",
+        "n": 3
+      },
+      {
+        "id": "485070",
+        "t": "MEX",
+        "n": 2
+      }
+    ],
+    "ENG|NOR": [
+      {
+        "id": "336022",
+        "t": "ENG",
+        "n": 6
+      },
+      {
+        "id": "373235",
+        "t": "NOR",
+        "n": 5
+      }
+    ],
+    "ENG|PAN": [
+      {
+        "id": "336022",
+        "t": "ENG",
+        "n": 2
+      },
+      {
+        "id": "441241",
+        "t": "PAN",
+        "n": 5
+      }
+    ],
+    "ESP|FRA": [
+      {
+        "id": "430753",
+        "t": "ESP",
+        "n": 3
+      }
+    ],
+    "ESP|KSA": [
+      {
+        "id": "396885",
+        "t": "KSA",
+        "n": 5
+      }
+    ],
+    "ESP|POR": [
+      {
+        "id": "403001",
+        "t": "POR",
+        "n": 4
+      },
+      {
+        "id": "430753",
+        "t": "ESP",
+        "n": 2
+      }
+    ],
+    "ESP|URU": [
+      {
+        "id": "430753",
+        "t": "ESP",
+        "n": 2
+      },
+      {
+        "id": "229498",
+        "t": "URU",
+        "n": 1
+      }
+    ],
+    "FRA|IRQ": [
+      {
+        "id": "433571",
+        "t": "IRQ",
+        "n": 2
+      }
+    ],
+    "FRA|MAR": [
+      {
+        "id": "356956",
+        "t": "MAR",
+        "n": 6
+      },
+      {
+        "id": "448332",
+        "t": "FRA",
+        "n": 1
+      }
+    ],
+    "FRA|NOR": [
+      {
+        "id": "483535",
+        "t": "NOR",
+        "n": 5
+      },
+      {
+        "id": "448332",
+        "t": "FRA",
+        "n": 3
+      }
+    ],
+    "FRA|PAR": [
+      {
+        "id": "494531",
+        "t": "PAR",
+        "n": 4
+      }
+    ],
+    "FRA|SEN": [
+      {
+        "id": "448332",
+        "t": "FRA",
+        "n": 2
+      },
+      {
+        "id": "433806",
+        "t": "SEN",
+        "n": 4
+      }
+    ],
+    "FRA|SWE": [
+      {
+        "id": "489685",
+        "t": "SWE",
+        "n": 11
+      },
+      {
+        "id": "448332",
+        "t": "FRA",
+        "n": 2
+      }
+    ],
+    "GER|PAR": [
+      {
+        "id": "228912",
+        "t": "GER",
+        "n": 3
+      },
+      {
+        "id": "494531",
+        "t": "PAR",
+        "n": 5
+      }
+    ],
+    "GHA|PAN": [
+      {
+        "id": "386473",
+        "t": "GHA",
+        "n": 1
+      },
+      {
+        "id": "441241",
+        "t": "PAN",
+        "n": 3
+      },
+      {
+        "id": "494349",
+        "t": "GHA",
+        "n": 1
+      }
+    ],
+    "HAI|MAR": [
+      {
+        "id": "356956",
+        "t": "MAR",
+        "n": 3
+      },
+      {
+        "id": "295922",
+        "t": "HAI",
+        "n": 8
+      }
+    ],
+    "HAI|SCO": [
+      {
+        "id": "295922",
+        "t": "HAI",
+        "n": 1
+      },
+      {
+        "id": "411301",
+        "t": "SCO",
+        "n": 2
+      }
+    ],
+    "IRQ|NOR": [
+      {
+        "id": "347085",
+        "t": "IRQ",
+        "n": 2
+      }
+    ],
+    "IRQ|SEN": [
+      {
+        "id": "433571",
+        "t": "IRQ",
+        "n": 1
+      },
+      {
+        "id": "347085",
+        "t": "IRQ",
+        "n": 6
+      },
+      {
+        "id": "448821",
+        "t": "SEN",
+        "n": 1
+      }
+    ],
+    "JPN|NED": [
+      {
+        "id": "405530",
+        "t": "JPN",
+        "n": 2
+      }
+    ],
+    "JPN|SWE": [
+      {
+        "id": "405530",
+        "t": "JPN",
+        "n": 3
+      },
+      {
+        "id": "489685",
+        "t": "SWE",
+        "n": 2
+      }
+    ],
+    "JPN|TUN": [
+      {
+        "id": "433365",
+        "t": "TUN",
+        "n": 1
+      },
+      {
+        "id": "405530",
+        "t": "JPN",
+        "n": 1
+      }
+    ],
+    "KOR|MEX": [
+      {
+        "id": "274281",
+        "t": "KOR",
+        "n": 4
+      },
+      {
+        "id": "485070",
+        "t": "MEX",
+        "n": 1
+      }
+    ],
+    "KOR|RSA": [
+      {
+        "id": "274281",
+        "t": "KOR",
+        "n": 3
+      },
+      {
+        "id": "395986",
+        "t": "RSA",
+        "n": 1
+      }
+    ],
+    "KSA|URU": [
+      {
+        "id": "396885",
+        "t": "KSA",
+        "n": 3
+      }
+    ],
+    "MAR|NED": [
+      {
+        "id": "424081",
+        "t": "NED",
+        "n": 3
+      },
+      {
+        "id": "356956",
+        "t": "MAR",
+        "n": 3
+      }
+    ],
+    "MAR|SCO": [
+      {
+        "id": "411301",
+        "t": "SCO",
+        "n": 3
+      },
+      {
+        "id": "356956",
+        "t": "MAR",
+        "n": 1
+      }
+    ],
+    "MEX|RSA": [
+      {
+        "id": "395986",
+        "t": "RSA",
+        "n": 5
+      },
+      {
+        "id": "485070",
+        "t": "MEX",
+        "n": 2
+      }
+    ],
+    "NED|SWE": [
+      {
+        "id": "424081",
+        "t": "NED",
+        "n": 8
+      },
+      {
+        "id": "360496",
+        "t": "SWE",
+        "n": 1
+      }
+    ],
+    "NED|TUN": [
+      {
+        "id": "424081",
+        "t": "NED",
+        "n": 3
+      },
+      {
+        "id": "433365",
+        "t": "TUN",
+        "n": 2
+      }
+    ],
+    "NOR|SEN": [
+      {
+        "id": "433806",
+        "t": "SEN",
+        "n": 5
+      },
+      {
+        "id": "373235",
+        "t": "NOR",
+        "n": 4
+      }
+    ],
+    "PAR|TUR": [
+      {
+        "id": "494531",
+        "t": "PAR",
+        "n": 5
+      },
+      {
+        "id": "441181",
+        "t": "TUR",
+        "n": 2
+      }
+    ],
+    "PAR|USA": [
+      {
+        "id": "494531",
+        "t": "PAR",
+        "n": 3
+      }
+    ],
+    "POR|UZB": [
+      {
+        "id": "403001",
+        "t": "POR",
+        "n": 1
+      },
+      {
+        "id": "479110",
+        "t": "UZB",
+        "n": 3
+      }
+    ],
+    "QAT|SUI": [
+      {
+        "id": "419459",
+        "t": "QAT",
+        "n": 1
+      },
+      {
+        "id": "448107",
+        "t": "SUI",
+        "n": 1
+      }
+    ],
+    "TUR|USA": [
+      {
+        "id": "441181",
+        "t": "TUR",
+        "n": 4
+      },
+      {
+        "id": "448217",
+        "t": "USA",
+        "n": 1
+      }
+    ]
   }
 }

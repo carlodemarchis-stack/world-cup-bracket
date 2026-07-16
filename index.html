@@ -1373,12 +1373,16 @@ function nodeCandidates(side, L, k){
 const ROUND_NAME = { 1: 'Round of 32', 2: 'Round of 16', 3: 'Quarter-final', 4: 'Semi-final' };
 // Build a played-match result object from a slot ({score, winner, ...}); score
 // is winner-first, so goals split by who won.
+const _pairKey = (a, b) => [a, b].sort().join('|');
+function savesFor(a, b){ return (DATA.saves || {})[_pairKey(a, b)] || null; }        // notable narrated saves
+function savesCntFor(a, b){ return (DATA.savesCount || {})[_pairKey(a, b)] || null; }  // per-keeper save totals
 function playedFrom(round, a, b, s){
   const g = String(s.score || '').split('–'), aWon = s.winner === a;
   return { round, a, b, played: true, winner: s.winner,
     aGoals: aWon ? g[0] : g[1], bGoals: aWon ? g[1] : g[0], goals: s.goals || [],
     et: s.et, pens: s.pens, penScore: s.penScore, penalties: s.penalties, date: s.date, venue: s.venue,
-    highlights: s.highlights, ref: s.ref, att: s.att, form: s.form, var: s.var, cards: s.cards, num: s.num, line: s.line };
+    highlights: s.highlights, ref: s.ref, att: s.att, form: s.form, var: s.var, cards: s.cards, num: s.num, line: s.line,
+    saves: savesFor(a, b), savesCount: savesCntFor(a, b) };
 }
 function sfLoser(side){
   const part = matchParticipants(side, 4, 0), w = winnerOfNode(side, 4, 0);
@@ -1393,6 +1397,7 @@ function resolveMatch(id){
     return { round: 'Group ' + p[1], a: gm.a, b: gm.b, played: true, winner,
       aGoals: sc[0], bGoals: sc[1], goals: gm.goals || [], date: gm.d,
       ref: gm.ref, att: gm.att, form: gm.form, venue: gm.venue, var: gm.var, cards: gm.cards, num: gm.num, line: gm.line,
+      saves: savesFor(gm.a, gm.b), savesCount: savesCntFor(gm.a, gm.b),
       highlights: gm.h ? ('https://www.youtube.com/watch?v=' + gm.h + '&list=PLBRLtDhTHh5o') : null };
   }
   if (id === 'final'){
@@ -2520,7 +2525,7 @@ fetch('data.json', { cache: 'no-store' })
 //  picById, TEAMDIR. Beats: intro · chapter · presentation · goal/red · HT ·
 //  FT · group standings · champion. Autoplay + prev/next + chapters.
 // ============================================================================
-const STY = { GREEN:'#2f9e57', ORANGE:'#ef8a34', BLUE:'#1499d6', GOLD:'#cf9c1e', RED:'#d0322a', VIOLET:'#7c4dff', INK:'#1c1813', SUB:'#6b6256' };
+const STY = { GREEN:'#2f9e57', ORANGE:'#ef8a34', BLUE:'#1499d6', GOLD:'#cf9c1e', RED:'#d0322a', VIOLET:'#7c4dff', TEAL:'#0fa3a3', INK:'#1c1813', SUB:'#6b6256' };
 const sflag = (iso,w) => iso ? 'https://flagcdn.com/w'+(w||320)+'/'+iso+'.png' : '';
 const shero = (pic,w) => pic ? pic+'?&io=transform:fit,width:'+(w||720)+'&quality=90' : '';
 // Wide top-band crop (like avatarImg): grabs just the head, so cover-cropping to a square gives a tight face.
@@ -2556,6 +2561,7 @@ function sEvents(m){
     if(!g.p||g.p.indexOf('(o.g.)')>=0){ ev.push({type:'og',team:(g.t===m.a?m.b:m.a),creditTeam:g.t,scorer:(g.p||'').replace(/\s*\(o\.g\.\)\s*/i,'').trim(),sid:g.id||null,min:g.m,half:sHalf(g.m),run}); return; }
     ev.push({type:'goal',team:g.t,scorer:g.p,sid:g.id,min:g.m,half:sHalf(g.m),assist:g.a||null,aid:g.aid||null,pen:!!g.pen,desc:g.desc||null,run}); });
   (m.cards||[]).forEach(c=>{ if(c.c==='R') ev.push({type:'red',team:c.t,player:c.p,sid:c.id||null,min:c.m,half:sHalf(c.m)}); });
+  (m.saves||[]).forEach(s=>{ ev.push({type:'save',team:s.t,sid:s.id||null,min:s.m,half:sHalf(s.m),desc:s.desc||null}); });
   return ev.sort((a,b)=>(parseInt(a.min)||0)-(parseInt(b.min)||0));
 }
 const sHT = m => { let A=0,B=0; (m.goals||[]).forEach(g=>{ if(sHalf(g.m)===1){ if(g.t===m.a)A++; else if(g.t===m.b)B++; } }); return A+'–'+B; };
@@ -2981,8 +2987,17 @@ function beatHTML(b){
   if(b.k==='end') return '<div style="position:absolute;inset:0;'+sBg(STY.VIOLET)+'"></div>'+sCentre(
     '<div class="sc" style="font-weight:800;font-size:90px;color:'+STY.INK+';line-height:.9;">TO BE<br>CONTINUED</div>'+
     '<div class="sk" style="color:'+STY.SUB+';margin-top:18px;">The story updates as the tournament unfolds</div>');
-  // event: goal / red / own-goal
+  // event: goal / red / own-goal / save
   const m=b.m,e=b.e;
+  if(e.type==='save'){ const kp=e.sid?picById(e.sid):null; const ss=sScoreAt(m,parseInt(e.min)||0);
+    const kobj=((DATA.squads&&DATA.squads[e.team])||[]).find(p=>p.id===e.sid); const kn=kobj?String(kobj.p).split(' ').slice(-1)[0]:'';
+    return matchRefBar(m,ss[0],ss[1])+'<div style="position:absolute;inset:0;'+sBg(STY.TEAL)+'"></div>'+
+      '<div style="position:absolute;inset:0;background:radial-gradient(60% 55% at 50% 40%,'+STY.TEAL+'22 0%,transparent 70%);"></div>'+sCentre(
+      (kp?'<div style="position:relative;margin-bottom:20px;"><div style="width:170px;height:170px;border-radius:50%;overflow:hidden;background:#eee6d6;border:5px solid #fff;box-shadow:0 14px 40px '+STY.TEAL+'55;"><img src="'+sface(kp,520)+'" style="width:100%;height:100%;object-fit:cover;object-position:top;"></div><div style="position:absolute;right:-8px;bottom:-6px;font-size:46px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.3));">🧤</div></div>'
+        :'<div style="font-size:120px;line-height:1;margin-bottom:8px;">🧤</div>')+
+      '<div class="sc" style="font-weight:900;font-size:82px;color:'+STY.TEAL+';letter-spacing:3px;">SAVE</div>'+
+      (kn?'<div style="display:flex;align-items:center;gap:13px;margin-top:6px;"><img class="sfl" src="'+sflag(tin(e.team).iso)+'"><div class="sc" style="font-weight:800;font-size:40px;color:'+STY.INK+';">'+kn+'</div><span class="spill">'+e.min+'</span></div>':'')+
+      (e.desc?'<div style="max-width:640px;margin-top:16px;font-size:19px;font-style:italic;color:#3f382e;line-height:1.45;border-left:3px solid '+STY.TEAL+';padding-left:14px;text-align:left;">'+e.desc+'</div>':'')); }
   if(e.type==='red'){ const rpic=e.sid?picById(e.sid):null; const rs=sScoreAt(m,parseInt(e.min)||0);
     return matchRefBar(m,rs[0],rs[1])+'<div style="position:absolute;inset:0;background:radial-gradient(80% 80% at 50% 40%,#f7dedb 0%,#faf7f0 72%);"></div>'+sCentre(
     (rpic?'<div style="position:relative;margin-bottom:22px;"><div style="width:160px;height:160px;border-radius:50%;overflow:hidden;background:#eee6d6;box-shadow:0 14px 38px rgba(224,70,63,.35);"><img src="'+sface(rpic)+'" style="width:100%;height:100%;object-fit:cover;object-position:top;"></div><div style="position:absolute;right:-8px;bottom:-2px;width:50px;height:68px;border-radius:8px;background:linear-gradient(160deg,#ff5b52,#d0322a);box-shadow:0 8px 18px rgba(224,70,63,.5);transform:rotate(10deg);border:3px solid #faf7f0;"></div></div>'
