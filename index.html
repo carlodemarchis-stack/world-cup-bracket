@@ -3016,17 +3016,30 @@ function beatHTML(b){
     const sev=Math.max(1,Math.min(5,c.severity||1));
     const dots=[0,1,2,3,4].map(i=>'<span style="display:inline-block;width:12px;height:12px;border-radius:50%;margin:0 2px;background:'+(i<sev?acc:'rgba(0,0,0,.13)')+';"></span>').join('');
     const minlabel=c.minute?(/^\d+\+?$/.test(c.minute)?c.minute+"'":c.minute):'';
-    const q=(c.quotes&&c.quotes[0]);
+    // VAR badge — meta.varFieldNote: role drives the colour.
+    const V=c.var||null;
+    const VMAP={decided:['VAR decided',STY.RED],reviewed_no_change:['VAR · no change','#d99a1e'],disputed_absence:['VAR didn’t step in','#d99a1e'],not_involved:['No VAR',STY.SUB]};
+    const vb=V?(VMAP[V.role]||['VAR',STY.SUB]):null;
+    // Press reactions — prefer one critical + one defending, cap 2, clickable.
+    const pr=c.pressReaction||[]; const SCOL={critical:STY.RED,defending:STY.GREEN,reporting:STY.SUB};
+    const pick=[], seen=new Set();
+    [pr.find(p=>p.stance==='critical'),pr.find(p=>p.stance==='defending')].forEach(p=>{ if(p&&!seen.has(p)){pick.push(p);seen.add(p);} });
+    pr.forEach(p=>{ if(pick.length<2&&!seen.has(p)){pick.push(p);seen.add(p);} });
+    const prCard=p=>{ const sc=SCOL[p.stance]||STY.SUB;
+      return '<a href="'+p.url+'" target="_blank" rel="noopener" style="display:block;flex:1;min-width:0;max-width:470px;text-decoration:none;background:rgba(255,255,255,.62);border-left:4px solid '+sc+';border-radius:11px;padding:13px 16px;box-shadow:0 6px 16px rgba(0,0,0,.08);cursor:pointer;text-align:left;">'+
+        '<div style="font-style:italic;font-size:15px;color:'+STY.INK+';line-height:1.42;">'+p.line+'</div>'+
+        '<div style="margin-top:9px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;letter-spacing:.5px;font-size:12px;color:'+sc+';text-transform:uppercase;">'+(p.stance||'')+' <span style="color:'+STY.SUB+';font-weight:600;text-transform:none;">· '+p.outlet+' · '+p.country+'</span> ↗</div>'+
+      '</a>'; };
     return '<div style="position:absolute;inset:0;'+sBg(acc)+'"></div>'+sCentre(
       '<div style="display:flex;align-items:center;gap:13px;"><img class="sfl" style="height:28px;" src="'+sflag(ia)+'"><span class="sc" style="font-weight:800;font-size:28px;color:'+STY.INK+';">'+ta+'</span>'+
         '<span class="sc" style="font-weight:800;font-size:24px;color:'+STY.SUB+';">'+score+'</span>'+
         '<span class="sc" style="font-weight:800;font-size:28px;color:'+STY.INK+';">'+tb+'</span><img class="sfl" style="height:28px;" src="'+sflag(ib)+'"></div>'+
       '<div class="sk" style="color:'+acc+';margin-top:9px;font-size:12px;">'+fb.round+(date?' · '+date:'')+(minlabel?' · '+minlabel:'')+'</div>'+
       '<div style="margin-top:5px;font-family:\'Barlow Condensed\',sans-serif;font-weight:600;font-size:15px;letter-spacing:.5px;color:'+STY.SUB+';">🎽 Referee: <b style="color:'+STY.INK+';">'+ref+'</b>'+(refNat?' · '+refNat:'')+'</div>'+
-      '<div style="margin-top:18px;"><span class="sbadge" style="background:'+acc+';">'+T[0]+'</span></div>'+
+      '<div style="margin-top:18px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;"><span class="sbadge" style="background:'+acc+';">'+T[0]+'</span>'+(vb?'<span class="sbadge" style="background:'+vb[1]+';">🖥 '+vb[0]+'</span>':'')+'</div>'+
       '<div style="margin-top:12px;">'+dots+' <span class="sc" style="color:'+STY.SUB+';font-size:13px;vertical-align:middle;">severity '+sev+'/5</span></div>'+
-      '<div style="max-width:880px;margin-top:18px;font-size:19px;color:'+STY.INK+';line-height:1.5;text-align:center;">'+c.summary+'</div>'+
-      (q?'<div style="max-width:780px;margin-top:16px;font-style:italic;font-size:16px;color:#3f382e;border-left:3px solid '+acc+';padding-left:14px;text-align:left;">“'+q.text+'” — <b>'+q.who+'</b>'+(q.role?', '+q.role:'')+'</div>':'')); }
+      '<div style="max-width:900px;margin-top:16px;font-size:18px;color:'+STY.INK+';line-height:1.48;text-align:center;">'+c.summary+'</div>'+
+      (pick.length?'<div style="display:flex;gap:14px;justify-content:center;margin-top:18px;max-width:970px;flex-wrap:wrap;">'+pick.map(prCard).join('')+'</div>':'')); }
   if(b.k==='champ'){ const c=tin(b.code); return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
     '<div class="sk" style="color:'+STY.GOLD+';letter-spacing:8px;">World Champions</div>'+
     '<img class="sfl" style="height:auto;width:150px;margin-top:14px;" src="'+sflag(c.iso,640)+'">'+
