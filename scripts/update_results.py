@@ -377,6 +377,80 @@ def fetch_stories(ids):
     return out
 
 
+_SAVE_ROUTINE = ("routine", "you'd expect", "comfortable", " tame", "harmlessly",
+                 "not an easy save either", "palms warmed", "straight at")
+_SAVE_STRONG = ("brilliant", "terrific", "superb", "what a", "point-blank", "double save",
+                "back to back", "fantastic", "finest", "stunning", "incredible", "wonderful",
+                "magnificent", "spectacular", "denies", "deny", "thwart", "tips", "reflex",
+                "excellent", "great save", "fine save", "races back", "gets down", "remarkable",
+                "superlative", "acrobatic", "cat-like")
+_GEN_SAVE = re.compile(r"^the goalkeeper of .+? pulls off a save\.?", re.I)
+
+
+def fetch_saves(ids, id2code):
+    """Keeper save totals + notable saves narrated by the FIFA.com live blog.
+
+    Returns (savesCount, notable):
+      savesCount = [{id, t, n}]  per-keeper totals (FIFA timeline Goal Prevention / Type 57,
+                   deduped by player+minute) — facts, safe to publish.
+      notable    = [{id, t, m, desc, dp:0}]  up to 2 saves the live-blog editors wrote a real
+                   note about (strong-word, non-routine) — RAW text; needs a paraphrase pass.
+    Best-effort; ([], []) on any failure.
+    """
+    stage, match = ids
+    try:
+        evs = fetch(f"https://api.fifa.com/api/v3/timelines/{COMPETITION}/{SEASON}/{stage}/{match}?language=en").get("Event", []) or []
+    except Exception:  # noqa: BLE001
+        evs = []
+    seen, cnt, minmap = set(), {}, {}
+    for e in evs:
+        if e.get("Type") != 57:
+            continue
+        pid, mm = str(e.get("IdPlayer") or ""), e.get("MatchMinute")
+        tc = id2code.get(str(e.get("IdTeam")))
+        if not tc:
+            continue
+        minmap[mm] = (pid, tc)
+        if (pid, mm) in seen:
+            continue
+        seen.add((pid, mm))
+        cnt[(pid, tc)] = cnt.get((pid, tc), 0) + 1
+    save_count = [{"id": pid, "t": tc, "n": n} for (pid, tc), n in cnt.items()]
+
+    def strip(h):
+        return re.sub(r"<[^>]+>", " ", h or "").replace("\xa0", " ").replace("  ", " ").strip()
+    try:
+        key = f"www.fifa.com/fifaplus/en/match-centre/match/{COMPETITION}/{SEASON}/{stage}/{match}"
+        ev = fetch(STORY_STATUS.format(base64.b64encode(key.encode()).decode()), tries=2)["event_id"]
+        tl = fetch(STORY_HIST.format(ev[:2], ev), tries=2)["timeline"]
+    except Exception:  # noqa: BLE001
+        tl = []
+    cands, seen2 = [], set()
+    for it in tl:
+        if it.get("content_type") != "generic-match-event-element":
+            continue
+        cf = (it.get("custom_fields") or {}).get("all", {})
+        if (cf.get("title") or "") != "Goal Prevention":
+            continue
+        extra = _GEN_SAVE.sub("", strip(cf.get("description"))).strip()
+        low = extra.lower()
+        if len(extra) < 25 or any(r in low for r in _SAVE_ROUTINE):
+            continue
+        st = cf.get("state", "")
+        if (st, extra[:40]) in seen2:
+            continue
+        seen2.add((st, extra[:40]))
+        score = sum(1 for s in _SAVE_STRONG if s in low)
+        if score > 0:
+            cands.append((score, st, extra))
+    cands.sort(key=lambda x: -x[0])
+    notable = []
+    for score, st, extra in sorted(cands[:2], key=lambda x: x[1]):
+        pid, tc = minmap.get(st, ("", None))
+        notable.append({"id": pid, "t": tc, "m": st, "desc": extra, "dp": 0})
+    return save_count, notable
+
+
 def attach_stories(slot, res, changes, label):
     """Attach the live-blog goal narrative to each matching goal (fill-once)."""
     goals = [g for g in (slot.get("goals") or []) if g.get("p") and "(o.g.)" not in g["p"]]
@@ -678,6 +752,28 @@ def main():
         changes.append(f"squads: {len(squads)} teams")
         data["squads"] = squads
 
+    # ---- Goalkeeper saves: totals (facts) + notable narrated saves (raw, need paraphrase) ----
+    # Keyed by sorted team-code pair; captured once per match (skip pairs already stored).
+    data.setdefault("saves", {})
+    data.setdefault("savesCount", {})
+    save_srcs = [(r["a"], r["b"], r["ids"], r["id2code"])
+                 for results in group_res.values() for r in results]
+    for fs, r in ko.items():
+        p = list(fs)
+        if len(p) == 2:
+            save_srcs.append((p[0], p[1], r["ids"], r["id2code"]))
+    for a, b, sids, s_id2code in save_srcs:
+        pk = "|".join(sorted([a, b]))
+        if pk in data["savesCount"]:
+            continue  # already captured (settled match)
+        sc, notable = fetch_saves(sids, s_id2code)
+        if sc:
+            data["savesCount"][pk] = sc
+            changes.append(f"saves: totals for {pk} ({sum(x['n'] for x in sc)})")
+        if notable and pk not in data["saves"]:
+            data["saves"][pk] = notable
+            changes.append(f"saves: +{len(notable)} notable (raw) for {pk}")
+
     after = json.dumps(data, ensure_ascii=False, sort_keys=True)
     if after == before:
         print("No changes.")
@@ -692,12 +788,15 @@ def main():
         f.write(json.dumps(data, ensure_ascii=False, indent=2) + "\n")
     print("Wrote data.json")
 
-    # Warn if any goal narratives are still the raw live-blog text (dp != 1).
+    # Warn if any goal or save narratives are still the raw live-blog text (dp != 1).
     raw = [g for g in _all_goals(data) if g.get("desc") and g.get("dp") != 1]
-    if raw:
-        print(f"\n  ⚠ {len(raw)} goal narrative(s) are raw FIFA text and need paraphrasing.")
-        print("    Ask Claude to run the paraphrase pass, then commit — do NOT push the raw text:")
-        print("    python3 scripts/paraphrase.py extract   # then apply the rewrites")
+    raw_saves = [s for lst in (data.get("saves") or {}).values() for s in lst if s.get("desc") and s.get("dp") != 1]
+    if raw or raw_saves:
+        if raw:
+            print(f"\n  ⚠ {len(raw)} goal narrative(s) are raw FIFA text and need paraphrasing.")
+        if raw_saves:
+            print(f"\n  ⚠ {len(raw_saves)} save narrative(s) are raw FIFA text and need paraphrasing.")
+        print("    Ask Claude to paraphrase (set dp:1), then commit — do NOT push the raw text.")
 
 
 def _loser(sched, key):
