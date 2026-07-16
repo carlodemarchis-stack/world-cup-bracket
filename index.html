@@ -3187,7 +3187,7 @@ window.launchStory=launchStory; window.storyGo=storyGo; window.storyToggle=story
 // Deep-link: ?film=N opens the movie at beat N; ?team=CODE opens that team's cut;
 // ?team=film (or ?film with no value) auto-plays the full film straight away.
 (function(){ const q=new URLSearchParams(location.search), f=q.get('film'), tm=q.get('team'), contro=q.has('contro'); if(f===null&&!tm&&!contro)return;
-  const go=()=>{ if(contro){ storyContro=true; launchStory(); return; }
+  const go=()=>{ if(contro){ storyContro=true; launchStory(); const n=parseInt(f,10)||0; if(n>0){ storyToggle(); storyGo(n); } return; }
     if(tm && tm.toLowerCase()!=='film') storyTeam=tm.toUpperCase();   // 'film' = the full film, not a team
     launchStory(); const n=parseInt(f,10)||0; if(n>0){ storyToggle(); storyGo(n); } };
   const t=setInterval(()=>{ if(DATA&&document.querySelector('#app [data-confed]')){ clearInterval(t);
