@@ -1,0 +1,201 @@
+{
+  "meta": {
+    "title": "FIFA World Cup 2026 Knockout Stage Controversy Tracker",
+    "scope": "Round of 32 through Semi-finals",
+    "compiledOn": "2026-07-16",
+    "asOf": "Semi-finals complete. Final (Spain v Argentina, 19 July) and Third-place match (France v England, 18 July) not yet played.",
+    "severityScale": "1 = minor talking point, 5 = tournament-defining / formal complaint / institutional fallout",
+    "notes": "Matches with no significant recorded controversy are included with an empty controversies array so the dataset is complete rather than selective."
+  },
+  "rounds": [
+    {
+      "round": "R32", "label": "Round of 32", "dates": "2026-06-28 to 2026-07-03",
+      "matches": [
+        { "matchId": "R32-M73", "teams": ["Canada", "South Africa"], "score": "1-0", "advanced": "Canada", "controversies": [] },
+        { "matchId": "R32-M74", "teams": ["Brazil", "Japan"], "score": "2-1", "advanced": "Brazil", "controversies": [] },
+        { "matchId": "R32-M81", "teams": ["Germany", "Paraguay"], "score": "1-1", "result": "Paraguay won 4-3 on penalties", "advanced": "Paraguay", "referee": "Jalal Jayed",
+          "controversies": [
+            { "id": "ger-tah-disallowed", "minute": "ET", "type": "disallowed_goal", "tech": "VAR", "severity": 5,
+              "summary": "Jonathan Tah headed in from a Nathaniel Brown corner to make it 2-1 in extra time. VAR sent Jayed to the monitor; Waldemar Anton judged to have blocked/impeded goalkeeper Orlando Gill in the build-up. Goal disallowed. Germany then lost the shootout, Tah blazing the decisive penalty over the bar.",
+              "significance": "Germany's first-ever World Cup penalty shootout defeat. Widely ranked the single most controversial call of the tournament.",
+              "quotes": [{ "who": "Julian Nagelsmann", "role": "Germany head coach", "text": "a joke" }],
+              "aftermath": "Nagelsmann later replaced as coach; Germany appointed Jurgen Klopp." }
+          ] },
+        { "matchId": "R32-M75", "teams": ["Netherlands", "Morocco"], "score": "1-1", "result": "Morocco won 3-2 on penalties", "advanced": "Morocco", "controversies": [] },
+        { "matchId": "R32-M78", "teams": ["Cote d'Ivoire", "Norway"], "score": "1-2", "advanced": "Norway", "controversies": [] },
+        { "matchId": "R32-M76", "teams": ["Portugal", "Croatia"], "score": "2-1", "advanced": "Portugal", "referee": "Espen Eskas",
+          "controversies": [
+            { "id": "por-penalty-ronaldo", "minute": "68", "type": "penalty_awarded", "tech": "VAR", "severity": 3,
+              "summary": "VAR review led to a penalty for Portugal after contact between Nikola Vlasic and Renato Veiga. Ronaldo converted.",
+              "quotes": [{ "who": "Luka Modric", "role": "Croatia captain", "text": "Argued both players were grappling and such incidents should not produce penalties." }] },
+            { "id": "cro-gvardiol-offside", "minute": "90+", "type": "technology", "tech": "connected_ball_sensor", "severity": 5,
+              "summary": "Josko Gvardiol bundled in a stoppage-time equaliser. FIFA's connected-ball (Trionda) sensor detected a faint touch by Igor Matanovic, reportedly off his hair, putting Mario Pasalic offside in the build-up. Goal ruled out; Croatia eliminated. Modric's final World Cup appearance.",
+              "formalComplaint": true, "complainant": "Croatian Football Federation (HNS)",
+              "quotes": [{ "who": "Tomislav Pacak", "role": "HNS spokesperson", "text": "We believe that this is an abuse of technology, which we welcome in football, but we believe that this application is not beneficial to FIFA, teams and football fans." }],
+              "aftermath": "Zlatko Dalic stepped down as Croatia coach." }
+          ] },
+        { "matchId": "R32-M77", "teams": ["France", "Sweden"], "score": "3-0", "advanced": "France", "controversies": [] },
+        { "matchId": "R32-M79", "teams": ["Mexico", "Ecuador"], "score": "2-0", "advanced": "Mexico", "controversies": [] },
+        { "matchId": "R32-M80", "teams": ["England", "DR Congo"], "score": "2-1", "advanced": "England", "referee": "Adham Makhadmeh",
+          "controversies": [
+            { "id": "eng-kane-nopen-drc", "minute": "43", "type": "penalty_denied", "tech": "VAR", "severity": 3,
+              "summary": "Harry Kane rounded goalkeeper Lionel Mpasi and went down. No penalty, no simulation booking. VAR checked and cleared.",
+              "quotes": [{ "who": "Andy Davies", "role": "ESPN analyst, ex-PL referee", "text": "Argued England deserved the spot kick and criticised VAR reviewing such duels in slow motion." }],
+              "note": "Became a reference point a round later when Kane conceded a monitor-reviewed penalty against Mexico in the mirror-image situation." }
+          ] },
+        { "matchId": "R32-M84", "teams": ["Belgium", "Senegal"], "score": "3-2", "result": "After extra time", "advanced": "Belgium", "referee": "Said Martinez",
+          "controversies": [
+            { "id": "bel-tielemans-penalty", "minute": "118", "type": "penalty_awarded", "tech": "VAR", "severity": 4,
+              "summary": "Youri Tielemans went down under a Lamine Camara challenge. Martinez initially played on. Lengthy VAR review, on-field monitor review, penalty awarded. Tielemans converted to complete a comeback from 2-0 down.",
+              "note": "Critics argued Tielemans stepped across Camara and initiated contact; VAR judged Camara kicked him without playing the ball. Reports of internal turmoil in the Senegal squad surfaced afterwards." }
+          ] },
+        { "matchId": "R32-M85", "teams": ["United States", "Bosnia and Herzegovina"], "score": "2-0", "advanced": "United States", "referee": "Raphael Claus",
+          "controversies": [
+            { "id": "usa-balogun-red", "minute": "64", "type": "red_card", "tech": "VAR", "severity": 5,
+              "summary": "Folarin Balogun's boot came down on the ankle/heel of Tarik Muharemovic in an aerial challenge. Straight red for serious foul play after VAR review. Balogun had scored just before half-time, becoming only the third player to score and be sent off in a World Cup knockout match, after Zidane and Ronaldinho.",
+              "note": "Muharemovic himself said it did not warrant a red. ESPN's review concluded the red was wrong. Pundits contrasted it with Messi escaping a card for a similar challenge on Aissa Mandi vs Algeria." },
+            { "id": "usa-balogun-article27", "minute": "post-match", "type": "red_card_reversed", "tech": "disciplinary", "severity": 5,
+              "summary": "Balogun's automatic one-match ban ruled him out of the Round of 16 vs Belgium. Donald Trump phoned Gianni Infantino to ask for a review. On 5 July FIFA's Disciplinary Committee suspended the ban under Article 27, placing Balogun on a one-year probation, and fined US Soccer $40,000. Balogun started the 4-1 defeat to Belgium.",
+              "formalComplaint": true, "complainant": "Royal Belgian Football Association",
+              "quotes": [
+                { "who": "Donald Trump", "role": "US President", "text": "I asked for a review because I didn't think it was a foul." },
+                { "who": "Rudi Garcia", "role": "Belgium head coach", "text": "I didn't know that in the offices of FIFA the fifth of July was the first of April in Europe." },
+                { "who": "UEFA statement", "role": "UEFA", "text": "unprecedented, incomprehensible and unjustifiable decision." }
+              ] },
+            { "id": "bih-barbarez-touchline", "minute": "second half", "type": "touchline", "severity": 2,
+              "summary": "Bosnia coach Sergej Barbarez picked up the ball and refused to return it in protest at a non-call on Antonee Robinson's foul on Esmir Bajraktarevic. Booked for unsporting behaviour and delaying the restart." }
+          ] },
+        { "matchId": "R32-M83", "teams": ["Spain", "Austria"], "score": "3-0", "advanced": "Spain", "controversies": [] },
+        { "matchId": "R32-M82", "teams": ["Switzerland", "Algeria"], "score": "2-0", "advanced": "Switzerland", "controversies": [] },
+        { "matchId": "R32-M86", "teams": ["Egypt", "Australia"], "score": "1-1", "result": "Egypt won 4-2 on penalties", "advanced": "Egypt", "controversies": [] },
+        { "matchId": "R32-M87", "teams": ["Colombia", "Ghana"], "score": "1-0", "advanced": "Colombia", "controversies": [] },
+        { "matchId": "R32-M88", "teams": ["Argentina", "Cape Verde"], "score": "3-2", "result": "After extra time", "advanced": "Argentina",
+          "controversies": [
+            { "id": "arg-capeverde-og", "minute": "ET", "type": "disallowed_goal", "severity": 2,
+              "summary": "Extra-time goal recorded as an own goal after a Cristian Romero header from a Messi corner deflected off the arm of Cape Verde defender Diney. Lusophone media questioned several decisions, including allowing Messi to take a free kick while goalkeeper Vozinha was still organising the wall.",
+              "note": "Fed the broader 'Argentina favouritism' narrative that intensified the following round." }
+          ] }
+      ]
+    },
+    {
+      "round": "R16", "label": "Round of 16", "dates": "2026-07-04 to 2026-07-07",
+      "matches": [
+        { "matchId": "R16-M89", "teams": ["Morocco", "Canada"], "score": "3-0", "advanced": "Morocco", "controversies": [] },
+        { "matchId": "R16-M90", "teams": ["France", "Paraguay"], "score": "1-0", "advanced": "France",
+          "controversies": [
+            { "id": "fra-mbappe-penalty-par", "minute": "second half", "type": "penalty_awarded", "tech": "VAR", "severity": 2,
+              "summary": "France won it on a Mbappe penalty after VAR recommended an on-field review and the referee agreed Diego Gomez's knee had tripped Desire Doue. Contested at the time but cited by Andy Davies (ESPN) as a correct and positive use of VAR." }
+          ] },
+        { "matchId": "R16-M91", "teams": ["Brazil", "Norway"], "score": "0-2", "advanced": "Norway", "referee": "Ismail Elfath",
+          "controversies": [
+            { "id": "bra-penalty-ajer", "minute": "first half", "type": "penalty_awarded", "tech": "VAR", "severity": 3,
+              "summary": "Early VAR-reviewed penalty to Brazil after Kristoffer Ajer's sliding challenge on Matheus Cunha. Replays suggested Ajer got a touch on the ball. Elfath stood by the decision after review. Bruno Guimaraes missed the penalty.",
+              "note": "This is the same Elfath later appointed to the Argentina-England semi-final, fuelling the 'Messi's favourite referee' narrative." },
+            { "id": "bra-penalty-taker-selection", "minute": "post-match", "type": "player_selection", "severity": 2,
+              "summary": "Ancelotti's choice of Bruno Guimaraes over Vinicius Junior as penalty taker. Defended as data-driven; Vinicius confirmed the order was set before kick-off. Ronaldo Nazario publicly criticised Ancelotti after Brazil's earliest World Cup exit since 1990.",
+              "quotes": [{ "who": "Carlo Ancelotti", "role": "Brazil head coach", "text": "According to the data, Neymar was the best person to take the penalty, and then Raphinha, Igor Thiago, and then Bruno." }] }
+          ] },
+        { "matchId": "R16-M92", "teams": ["Mexico", "England"], "score": "2-3", "advanced": "England", "referee": "Alireza Faghani", "venue": "Estadio Azteca",
+          "controversies": [
+            { "id": "eng-quansah-red", "minute": "54", "type": "red_card", "tech": "VAR", "severity": 4,
+              "summary": "Faghani upgraded a no-call to a straight red after VAR judged Jarell Quansah's fast, high challenge on Jesus Gallardo to be serious foul play. Mexico's bench had been furious at the original non-decision. Kick-off was also delayed one hour by thunderstorms." },
+            { "id": "mex-penalty-kane", "minute": "68", "type": "penalty_awarded", "tech": "VAR", "severity": 4,
+              "summary": "Faghani sent back to the monitor. Harry Kane, clearing from his own box, caught Brian Gutierrez's boot. Penalty given, Raul Jimenez scored — the mirror image of Kane's DR Congo appeal a round earlier.",
+              "quotes": [
+                { "who": "Thomas Tuchel", "role": "England head coach", "text": "Referees are just not good enough. Is this a clear and obvious mistake for the Mexico penalty? For sure not, but VAR gets involved." },
+                { "who": "Alan Shearer", "role": "BBC pundit", "text": "Disagreed with the Mexico penalty; Kane's contact is not enough to give a penalty." }
+              ],
+              "note": "Public opinion split sharply, with a strong current of support for Faghani." }
+          ] },
+        { "matchId": "R16-M93", "teams": ["Spain", "Portugal"], "score": "1-0", "advanced": "Spain",
+          "note": "Merino's late winner; Cristiano Ronaldo's World Cup farewell. No significant officiating controversy recorded.", "controversies": [] },
+        { "matchId": "R16-M94", "teams": ["Belgium", "United States"], "score": "4-1", "advanced": "Belgium",
+          "controversies": [
+            { "id": "usa-balogun-eligibility-r16", "minute": "pre-match", "type": "off_field", "severity": 4,
+              "summary": "The officiating story sat entirely off the pitch: Balogun's ban had been suspended the day before under Article 27, and Belgium publicly attacked the decision. Balogun started." }
+          ] },
+        { "matchId": "R16-M97", "teams": ["Argentina", "Egypt"], "score": "3-2", "advanced": "Argentina", "referee": "Francois Letexier", "venue": "Atlanta",
+          "controversies": [
+            { "id": "egy-ziko-disallowed", "minute": "second half", "type": "disallowed_goal", "tech": "VAR", "severity": 5,
+              "summary": "Egypt led 2-0. Mostafa Ziko finished a breakaway that would have extended the lead. Letexier sent to the monitor, disallowed it for a build-up foul: Marwan Attia held Lisandro Martinez's shirt and stepped on his foot to spring the move. One broadcaster placed the infringement 'a full pitch away' from the net. Argentina scored three times in 13 minutes, Enzo Fernandez heading a 92nd-minute winner.",
+              "formalComplaint": true, "complainant": "Egyptian Football Association",
+              "quotes": [
+                { "who": "Hossam Hassan", "role": "Egypt head coach", "text": "It's all about money. They want Messi to stay in the tournament. We have suffered injustice." },
+                { "who": "Mostafa Ziko", "role": "Egypt forward", "text": "It's clear that this tournament has been fixed." },
+                { "who": "Pierluigi Collina", "role": "FIFA head of refereeing", "text": "We believe that a foul is a foul. If the referee did not see it on the field of play, the VAR can intervene." }
+              ] },
+            { "id": "egy-appeals-declined", "minute": "90+", "type": "penalty_denied", "tech": "VAR", "severity": 4,
+              "summary": "Two Egypt appeals declined in the build-up to the winner: Alexis Mac Allister tugging Hamdy Fathy's shirt, and Mohamed Salah claiming a trip by Julian Alvarez. VAR checked and cleared both. Egypt's goalkeeping coach was shown a red card." }
+          ] },
+        { "matchId": "R16-M96", "teams": ["Switzerland", "Colombia"], "score": "0-0", "result": "Switzerland won 4-3 on penalties", "advanced": "Switzerland", "controversies": [] }
+      ]
+    },
+    {
+      "round": "QF", "label": "Quarter-finals", "dates": "2026-07-09 to 2026-07-11",
+      "matches": [
+        { "matchId": "QF-M99", "teams": ["France", "Morocco"], "score": "2-0", "advanced": "France", "referee": "Facundo Tello", "refereeNationality": "Argentina", "venue": "Foxborough (Boston)",
+          "controversies": [
+            { "id": "fra-mor-all-argentine-crew", "minute": "pre-match", "type": "appointment", "severity": 4,
+              "summary": "FIFA appointed an entirely Argentine crew: Tello, Belatti, Chade, Herrera, Navarro. First single-nation officiating team of the tournament, for a match involving a direct rival of Argentina, one week after the Argentina-Egypt storm. French media and fans reacted angrily; the 2022 final sharpened the optics.",
+              "quotes": [{ "who": "Didier Deschamps", "role": "France head coach", "text": "You could ask questions, certainly. But our opponent is Morocco, not the referee." }] },
+            { "id": "fra-penalty-mbappe", "minute": "25", "type": "penalty_awarded", "tech": "VAR", "severity": 3,
+              "summary": "Penalty to France after Noussair Mazraoui brought down Mbappe. Tello pointed immediately. The VAR check then ran more than three minutes before the kick. Bounou saved Mbappe's effort. The call was widely judged correct; the length of the check fed the complaint that even correct decisions now arrive wrapped in long stoppages." }
+          ] },
+        { "matchId": "QF-M100", "teams": ["Spain", "Belgium"], "score": "2-1", "advanced": "Spain", "referee": "Michael Oliver", "venue": "SoFi Stadium, Los Angeles",
+          "controversies": [
+            { "id": "bel-rodri-handball-nopen", "minute": "at 1-1", "type": "penalty_denied", "tech": "VAR", "severity": 4,
+              "summary": "Aymeric Laporte headed a clearance onto Rodri's arm inside the box. Belgium appealed for handball. Oliver waved it away, VAR did not recommend a review. Mikel Merino won it in the 88th minute.",
+              "note": "IFAB law states a handball offence is not committed when the ball touches an arm directly from the head or body of a team-mate. Ex-PGMOL chief Keith Hackett said the officials got it right." },
+            { "id": "oliver-eligibility-note", "minute": "pre-match", "type": "appointment", "severity": 2,
+              "summary": "Oliver was eligible despite England still being in the tournament, because FIFA only bars referees from matches involving their own nation. Scrutinised because the result determined England's potential semi-final path." }
+          ] },
+        { "matchId": "QF-M101", "teams": ["Norway", "England"], "score": "1-2", "result": "After extra time", "advanced": "England", "referee": "Clement Turpin", "venue": "Miami",
+          "controversies": [
+            { "id": "eng-skycam-wire", "minute": "45+", "type": "technology", "severity": 4,
+              "summary": "Fox Sports replays showed the ball clipped the overhead sky-cam wire in the build-up to Bellingham's equaliser, dropping to Elliot Anderson's feet. Orjan Nyland and Stale Solbakken tried to alert the officials. Contact with the wire should stop play. The goal stood; FIFA disputed that the ball touched the wire.",
+              "note": "Dubbed the 'Cable of God' by fans, a play on Maradona's 'Hand of God'." },
+            { "id": "nor-heggem-disallowed", "minute": "55", "type": "disallowed_goal", "tech": "VAR", "severity": 4,
+              "summary": "Torbjorn Heggem put Norway 2-1 up from a corner rebound. VAR review, goal chalked off for a soft foul by Erling Haaland on Elliot Anderson in the build-up." },
+            { "id": "eng-penalty-overturned-norway", "minute": "ET", "type": "penalty_overturned", "tech": "VAR", "severity": 3,
+              "summary": "Djed Spence drove into the box and appeared to be kicked from behind by Oscar Bobb. Turpin pointed to the spot, then overturned after a VAR review found no foul.",
+              "note": "All four flashpoints in the match went England's way." }
+          ] },
+        { "matchId": "QF-M102", "teams": ["Argentina", "Switzerland"], "score": "3-1", "result": "After extra time", "advanced": "Argentina", "referee": "Joao Pinheiro", "venue": "Kansas City",
+          "controversies": [
+            { "id": "pinheiro-appointment", "minute": "pre-match", "type": "appointment", "severity": 3,
+              "summary": "Pinheiro's appointment drew scrutiny given his role in the Bayern-PSG Champions League semi-final, where Nuno Mendes avoided a second yellow after Pinheiro instead awarded PSG a free kick for a disputed handball by Konrad Laimer." },
+            { "id": "swi-embolo-red", "minute": "71", "type": "red_card", "tech": "VAR", "severity": 5,
+              "summary": "Pinheiro booked Leandro Paredes for a foul on Breel Embolo. VAR intervened, judging no contact and that Embolo had simulated. Pinheiro rescinded Paredes's yellow and booked Embolo for simulation — his second yellow, so he was sent off. First 'mistaken identity' red card in World Cup history under IFAB's expanded 2026 definition. Switzerland played the last hour-plus a man down. Embolo left in tears.",
+              "quotes": [{ "who": "Murat Yakin", "role": "Switzerland head coach", "text": "It's completely not understandable. This rule destroyed the game today. It has nothing to do with football." }],
+              "note": "Most analysts agreed the dive was real and the outcome technically correct; the argument centred on whether the new rule should exist. Alvarez and Lautaro Martinez scored in extra time." }
+          ] }
+      ]
+    },
+    {
+      "round": "SF", "label": "Semi-finals", "dates": "2026-07-14 to 2026-07-15",
+      "matches": [
+        { "matchId": "SF-M103", "teams": ["France", "Spain"], "score": "0-2", "advanced": "Spain", "referee": "Ivan Barton", "refereeNationality": "El Salvador", "venue": "AT&T Stadium, Arlington (Dallas)",
+          "controversies": [
+            { "id": "esp-yamal-penalty", "minute": "22", "type": "penalty_awarded", "tech": "VAR", "severity": 4,
+              "summary": "At 0-0, Lucas Digne caught Lamine Yamal while attempting to clear a Cucurella cross. Barton awarded a penalty without hesitation. France appealed for a VAR overturn, pointing to replays that appeared to show the ball grazing Yamal's arm in the build-up. VAR let the on-field call stand. Mikel Oyarzabal converted; Pedro Porro added a second. Spain reached their first final since 2010.",
+              "quotes": [
+                { "who": "Didier Deschamps", "role": "France head coach", "text": "Did tonight's referee have the level to officiate a World Cup semifinal? It's an accumulation of things." },
+                { "who": "Keith Hackett", "role": "ex-PGMOL chief", "text": "Barton was correct and had a great viewing angle; Yamal's arm was tucked close to his body." }
+              ],
+              "note": "Reported that FIFA may sanction Deschamps over his comments. Expected to be his last match as France coach, with Zidane set to take over." },
+            { "id": "esp-yamal-offside-disallowed", "minute": "60", "type": "disallowed_goal", "tech": "semi_automated_offside", "severity": 1,
+              "summary": "Shortly after Porro's goal, Yamal buried a third and had it ruled out for a narrow offside — a factual measurement, accepted within seconds. Cited as the clearest illustration of the factual-vs-subjective split: the machine-decided call caused no argument while the subjective penalty was argued to the press conference." }
+          ] },
+        { "matchId": "SF-M104", "teams": ["England", "Argentina"], "score": "1-2", "advanced": "Argentina", "referee": "Ismail Elfath", "refereeNationality": "United States", "venue": "Mercedes-Benz Stadium, Atlanta",
+          "controversies": [
+            { "id": "elfath-appointment", "minute": "pre-match", "type": "appointment", "severity": 4,
+              "summary": "FIFA appointed American Ismail Elfath, dubbed 'Messi's favourite referee' because Messi's teams had won all five previous matches Elfath officiated in some capacity. English fans and several outlets alleged the tournament was being smoothed for Messi. Outlets stressed the tag is a media label, not evidence. An all-American crew was used; an English referee cannot officiate Argentina due to the Falklands history.",
+              "note": "The match was designated 'high risk'. FIFA had just moved VAR officials into stadiums from the semi-finals in response to quarter-final backlash." },
+            { "id": "arg-messi-offside-claim", "minute": "85", "type": "disallowed_goal", "tech": "VAR", "severity": 3,
+              "summary": "Argentina came from 1-0 down (Anthony Gordon, 55') to win 2-1 with an Enzo Fernandez screamer (85') and a Lautaro Martinez stoppage-time header, Messi assisting both. Social media erupted claiming a possible offside in the build-up to Fernandez's goal, with no graphic VAR confirmation shown. Others noted grass lines suggested Messi was onside. No formal complaint recorded.",
+              "note": "Fed the season-long favouritism thread. The first booking went to England's Elliot Anderson for a foul on Messi." }
+          ] }
+      ]
+    }
+  ]
+}
