@@ -3299,11 +3299,8 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
 // Deep-link: ?film=N opens the movie at beat N; ?team=CODE opens that team's cut;
 // ?team=film (or ?film with no value) auto-plays the full film straight away.
 (function(){ const q=new URLSearchParams(location.search), f=q.get('film'), tm=q.get('team'), contro=q.has('contro'); if(f===null&&!tm&&!contro)return;
-  // On a reload, don't auto-open the film — the Resume chip on the bracket handles it.
-  // Fresh navigation (e.g. a shared link) still opens straight into the film.
-  const nav=(performance.getEntriesByType&&performance.getEntriesByType('navigation')[0])||null;
-  const isReload=nav?nav.type==='reload':(performance.navigation&&performance.navigation.type===1);
-  if(isReload)return;
+  // The URL is authoritative: a reload with ?film/?contro/?team resumes straight into the film.
+  // (Once the film is closed the URL is cleaned, so a later reload lands on the bracket + Resume chip.)
   const go=()=>{ if(contro){ storyContro=true; launchStory(); const n=parseInt(f,10)||0; if(n>0){ storyToggle(); storyGo(n); } return; }
     if(tm && tm.toLowerCase()!=='film') storyTeam=tm.toUpperCase();   // 'film' = the full film, not a team
     launchStory(); const n=parseInt(f,10)||0; if(n>0){ storyToggle(); storyGo(n); } };
