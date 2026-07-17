@@ -818,7 +818,7 @@ function buildBracket(v){
   const topCardsBtn = document.createElement('button'); topCardsBtn.type = 'button';
   topCardsBtn.textContent = 'Top Cards';
   topCardsBtn.style.cssText = "background:transparent;border:1px solid " + state.accentColor + ';color:' + state.accentColor + ";cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.6px;text-transform:uppercase;padding:3px 11px;border-radius:20px;line-height:1;";
-  topCardsBtn.onclick = () => { if (window.wcbCards && window.wcbCards.openTop) window.wcbCards.openTop('topscorer'); };
+  topCardsBtn.onclick = () => { if (window.wcbCards && window.wcbCards.openTop) window.wcbCards.openTop(wcbLoad('wcb:topcat') || 'topscorer'); };
   row1.appendChild(topCardsBtn);
   // Controversy Tracker film — same pill as Top Cards, sits just before Film.
   const controBtn = document.createElement('button'); controBtn.type = 'button';
@@ -3295,6 +3295,10 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
   const t=setInterval(()=>{ if(DATA&&document.querySelector('#app [data-confed]')){ clearInterval(t);
     if(contro && !CONTRO){ fetch('controversies.json').then(r=>r.json()).then(j=>{ CONTRO=j; go(); }).catch(()=>go()); }
     else go(); } }, 200); })();
+// Deep-link: ?cards=<tab> reopens the Top Cards board on that tab (so a reload restores it).
+(function(){ const cat=new URLSearchParams(location.search).get('cards'); if(!cat)return;
+  const t=setInterval(()=>{ if(DATA&&window.wcbCards&&window.wcbCards.openTop&&document.querySelector('#app [data-confed]')){ clearInterval(t); window.wcbCards.openTop(cat); } },200);
+  setTimeout(()=>clearInterval(t),9000); })();
 
 // ---- Ambient side-gutter bubbles --------------------------------------------
 // One bubble at a time, desktop only, and only when the page is quiet (no
@@ -3554,11 +3558,26 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     if (!pool) pool = buildPool();
     if (kind === 'fantasy') return (pool.fantasy || []).slice();
     if (kind === 'power') return (pool.power || []).slice().sort((a, b) => b.lead - a.lead);
+    if (kind === 'keepersaves') return keeperSavesItems();
     return (pool.allTop || []).filter(x => x.kind === kind).slice().sort((a, b) => b.total - a.total || a.name.localeCompare(b.name));
+  }
+  // Golden Glove board — every goalkeeper with a photo, ranked by total saves (from DATA.savesCount).
+  function keeperSavesItems(){
+    const kp = {};
+    const stageAbbr = r => /^Group /.test(r) ? 'GRP' : ({'Round of 32':'R32','Round of 16':'R16','Quarter-final':'QF','Semi-final':'SF','Final':'F','Third-place play-off':'3P'})[r] || r;
+    storyMatches().forEach(m => { const st = stageAbbr(m.round);
+      (m.savesCount || []).forEach(s => { if (!s.id) return; const opp = s.t === m.a ? m.b : m.a, k = s.id;
+        const ko = (DATA.squads && DATA.squads[s.t] || []).find(p => p.id === s.id);
+        (kp[k] = kp[k] || { kind:'keepersaves', id:s.id, name: ko ? ko.p : s.t, team:s.t, pic: picById(s.id), log:[], total:0 });
+        kp[k].log.push({ stage:st, opp, saves:s.n }); kp[k].total += s.n; }); });
+    const list = Object.values(kp).filter(x => x.pic).sort((a,b) => b.total - a.total || a.name.localeCompare(b.name));
+    let rk = 0, prev = null; list.forEach((it,i) => { if (it.total !== prev){ rk = i + 1; prev = it.total; } it.rank = rk; });
+    return list;
   }
   const TAKEOVER_SCREENS = [
     { kind: 'topscorer', title: 'Top Scorers' },
     { kind: 'topassist', title: 'Top Assists' },
+    { kind: 'keepersaves', title: 'Golden Glove' },
     { kind: 'power', title: 'Power Rankings' },
     { kind: 'fantasy', title: 'FIFA Fantasy' }
   ];
@@ -3571,7 +3590,7 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     const titleCol = dark ? '#f4efe2' : '#111';
     const idle = dark ? 'rgba(255,255,255,.22)' : 'rgba(0,0,0,.16)';
     const idleTxt = dark ? 'rgba(228,222,206,.7)' : 'rgba(50,44,34,.62)';
-    const accentFor = k => k === 'fantasy' ? '#7c4dff' : k === 'power' ? '#22b0f0' : k === 'topassist' ? '#ef8a34' : state.accentColor;
+    const accentFor = k => k === 'fantasy' ? '#7c4dff' : k === 'power' ? '#22b0f0' : k === 'keepersaves' ? '#0fa3a3' : k === 'topassist' ? '#ef8a34' : state.accentColor;
     const ov = el('div', '');
     ov.style.cssText = 'position:fixed;inset:0;z-index:300;background:' + bg + ";font-family:'Barlow',system-ui,sans-serif;display:flex;flex-direction:column;opacity:0;transition:opacity .3s ease;";
     // Top bar: centred title + a very clear close X at top-right.
@@ -3593,6 +3612,8 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     const PAGE = 50;
     function paint(k){
       const scr = TAKEOVER_SCREENS.find(s => s.kind === k) || TAKEOVER_SCREENS[0];
+      wcbSave('wcb:topcat', scr.kind);   // remember the tab; sync URL so a reload reopens it
+      try { history.replaceState(null, '', location.pathname + '?cards=' + scr.kind); } catch(e){}
       titleEl.textContent = scr.title;
       const acc = accentFor(k);
       Object.keys(tabBtns).forEach(kk => { tabBtns[kk].style.cssText = tabCss(kk === k, accentFor(kk)); });
@@ -3654,6 +3675,7 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
   function closeTakeover(){
     if (!takeoverEl) return;
     const ov = takeoverEl; takeoverEl = null;
+    wcbClearUrl();
     if (ov._onKey) removeEventListener('keydown', ov._onKey);
     ov.style.opacity = '0';
     setTimeout(() => ov.remove(), 300);
@@ -3717,7 +3739,7 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     if (item.kind === 'fantasy') return makeFantasy(item, w);
     if (item.kind === 'power') return makePower(item, w);
     if (item.kind === 'stat') return makeStat(item, w);
-    if (item.kind === 'topscorer' || item.kind === 'topassist') return makeTop(item, w);
+    if (item.kind === 'topscorer' || item.kind === 'topassist' || item.kind === 'keepersaves') return makeTop(item, w);
     return makeMoment(item, w);
   }
 
@@ -3838,7 +3860,8 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
 
   // Distinct "top scorer" spotlight card: hero photo, big goal total, goal log.
   function makeTop(item, w){
-    const dark = state.bgTheme === 'Dark', isScorer = item.kind === 'topscorer', accent = isScorer ? state.accentColor : '#ef8a34';
+    const dark = state.bgTheme === 'Dark', isScorer = item.kind === 'topscorer', isKeeper = item.kind === 'keepersaves';
+    const accent = isKeeper ? '#0fa3a3' : (isScorer ? state.accentColor : '#ef8a34');
     const bg = dark ? 'rgba(27,26,18,.98)' : 'rgba(255,255,255,.99)';
     const fg = dark ? '#f4efe2' : '#1c1813', sub = dark ? 'rgba(228,222,206,.6)' : 'rgba(70,62,48,.66)';
     const line = dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.08)';
@@ -3857,10 +3880,10 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     if (im.complete && im.naturalWidth) reveal();
     hero.appendChild(im);
     hero.appendChild(el('div', 'position:absolute;left:0;right:0;bottom:0;height:76px;background:linear-gradient(180deg,' + (dark ? 'rgba(27,26,18,0),rgba(27,26,18,.98)' : 'rgba(255,255,255,0),rgba(255,255,255,.99)') + ');'));
-    hero.appendChild(el('div', 'position:absolute;top:10px;left:12px;background:' + accent + ';color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:5px;', isScorer ? 'Top scorer' : 'Top assists'));
+    hero.appendChild(el('div', 'position:absolute;top:10px;left:12px;background:' + accent + ';color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:5px;', isKeeper ? 'Golden Glove' : (isScorer ? 'Top scorer' : 'Top assists')));
     const num = el('div', 'position:absolute;top:6px;right:12px;display:flex;flex-direction:column;align-items:flex-end;line-height:.85;text-shadow:0 1px 5px rgba(0,0,0,.45),0 0 3px rgba(255,255,255,.35);');
     num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:52px;color:" + accent + ';', String(item.total)));
-    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:" + accent + ';', (isScorer ? 'GOAL' : 'ASSIST') + (item.total === 1 ? '' : 'S')));
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:" + accent + ';', (isKeeper ? 'SAVE' : (isScorer ? 'GOAL' : 'ASSIST')) + (item.total === 1 ? '' : 'S')));
     hero.appendChild(num);
     // Rank is redundant in the ranked board grid — only show it in the ambient
     // bubble and the single-player modal.
@@ -3869,7 +3892,7 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     nm.appendChild(el('span', 'font-weight:800;font-size:19px;', item.name));
     if (TEAMDIR[item.team] && TEAMDIR[item.team].iso) nm.appendChild(flagImg(TEAMDIR[item.team].iso, 18));
     hero.appendChild(nm);
-    if (showRank) hero.appendChild(el('div', "position:absolute;left:13px;bottom:7px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;color:" + sub + ';', '#' + item.rank + (isScorer ? ' for goals' : ' for assists')));
+    if (showRank) hero.appendChild(el('div', "position:absolute;left:13px;bottom:7px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;color:" + sub + ';', '#' + item.rank + (isKeeper ? ' for saves' : (isScorer ? ' for goals' : ' for assists'))));
     b.appendChild(hero);
     // Goal / assist log — like the Goals & Assists tabs.
     const list = el('div', 'padding:8px 14px 12px;display:flex;flex-direction:column;');
@@ -3881,9 +3904,10 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
       if (oi.iso) r.appendChild(flagImg(oi.iso, 14));
       const mid = el('div', 'flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;');
       mid.appendChild(el('span', 'font-weight:700;', gl.opp));
-      if (!isScorer && gl.scorer) mid.appendChild(el('span', 'color:' + sub + ';', '  → ' + gl.scorer));
+      if (item.kind === 'topassist' && gl.scorer) mid.appendChild(el('span', 'color:' + sub + ';', '  → ' + gl.scorer));
       r.appendChild(mid);
-      r.appendChild(el('span', 'font-weight:700;color:' + fg + ';flex:none;', gl.min));
+      r.appendChild(el('span', 'font-weight:700;color:' + fg + ';flex:none;', isKeeper ? String(gl.saves) : gl.min));
+      if (isKeeper) r.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;letter-spacing:.3px;color:" + accent + ';flex:none;', gl.saves === 1 ? 'SAVE' : 'SAVES'));
       if (isScorer && gl.pen) r.appendChild(el('span', 'font-weight:700;color:' + accent + ';flex:none;', '(pen)'));
       list.appendChild(r);
     });
