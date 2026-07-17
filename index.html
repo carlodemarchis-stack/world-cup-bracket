@@ -114,6 +114,9 @@
     }
     #site-footer > * { pointer-events: auto !important; }
     #site-footer > span { flex: 0 1 auto !important; max-width: 30vw !important; }
+    /* Controls now live in the top corners; the info line sits below the circle,
+       pulled up into the square box's ~9.8% empty bottom band. */
+    #credit-bar { margin-top: calc(20px - 0.098 * min(94vw, 820px)) !important; }
   }
 </style>
 </head>
@@ -734,13 +737,18 @@ function buildBracket(v){
   creditsLink.onclick = e => { e.preventDefault(); openCredits(); };
   credit.appendChild(creditsLink);
   credit.style.cssText = 'flex:1 1 260px;min-width:0;text-align:left;';
-  footer.appendChild(credit);
+  // (credit is the info line — moved below the circle, appended to a creditBar at the end)
 
-  // Right cluster: two rows — controls, then the view toggles beneath them.
+  // Top-right cluster: Top Cards / Controversies / Film.
   const right = el('div');
   right.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;gap:6px;';
   const row1 = el('div');
   row1.style.cssText = 'display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;';
+  // Top-left cluster: the circle controls — playback, then confederation / timezone / toggles.
+  const left = el('div');
+  left.style.cssText = 'display:flex;flex-direction:column;align-items:flex-start;gap:8px;';
+  const playRow = el('div');
+  playRow.style.cssText = 'display:flex;align-items:center;gap:10px;';
 
   // Confederation spotlight — pick one to light up its teams and the results
   // they won; everything else greys out. Sits before the card controls.
@@ -788,7 +796,7 @@ function buildBracket(v){
   // page activity (the global pointerdown "poke" would make the idle loop dismiss
   // the very card you just summoned). The arrow keys already bypass poke.
   cardCtl.addEventListener('pointerdown', e => e.stopPropagation());
-  row1.appendChild(cardCtl);
+  playRow.appendChild(cardCtl);
 
   // Timezone selector — kickoff times shown in this zone (defaults to the client's).
   const tzSel = document.createElement('select');
@@ -804,7 +812,7 @@ function buildBracket(v){
 
   // View toggles on a second line — same font/colour as the row above, default on.
   const row2 = el('div');
-  row2.style.cssText = 'display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end;';
+  row2.style.cssText = 'display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-start;';
   const mkToggle = (label, key, after) => {
     const b = document.createElement('button'); b.type = 'button';
     b.style.cssText = 'display:inline-flex;align-items:center;gap:5px;background:transparent;border:none;color:inherit;cursor:pointer;font:inherit;font-size:10px;text-transform:none;letter-spacing:normal;opacity:.8;padding:0;';
@@ -841,9 +849,18 @@ function buildBracket(v){
   row2.appendChild(mkToggle('Show eliminated', 'showEliminated', () => applyElim()));
 
   right.appendChild(row1);
-  right.appendChild(row2);
+  left.appendChild(playRow);
+  left.appendChild(row2);
+  footer.appendChild(left);
   footer.appendChild(right);
   root.appendChild(footer);
+  // Info line (credit) — below the circle, centred.
+  const creditBar = el('div', v.footerStyle);
+  creditBar.id = 'credit-bar';
+  creditBar.style.textTransform = 'none'; creditBar.style.letterSpacing = 'normal'; creditBar.style.textAlign = 'center'; creditBar.style.padding = '0 16px'; creditBar.style.marginTop = '10px';
+  credit.style.cssText = 'max-width:760px;margin:0 auto;text-align:center;';
+  creditBar.appendChild(credit);
+  root.appendChild(creditBar);
   return root;
 }
 
