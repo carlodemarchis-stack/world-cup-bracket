@@ -3275,6 +3275,9 @@ function launchStory(){
   ov._fit(); addEventListener('resize',ov._fit);
   ov._key=e=>{ if(e.key==='Escape')closeStory(); else if(e.key==='ArrowRight'){e.preventDefault();storyGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();storyGo(-1);} else if(e.key===' '){e.preventDefault();storyToggle();} };
   addEventListener('keydown',ov._key);
+  // Any interaction with a card (tab switch, link, day jump…) restarts the auto-advance countdown,
+  // so the beat won't flip away mid-click. Only re-arms while playing; leaves a paused film paused.
+  ov.addEventListener('click', ()=>{ if(storyOv&&storyPlaying) schedNext(); });
   si=0; storyPlaying=true; renderStory(); schedNext();
   prefetchStory();
 }
