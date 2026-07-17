@@ -750,7 +750,7 @@ function buildBracket(v){
   confedSel.style.cssText = 'font:inherit;font-size:10px;text-transform:none;letter-spacing:normal;color:inherit;background:transparent;border:1px solid currentColor;border-radius:6px;padding:2px 5px;cursor:pointer;opacity:.7;';
   [['all', 'All Confederations']].concat(CONFED_LIST.map(c => [c, c])).forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; if (v === confedFilter) o.selected = true; confedSel.appendChild(o); });
   confedSel.onchange = () => { confedFilter = confedSel.value; applyConfed(confedFilter); };
-  row1.appendChild(confedSel);
+  // (appended to row2 below, beneath the playback/film controls)
 
   // Card controls — mirror the arrow keys (← prev · stop/start · → next).
   const btnCss = 'display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;color:inherit;background:transparent;border:1px solid currentColor;border-radius:6px;cursor:pointer;opacity:.65;transition:opacity .15s;';
@@ -820,11 +820,21 @@ function buildBracket(v){
   topCardsBtn.style.cssText = "background:transparent;border:1px solid " + state.accentColor + ';color:' + state.accentColor + ";cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.6px;text-transform:uppercase;padding:3px 11px;border-radius:20px;line-height:1;";
   topCardsBtn.onclick = () => { if (window.wcbCards && window.wcbCards.openTop) window.wcbCards.openTop('topscorer'); };
   row1.appendChild(topCardsBtn);
+  // Controversy Tracker film — same pill as Top Cards, sits just before Film.
+  const controBtn = document.createElement('button'); controBtn.type = 'button';
+  controBtn.textContent = 'Controversies';
+  controBtn.title = 'Play the Controversy Tracker film';
+  controBtn.style.cssText = topCardsBtn.style.cssText;
+  controBtn.onclick = () => { storyContro = true;
+    if (!CONTRO) fetch('controversies.json').then(r => r.json()).then(j => { CONTRO = j; launchStory(); }).catch(() => launchStory());
+    else launchStory(); };
+  row1.appendChild(controBtn);
   const filmBtn = document.createElement('button'); filmBtn.type = 'button';
   filmBtn.textContent = '▶ Film';
   filmBtn.style.cssText = 'background:' + state.accentColor + ';border:1px solid ' + state.accentColor + ";color:#fff;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.6px;text-transform:uppercase;padding:3px 12px;border-radius:20px;line-height:1;box-shadow:0 2px 8px " + state.accentColor + '44;';
-  filmBtn.onclick = () => launchStory();
+  filmBtn.onclick = () => { storyContro = false; launchStory(); };
   row1.appendChild(filmBtn);
+  row2.appendChild(confedSel);
   row2.appendChild(tzSel);
   row2.appendChild(mkToggle('Show scores', 'showResults', () => render()));
   row2.appendChild(mkToggle('Show eliminated', 'showEliminated', () => applyElim()));
