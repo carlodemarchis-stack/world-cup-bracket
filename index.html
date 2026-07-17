@@ -3045,7 +3045,11 @@ function beatHTML(b){
     // Mentioned players → full-body cutouts on their team's side (mid-size, scaling with count).
     const ca=om?om.a:contCode(fb.teams[0]), cb=om?om.b:contCode(fb.teams[1]);
     const sideArr={A:[],B:[]}, seenP=new Set();
+    // Only show players actually NAMED in this controversy's summary (not every match figure the research listed).
+    const sumw=new Set(_cnorm(c.summary||'').split(/[^a-z0-9]+/).filter(Boolean));
     ((enr&&enr.players)||[]).forEach(p=>{ const pc=contCode(p.team), side=pc===ca?'A':pc===cb?'B':null; if(!side)return;
+      const ntoks=_cnorm(p.name).split(' ').filter(t=>t.length>=3);
+      if(!ntoks.some(t=>sumw.has(t)))return;
       const info=contPlayer(pc,p.name); if(!info)return; const k=side+info.surname; if(seenP.has(k))return; seenP.add(k);
       sideArr[side].push({pic:info.pic,surname:info.surname,iso:tin(pc).iso}); });
     const cluster=(arr,side)=>{ if(!arr.length)return''; const list=arr.slice(0,4), n=list.length;
