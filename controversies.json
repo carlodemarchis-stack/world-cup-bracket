@@ -1378,37 +1378,24 @@
        "linkedTo": "usa-balogun-article27",
        "pressReaction": [
         {
-         "country": "Qatar/International",
-         "outlet": "Al Jazeera",
-         "type": "news analysis",
-         "lang": "en",
-         "line": "Explains why FIFA's reversal after Trump's call is controversial, citing UEFA and Blatter criticism.",
-         "url": "https://www.aljazeera.com/sports/2026/7/6/why-fifas-balogun-red-card-suspension-after-trump-call-is-so-controversial",
-         "stance": "critical",
-         "vq": "yes",
-         "vv": "verified"
-        },
-        {
-         "country": "Qatar/International",
-         "outlet": "Al Jazeera",
-         "type": "news",
-         "lang": "en",
-         "line": "Reports FIFA and Collina defending referee Raphael Claus after Trump called him \"a bit suspect.\"",
-         "url": "https://www.aljazeera.com/sports/2026/7/7/fifa-defends-balogun-red-card-referee-after-trump-calls-him-a-bit-suspect",
-         "stance": "defending",
-         "vq": "approx",
-         "vv": "verified"
-        },
-        {
          "country": "USA",
-         "outlet": "CBS News",
-         "type": "news",
+         "outlet": "ESPN",
+         "type": "analysis",
          "lang": "en",
-         "line": "Lays out FIFA's Article 27 rationale alongside Belgian and UEFA objections and Trump's and US Soccer's reactions.",
-         "url": "https://www.cbsnews.com/news/folarin-balogun-red-card-world-cup-us-mens-team-belgium/",
-         "stance": "reporting",
-         "vq": "yes",
-         "vv": "verified"
+         "line": "Referee analyst concludes VAR misapplied slow-motion replay protocol, calling the red card unjustified.",
+         "url": "https://www.espn.com/soccer/story/_/id/49244156/world-cup-var-review-misapplied-protocols-leave-usmnt-folarin-balogun-wrongly-red-carded-world-cup-vs-bosnia-herzegovina",
+         "stance": "critical",
+         "vq": "yes"
+        },
+        {
+         "country": "Bosnia and Herzegovina",
+         "outlet": "Bosnia Football (official BiH federation account), via Yahoo Sports",
+         "type": "social media statement",
+         "lang": "en",
+         "line": "It was a clear red card. What are you people on about!?!? Ridiculous takes",
+         "url": "https://sports.yahoo.com/articles/people-bosnia-football-takes-blunt-202659963.html",
+         "stance": "defending",
+         "vq": "yes"
         }
        ],
        "var": {
@@ -1646,7 +1633,7 @@
        "type": "red_card_reversed",
        "tech": "disciplinary",
        "severity": 5,
-       "summary": "Balogun's automatic one-match ban ruled him out of the Round of 16 vs Belgium. Donald Trump phoned Gianni Infantino to ask for a review. On 5 July FIFA's Disciplinary Committee suspended the ban under Article 27, placing Balogun on a one-year probationary period. A $40,000 fine was imposed on US Soccer. Balogun played and started the 4-1 defeat to Belgium.",
+       "summary": "The core of the storm was political: US President Donald Trump personally phoned FIFA president Gianni Infantino to demand Balogun's red card be reviewed. On 5 July FIFA's Disciplinary Committee suspended the automatic one-match ban under Article 27 — a rare outside intervention — freeing Balogun to start the Round of 16 against Belgium (a 4-1 defeat). US Soccer was fined $40,000; UEFA branded the move 'incomprehensible and unjustifiable.'",
        "formalComplaint": true,
        "complainant": "Royal Belgian Football Association (RBFA)",
        "pressReaction": [
@@ -1658,30 +1645,17 @@
          "line": "unprecedented, incomprehensible and unjustifiable decision",
          "url": "https://www.aljazeera.com/sports/2026/7/6/why-fifas-balogun-red-card-suspension-after-trump-call-is-so-controversial",
          "stance": "critical",
-         "vq": "yes",
-         "vv": "verified"
+         "vq": "yes"
         },
         {
-         "country": "Bosnia and Herzegovina",
-         "outlet": "Bosnia Football (official BiH federation account), via Yahoo Sports",
-         "type": "social media statement",
+         "country": "United States",
+         "outlet": "ESPN (analysis by former referee Andy Davies)",
+         "type": "analysis",
          "lang": "en",
-         "line": "It was a clear red card. What are you people on about!?!? Ridiculous takes",
-         "url": "https://sports.yahoo.com/articles/people-bosnia-football-takes-blunt-202659963.html",
+         "line": "this was not a red card offense... purely accidental and an unfortunate result from two players challenging for possession",
+         "url": "https://www.espn.com/soccer/story/_/id/49244156/world-cup-var-review-misapplied-protocols-leave-usmnt-folarin-balogun-wrongly-red-carded-world-cup-vs-bosnia-herzegovina",
          "stance": "defending",
-         "vq": "yes",
-         "vv": "verified"
-        },
-        {
-         "country": "Belgium",
-         "outlet": "Rudi Garcia (Belgium head coach), via Al Jazeera",
-         "type": "quote",
-         "lang": "en",
-         "line": "I didn't know that in the offices of FIFA the fifth of July was the first of April in Europe.",
-         "url": "https://www.aljazeera.com/sports/2026/7/6/why-fifas-balogun-red-card-suspension-after-trump-call-is-so-controversial",
-         "stance": "critical",
-         "vq": "yes",
-         "vv": "verified"
+         "vq": "yes"
         }
        ],
        "var": {

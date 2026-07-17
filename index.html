@@ -2659,7 +2659,7 @@ let CONTRO=null;
 function contIso(name){ const AL={"Cote d'Ivoire":'ci',"Bosnia and Herzegovina":'ba'}; if(AL[name])return AL[name]; const t=(DATA.teams||[]).find(x=>x.name===name); return t?t.iso:''; }
 const CONTRO_TYPE={ disallowed_goal:['Disallowed Goal',STY.RED], red_card:['Red Card',STY.RED], red_card_reversed:['Red Card Reversed',STY.RED], penalty_awarded:['Penalty Awarded',STY.VIOLET], penalty_denied:['Penalty Denied',STY.VIOLET], penalty_overturned:['Penalty Overturned',STY.VIOLET], yellow_card_consistency:['Card Consistency',STY.GOLD], touchline:['Touchline',STY.ORANGE], technology:['Technology',STY.BLUE], appointment:['Appointment',STY.GOLD], off_field:['Off the Field',STY.SUB], player_selection:['Player Selection',STY.SUB] };
 const _CONTRO_NAME_CODE={"Cote d'Ivoire":'CIV',"Bosnia and Herzegovina":'BIH'};
-function contCode(name){ if(_CONTRO_NAME_CODE[name]) return _CONTRO_NAME_CODE[name]; const t=(DATA.teams||[]).find(x=>x.name===name); return t?t.code:null; }
+function contCode(name){ if(_CONTRO_NAME_CODE[name]) return _CONTRO_NAME_CODE[name]; const t=(DATA.teams||[]).find(x=>x.name===name||x.code===name); return t?t.code:null; }
 // Resolve an enrichment player {name} to their squad photo + surname, for a given team code.
 const _cnorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[.']/g,'').trim();
 function contPlayer(code,name){
