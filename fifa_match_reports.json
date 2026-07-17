@@ -1,0 +1,920 @@
+[
+  {
+    "bracketMatchId": null,
+    "num": 1,
+    "stage": "group",
+    "home": "MEX",
+    "away": "RSA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M01%20MEX%20V%20RSA.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 2,
+    "stage": "group",
+    "home": "KOR",
+    "away": "CZE",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M02%20KOR%20V%20CZE%20.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 3,
+    "stage": "group",
+    "home": "CAN",
+    "away": "BIH",
+    "suffix": "V2",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M03-CAN-V-BIH-V2.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 4,
+    "stage": "group",
+    "home": "USA",
+    "away": "PAR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M04-USA-V-PAR.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 5,
+    "stage": "group",
+    "home": "HAI",
+    "away": "SCO",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M05-HAI-V-SCO.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 6,
+    "stage": "group",
+    "home": "AUS",
+    "away": "TUR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M06-AUS-V-TUR.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 7,
+    "stage": "group",
+    "home": "BRA",
+    "away": "MAR",
+    "suffix": "POST-V2",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M07-BRA-V-MAR%20POST-V2.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 8,
+    "stage": "group",
+    "home": "QAT",
+    "away": "SUI",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M08-QAT-V-SUI.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 9,
+    "stage": "group",
+    "home": "CIV",
+    "away": "ECU",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M09-CIV-V-ECU.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 10,
+    "stage": "group",
+    "home": "GER",
+    "away": "CUW",
+    "suffix": "V2",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M10-GER-V-CUW-V2.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 11,
+    "stage": "group",
+    "home": "NED",
+    "away": "JPN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M11-NED-V-JPN.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 12,
+    "stage": "group",
+    "home": "SWE",
+    "away": "TUN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M12-SWE-V-TUN.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 13,
+    "stage": "group",
+    "home": "KSA",
+    "away": "URU",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M13-KSA-V-URU.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 14,
+    "stage": "group",
+    "home": "ESP",
+    "away": "CPV",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M14-ESP-V-CPV.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 15,
+    "stage": "group",
+    "home": "IRN",
+    "away": "NZL",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M15-IRN-V-NZL.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 16,
+    "stage": "group",
+    "home": "BEL",
+    "away": "EGY",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M16-BEL-V-EGY.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 17,
+    "stage": "group",
+    "home": "FRA",
+    "away": "SEN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M17-FRA-V-SEN.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 18,
+    "stage": "group",
+    "home": "IRQ",
+    "away": "NOR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M18-IRQ-V-NOR.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 19,
+    "stage": "group",
+    "home": "ARG",
+    "away": "ALG",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M19-ARG-V-ALG.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 20,
+    "stage": "group",
+    "home": "AUT",
+    "away": "JOR",
+    "suffix": "V3",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M20-AUT-V-JOR-V3.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 21,
+    "stage": "group",
+    "home": "GHA",
+    "away": "PAN",
+    "suffix": "V2",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M21-GHA-V-PAN-V2.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 22,
+    "stage": "group",
+    "home": "ENG",
+    "away": "CRO",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M22-ENG-V-CRO.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 23,
+    "stage": "group",
+    "home": "POR",
+    "away": "COD",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M23-POR-V-COD.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 24,
+    "stage": "group",
+    "home": "UZB",
+    "away": "COL",
+    "suffix": "V2",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M24-UZB-V-COL-V2.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 25,
+    "stage": "group",
+    "home": "CZE",
+    "away": "RSA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M25-CZE-V-RSA.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 26,
+    "stage": "group",
+    "home": "SUI",
+    "away": "BIH",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M26-SUI-V-BIH.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 27,
+    "stage": "group",
+    "home": "CAN",
+    "away": "QAT",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M27-CAN-V-QAT.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 28,
+    "stage": "group",
+    "home": "MEX",
+    "away": "KOR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M28-MEX-V-KOR.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 29,
+    "stage": "group",
+    "home": "BRA",
+    "away": "HAI",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M29-BRA-V-HAI.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 30,
+    "stage": "group",
+    "home": "SCO",
+    "away": "MAR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M30-SCO-V-MAR.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 31,
+    "stage": "group",
+    "home": "TUR",
+    "away": "PAR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M31-TUR-V-PAR.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 32,
+    "stage": "group",
+    "home": "USA",
+    "away": "AUS",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M32-USA-V-AUS.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 33,
+    "stage": "group",
+    "home": "GER",
+    "away": "CIV",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M33-GER-V-CIV.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 34,
+    "stage": "group",
+    "home": "ECU",
+    "away": "CUW",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M34-ECU-V-CUW.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 35,
+    "stage": "group",
+    "home": "NED",
+    "away": "SWE",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M35-NED-V-SWE.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 36,
+    "stage": "group",
+    "home": "TUN",
+    "away": "JPN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M36-TUN-V-JPN.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 37,
+    "stage": "group",
+    "home": "URU",
+    "away": "CPV",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M37-URU-V-CPV.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 38,
+    "stage": "group",
+    "home": "ESP",
+    "away": "KSA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M38-ESP-V-KSA.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 39,
+    "stage": "group",
+    "home": "BEL",
+    "away": "IRN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M39-BEL-V-IRN.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 40,
+    "stage": "group",
+    "home": "NZL",
+    "away": "EGY",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M40-NZL-V-EGY.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 41,
+    "stage": "group",
+    "home": "NOR",
+    "away": "SEN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M41-NOR-V-SEN.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 42,
+    "stage": "group",
+    "home": "FRA",
+    "away": "IRQ",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M42-FRA-V-IRQ.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 43,
+    "stage": "group",
+    "home": "ARG",
+    "away": "AUT",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M43-ARG-V-AUT.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 44,
+    "stage": "group",
+    "home": "JOR",
+    "away": "ALG",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M44-JOR-V-ALG.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 45,
+    "stage": "group",
+    "home": "ENG",
+    "away": "GHA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M45-ENG-V-GHA.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 46,
+    "stage": "group",
+    "home": "PAN",
+    "away": "CRO",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M46-PAN-V-CRO.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 47,
+    "stage": "group",
+    "home": "POR",
+    "away": "UZB",
+    "suffix": "v2",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M47-POR-V-UZB-v2.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 48,
+    "stage": "group",
+    "home": "COL",
+    "away": "COD",
+    "suffix": "V2",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M48-COL-V-COD-V2.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 49,
+    "stage": "group",
+    "home": "SCO",
+    "away": "BRA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M49-SCO-V-BRA.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 50,
+    "stage": "group",
+    "home": "MAR",
+    "away": "HAI",
+    "suffix": "V2",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M50-MAR-V-HAI-V2.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 51,
+    "stage": "group",
+    "home": "SUI",
+    "away": "CAN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M51-SUI-V-CAN.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 52,
+    "stage": "group",
+    "home": "BIH",
+    "away": "QAT",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M52-BIH-V-QAT.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 53,
+    "stage": "group",
+    "home": "CZE",
+    "away": "MEX",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M53-CZE-V-MEX.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 54,
+    "stage": "group",
+    "home": "RSA",
+    "away": "KOR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M54-RSA-V-KOR.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 55,
+    "stage": "group",
+    "home": "CUW",
+    "away": "CIV",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M55-CUW-V-CIV.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 56,
+    "stage": "group",
+    "home": "ECU",
+    "away": "GER",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M56-ECU-V-GER.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 57,
+    "stage": "group",
+    "home": "JPN",
+    "away": "SWE",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M57-JPN-V-SWE.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 58,
+    "stage": "group",
+    "home": "TUN",
+    "away": "NED",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M58-TUN-V-NED.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 59,
+    "stage": "group",
+    "home": "TUR",
+    "away": "USA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M59-TUR-v-USA.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 60,
+    "stage": "group",
+    "home": "PAR",
+    "away": "AUS",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M60-PAR-V-AUS.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 61,
+    "stage": "group",
+    "home": "NOR",
+    "away": "FRA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M61-NOR-V-FRA.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 62,
+    "stage": "group",
+    "home": "SEN",
+    "away": "IRQ",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M62-SEN-V-IRQ.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 63,
+    "stage": "group",
+    "home": "EGY",
+    "away": "IRN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M63-EGY-V-IRN.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 64,
+    "stage": "group",
+    "home": "NZL",
+    "away": "BEL",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M64-NZL-V-BEL.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 65,
+    "stage": "group",
+    "home": "CPV",
+    "away": "KSA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M65-CPV-V-KSA.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 66,
+    "stage": "group",
+    "home": "URU",
+    "away": "ESP",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M66-URU-V-ESP.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 67,
+    "stage": "group",
+    "home": "PAN",
+    "away": "ENG",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M67-PAN-V-ENG.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 68,
+    "stage": "group",
+    "home": "CRO",
+    "away": "GHA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M68-CRO-V-GHA.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 69,
+    "stage": "group",
+    "home": "ALG",
+    "away": "AUT",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M69-ALG-V-AUT.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 70,
+    "stage": "group",
+    "home": "JOR",
+    "away": "ARG",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M70-JOR-V-ARG.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 71,
+    "stage": "group",
+    "home": "COL",
+    "away": "POR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M71-COL-V-POR.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 72,
+    "stage": "group",
+    "home": "COD",
+    "away": "UZB",
+    "suffix": "v2",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M72-COD-V-UZB-v2.pdf"
+  },
+  {
+    "bracketMatchId": "r32/L:1:5",
+    "num": 73,
+    "stage": "knockout",
+    "home": "RSA",
+    "away": "CAN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf"
+  },
+  {
+    "bracketMatchId": "r32/L:1:7",
+    "num": 74,
+    "stage": "knockout",
+    "home": "GER",
+    "away": "PAR",
+    "suffix": "V2",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf"
+  },
+  {
+    "bracketMatchId": "r32/L:1:4",
+    "num": 75,
+    "stage": "knockout",
+    "home": "NED",
+    "away": "MAR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf"
+  },
+  {
+    "bracketMatchId": "r32/R:1:0",
+    "num": 76,
+    "stage": "knockout",
+    "home": "BRA",
+    "away": "JPN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf"
+  },
+  {
+    "bracketMatchId": "r32/L:1:6",
+    "num": 77,
+    "stage": "knockout",
+    "home": "FRA",
+    "away": "SWE",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf"
+  },
+  {
+    "bracketMatchId": "r32/R:1:1",
+    "num": 78,
+    "stage": "knockout",
+    "home": "CIV",
+    "away": "NOR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf"
+  },
+  {
+    "bracketMatchId": "r32/R:1:2",
+    "num": 79,
+    "stage": "knockout",
+    "home": "MEX",
+    "away": "ECU",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf"
+  },
+  {
+    "bracketMatchId": "r32/R:1:3",
+    "num": 80,
+    "stage": "knockout",
+    "home": "ENG",
+    "away": "COD",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf"
+  },
+  {
+    "bracketMatchId": "r32/L:1:1",
+    "num": 81,
+    "stage": "knockout",
+    "home": "USA",
+    "away": "BIH",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf"
+  },
+  {
+    "bracketMatchId": "r32/L:1:0",
+    "num": 82,
+    "stage": "knockout",
+    "home": "BEL",
+    "away": "SEN",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf"
+  },
+  {
+    "bracketMatchId": "r32/L:1:3",
+    "num": 83,
+    "stage": "knockout",
+    "home": "POR",
+    "away": "CRO",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf"
+  },
+  {
+    "bracketMatchId": "r32/L:1:2",
+    "num": 84,
+    "stage": "knockout",
+    "home": "ESP",
+    "away": "AUT",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf"
+  },
+  {
+    "bracketMatchId": "r32/R:1:6",
+    "num": 85,
+    "stage": "knockout",
+    "home": "SUI",
+    "away": "ALG",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf"
+  },
+  {
+    "bracketMatchId": "r32/R:1:4",
+    "num": 86,
+    "stage": "knockout",
+    "home": "ARG",
+    "away": "CPV",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf"
+  },
+  {
+    "bracketMatchId": "r32/R:1:7",
+    "num": 87,
+    "stage": "knockout",
+    "home": "COL",
+    "away": "GHA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf"
+  },
+  {
+    "bracketMatchId": "r32/R:1:5",
+    "num": 88,
+    "stage": "knockout",
+    "home": "AUS",
+    "away": "EGY",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/L:2:3",
+    "num": 89,
+    "stage": "knockout",
+    "home": "PAR",
+    "away": "FRA",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/L:2:2",
+    "num": 90,
+    "stage": "knockout",
+    "home": "CAN",
+    "away": "MAR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/R:2:0",
+    "num": 91,
+    "stage": "knockout",
+    "home": "BRA",
+    "away": "NOR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/R:2:1",
+    "num": 92,
+    "stage": "knockout",
+    "home": "MEX",
+    "away": "ENG",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/L:2:1",
+    "num": 93,
+    "stage": "knockout",
+    "home": "POR",
+    "away": "ESP",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/L:2:0",
+    "num": 94,
+    "stage": "knockout",
+    "home": "USA",
+    "away": "BEL",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/R:2:2",
+    "num": 95,
+    "stage": "knockout",
+    "home": "ARG",
+    "away": "EGY",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/R:2:3",
+    "num": 96,
+    "stage": "knockout",
+    "home": "SUI",
+    "away": "COL",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M96-SUI-V-COL.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/L:3:1",
+    "num": 97,
+    "stage": "knockout",
+    "home": "FRA",
+    "away": "MAR",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M97-FRA-V-MAR.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/L:3:0",
+    "num": 98,
+    "stage": "knockout",
+    "home": "ESP",
+    "away": "BEL",
+    "suffix": "ALT",
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M98-ESP-V-BEL-ALT.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/R:3:0",
+    "num": 99,
+    "stage": "knockout",
+    "home": "NOR",
+    "away": "ENG",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M99-NOR-V-ENG.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/R:3:1",
+    "num": 100,
+    "stage": "knockout",
+    "home": "ARG",
+    "away": "SUI",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M100-ARG-V-SUI.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/L:4:0",
+    "num": 101,
+    "stage": "knockout",
+    "home": "FRA",
+    "away": "ESP",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M101-FRA-V-ESP.pdf"
+  },
+  {
+    "bracketMatchId": "schedule/R:4:0",
+    "num": 102,
+    "stage": "knockout",
+    "home": "ENG",
+    "away": "ARG",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M102-ENG-V-ARG.pdf"
+  }
+]

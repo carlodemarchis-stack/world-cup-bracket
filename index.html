@@ -870,6 +870,9 @@ const ACCENTS = ['#d6b04a','#d23b3b','#2f9e6b','#3b82d2'];
 
 const app = document.getElementById('app');
 let DATA = null; // schedule + results, loaded from data.json
+// FIFA official post-match report PDFs, keyed by match number (fifa_match_reports.json).
+let MATCH_REPORTS = {};
+fetch('fifa_match_reports.json').then(r => r.ok ? r.json() : []).then(list => { (list || []).forEach(e => { if (e && e.num != null && e.pdfUrl) MATCH_REPORTS[e.num] = e.pdfUrl; }); }).catch(() => {});
 let controlsOpen = false; // settings panel starts hidden, toggled by the footer gear
 function setControls(open){
   controlsOpen = open;
@@ -2849,7 +2852,8 @@ function qualifyLine(m){ if(!m.winner||/^Group /.test(m.round)) return '';
 // and Alexander Bogachev's Football Data Portrait — each a button + thumbnail + credit.
 function matchFooter(m,url){
   const b=(DATA.bogachev||{})[m&&m.id];
-  if(!url&&!b) return '';
+  const reportUrl=(m&&m.num!=null)?MATCH_REPORTS[m.num]:null;
+  if(!url&&!b&&!reportUrl) return '';
   const vid=url?((url.match(/[?&]v=([^&]+)/)||[])[1]||null):null;
   const play='<svg width="13" height="13" viewBox="0 0 24 24" fill="#fff" style="flex:none;"><path d="M8 5v14l11-7z"/></svg>';
   const btn=(bg,label)=>'<span style="display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border-radius:24px;background:'+bg+';color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:14px;letter-spacing:.7px;text-transform:uppercase;box-shadow:0 5px 15px rgba(0,0,0,.28);">'+play+label+'</span>';
@@ -2865,7 +2869,9 @@ function matchFooter(m,url){
       btn('#14110c','Relive')+
       '<div style="background:#14110c;padding:7px;border-radius:11px;box-shadow:0 8px 22px rgba(0,0,0,.3);"><img src="'+b.img+'" alt="Football Data Portraits by Alexander Bogachev" style="height:90px;width:auto;border-radius:5px;display:block;"></div>'+
       credit('Football Data Portraits by<br><span style="color:'+STY.INK+';">Alexander Bogachev</span> ↗'))+'</a>':'';
-  return '<div style="margin-top:74px;display:flex;align-items:flex-start;justify-content:center;gap:46px;flex-wrap:wrap;">'+yt+bog+'</div>';
+  const row='<div style="display:flex;align-items:flex-start;justify-content:center;gap:46px;flex-wrap:wrap;">'+yt+bog+'</div>';
+  const report=reportUrl?'<div style="text-align:center;margin-top:'+((url||b)?'20px':'0')+';"><a href="'+reportUrl+'" target="_blank" rel="noopener" style="pointer-events:auto;display:inline-flex;align-items:center;gap:7px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:13px;letter-spacing:.7px;text-transform:uppercase;color:'+STY.SUB+';text-decoration:none;border-bottom:1px solid '+STY.SUB+'55;padding-bottom:2px;">📄 FIFA Official Match Report (PDF) ↗</a></div>':'';
+  return '<div style="margin-top:74px;">'+row+report+'</div>';
 }
 // "Watch highlights" button only (used where no Bogachev viz footer is wanted).
 function hlBtn(url){ return url?'<a href="'+url+'" target="_blank" rel="noopener" style="pointer-events:auto;display:inline-flex;align-items:center;gap:9px;margin-top:26px;padding:10px 20px;border-radius:24px;background:#ff0000;color:#fff;text-decoration:none;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:15px;letter-spacing:.6px;text-transform:uppercase;box-shadow:0 5px 16px rgba(255,0,0,.32);"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>Watch highlights</a>':''; }
