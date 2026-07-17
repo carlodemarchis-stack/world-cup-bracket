@@ -749,7 +749,7 @@ function buildBracket(v){
   confedSel.setAttribute('aria-label', 'Confederation');
   confedSel.style.cssText = 'font:inherit;font-size:10px;text-transform:none;letter-spacing:normal;color:inherit;background:transparent;border:1px solid currentColor;border-radius:6px;padding:2px 5px;cursor:pointer;opacity:.7;';
   [['all', 'All Confederations']].concat(CONFED_LIST.map(c => [c, c])).forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; if (v === confedFilter) o.selected = true; confedSel.appendChild(o); });
-  confedSel.onchange = () => { confedFilter = confedSel.value; applyConfed(confedFilter); };
+  confedSel.onchange = () => { confedFilter = confedSel.value; applyConfed(confedFilter); wcbSavePrefs(); };
   // (appended to row2 below, beneath the playback/film controls)
 
   // Card controls — mirror the arrow keys (← prev · stop/start · → next).
@@ -800,7 +800,7 @@ function buildBracket(v){
   [['Europe/London','UK'],['Europe/Rome','Central Europe'],['America/New_York','US East'],['America/Chicago','US Central'],['America/Denver','US Mountain'],['America/Los_Angeles','US Pacific'],['America/Mexico_City','Mexico City'],['America/Sao_Paulo','Brazil'],['Africa/Johannesburg','South Africa'],['Asia/Tokyo','Japan'],['Australia/Sydney','Sydney']]
     .forEach(z => { if (z[0] !== localZone) zones.push(z); });
   zones.forEach(([z, label]) => { const o = document.createElement('option'); o.value = z; o.textContent = label; if (z === tz) o.selected = true; tzSel.appendChild(o); });
-  tzSel.onchange = () => { tz = tzSel.value; render(); };
+  tzSel.onchange = () => { tz = tzSel.value; render(); wcbSavePrefs(); };
 
   // View toggles on a second line — same font/colour as the row above, default on.
   const row2 = el('div');
@@ -812,7 +812,7 @@ function buildBracket(v){
     const acc = state.accentColor;
     const paint = () => { const on = !!state[key]; box.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;flex:none;border-radius:3px;line-height:1;font-size:9px;font-weight:900;color:#fff;border:1px solid ' + (on ? acc : 'currentColor') + ';background:' + (on ? acc : 'transparent') + ';'; box.textContent = on ? '✓' : ''; b.setAttribute('aria-pressed', String(on)); };
     b.appendChild(box); b.appendChild(el('span', '', label)); paint();
-    b.onclick = () => { state[key] = !state[key]; paint(); after(); };
+    b.onclick = () => { state[key] = !state[key]; paint(); after(); wcbSavePrefs(); };
     return b;
   };
   const topCardsBtn = document.createElement('button'); topCardsBtn.type = 'button';
@@ -839,6 +839,16 @@ function buildBracket(v){
   row2.appendChild(mkToggle('Show scores', 'showResults', () => render()));
   row2.appendChild(mkToggle('Show eliminated', 'showEliminated', () => applyElim()));
 
+  // Resume chip — if the user left a film mid-play, offer a one-click return (no auto-fullscreen).
+  const res = wcbLoad('wcb:resume');
+  if (res && res.total && res.beat > 0) {
+    const chip = document.createElement('button'); chip.type = 'button';
+    chip.textContent = '⏵ Resume ' + wcbResumeLabel(res) + ' · card ' + ((res.beat || 0) + 1);
+    chip.title = 'Pick up where you left off';
+    chip.style.cssText = 'align-self:flex-end;background:' + state.accentColor + '14;border:1px solid ' + state.accentColor + ';color:' + state.accentColor + ";cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.5px;text-transform:uppercase;padding:4px 12px;border-radius:20px;line-height:1;";
+    chip.onclick = () => wcbResume(res);
+    right.appendChild(chip);
+  }
   right.appendChild(row1);
   right.appendChild(row2);
   footer.appendChild(right);
@@ -2486,9 +2496,9 @@ function renderControls(){
   hd.appendChild(close);
   c.appendChild(hd);
   // Scores on → played matches show the score; off → every tie shows as a fixture.
-  c.appendChild(group(null, checkbox('Show scores', state.showResults, v => { state.showResults = v; render(); })));
+  c.appendChild(group(null, checkbox('Show scores', state.showResults, v => { state.showResults = v; render(); wcbSavePrefs(); })));
   // Eliminated on → shown as-is; off → all eliminated teams dimmed (grayscale).
-  c.appendChild(group(null, checkbox('Show eliminated', state.showEliminated, v => { state.showEliminated = v; applyElim(); })));
+  c.appendChild(group(null, checkbox('Show eliminated', state.showEliminated, v => { state.showEliminated = v; applyElim(); wcbSavePrefs(); })));
 }
 // Controls whose active-state styling depends on theme/accent need a controls rebuild too.
 function rerender(){ render(); renderControls(); }
@@ -2517,8 +2527,10 @@ fetch('data.json', { cache: 'no-store' })
   .then(txt => {
     feedTxt = txt;
     applyFeed(JSON.parse(txt));
+    wcbApplyPrefs();
     renderControls();
     render();
+    wcbRestoreScroll();
   })
   .catch(err => {
     app.innerHTML =
@@ -3230,7 +3242,7 @@ function renderStory(){
   const dt=document.getElementById('wcDate'); if(dt) dt.textContent=storyDays[storyBeatDay[si]]||'';
   document.querySelectorAll('#wcDaysTrack i').forEach(t=>{ const on=+t.dataset.d===storyBeatDay[si]; t.style.background=on?'#cf9c1e':'rgba(240,235,221,.28)'; t.style.height=on?'11px':'7px'; });
   document.getElementById('wcPlay').textContent=storyPlaying?'❚❚':'▶';
-  prefetchStory();
+  prefetchStory(); wcbSaveResume(); wcbSyncUrl();
 }
 function schedNext(){ clearTimeout(storyTimer); if(!storyPlaying)return; storyTimer=setTimeout(()=>storyGo(1), beatDur(storyBeats[si])/storySpeed); }
 function storyGo(d){ if(!storyOv)return; const n=si+d; if(n<0||n>=storyBeats.length){ if(d>0)storyToggle(); return; } si=n; renderStory(); schedNext(); }
@@ -3245,7 +3257,7 @@ function rebuildStory(team){ if(!storyOv)return; storyTeam=team||null;
   const sel=document.getElementById('wcTeam'); if(sel&&sel.value!==(storyTeam||'')) sel.value=storyTeam||'';
   si=0; storyPlaying=true; renderStory(); schedNext(); }
 function storyToggle(){ storyPlaying=!storyPlaying; document.getElementById('wcPlay').textContent=storyPlaying?'❚❚':'▶'; if(storyPlaying)schedNext(); else clearTimeout(storyTimer); }
-function storyCycleSpeed(){ storySpeed=({1:1.5,1.5:2,2:3,3:1})[storySpeed]||1; document.getElementById('wcSpeed').textContent=storySpeed+'×'; schedNext(); }
+function storyCycleSpeed(){ storySpeed=({1:1.5,1.5:2,2:3,3:1})[storySpeed]||1; document.getElementById('wcSpeed').textContent=storySpeed+'×'; schedNext(); wcbSavePrefs(); }
 function storyChapters(){
   const chs=storyBeats.map((b,i)=>({b,i})).filter(x=>x.b.k==='chapter'||x.b.k==='intro'||x.b.k==='champ'||x.b.k==='end');
   const wasPlaying=storyPlaying; storyPlaying=false; clearTimeout(storyTimer);
@@ -3258,11 +3270,40 @@ function storyChapters(){
   [...menu.querySelectorAll('.wcChapRow')].forEach(r=>{ r.onmouseenter=()=>r.style.background='rgba(47,158,87,.12)'; r.onmouseleave=()=>r.style.background=''; });
   document.body.appendChild(menu);
 }
-function closeStory(){ if(!storyOv)return; clearTimeout(storyTimer); removeEventListener('resize',storyOv._fit); removeEventListener('keydown',storyOv._key); storyOv.remove(); storyOv=null; if(modalEl&&modalEl.id==='wcStory')modalEl=null; const c=document.getElementById('wcChap'); if(c)c.remove(); }
+function closeStory(){ if(!storyOv)return; clearTimeout(storyTimer); removeEventListener('resize',storyOv._fit); removeEventListener('keydown',storyOv._key); storyOv.remove(); storyOv=null; if(modalEl&&modalEl.id==='wcStory')modalEl=null; const c=document.getElementById('wcChap'); if(c)c.remove(); wcbClearUrl(); render(); }
 window.launchStory=launchStory; window.storyGo=storyGo; window.storyToggle=storyToggle; window.storyCycleSpeed=storyCycleSpeed; window.storyChapters=storyChapters;
+// ——— Persistence: preferences (localStorage), scroll (sessionStorage), film resume ———
+function wcbLoad(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+function wcbSave(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function wcbSavePrefs(){ wcbSave('wcb:prefs',{confed:confedFilter,tz:tz,showResults:state.showResults,showEliminated:state.showEliminated,speed:storySpeed}); }
+function wcbApplyPrefs(){ const p=wcbLoad('wcb:prefs'); if(!p)return;
+  if(p.confed) confedFilter=p.confed;
+  if(p.tz) tz=p.tz;
+  if(typeof p.showResults==='boolean') state.showResults=p.showResults;
+  if(typeof p.showEliminated==='boolean') state.showEliminated=p.showEliminated;
+  if(p.speed) storySpeed=p.speed; }
+function wcbRestoreScroll(){ const y=+(sessionStorage.getItem('wcb:scroll')||0); if(y>0) requestAnimationFrame(()=>requestAnimationFrame(()=>scrollTo(0,y))); }
+let _wcbScrollT; addEventListener('scroll',()=>{ clearTimeout(_wcbScrollT); _wcbScrollT=setTimeout(()=>{ try{ sessionStorage.setItem('wcb:scroll',String(Math.round(scrollY))); }catch(e){} },200); },{passive:true});
+// Film resume — remember which film + which beat, offer a chip on the bracket.
+function wcbSaveResume(){ if(!storyOv)return; const kind=storyContro?'contro':(storyTeam?'team':'full');
+  wcbSave('wcb:resume',{kind,team:storyTeam||null,beat:si,total:storyBeats.length,ts:Date.now()}); }
+function wcbResumeLabel(res){ return res.kind==='contro'?'Controversy Tracker':res.kind==='team'?(tin(res.team).name+' story'):'the Film'; }
+function wcbResume(res){ storyContro=res.kind==='contro'; storyTeam=res.kind==='team'?res.team:null;
+  const launch=()=>{ launchStory(); if(res.beat>0){ storyToggle(); storyGo(res.beat); } };
+  if(storyContro && !CONTRO) fetch('controversies.json').then(r=>r.json()).then(j=>{ CONTRO=j; launch(); }).catch(launch); else launch(); }
+// Keep the address bar in sync with the current beat (shareable); clear it on close.
+function wcbSyncUrl(){ try{ const p=new URLSearchParams();
+  if(storyContro) p.set('contro','1'); else if(storyTeam) p.set('team',storyTeam);
+  p.set('film',String(si)); history.replaceState(null,'',location.pathname+'?'+p.toString()); }catch(e){} }
+function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }catch(e){} }
 // Deep-link: ?film=N opens the movie at beat N; ?team=CODE opens that team's cut;
 // ?team=film (or ?film with no value) auto-plays the full film straight away.
 (function(){ const q=new URLSearchParams(location.search), f=q.get('film'), tm=q.get('team'), contro=q.has('contro'); if(f===null&&!tm&&!contro)return;
+  // On a reload, don't auto-open the film — the Resume chip on the bracket handles it.
+  // Fresh navigation (e.g. a shared link) still opens straight into the film.
+  const nav=(performance.getEntriesByType&&performance.getEntriesByType('navigation')[0])||null;
+  const isReload=nav?nav.type==='reload':(performance.navigation&&performance.navigation.type===1);
+  if(isReload)return;
   const go=()=>{ if(contro){ storyContro=true; launchStory(); const n=parseInt(f,10)||0; if(n>0){ storyToggle(); storyGo(n); } return; }
     if(tm && tm.toLowerCase()!=='film') storyTeam=tm.toUpperCase();   // 'film' = the full film, not a team
     launchStory(); const n=parseInt(f,10)||0; if(n>0){ storyToggle(); storyGo(n); } };
