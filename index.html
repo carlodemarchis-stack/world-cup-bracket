@@ -873,6 +873,9 @@ let DATA = null; // schedule + results, loaded from data.json
 // FIFA official post-match report PDFs, keyed by match number (fifa_match_reports.json).
 let MATCH_REPORTS = {};
 fetch('fifa_match_reports.json').then(r => r.ok ? r.json() : []).then(list => { (list || []).forEach(e => { if (e && e.num != null && e.pdfUrl) MATCH_REPORTS[e.num] = e.pdfUrl; }); }).catch(() => {});
+// Official FIFA per-player shot stats — { playerId: [shots, onTarget, goals] } (shots.json).
+let SHOTS = null;
+fetch('shots.json').then(r => r.ok ? r.json() : {}).then(j => { SHOTS = j || {}; }).catch(() => { SHOTS = {}; });
 let controlsOpen = false; // settings panel starts hidden, toggled by the footer gear
 function setControls(open){
   controlsOpen = open;
@@ -3566,6 +3569,7 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     if (kind === 'fantasy') return (pool.fantasy || []).slice();
     if (kind === 'power') return (pool.power || []).slice().sort((a, b) => b.lead - a.lead);
     if (kind === 'keepersaves') return keeperSavesItems();
+    if (kind === 'topshots') return shotsItems();
     return (pool.allTop || []).filter(x => x.kind === kind).slice().sort((a, b) => b.total - a.total || a.name.localeCompare(b.name));
   }
   // Golden Glove board — every goalkeeper with a photo, ranked by total saves (from DATA.savesCount).
@@ -3581,9 +3585,25 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     let rk = 0, prev = null; list.forEach((it,i) => { if (it.total !== prev){ rk = i + 1; prev = it.total; } it.rank = rk; });
     return list;
   }
+  // Shots on Goal board — every player ranked by shots on target (official FIFA per-player stats, shots.json).
+  function shotsItems(){
+    if (!SHOTS) return [];
+    const idx = shotsItems._idx || (shotsItems._idx = (() => { const m = {}; Object.keys(DATA.squads || {}).forEach(code => (DATA.squads[code] || []).forEach(p => { m[String(p.id)] = { team: code, name: p.p }; })); return m; })());
+    const rows = [];
+    Object.keys(SHOTS).forEach(pid => { const a = SHOTS[pid], shots = a[0], on = a[1], goals = a[2];
+      if (!on) return;                         // a "shots on target" board — keepers of zero on-target aren't listed
+      const pic = picById(pid), meta = idx[pid]; if (!pic || !meta) return;
+      rows.push({ kind:'topshots', id:pid, name:meta.name, team:meta.team, pic, total:on, shots, goals,
+        stats:[{ label:'Shots taken', val:shots }, { label:'Goals', val:goals }, { label:'Accuracy', val:(shots ? Math.round(on / shots * 100) : 0) + '%' }] });
+    });
+    rows.sort((a,b) => b.total - a.total || b.shots - a.shots || a.name.localeCompare(b.name));
+    let rk = 0, prev = null; rows.forEach((it,i) => { if (it.total !== prev){ rk = i + 1; prev = it.total; } it.rank = rk; });
+    return rows;
+  }
   const TAKEOVER_SCREENS = [
     { kind: 'topscorer', title: 'Top Scorers' },
     { kind: 'topassist', title: 'Top Assists' },
+    { kind: 'topshots', title: 'Shots on Goal' },
     { kind: 'keepersaves', title: 'Golden Glove' },
     { kind: 'power', title: 'Power Rankings' },
     { kind: 'fantasy', title: 'FIFA Fantasy' }
@@ -3597,7 +3617,7 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     const titleCol = dark ? '#f4efe2' : '#111';
     const idle = dark ? 'rgba(255,255,255,.22)' : 'rgba(0,0,0,.16)';
     const idleTxt = dark ? 'rgba(228,222,206,.7)' : 'rgba(50,44,34,.62)';
-    const accentFor = k => k === 'fantasy' ? '#7c4dff' : k === 'power' ? '#22b0f0' : k === 'keepersaves' ? '#0fa3a3' : k === 'topassist' ? '#ef8a34' : state.accentColor;
+    const accentFor = k => k === 'fantasy' ? '#7c4dff' : k === 'power' ? '#22b0f0' : k === 'keepersaves' ? '#0fa3a3' : k === 'topshots' ? '#e23b3b' : k === 'topassist' ? '#ef8a34' : state.accentColor;
     const ov = el('div', '');
     ov.style.cssText = 'position:fixed;inset:0;z-index:300;background:' + bg + ";font-family:'Barlow',system-ui,sans-serif;display:flex;flex-direction:column;opacity:0;transition:opacity .3s ease;";
     // Top bar: centred title + a very clear close X at top-right.
@@ -3746,7 +3766,7 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     if (item.kind === 'fantasy') return makeFantasy(item, w);
     if (item.kind === 'power') return makePower(item, w);
     if (item.kind === 'stat') return makeStat(item, w);
-    if (item.kind === 'topscorer' || item.kind === 'topassist' || item.kind === 'keepersaves') return makeTop(item, w);
+    if (item.kind === 'topscorer' || item.kind === 'topassist' || item.kind === 'keepersaves' || item.kind === 'topshots') return makeTop(item, w);
     return makeMoment(item, w);
   }
 
@@ -3867,8 +3887,8 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
 
   // Distinct "top scorer" spotlight card: hero photo, big goal total, goal log.
   function makeTop(item, w){
-    const dark = state.bgTheme === 'Dark', isScorer = item.kind === 'topscorer', isKeeper = item.kind === 'keepersaves';
-    const accent = isKeeper ? '#0fa3a3' : (isScorer ? state.accentColor : '#ef8a34');
+    const dark = state.bgTheme === 'Dark', isScorer = item.kind === 'topscorer', isKeeper = item.kind === 'keepersaves', isShots = item.kind === 'topshots';
+    const accent = isKeeper ? '#0fa3a3' : isShots ? '#e23b3b' : (isScorer ? state.accentColor : '#ef8a34');
     const bg = dark ? 'rgba(27,26,18,.98)' : 'rgba(255,255,255,.99)';
     const fg = dark ? '#f4efe2' : '#1c1813', sub = dark ? 'rgba(228,222,206,.6)' : 'rgba(70,62,48,.66)';
     const line = dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.08)';
@@ -3887,10 +3907,10 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     if (im.complete && im.naturalWidth) reveal();
     hero.appendChild(im);
     hero.appendChild(el('div', 'position:absolute;left:0;right:0;bottom:0;height:76px;background:linear-gradient(180deg,' + (dark ? 'rgba(27,26,18,0),rgba(27,26,18,.98)' : 'rgba(255,255,255,0),rgba(255,255,255,.99)') + ');'));
-    hero.appendChild(el('div', 'position:absolute;top:10px;left:12px;background:' + accent + ';color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:5px;', isKeeper ? 'Golden Glove' : (isScorer ? 'Top scorer' : 'Top assists')));
+    hero.appendChild(el('div', 'position:absolute;top:10px;left:12px;background:' + accent + ';color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:5px;', isKeeper ? 'Golden Glove' : isShots ? 'Shots on Goal' : (isScorer ? 'Top scorer' : 'Top assists')));
     const num = el('div', 'position:absolute;top:6px;right:12px;display:flex;flex-direction:column;align-items:flex-end;line-height:.85;text-shadow:0 1px 5px rgba(0,0,0,.45),0 0 3px rgba(255,255,255,.35);');
     num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:52px;color:" + accent + ';', String(item.total)));
-    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:" + accent + ';', (isKeeper ? 'SAVE' : (isScorer ? 'GOAL' : 'ASSIST')) + (item.total === 1 ? '' : 'S')));
+    num.appendChild(el('span', "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:" + accent + ';', isShots ? 'ON TARGET' : (isKeeper ? 'SAVE' : (isScorer ? 'GOAL' : 'ASSIST')) + (item.total === 1 ? '' : 'S')));
     hero.appendChild(num);
     // Rank is redundant in the ranked board grid — only show it in the ambient
     // bubble and the single-player modal.
@@ -3899,10 +3919,22 @@ function wcbClearUrl(){ try{ history.replaceState(null,'',location.pathname); }c
     nm.appendChild(el('span', 'font-weight:800;font-size:19px;', item.name));
     if (TEAMDIR[item.team] && TEAMDIR[item.team].iso) nm.appendChild(flagImg(TEAMDIR[item.team].iso, 18));
     hero.appendChild(nm);
-    if (showRank) hero.appendChild(el('div', "position:absolute;left:13px;bottom:7px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;color:" + sub + ';', '#' + item.rank + (isKeeper ? ' for saves' : (isScorer ? ' for goals' : ' for assists'))));
+    if (showRank) hero.appendChild(el('div', "position:absolute;left:13px;bottom:7px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;color:" + sub + ';', '#' + item.rank + (isKeeper ? ' for saves' : isShots ? ' on target' : (isScorer ? ' for goals' : ' for assists'))));
     b.appendChild(hero);
-    // Goal / assist log — like the Goals & Assists tabs.
+    // Goal / assist log — like the Goals & Assists tabs. Shots show a stat breakdown instead (no per-match log).
     const list = el('div', 'padding:8px 14px 12px;display:flex;flex-direction:column;');
+    if (isShots){
+      (item.stats || []).forEach((st, i) => {
+        const r = el('div', "display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;font-family:'Barlow Condensed',sans-serif;font-size:14px;" + (i ? 'border-top:1px solid ' + line + ';' : ''));
+        r.appendChild(el('span', 'color:' + sub + ';font-weight:600;', st.label));
+        r.appendChild(el('span', 'font-weight:800;color:' + fg + ';', String(st.val)));
+        list.appendChild(r);
+      });
+      b.appendChild(list);
+      b.style.pointerEvents = 'auto'; b.style.cursor = 'pointer';
+      b.addEventListener('click', () => openTakeover(item.kind));
+      return b;
+    }
     item.log.forEach((gl, i) => {
       const r = el('div', "display:flex;align-items:center;gap:8px;padding:3px 0;font-family:'Barlow Condensed',sans-serif;font-size:13px;" + (i ? 'border-top:1px solid ' + line + ';' : ''));
       r.appendChild(el('span', 'font-weight:700;font-size:9px;letter-spacing:.4px;color:' + accent + ';width:30px;flex:none;', gl.stage));
