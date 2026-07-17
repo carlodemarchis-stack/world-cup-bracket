@@ -35,18 +35,22 @@ jobs:
         run: python3 scripts/update_shots.py
         continue-on-error: true
 
+      - name: Refresh per-match team stats
+        run: python3 scripts/update_matchstats.py
+        continue-on-error: true
+
       - name: Commit & push if changed
         id: commit
         run: |
-          if [ -z "$(git status --porcelain powerranking.json fantasy.json shots.json)" ]; then
+          if [ -z "$(git status --porcelain powerranking.json fantasy.json shots.json matchstats.json)" ]; then
             echo "No stats changes."
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name  "wc26-stats-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add powerranking.json fantasy.json shots.json
-          git commit -m "Auto-update stats feeds (power / fantasy / shots) from FIFA"
+          git add powerranking.json fantasy.json shots.json matchstats.json
+          git commit -m "Auto-update stats feeds (power / fantasy / shots / matchstats) from FIFA"
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
 

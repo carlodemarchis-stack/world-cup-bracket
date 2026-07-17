@@ -876,6 +876,9 @@ fetch('fifa_match_reports.json').then(r => r.ok ? r.json() : []).then(list => { 
 // Official FIFA per-player shot stats — { playerId: [shots, onTarget, goals] } (shots.json).
 let SHOTS = null;
 fetch('shots.json').then(r => r.ok ? r.json() : {}).then(j => { SHOTS = j || {}; }).catch(() => { SHOTS = {}; });
+// Official FIFA per-match team stats — { matchNum: { CODE: {poss,shots,onT,passes,passPct,corners,fouls,off} } } (matchstats.json).
+let MATCHSTATS = {};
+fetch('matchstats.json').then(r => r.ok ? r.json() : {}).then(j => { MATCHSTATS = j || {}; }).catch(() => {});
 let controlsOpen = false; // settings panel starts hidden, toggled by the footer gear
 function setControls(open){
   controlsOpen = open;
@@ -2874,7 +2877,7 @@ function matchFooter(m,url){
       credit('Football Data Portraits by<br><span style="color:'+STY.INK+';">Alexander Bogachev</span> ↗'))+'</a>':'';
   const row='<div style="display:flex;align-items:flex-start;justify-content:center;gap:46px;flex-wrap:wrap;">'+yt+bog+'</div>';
   const report=reportUrl?'<div style="text-align:center;margin-top:'+((url||b)?'20px':'0')+';"><a href="'+reportUrl+'" target="_blank" rel="noopener" style="pointer-events:auto;display:inline-flex;align-items:center;gap:7px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:13px;letter-spacing:.7px;text-transform:uppercase;color:'+STY.SUB+';text-decoration:none;border-bottom:1px solid '+STY.SUB+'55;padding-bottom:2px;">📄 FIFA Official Match Report (PDF) ↗</a></div>':'';
-  return '<div style="margin-top:74px;">'+row+report+'</div>';
+  return '<div style="margin-top:44px;">'+row+report+'</div>';
 }
 // "Watch highlights" button only (used where no Bogachev viz footer is wanted).
 function hlBtn(url){ return url?'<a href="'+url+'" target="_blank" rel="noopener" style="pointer-events:auto;display:inline-flex;align-items:center;gap:9px;margin-top:26px;padding:10px 20px;border-radius:24px;background:#ff0000;color:#fff;text-decoration:none;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:15px;letter-spacing:.6px;text-transform:uppercase;box-shadow:0 5px 16px rgba(255,0,0,.32);"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>Watch highlights</a>':''; }
@@ -2888,6 +2891,16 @@ function sResultCard(m,opts){
   // Minute filter (so half-time/end-of-regular-time panels only show events up to that point).
   const _rng=v=>{ v=parseInt(v)||0; return (opts.scorerMax==null||v<=opts.scorerMax)&&(opts.scorerMin==null||v>=opts.scorerMin); };
   const hasEvt=gl.length||(m.cards||[]).some(c=>_rng(c.m))||Object.values(m.line||{}).some(t=>(t.subs||[]).some(s=>_rng(s[2])));
+  // Possession pie (official per-match stats) — full-match totals; shown on any summary card that has stats.
+  const _ps=MATCHSTATS[m.num], _pa=_ps&&_ps[m.a], _pb=_ps&&_ps[m.b];
+  const poss=(_pa&&_pb)?(function(){ const hp=_pa.poss,ap=_pb.poss,contest=Math.max(0,100-hp-ap),p2=hp+contest,c1='#2f6fed',c2='#ef8a34',cg='#ccc6b8';
+    return '<div style="margin-top:16px;display:flex;flex-direction:column;align-items:center;gap:6px;">'+
+      '<div style="width:78px;height:78px;border-radius:50%;background:conic-gradient('+c1+' 0 '+hp+'%,'+cg+' '+hp+'% '+p2+'%,'+c2+' '+p2+'% 100%);box-shadow:0 6px 18px rgba(0,0,0,.2);"></div>'+
+      '<div class="sk" style="color:'+STY.SUB+';font-size:11px;letter-spacing:3px;">Possession</div>'+
+      '<div style="display:flex;gap:18px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:16px;color:'+STY.INK+';">'+
+        '<span><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'+c1+';margin-right:6px;vertical-align:middle;"></span>'+m.a+' '+hp+'%</span>'+
+        '<span><span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:'+c2+';margin-right:6px;vertical-align:middle;"></span>'+m.b+' '+ap+'%</span>'+
+      '</div></div>'; })():'';
   const fmt=g=>{ const og=g.p.indexOf('(o.g.)')>=0, nm=(og?g.p.replace(/\s*\(o\.g\.\)\s*/i,'').trim():g.p).split(' ').slice(-1)[0]; return nm+' '+g.m+(og?' (OG)':''); };
   const face=g=>{ const pic=g.id?picById(g.id):null; return '<div style="width:44px;height:44px;border-radius:50%;overflow:hidden;flex:none;background:#eee6d6;border:2px solid #fff;box-shadow:0 3px 9px rgba(0,0,0,.22);">'+(pic?'<img src="'+sface(pic)+'" style="width:100%;height:100%;object-fit:cover;">':'')+'</div>'; };
   const row=(g,align)=>align==='right'
@@ -2913,12 +2926,19 @@ function sResultCard(m,opts){
     const flag='<img class="sfl" style="height:22px;" src="'+sflag(tin(code).iso)+'">';
     const head='<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+(align==='right'?'':flag)+'<span class="sc" style="font-weight:800;font-size:22px;letter-spacing:1px;color:'+STY.INK+';opacity:.7;">'+code+'</span>'+(align==='right'?flag:'')+'</div>';
     const acc=(m.round==='Final')?STY.GOLD:opts.color;
+    // Stats tab — official per-match team stats (matchstats.json, full-match totals).
+    const ms=(MATCHSTATS[m.num]||{})[code];
+    const statRow=(l,v)=>'<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:4px 0;font-family:\'Barlow Condensed\',sans-serif;border-bottom:1px solid rgba(0,0,0,.05);">'+
+      (align==='right'?'<span style="font-weight:800;font-size:18px;color:'+STY.INK+';">'+v+'</span><span style="color:'+STY.SUB+';font-size:14px;letter-spacing:.3px;">'+l+'</span>'
+                      :'<span style="color:'+STY.SUB+';font-size:14px;letter-spacing:.3px;">'+l+'</span><span style="font-weight:800;font-size:18px;color:'+STY.INK+';">'+v+'</span>')+'</div>';
+    const statsBody=ms?[['Shots',ms.shots],['On target',ms.onT],['Passes',ms.passes],['Pass %',ms.passPct+'%'],['Corners',ms.corners],['Fouls',ms.fouls],['Offsides',ms.off]].map(x=>statRow(x[0],x[1])).join(''):'';
     const tb=(t,lbl,on)=>'<button class="sMTabBtn" data-tab="'+t+'" onclick="sMTab(this,\''+t+'\')" style="pointer-events:auto;cursor:pointer;border:none;border-radius:13px;padding:3px 11px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:'+(on?'#fff':STY.SUB)+';background:'+(on?acc:'transparent')+';">'+lbl+'</button>';
-    const bar='<div style="display:flex;gap:5px;margin-bottom:12px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+tb('scorers','Goals',true)+tb('cards','Cards',false)+tb('subs','Subs',false)+'</div>';
+    const bar='<div style="display:flex;gap:4px;margin-bottom:12px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+tb('scorers','Goals',true)+tb('cards','Cards',false)+tb('subs','Subs',false)+(ms?tb('stats','Stats',false):'')+'</div>';
     return '<div class="sMPanel" data-acc="'+acc+'">'+head+bar+
       '<div class="sMBody" data-tab="scorers">'+scorers+'</div>'+
       '<div class="sMBody" data-tab="cards" style="display:none;">'+cards+'</div>'+
-      '<div class="sMBody" data-tab="subs" style="display:none;">'+subs+'</div></div>';
+      '<div class="sMBody" data-tab="subs" style="display:none;">'+subs+'</div>'+
+      (ms?'<div class="sMBody" data-tab="stats" style="display:none;">'+statsBody+'</div>':'')+'</div>';
   };
   if(opts.epic){
     const isFinal=(m.round==='Final'), col=isFinal?STY.GOLD:opts.color;
@@ -2935,12 +2955,12 @@ function sResultCard(m,opts){
       '<div style="position:absolute;inset:0;background:radial-gradient(58% 52% at 50% 40%,'+col+'26 0%,transparent 70%);"></div>'+sideScorers+sCentre(
       '<div class="sk" style="color:'+col+';letter-spacing:7px;">'+(isFinal?'🏆 '+opts.title:opts.title)+'</div>'+
       '<div style="margin-top:22px;display:flex;align-items:center;gap:22px;">'+side(m.a,A.iso,wa)+
-        '<span class="sc" style="font-weight:900;font-size:132px;line-height:.78;color:'+col+';filter:drop-shadow(0 10px 26px '+col+'66);">'+aG+'–'+bG+'</span>'+
+        '<span class="sc" style="font-weight:900;font-size:110px;line-height:.78;color:'+col+';filter:drop-shadow(0 10px 26px '+col+'66);">'+aG+'–'+bG+'</span>'+
         side(m.b,B.iso,wb)+'</div>'+
-      (opts.qualify?'<div class="sc" style="margin-top:30px;font-weight:900;font-size:'+(isFinal?42:30)+'px;color:'+col+';filter:drop-shadow(0 4px 12px '+col+'55);">'+opts.qualify+'</div>':'')+hl);
+      (opts.qualify?'<div class="sc" style="margin-top:30px;font-weight:900;font-size:'+(isFinal?42:30)+'px;color:'+col+';filter:drop-shadow(0 4px 12px '+col+'55);">'+opts.qualify+'</div>':'')+poss+hl);
   }
   return matchRefBar(m,aG,bG)+'<div style="position:absolute;inset:0;'+sBg(opts.color)+'"></div>'+sCentre(
-    '<div class="sk" style="color:'+opts.color+';">'+opts.title+'</div><div style="margin-top:16px;">'+sScore(m,STY.INK,aG,bG)+'</div>'+
+    '<div class="sk" style="color:'+opts.color+';">'+opts.title+'</div><div style="margin-top:16px;">'+sScore(m,STY.INK,aG,bG)+'</div>'+poss+
     (opts.note?'<div class="sc" style="margin-top:14px;color:'+STY.SUB+';font-size:20px;font-weight:700;">'+opts.note+'</div>':'')+
     (hasEvt?'<div style="margin-top:24px;display:flex;align-items:flex-start;justify-content:center;gap:80px;"><div style="width:290px;">'+sTabCol(m.a,'left')+'</div><div style="width:290px;">'+sTabCol(m.b,'right')+'</div></div>':'')+
     (opts.qualify?'<div class="sc" style="margin-top:26px;font-weight:800;font-size:26px;color:'+opts.color+';">'+opts.qualify+'</div>':'')+hl);
