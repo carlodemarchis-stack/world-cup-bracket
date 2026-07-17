@@ -3024,7 +3024,9 @@ function beatHTML(b){
     const enr=c.enrichment||null, ver=c.verification||null;
     const off=(enr&&enr.officials)||{};
     const cn=s=>{ s=String(s).split(' — ')[0].split(' – ')[0].split(';')[0].trim(); return s.length>42?s.slice(0,42).trim()+'…':s; };
-    const crewbits=[off.var&&('VAR '+cn(off.var)),off.avar&&('AVAR '+cn(off.avar)),off.fourthOfficial&&('4th '+cn(off.fourthOfficial))].filter(Boolean).join('&nbsp;&nbsp;·&nbsp;&nbsp;');
+    // Off-the-field cases (appointments, disciplinary, coaching decisions, pre/post-match) have no on-pitch VAR crew — omit it.
+    const offField=/pre-match|post-match/i.test(c.minute||'')||['appointment','off_field','player_selection','red_card_reversed'].includes(c.type);
+    const crewbits=offField?'':[off.var&&('VAR '+cn(off.var)),off.avar&&('AVAR '+cn(off.avar)),off.fourthOfficial&&('4th '+cn(off.fourthOfficial))].filter(Boolean).join('&nbsp;&nbsp;·&nbsp;&nbsp;');
     const law=enr&&enr.lawInvoked;
     const lawtxt=law?((law.title&&law.code&&!String(law.title).startsWith(law.code))?law.code+' — '+law.title:(law.title||law.code)):'';
     const vconf=(ver&&typeof ver.confidence==='number')?ver.confidence.toFixed(2):'';
