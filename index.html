@@ -2885,6 +2885,9 @@ function sBall(s){ s=s||22; return '<img src="ball.png" alt="" style="width:'+s+
 function sResultCard(m,opts){
   const A=tin(m.a),B=tin(m.b),aG=opts.aG,bG=opts.bG;
   const gl=(m.goals||[]).filter(g=>g.p&&(opts.scorerMax==null||(parseInt(g.m)||0)<=opts.scorerMax)&&(opts.scorerMin==null||(parseInt(g.m)||0)>=opts.scorerMin));
+  // Minute filter (so half-time/end-of-regular-time panels only show events up to that point).
+  const _rng=v=>{ v=parseInt(v)||0; return (opts.scorerMax==null||v<=opts.scorerMax)&&(opts.scorerMin==null||v>=opts.scorerMin); };
+  const hasEvt=gl.length||(m.cards||[]).some(c=>_rng(c.m))||Object.values(m.line||{}).some(t=>(t.subs||[]).some(s=>_rng(s[2])));
   const fmt=g=>{ const og=g.p.indexOf('(o.g.)')>=0, nm=(og?g.p.replace(/\s*\(o\.g\.\)\s*/i,'').trim():g.p).split(' ').slice(-1)[0]; return nm+' '+g.m+(og?' (OG)':''); };
   const face=g=>{ const pic=g.id?picById(g.id):null; return '<div style="width:44px;height:44px;border-radius:50%;overflow:hidden;flex:none;background:#eee6d6;border:2px solid #fff;box-shadow:0 3px 9px rgba(0,0,0,.22);">'+(pic?'<img src="'+sface(pic)+'" style="width:100%;height:100%;object-fit:cover;">':'')+'</div>'; };
   const row=(g,align)=>align==='right'
@@ -2904,10 +2907,11 @@ function sResultCard(m,opts){
     const crow=c=>{ const nm=(c.id&&sqm[c.id])?surn(c.id):String(c.p||'').split(' ').slice(-1)[0]; const ic=c.c==='R'?'🟥':'🟨';
       const t='<span class="sc" style="color:'+STY.INK+';font-weight:600;font-size:18px;">'+nm+' '+c.m+'</span>';
       return '<div style="display:flex;align-items:center;gap:8px;margin:8px 0;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+(align==='right'?t+'<span style="font-size:15px;">'+ic+'</span>':'<span style="font-size:15px;">'+ic+'</span>'+t)+'</div>'; };
-    const cards=(m.cards||[]).filter(c=>c.t===code).map(crow).join('')||empty('No cards');
+    const cards=(m.cards||[]).filter(c=>c.t===code&&_rng(c.m)).map(crow).join('')||empty('No cards');
     const srow=s=>'<div style="margin:7px 0;text-align:'+align+';line-height:1.12;"><div><span class="sc" style="color:#2f9e57;font-weight:700;font-size:17px;">▲ '+surn(s[0])+'</span> <span style="color:'+STY.SUB+';font-size:12px;">'+(s[2]||'')+'</span></div><div><span class="sc" style="color:#d0322a;font-weight:700;font-size:16px;">▼ '+surn(s[1])+'</span></div></div>';
-    const subs=((m.line&&m.line[code]&&m.line[code].subs)||[]).map(srow).join('')||empty('No subs');
-    const head='<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+(align==='right'?'':sBall(24))+'<span class="sc" style="font-weight:800;font-size:22px;letter-spacing:1px;color:'+STY.INK+';opacity:.7;">'+code+'</span>'+(align==='right'?sBall(24):'')+'</div>';
+    const subs=((m.line&&m.line[code]&&m.line[code].subs)||[]).filter(s=>_rng(s[2])).map(srow).join('')||empty('No subs');
+    const flag='<img class="sfl" style="height:22px;" src="'+sflag(tin(code).iso)+'">';
+    const head='<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+(align==='right'?'':flag)+'<span class="sc" style="font-weight:800;font-size:22px;letter-spacing:1px;color:'+STY.INK+';opacity:.7;">'+code+'</span>'+(align==='right'?flag:'')+'</div>';
     const acc=(m.round==='Final')?STY.GOLD:opts.color;
     const tb=(t,lbl,on)=>'<button class="sMTabBtn" data-tab="'+t+'" onclick="sMTab(this,\''+t+'\')" style="pointer-events:auto;cursor:pointer;border:none;border-radius:13px;padding:3px 11px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:'+(on?'#fff':STY.SUB)+';background:'+(on?acc:'transparent')+';">'+lbl+'</button>';
     const bar='<div style="display:flex;gap:5px;margin-bottom:12px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+tb('scorers','Goals',true)+tb('cards','Cards',false)+tb('subs','Subs',false)+'</div>';
@@ -2938,7 +2942,7 @@ function sResultCard(m,opts){
   return matchRefBar(m,aG,bG)+'<div style="position:absolute;inset:0;'+sBg(opts.color)+'"></div>'+sCentre(
     '<div class="sk" style="color:'+opts.color+';">'+opts.title+'</div><div style="margin-top:16px;">'+sScore(m,STY.INK,aG,bG)+'</div>'+
     (opts.note?'<div class="sc" style="margin-top:14px;color:'+STY.SUB+';font-size:20px;font-weight:700;">'+opts.note+'</div>':'')+
-    (gl.length?'<div style="margin-top:24px;display:flex;align-items:flex-start;gap:80px;width:720px;">'+colFor(m.a,'left')+colFor(m.b,'right')+'</div>':'')+
+    (hasEvt?'<div style="margin-top:24px;display:flex;align-items:flex-start;justify-content:center;gap:80px;"><div style="width:290px;">'+sTabCol(m.a,'left')+'</div><div style="width:290px;">'+sTabCol(m.b,'right')+'</div></div>':'')+
     (opts.qualify?'<div class="sc" style="margin-top:26px;font-weight:800;font-size:26px;color:'+opts.color+';">'+opts.qualify+'</div>':'')+hl);
 }
 // Switch a final-card team panel between Goals / Cards / Subs (in-place, scoped to the clicked panel).
