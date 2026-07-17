@@ -1,0 +1,57 @@
+name: Update stats
+
+# Hourly refresh of the Top Cards stat feeds — Power Rankings, FIFA Fantasy,
+# and Shots-on-target — from FIFA's public APIs. Commits only when a feed
+# actually changed; the push then dispatches the Pages deploy.
+on:
+  schedule:
+    - cron: '45 * * * *'   # :45 each hour (offset from results :00 and highlights :30)
+  workflow_dispatch: {}     # allow manual runs from the Actions tab
+
+permissions:
+  contents: write           # push the updated feed files
+  actions: write            # dispatch the Pages deploy after a change
+
+concurrency:
+  group: update-stats
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Each feed hits a separate FIFA endpoint; don't let one hiccup block the others.
+      - name: Refresh Power Rankings
+        run: python3 scripts/update_powerranking.py
+        continue-on-error: true
+
+      - name: Refresh FIFA Fantasy
+        run: python3 scripts/update_fantasy.py
+        continue-on-error: true
+
+      - name: Refresh Shots on target
+        run: python3 scripts/update_shots.py
+        continue-on-error: true
+
+      - name: Commit & push if changed
+        id: commit
+        run: |
+          if [ -z "$(git status --porcelain powerranking.json fantasy.json shots.json)" ]; then
+            echo "No stats changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name  "wc26-stats-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add powerranking.json fantasy.json shots.json
+          git commit -m "Auto-update stats feeds (power / fantasy / shots) from FIFA"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy the updated site
+        if: steps.commit.outputs.changed == 'true'
+        run: gh workflow run deploy-pages.yml --ref main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
