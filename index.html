@@ -3259,10 +3259,12 @@ function launchStory(){
     '#wcBall{position:absolute;left:0;top:50%;transform:translate(-50%,-50%);font-size:15px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6));transition:left .3s cubic-bezier(.4,0,.2,1);pointer-events:none;}'+
     '#wcDate{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;color:#cf9c1e;min-width:58px;text-align:right;}</style>'+
     '<div id="wcStage"></div>'+daysBar+
+    '<button id="wcX" title="Close (Esc)" aria-label="Close" style="position:fixed;top:46px;right:18px;z-index:404;width:42px;height:42px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;font-weight:800;line-height:1;color:#fff;background:rgba(20,18,14,.82);box-shadow:0 3px 12px rgba(0,0,0,.35);">✕</button>'+
     '<div id="wcCtl"><button id="wcClose" title="Close">✕</button><button title="Restart from the beginning" onclick="storyRestart()">↺</button><button onclick="storyGo(-1)">◀</button><button id="wcPlay" onclick="storyToggle()">❚❚</button><button onclick="storyGo(1)">▶</button>'+
     '<div id="wcLbl"></div>'+(storyContro?'':'<select id="wcTeam" title="Watch one team">'+teamOpts+'</select>')+'<button id="wcSpeed" onclick="storyCycleSpeed()">1×</button><button onclick="storyChapters()">☰</button></div>';
   document.body.appendChild(ov); storyOv=ov; modalEl=ov;
   document.getElementById('wcClose').onclick=closeStory;
+  document.getElementById('wcX').onclick=closeStory;
   { const ts=document.getElementById('wcTeam'); if(ts) ts.onchange=e=>rebuildStory(e.target.value||null); }
   const track=document.getElementById('wcDaysTrack');
   if(track){ track.title='Click to jump to a day';
