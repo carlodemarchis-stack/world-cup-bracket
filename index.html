@@ -3020,6 +3020,15 @@ function beatHTML(b){
     const V=c.var||null;
     const VMAP={decided:['VAR decided',STY.RED],reviewed_no_change:['VAR · no change','#d99a1e'],disputed_absence:['VAR didn’t step in','#d99a1e'],not_involved:['No VAR',STY.SUB]};
     const vb=V?(VMAP[V.role]||['VAR',STY.SUB]):null;
+    // Enrichment (web-researched) + verification (adversarial fact-check).
+    const enr=c.enrichment||null, ver=c.verification||null;
+    const off=(enr&&enr.officials)||{};
+    const cn=s=>{ s=String(s).split(' — ')[0].split(' – ')[0].split(';')[0].trim(); return s.length>42?s.slice(0,42).trim()+'…':s; };
+    const crewbits=[off.var&&('VAR '+cn(off.var)),off.avar&&('AVAR '+cn(off.avar)),off.fourthOfficial&&('4th '+cn(off.fourthOfficial))].filter(Boolean).join('&nbsp;&nbsp;·&nbsp;&nbsp;');
+    const law=enr&&enr.lawInvoked;
+    const lawtxt=law?((law.title&&law.code&&!String(law.title).startsWith(law.code))?law.code+' — '+law.title:(law.title||law.code)):'';
+    const vconf=(ver&&typeof ver.confidence==='number')?ver.confidence.toFixed(2):'';
+    const vbadge=ver?(ver.status==='verified'?['✓ FACT-CHECKED '+vconf,STY.GREEN]:(ver.status==='contested'?['⚠ CONTESTED '+vconf,'#c9971b']:null)):null;
     // Press reactions — prefer one critical + one defending, cap 2, clickable.
     const pr=c.pressReaction||[]; const SCOL={critical:STY.RED,defending:STY.GREEN,reporting:STY.SUB};
     const pick=[], seen=new Set();
@@ -3036,7 +3045,9 @@ function beatHTML(b){
         '<span class="sc" style="font-weight:800;font-size:28px;color:'+STY.INK+';">'+tb+'</span><img class="sfl" style="height:28px;" src="'+sflag(ib)+'"></div>'+
       '<div class="sk" style="color:'+acc+';margin-top:9px;font-size:12px;">'+fb.round+(date?' · '+date:'')+(minlabel?' · '+minlabel:'')+'</div>'+
       '<div style="margin-top:5px;font-family:\'Barlow Condensed\',sans-serif;font-weight:600;font-size:15px;letter-spacing:.5px;color:'+STY.SUB+';">🎽 Referee: <b style="color:'+STY.INK+';">'+ref+'</b>'+(refNat?' · '+refNat:'')+'</div>'+
-      '<div style="margin-top:18px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;"><span class="sbadge" style="background:'+acc+';">'+T[0]+'</span>'+(vb?'<span class="sbadge" style="background:'+vb[1]+';">🖥 '+vb[0]+'</span>':'')+'</div>'+
+      (crewbits?'<div style="margin-top:3px;font-family:\'Barlow Condensed\',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.4px;color:'+STY.SUB+';opacity:.85;">🖥 Crew (reported): '+crewbits+'</div>':'')+
+      (lawtxt?'<div style="margin-top:3px;font-family:\'Barlow Condensed\',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.4px;color:'+STY.SUB+';">📖 '+lawtxt+'</div>':'')+
+      '<div style="margin-top:16px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;"><span class="sbadge" style="background:'+acc+';">'+T[0]+'</span>'+(vb?'<span class="sbadge" style="background:'+vb[1]+';">🖥 '+vb[0]+'</span>':'')+(vbadge?'<span class="sbadge" style="background:'+vbadge[1]+';">'+vbadge[0]+'</span>':'')+'</div>'+
       '<div style="margin-top:12px;">'+dots+' <span class="sc" style="color:'+STY.SUB+';font-size:13px;vertical-align:middle;">severity '+sev+'/5</span></div>'+
       '<div style="max-width:900px;margin-top:16px;font-size:18px;color:'+STY.INK+';line-height:1.48;text-align:center;">'+c.summary+'</div>'+
       (pick.length?'<div style="display:flex;gap:14px;justify-content:center;margin-top:18px;max-width:970px;flex-wrap:wrap;">'+pick.map(prCard).join('')+'</div>':'')); }
