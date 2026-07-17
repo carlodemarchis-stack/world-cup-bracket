@@ -2965,10 +2965,15 @@ function sResultCard(m,opts){
     (hasEvt?'<div style="margin-top:24px;display:flex;align-items:flex-start;justify-content:center;gap:80px;"><div style="width:290px;">'+sTabCol(m.a,'left')+'</div><div style="width:290px;">'+sTabCol(m.b,'right')+'</div></div>':'')+
     (opts.qualify?'<div class="sc" style="margin-top:26px;font-weight:800;font-size:26px;color:'+opts.color+';">'+opts.qualify+'</div>':'')+hl);
 }
-// Switch a final-card team panel between Goals / Cards / Subs (in-place, scoped to the clicked panel).
-function sMTab(btn, tab){ const p = btn.closest('.sMPanel'); if(!p) return; const acc = p.dataset.acc || '#2f9e57';
-  p.querySelectorAll('.sMTabBtn').forEach(b => { const on = b.dataset.tab === tab; b.style.color = on ? '#fff' : '#6b6256'; b.style.background = on ? acc : 'transparent'; });
-  p.querySelectorAll('.sMBody').forEach(d => { d.style.display = (d.dataset.tab === tab) ? '' : 'none'; }); }
+// Switch team panels between Goals / Cards / Subs / Stats — both teams stay in sync.
+function sMTab(btn, tab){
+  document.querySelectorAll('.sMPanel').forEach(p => {
+    if(!p.querySelector('.sMBody[data-tab="' + tab + '"]')) return;   // panel lacks this tab — leave it be
+    const acc = p.dataset.acc || '#2f9e57';
+    p.querySelectorAll('.sMTabBtn').forEach(b => { const on = b.dataset.tab === tab; b.style.color = on ? '#fff' : '#6b6256'; b.style.background = on ? acc : 'transparent'; });
+    p.querySelectorAll('.sMBody').forEach(d => { d.style.display = (d.dataset.tab === tab) ? '' : 'none'; });
+  });
+}
 window.sMTab = sMTab;
 // Penalty shoot-out card. Renders the real kick sequence if m.penalties=[{t,player,scored}] exists,
 // otherwise the converted tally from penScore (per-kick data isn't in the FIFA feed).
