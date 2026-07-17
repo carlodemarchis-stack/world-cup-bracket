@@ -2895,21 +2895,42 @@ function sResultCard(m,opts){
       (align==='right'?'':sBall(24))+'<span class="sc" style="font-weight:800;font-size:22px;letter-spacing:1px;color:'+STY.INK+';opacity:.7;">'+code+'</span>'+(align==='right'?sBall(24):'')+'</div>'+
     (gl.filter(g=>g.t===code).map(g=>row(g,align)).join('')||'<div style="color:'+STY.SUB+';font-size:16px;opacity:.5;text-align:'+align+';">—</div>')+'</div>';
   const hl=opts.final?matchFooter(m,opts.highlights):'';   // highlights + Bogachev viz only on the match's final card
+  // Final card: a per-team panel with a Goals / Cards / Subs tab bar (scorers stay the default view).
+  const sTabCol=(code,align)=>{
+    const sqm={}; (DATA.squads&&DATA.squads[code]||[]).forEach(p=>sqm[p.id]=p);
+    const surn=id=>{ const p=sqm[id]; return p?String(p.p).split(' ').slice(-1)[0]:''; };
+    const empty=t=>'<div style="color:'+STY.SUB+';font-size:15px;opacity:.5;text-align:'+align+';margin-top:4px;">'+t+'</div>';
+    const scorers=gl.filter(g=>g.t===code).map(g=>row(g,align)).join('')||empty('No goals');
+    const crow=c=>{ const nm=(c.id&&sqm[c.id])?surn(c.id):String(c.p||'').split(' ').slice(-1)[0]; const ic=c.c==='R'?'🟥':'🟨';
+      const t='<span class="sc" style="color:'+STY.INK+';font-weight:600;font-size:18px;">'+nm+' '+c.m+'</span>';
+      return '<div style="display:flex;align-items:center;gap:8px;margin:8px 0;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+(align==='right'?t+'<span style="font-size:15px;">'+ic+'</span>':'<span style="font-size:15px;">'+ic+'</span>'+t)+'</div>'; };
+    const cards=(m.cards||[]).filter(c=>c.t===code).map(crow).join('')||empty('No cards');
+    const srow=s=>'<div style="margin:7px 0;text-align:'+align+';line-height:1.12;"><div><span class="sc" style="color:#2f9e57;font-weight:700;font-size:17px;">▲ '+surn(s[0])+'</span> <span style="color:'+STY.SUB+';font-size:12px;">'+(s[2]||'')+'</span></div><div><span class="sc" style="color:#d0322a;font-weight:700;font-size:16px;">▼ '+surn(s[1])+'</span></div></div>';
+    const subs=((m.line&&m.line[code]&&m.line[code].subs)||[]).map(srow).join('')||empty('No subs');
+    const head='<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+(align==='right'?'':sBall(24))+'<span class="sc" style="font-weight:800;font-size:22px;letter-spacing:1px;color:'+STY.INK+';opacity:.7;">'+code+'</span>'+(align==='right'?sBall(24):'')+'</div>';
+    const acc=(m.round==='Final')?STY.GOLD:opts.color;
+    const tb=(t,lbl,on)=>'<button class="sMTabBtn" data-tab="'+t+'" onclick="sMTab(this,\''+t+'\')" style="pointer-events:auto;cursor:pointer;border:none;border-radius:13px;padding:3px 11px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:'+(on?'#fff':STY.SUB)+';background:'+(on?acc:'transparent')+';">'+lbl+'</button>';
+    const bar='<div style="display:flex;gap:5px;margin-bottom:12px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+tb('scorers','Goals',true)+tb('cards','Cards',false)+tb('subs','Subs',false)+'</div>';
+    return '<div class="sMPanel" data-acc="'+acc+'">'+head+bar+
+      '<div class="sMBody" data-tab="scorers">'+scorers+'</div>'+
+      '<div class="sMBody" data-tab="cards" style="display:none;">'+cards+'</div>'+
+      '<div class="sMBody" data-tab="subs" style="display:none;">'+subs+'</div></div>';
+  };
   if(opts.epic){
     const isFinal=(m.round==='Final'), col=isFinal?STY.GOLD:opts.color;
     const win=m.winner, wa=win&&win===m.a, wb=win&&win===m.b;
     const side=(code,iso,won)=>'<div style="display:flex;flex-direction:column;align-items:center;gap:10px;'+(win&&!won?'opacity:.55;':'')+'">'+
-        '<img class="sfl" style="height:74px;'+(won?'box-shadow:0 8px 26px '+col+'88;border-radius:4px;':'')+'" src="'+sflag(iso,320)+'">'+
-        '<span class="sc" style="font-weight:800;font-size:40px;color:'+STY.INK+';">'+code+'</span></div>';
+        '<img class="sfl" style="height:62px;'+(won?'box-shadow:0 8px 26px '+col+'88;border-radius:4px;':'')+'" src="'+sflag(iso,320)+'">'+
+        '<span class="sc" style="font-weight:800;font-size:36px;color:'+STY.INK+';">'+code+'</span></div>';
     // Scorers pinned to the far left/right edges so the centre block (score + qualify + links)
     // stays put no matter how many goals were scored.
-    const sideScorers=gl.length?
-      '<div style="position:absolute;left:50px;top:50%;transform:translateY(-50%);width:280px;z-index:2;">'+colFor(m.a,'left')+'</div>'+
-      '<div style="position:absolute;right:50px;top:50%;transform:translateY(-50%);width:280px;z-index:2;">'+colFor(m.b,'right')+'</div>':'';
+    const sideScorers=(opts.final||gl.length)?
+      '<div style="position:absolute;left:46px;top:96px;width:268px;z-index:3;">'+(opts.final?sTabCol(m.a,'left'):colFor(m.a,'left'))+'</div>'+
+      '<div style="position:absolute;right:46px;top:96px;width:268px;z-index:3;">'+(opts.final?sTabCol(m.b,'right'):colFor(m.b,'right'))+'</div>':'';
     return matchRefBar(m,aG,bG)+'<div style="position:absolute;inset:0;'+sBg(col)+'"></div>'+
       '<div style="position:absolute;inset:0;background:radial-gradient(58% 52% at 50% 40%,'+col+'26 0%,transparent 70%);"></div>'+sideScorers+sCentre(
       '<div class="sk" style="color:'+col+';letter-spacing:7px;">'+(isFinal?'🏆 '+opts.title:opts.title)+'</div>'+
-      '<div style="margin-top:22px;display:flex;align-items:center;gap:34px;">'+side(m.a,A.iso,wa)+
+      '<div style="margin-top:22px;display:flex;align-items:center;gap:22px;">'+side(m.a,A.iso,wa)+
         '<span class="sc" style="font-weight:900;font-size:132px;line-height:.78;color:'+col+';filter:drop-shadow(0 10px 26px '+col+'66);">'+aG+'–'+bG+'</span>'+
         side(m.b,B.iso,wb)+'</div>'+
       (opts.qualify?'<div class="sc" style="margin-top:30px;font-weight:900;font-size:'+(isFinal?42:30)+'px;color:'+col+';filter:drop-shadow(0 4px 12px '+col+'55);">'+opts.qualify+'</div>':'')+hl);
@@ -2920,6 +2941,11 @@ function sResultCard(m,opts){
     (gl.length?'<div style="margin-top:24px;display:flex;align-items:flex-start;gap:80px;width:720px;">'+colFor(m.a,'left')+colFor(m.b,'right')+'</div>':'')+
     (opts.qualify?'<div class="sc" style="margin-top:26px;font-weight:800;font-size:26px;color:'+opts.color+';">'+opts.qualify+'</div>':'')+hl);
 }
+// Switch a final-card team panel between Goals / Cards / Subs (in-place, scoped to the clicked panel).
+function sMTab(btn, tab){ const p = btn.closest('.sMPanel'); if(!p) return; const acc = p.dataset.acc || '#2f9e57';
+  p.querySelectorAll('.sMTabBtn').forEach(b => { const on = b.dataset.tab === tab; b.style.color = on ? '#fff' : '#6b6256'; b.style.background = on ? acc : 'transparent'; });
+  p.querySelectorAll('.sMBody').forEach(d => { d.style.display = (d.dataset.tab === tab) ? '' : 'none'; }); }
+window.sMTab = sMTab;
 // Penalty shoot-out card. Renders the real kick sequence if m.penalties=[{t,player,scored}] exists,
 // otherwise the converted tally from penScore (per-kick data isn't in the FIFA feed).
 function sPensCard(m){ const A=tin(m.a),B=tin(m.b); const parts=(m.penScore||'').split(/[–-]/); const pa=(parts[0]||'').trim(),pb=(parts[1]||'').trim();
