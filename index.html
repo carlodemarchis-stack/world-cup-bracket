@@ -2908,9 +2908,10 @@ function sResultCard(m,opts){
   // Minute filter (so half-time/end-of-regular-time panels only show events up to that point).
   const _rng=v=>{ v=parseInt(v)||0; return (opts.scorerMax==null||v<=opts.scorerMax)&&(opts.scorerMin==null||v>=opts.scorerMin); };
   const hasEvt=gl.length||(m.cards||[]).some(c=>_rng(c.m))||Object.values(m.line||{}).some(t=>(t.subs||[]).some(s=>_rng(s[2])));
-  // Possession pie (official per-match stats) — full-match totals; shown on any summary card that has stats.
+  // Possession pie (official per-match stats) — full-match totals, so only on the match's final card
+  // (an intermediate half-time/end-of-regular-time panel would misreport the final figure as the score so far).
   const _ps=MATCHSTATS[m.num], _pa=_ps&&_ps[m.a], _pb=_ps&&_ps[m.b];
-  const poss=(_pa&&_pb)?(function(){ const hp=_pa.poss,ap=_pb.poss,contest=Math.max(0,100-hp-ap),p2=hp+contest,c1='#2f6fed',c2='#ef8a34',cg='#ccc6b8';
+  const poss=(opts.final&&_pa&&_pb)?(function(){ const hp=_pa.poss,ap=_pb.poss,contest=Math.max(0,100-hp-ap),p2=hp+contest,c1='#2f6fed',c2='#ef8a34',cg='#ccc6b8';
     return '<div style="margin-top:16px;display:flex;flex-direction:column;align-items:center;gap:6px;">'+
       '<div style="width:78px;height:78px;border-radius:50%;background:conic-gradient('+c1+' 0 '+hp+'%,'+cg+' '+hp+'% '+p2+'%,'+c2+' '+p2+'% 100%);box-shadow:0 6px 18px rgba(0,0,0,.2);"></div>'+
       '<div class="sk" style="color:'+STY.SUB+';font-size:11px;letter-spacing:3px;">Possession</div>'+
@@ -2943,8 +2944,9 @@ function sResultCard(m,opts){
     const flag='<img class="sfl" style="height:22px;" src="'+sflag(tin(code).iso)+'">';
     const head='<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;justify-content:'+(align==='right'?'flex-end':'flex-start')+';">'+(align==='right'?'':flag)+'<span class="sc" style="font-weight:800;font-size:22px;letter-spacing:1px;color:'+STY.INK+';opacity:.7;">'+code+'</span>'+(align==='right'?flag:'')+'</div>';
     const acc=(m.round==='Final')?STY.GOLD:opts.color;
-    // Stats tab — official per-match team stats (matchstats.json, full-match totals).
-    const ms=(MATCHSTATS[m.num]||{})[code];
+    // Stats tab — official per-match team stats (matchstats.json, full-match totals); final card only,
+    // so it isn't offered on an intermediate panel where it would misrepresent the score-so-far.
+    const ms=opts.final?(MATCHSTATS[m.num]||{})[code]:null;
     const statRow=(l,v)=>'<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:4px 0;font-family:\'Barlow Condensed\',sans-serif;border-bottom:1px solid rgba(0,0,0,.05);">'+
       (align==='right'?'<span style="font-weight:800;font-size:18px;color:'+STY.INK+';">'+v+'</span><span style="color:'+STY.SUB+';font-size:14px;letter-spacing:.3px;">'+l+'</span>'
                       :'<span style="color:'+STY.SUB+';font-size:14px;letter-spacing:.3px;">'+l+'</span><span style="font-weight:800;font-size:18px;color:'+STY.INK+';">'+v+'</span>')+'</div>';
