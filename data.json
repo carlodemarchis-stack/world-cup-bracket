@@ -5257,7 +5257,201 @@
   "thirdPlace": {
     "date": "Jul 18",
     "time": "23:00",
-    "venue": "Miami Stadium"
+    "venue": "Miami Stadium",
+    "score": "6–4",
+    "winner": "ENG",
+    "ref": "Jesús Valenzuela Sáez",
+    "att": 64478,
+    "form": {
+      "FRA": "4-2-3-1",
+      "ENG": "4-1-2-3"
+    },
+    "num": 103,
+    "goals": [
+      {
+        "t": "ENG",
+        "p": "Rice",
+        "m": "3'",
+        "id": "433097",
+        "desc": "England strike early! It's 1-0 to the Three Lions! Declan Rice fires home. England pick off a poor Doue pass and Rice charges toward the France area and unleashes a right-footed rocket. What a strike!",
+        "dp": 0
+      },
+      {
+        "t": "ENG",
+        "p": "Konsa",
+        "m": "18'",
+        "id": "403049",
+        "a": "Rice",
+        "aid": "433097",
+        "desc": "Ezri Konsa has turned in a header off a corner kick! The Three Lions have come roaring out of the gates and now lead 2-0 with Konsa meeting the corner kick with an inch-perfect, precise header inside the far corner.",
+        "dp": 0
+      },
+      {
+        "t": "ENG",
+        "p": "Saka",
+        "m": "37'",
+        "id": "448196",
+        "a": "Rashford",
+        "aid": "401470",
+        "desc": "Saka stretches it to three! A brilliant save from Henderson starts a counter-attack, that leads to both Rashford and Saka getting cracks at goal. Neither convert, but eventually Saka gets another chance and makes good on it.",
+        "dp": 0
+      },
+      {
+        "t": "ENG",
+        "p": "Saka",
+        "m": "45'+1'",
+        "id": "448196",
+        "a": "Eze",
+        "aid": "473113",
+        "desc": "It has been a fun-filled first 45 for England. The Three Lions are taking advantage of France's poor defensive shape and have hit for a quartet of goals, with Bukayo Saka bagging a brace. Can Didier Deschamps get his team refocused and make a charge in the second half in his France coaching finale?",
+        "dp": 0
+      },
+      {
+        "t": "FRA",
+        "p": "Mbappe",
+        "m": "48'",
+        "id": "389867",
+        "a": "Olise",
+        "aid": "485655",
+        "desc": "France have pulled one back! It is a different looking French team to start the second stanza and Mbappe slots one home to bring Les Bleus to within three. Mbappe is now one ahead of Messi for the Golden Boot in World Cup 2026 and now level with the Argentinian for all-time World Cup goals.",
+        "dp": 0
+      },
+      {
+        "t": "FRA",
+        "p": "Barcola",
+        "m": "54'",
+        "id": "484860",
+        "a": "Mbappe",
+        "aid": "389867",
+        "desc": "England's lead is now only 4-2! What a finish from Bradley Barcola, who is one of the half-time subs. Barcola absolutely hammers home a shot to polish off a picture perfect counter-attack.",
+        "dp": 0
+      },
+      {
+        "t": "FRA",
+        "p": "Mbappe",
+        "m": "66'",
+        "id": "389867",
+        "a": "Olise",
+        "aid": "485655",
+        "desc": "France are within one! Mbappe scores! This bonkers match just went to a new level of crazy! Wonderful one-two passing between Mbappe and Olise and Mbappe finishes with aplomb.",
+        "dp": 0
+      },
+      {
+        "t": "ENG",
+        "p": "Saka",
+        "m": "87'",
+        "id": "448196",
+        "pen": true,
+        "desc": "England get back to a two-goal cushion as Bukayo Saka calmly converts from the spot! It's a hat trick for Saka!",
+        "dp": 0
+      },
+      {
+        "t": "FRA",
+        "p": "Dembele",
+        "m": "90'+6'",
+        "id": "398680",
+        "a": "Upamecano",
+        "aid": "389876",
+        "desc": "The French are still fighting! Dembele fires home thanks to some good work from Upamecano. It's now 5-4 to England. Great left-footed strike from Dembele.",
+        "dp": 0
+      },
+      {
+        "t": "ENG",
+        "p": "Bellingham",
+        "m": "90'+8'",
+        "id": "448202",
+        "desc": "Jude Bellingham crushes a right-footer! England avoid a late French surge as Bellingham breaks loose late, shows his composure and he scores his seventh World Cup 2026 goal.",
+        "dp": 0
+      }
+    ],
+    "line": {
+      "FRA": {
+        "xi": [
+          "448332",
+          "464055",
+          "419166",
+          "408042",
+          "405881",
+          "402047",
+          "483549",
+          "431861",
+          "389867",
+          "485655",
+          "464114"
+        ],
+        "subs": [
+          [
+            "389876",
+            "419166",
+            ""
+          ],
+          [
+            "484860",
+            "464114",
+            ""
+          ],
+          [
+            "368860",
+            "408042",
+            ""
+          ],
+          [
+            "398680",
+            "431861",
+            ""
+          ],
+          [
+            "430707",
+            "464055",
+            "90'+1'"
+          ]
+        ],
+        "cap": "389867"
+      },
+      "ENG": {
+        "xi": [
+          "403046",
+          "403049",
+          "405841",
+          "506329",
+          "463809",
+          "433097",
+          "492716",
+          "473113",
+          "448196",
+          "401470",
+          "448198"
+        ],
+        "subs": [
+          [
+            "448203",
+            "401470",
+            ""
+          ],
+          [
+            "481610",
+            "448198",
+            "79'"
+          ],
+          [
+            "448202",
+            "473113",
+            "79'"
+          ],
+          [
+            "439641",
+            "463809",
+            "83'"
+          ],
+          [
+            "439691",
+            "405841",
+            "90'+2'"
+          ]
+        ],
+        "cap": "433097"
+      }
+    }
   },
   "highlightsPlaylist": "https://www.youtube.com/playlist?list=PLBRLtDhTHh5o",
   "_groups": "Final group-stage standings (finishing order 1-4) and matches, keyed A-L. Table row: {code,name,iso,w,d,l,gf,ga}; played=w+d+l, pts=3w+d, gd=gf-ga are derived. Match: {d,a,b,s} with score s in a-b order. Qualification (winner/runner-up/best third/eliminated) is derived from position + bracket membership.",
@@ -29984,6 +30178,22 @@
         "m": "74'",
         "desc": "Nematov denied Ronaldo again, this time from the captain's volley."
       }
+    ],
+    "ENG|FRA": [
+      {
+        "id": "403046",
+        "t": "ENG",
+        "m": "11'",
+        "desc": "Henderson with an excellent save to deny Cherki.",
+        "dp": 0
+      },
+      {
+        "id": "403046",
+        "t": "ENG",
+        "m": "35'",
+        "desc": "My goodness what a save from Henderson! Mbappe looks set to score but Henderson reacts well to deny the French superstar.",
+        "dp": 0
+      }
     ]
   },
   "savesCount": {
@@ -31088,6 +31298,18 @@
         "id": "448217",
         "t": "USA",
         "n": 1
+      }
+    ],
+    "ENG|FRA": [
+      {
+        "id": "403046",
+        "t": "ENG",
+        "n": 6
+      },
+      {
+        "id": "448332",
+        "t": "FRA",
+        "n": 4
       }
     ]
   }
