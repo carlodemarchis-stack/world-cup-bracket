@@ -843,7 +843,7 @@ function buildBracket(v){
   filmBtn.style.cssText = 'background:' + state.accentColor + ';border:1px solid ' + state.accentColor + ";color:#fff;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.6px;text-transform:uppercase;padding:3px 12px;border-radius:20px;line-height:1;box-shadow:0 2px 8px " + state.accentColor + '44;';
   filmBtn.onclick = () => { storyContro = false; const r = wcbLoad('wcb:resumeFilm') || {}; storyTeam = r.team || null; launchStory(); if (r.beat > 0){ storyToggle(); storyGo(r.beat); } };
   row1.appendChild(filmBtn);
-  playRow.appendChild(confedSel);
+  playRow.insertBefore(confedSel, playRow.firstChild);
   row2.appendChild(tzSel);
   row2.appendChild(mkToggle('Show scores', 'showResults', () => render()));
   row2.appendChild(mkToggle('Show eliminated', 'showEliminated', () => applyElim()));
