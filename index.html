@@ -3518,7 +3518,8 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #wcSquad .sqPl.hl{z-index:3}
 #wcSquad .sqPl.hl .sqNum{transform:scale(1.34);border-color:#ffd34d;background:#fff;box-shadow:0 0 0 3px #ffd34d,0 3px 9px rgba(0,0,0,.45)}
 #wcSquad .sqPl.hl .sqLab{font-weight:900;font-size:10px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.85)}
-#wcSquad .sqInv{padding:6px 10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#1c1813;background:#f3eddf;border-top:1px solid #e4ddce;text-align:center;line-height:1.2}
+#wcSquad .sqInvWrap{height:44px;box-sizing:border-box;overflow:hidden;background:#f3eddf;border-top:1px solid #e4ddce;display:flex;flex-direction:column;justify-content:center;gap:1px}
+#wcSquad .sqInv{padding:0 10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#1c1813;text-align:center;line-height:1.2}
 #wcSquad .sqInv.na{color:#a49a86;font-style:italic;font-weight:600}
 #wcSquad .sqPitch.sqPna .sqField{filter:grayscale(.65);opacity:.5}
 #sqHero{position:fixed;left:16px;bottom:16px;z-index:361;width:184px;background:#fbf9f4;border:1px solid #e4ddce;border-radius:16px;box-shadow:0 16px 42px rgba(0,0,0,.32);overflow:hidden;display:flex;flex-direction:column;animation:sqHeroIn .25s ease}
@@ -3557,10 +3558,10 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #sqPlayerBar .sqPbStat{margin-top:3px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:12.5px;color:#6f6656}
 #sqPlayerBar .sqPbStat b{color:#1c1813;font-weight:800}
 #sqPlayerBar .sqPbStat .sep{opacity:.35}
-#wcSquad .sqEv{padding:0 10px 6px;background:#f3eddf;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#1c1813;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 8px;line-height:1.15}
+#wcSquad .sqEv{padding:0 10px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#1c1813;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:4px 8px;line-height:1.15;white-space:nowrap;overflow:hidden;max-width:100%}
 #wcSquad .sqEv .d{opacity:.35}
 #wcSquad .sqOp .sqRes{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:.3px}
-#wcSquad .sqInv:has(+ .sqEv){padding-bottom:2px}`;
+`;
 function squadBodyHTML(code){
   const R=buildSquadRun(code);
   const rescol=r=>r==='W'?STY.GREEN:r==='L'?STY.RED:STY.SUB;
@@ -3595,7 +3596,7 @@ function squadBodyHTML(code){
       if(yy.length) parts.push('🟨 '+yy.map(c=>c.m).join(', '));
       if(rr.length) parts.push('🟥 '+rr.map(c=>c.m).join(', '));
       return parts.length?'<div class="sqEv">'+parts.join('<span class="d">·</span>')+'</div>':''; })():'';
-    const invBar=selP?'<div class="sqInv'+(na?' na':'')+'">'+invTxt(selP.inv[i])+'</div>'+evLine:'';
+    const invBar=selP?'<div class="sqInvWrap"><div class="sqInv'+(na?' na':'')+'">'+invTxt(selP.inv[i])+'</div>'+evLine+'</div>':'';   // fixed height so the bench pitches stay aligned
     return '<div class="sqPitch'+(na?' sqPna':'')+'" style="'+basis+'"><div class="sqPh"><div class="sqOp">v <img src="'+sflag(m.oppIso)+'">'+m.opp+'<span class="sqRes" style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</span></div><div class="sqMeta"><span>'+m.round+'</span><span>'+m.form+'</span></div></div><div class="sqField">'+st+dots+'</div>'+invBar+lower+'</div>'; }).join('');
   let mh='<thead><tr><th class="sqPn">Player</th>';
   R.matches.forEach(m=>{ mh+='<th class="sqMh"><div class="rd">'+m.round+'</div><div class="op">v <img src="'+sflag(m.oppIso)+'">'+m.opp+'</div><div class="sc" style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</div><div class="fm">'+m.form+'</div></th>'; });
