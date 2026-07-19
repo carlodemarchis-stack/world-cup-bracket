@@ -376,6 +376,10 @@ function renderVals(P, DATA) {
     };
   }
 
+  // Vertical centre of the final node (below the trophy): the pending "Final" box,
+  // or — once decided — the champion crest. The two semi-final links point here.
+  const finalNodeY = C + ((DATA.final || {}).winner ? 88 : 78);
+
   ['R','L'].forEach(side=>{
     for (let i=0;i<16;i++){
       const t = side==='R' ? TEAMS[i] : TEAMS[16+i];
@@ -405,10 +409,10 @@ function renderVals(P, DATA) {
         const m = (L === 1) ? (MATCHES[side+':1:'+k] || {}) : (INNER_INFO[side+':'+L+':'+k] || {});
         if (wc){
           // the winning crest advances inward; dim it (red) if it later went out
-          const wn = makeTeam(TEAMS.find(x=>x.code===wc), p, L===1?44:40, !eliminated[wc], !!eliminated[wc]);
+          const wn = makeTeam(TEAMS.find(x=>x.code===wc), p, L===1?44:(L===4?52:40), !eliminated[wc], !!eliminated[wc]);   // L=4 = the two finalists → a touch larger
           wn.match = side+':'+L+':'+k;   // this crest = the match it won
           teamNodes.push(wn);
-          if (showResults && m.score) innerCards.push(makeInnerCard(p.x, p.y - (L===1?21:19), { score:m.score, pens:m.pens, penScore:m.penScore, match:side+':'+L+':'+k }));
+          if (showResults && m.score) innerCards.push(makeInnerCard(p.x, p.y - (L===1?21:(L===4?25:19)), { score:m.score, pens:m.pens, penScore:m.penScore, match:side+':'+L+':'+k }));
         } else {
           // pending match — always shown so upcoming ties stay visible even with
           // scores hidden: round + date/time + the feeding teams' codes.
@@ -455,7 +459,7 @@ function renderVals(P, DATA) {
     const fin = nodePos(side,4,0);
     const champ = (DATA.final||{}).winner, sfWin = wonAt(side,4,0);
     const finLit = !!champ && !!sfWin && champ === sfWin;
-    links.push(trimmed(fin, { x:C, y:C }, crestVB(4, 0), 0, { stroke: finLit?accent:T.linkColor, w: finLit?3:1.8,
+    links.push(trimmed(fin, { x:C, y:finalNodeY }, crestVB(4, 0), 0, { stroke: finLit?accent:T.linkColor, w: finLit?3:1.8,
       lstyle: finLit?('filter:drop-shadow(0 0 5px '+accent+'aa)'):'',
       confed: sfWin ? confedOf(sfWin) : [...leafAliveConfeds(side, 4, 0)].join(' '), node: side+':4:0' }));
   });
@@ -471,11 +475,13 @@ function renderVals(P, DATA) {
     if (f.winner){
       // champion advances to the final node; the trophy stays dead centre
       const champT = TEAMS.find(x => x.code === f.winner);
-      if (champT){ const wn = makeTeam(champT, { x:C, y:C + 78, a:0 }, 46, true, false); wn.match = 'final'; teamNodes.push(wn); }
-      if (showResults && f.score) innerCards.push(makeInnerCard(C, C + 78 - 24, { score:f.score, pens:f.pens, penScore:f.penScore, match:'final' }));
+      const CHSZ = 64;   // the champion crest sits a touch larger than a normal node — it's the final
+      if (champT){ const wn = makeTeam(champT, { x:C, y:finalNodeY, a:0 }, CHSZ, true, false); wn.match = 'final'; teamNodes.push(wn); }
+      // Score sits BELOW the champion crest (the semi-final links come in from above).
+      if (showResults && f.score) innerCards.push(makeInnerCard(C, finalNodeY + (CHSZ/2) + 12, { score:f.score, pens:f.pens, penScore:f.penScore, match:'final' }));
     } else {
       // Finalists once known: the two semi-final winners (either side may still be TBD).
-      innerCards.push(makeInnerCard(C, C + 78, { phase:'Final', date:f.date, time:f.time, match:'final', ta:wonAt('R',4,0), tb:wonAt('L',4,0) }));
+      innerCards.push(makeInnerCard(C, finalNodeY, { phase:'Final', date:f.date, time:f.time, match:'final', ta:wonAt('R',4,0), tb:wonAt('L',4,0) }));
     }
   }
   // Third-place play-off: a standalone chip above the trophy (the two SF losers;
