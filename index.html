@@ -483,8 +483,12 @@ function renderVals(P, DATA) {
   const sfLoserOf = S => { const w = wonAt(S,4,0); if(!w) return null; const a = wonAt(S,3,0), b = wonAt(S,3,1); return w===a ? b : (w===b ? a : null); };
   if (DATA.thirdPlace){
     const tp = DATA.thirdPlace;
-    if (showResults && tp.winner && tp.score) innerCards.push(makeInnerCard(C, C - 108, { score:tp.score, pens:tp.pens, penScore:tp.penScore, match:'third' }));
-    else innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:tp.date, time:tp.time, match:'third', ta:sfLoserOf('R'), tb:sfLoserOf('L') }));
+    if (showResults && tp.winner && tp.score){
+      // Played: keep the two teams and a "Third place" label alongside the score
+      // (resolveMatch orients the goals to a/b), instead of a bare, contextless scoreline.
+      const rm = resolveMatch('third');
+      innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', match:'third', ta:rm.a, tb:rm.b, score:rm.aGoals + '–' + rm.bGoals, pens:rm.pens, penScore:rm.penScore }));
+    } else innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:tp.date, time:tp.time, match:'third', ta:sfLoserOf('R'), tb:sfLoserOf('L') }));
   }
 
   // ---- Group-stage eliminated teams: two outer side arcs, like parentheses.
