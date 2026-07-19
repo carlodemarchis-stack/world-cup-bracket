@@ -3419,11 +3419,17 @@ function buildSquadRun(code){
     xi.forEach(pid=>{ feat[pid]=feat[pid]||{id:pid,sur:sur(pid),n:nn(pid),pos:po(pid),cells:[]}; });
     subs.forEach(s=>{ feat[s[0]]=feat[s[0]]||{id:s[0],sur:sur(s[0]),n:nn(s[0]),pos:po(s[0]),cells:[]}; });
   });
+  // Include every squad member — even those who never featured (their row is all-empty).
+  (DATA.squads&&DATA.squads[code]||[]).forEach(p=>{ if(!feat[p.id]) feat[p.id]={id:p.id,sur:sur(p.id),n:nn(p.id),pos:po(p.id),cells:[]}; });
   Object.values(feat).forEach(p=>p.cells=ms.map(()=>null));
   ms.forEach((m,mi)=>{ const line=(m.line||{})[code]||{}, xi=line.xi||[], subs=line.subs||[]; const offm={}; subs.forEach(s=>offm[s[1]]=s[2]);
     xi.forEach(pid=>{ if(feat[pid]) feat[pid].cells[mi]={t:(pid in offm)?'off':'full',m:offm[pid]||'',cap:line.cap===pid}; });
     subs.forEach(s=>{ if(feat[s[0]]&&!feat[s[0]].cells[mi]) feat[s[0]].cells[mi]={t:'on',m:s[2],cap:false}; });
   });
+  // Per-player tallies across this team's run: appearances, goals, assists, saves, cards.
+  const tp={}; teamPlayers(code).forEach(e=>{ if(e.id) tp[e.id]={g:e.g,a:e.a,y:e.y,r:e.r}; });
+  const sv={}; ms.forEach(m=>(m.savesCount||[]).forEach(s=>{ if(s.id&&s.t===code) sv[s.id]=(sv[s.id]||0)+(s.n||0); }));
+  Object.values(feat).forEach(p=>{ const t=tp[p.id]||{}; p.apps=p.cells.filter(Boolean).length; p.g=t.g||0; p.a=t.a||0; p.y=t.y||0; p.r=t.r||0; p.sv=sv[p.id]||0; });
   const starts=p=>p.cells.filter(c=>c&&(c.t==='full'||c.t==='off')).length;
   const players=Object.values(feat).sort((a,b)=>a.pos-b.pos||starts(b)-starts(a)||(a.n||0)-(b.n||0));
   return {code,name:tin(code).name,iso:tin(code).iso,matches,players,pitches,subs:subsD};
@@ -3485,7 +3491,13 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #sqCtl button{background:transparent;border:none;color:#f0ebdd;cursor:pointer;font:inherit;font-size:17px;padding:6px 11px;border-radius:20px;line-height:1}
 #sqCtl button:hover{background:rgba(255,255,255,.12)}
 #sqLbl{min-width:128px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;white-space:nowrap}#sqLbl b{color:#cf9c1e}
-#sqSeqSel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f0ebdd;font:inherit;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:20px;padding:6px 10px;cursor:pointer;max-width:140px}#sqSeqSel option{color:#1c1813;text-transform:none}`;
+#sqSeqSel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f0ebdd;font:inherit;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:20px;padding:6px 10px;cursor:pointer;max-width:140px}#sqSeqSel option{color:#1c1813;text-transform:none}
+#wcSquad .sqPn{min-width:176px}
+#wcSquad .sqCell{height:44px}
+#wcSquad .sqStat{margin-top:3px;display:flex;flex-wrap:wrap;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:10.5px;line-height:1.1;color:#6f6656}
+#wcSquad .sqStat b{color:#1c1813;font-weight:800}
+#wcSquad .sqStat .sep{opacity:.35}
+#wcSquad .sqPr.sqUnused td{opacity:.5}`;
 function squadBodyHTML(code){
   const R=buildSquadRun(code);
   const rescol=r=>r==='W'?STY.GREEN:r==='L'?STY.RED:STY.SUB;
@@ -3497,7 +3509,8 @@ function squadBodyHTML(code){
   R.matches.forEach(m=>{ mh+='<th class="sqMh"><div class="rd">'+m.round+'</div><div class="op">v <img src="'+sflag(m.oppIso)+'">'+m.opp+'</div><div class="sc" style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</div><div class="fm">'+m.form+'</div></th>'; });
   mh+='</tr></thead><tbody>'; let cur=-1; const POSN={0:'Goalkeeper',1:'Defenders',2:'Midfielders',3:'Forwards'};
   R.players.forEach(p=>{ if(p.pos!==cur){ cur=p.pos; mh+='<tr class="sqGrp"><td class="sqPn" style="position:sticky;left:0">'+(POSN[p.pos]||'')+'</td>'+R.matches.map(()=>'<td class="sqGrp"></td>').join('')+'</tr>'; }
-    mh+='<tr class="sqPr"><td class="sqPn"><span class="n">'+p.n+'</span><span class="s">'+p.sur+'</span></td>';
+    const stx=['<b>'+(p.apps||0)+'</b> '+((p.apps||0)===1?'app':'apps')]; if(p.g)stx.push('⚽'+p.g); if(p.a)stx.push('🥾'+p.a); if(p.sv)stx.push('🧤'+p.sv); if(p.y)stx.push('🟨'+p.y); if(p.r)stx.push('🟥'+p.r);
+    mh+='<tr class="sqPr'+(p.apps?'':' sqUnused')+'"><td class="sqPn"><span class="n">'+p.n+'</span><span class="s">'+p.sur+'</span><div class="sqStat">'+stx.join('<span class="sep">·</span>')+'</div></td>';
     p.cells.forEach(c=>{ if(!c){ mh+='<td class="sqCell"><span class="sqDot"></span></td>'; return; } const cc=c.cap?'<span class="sqCc">C</span>':'';
       mh+='<td class="sqCell"><span class="sqPip '+c.t+'">'+(c.t==='full'?'90’':c.m)+'</span>'+cc+'</td>'; });
     mh+='</tr>'; }); mh+='</tbody>';
