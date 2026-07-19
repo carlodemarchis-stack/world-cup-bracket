@@ -3508,7 +3508,7 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #wcSquad .sqStat{margin-left:auto;display:inline-flex;flex-wrap:nowrap;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:11px;line-height:1.1;color:#6f6656;white-space:nowrap}
 #wcSquad .sqStat b{color:#1c1813;font-weight:800}
 #wcSquad .sqStat .sep{opacity:.35}
-#wcSquad .sqPip{width:auto;min-width:44px;max-width:66px;padding:0 5px;font-size:9.5px;letter-spacing:.2px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);white-space:nowrap;overflow:hidden}
+#wcSquad .sqPip{width:auto;min-width:46px;max-width:70px;padding:0 6px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:.2px;color:#fff;text-shadow:none;white-space:nowrap;overflow:hidden}
 #wcSquad .sqPip.full{background:#2f9e57}
 #wcSquad .sqPr.sqUnused td{opacity:.5}
 #wcSquad .sqPitch{min-width:150px;box-sizing:border-box}
@@ -3553,9 +3553,9 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #sqPlayerBar .sqPbAv{width:44px;height:44px;border-radius:50%;overflow:hidden;flex:none;background:#e9e2d3;box-shadow:0 2px 7px rgba(0,0,0,.22);border:2px solid #fff}
 #sqPlayerBar .sqPbAv img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
 #sqPlayerBar .sqPbAv span{display:flex;align-items:center;justify-content:center;height:100%;font-family:'Barlow Condensed',sans-serif;font-weight:800;color:#6f6656;font-size:16px}
-#sqPlayerBar .sqPbName{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;color:#1c1813;line-height:1.05}
-#sqPlayerBar .sqPbName b{color:#6f6656;font-size:13px;margin-right:2px}
-#sqPlayerBar .sqPbStat{margin-top:3px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:12.5px;color:#6f6656}
+#sqPlayerBar .sqPbName{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:27px;color:#1c1813;line-height:1;white-space:nowrap}
+#sqPlayerBar .sqPbName b{color:#6f6656;font-size:16px;margin-right:3px}
+#sqPlayerBar .sqPbStat{margin-left:6px;display:flex;flex-wrap:nowrap;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:14px;color:#6f6656;white-space:nowrap}
 #sqPlayerBar .sqPbStat b{color:#1c1813;font-weight:800}
 #sqPlayerBar .sqPbStat .sep{opacity:.35}
 #wcSquad .sqEv{padding:0 10px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#1c1813;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:4px 8px;line-height:1.15;white-space:nowrap;overflow:hidden;max-width:100%}
@@ -3612,7 +3612,7 @@ function squadBodyHTML(code){
       mh+='<td class="sqCell">'+box+cc+'</td>'; });
     mh+='</tr>'; }); mh+='</tbody>';
   const hero=selP?(function(){ const sx=['<b>'+(selP.apps||0)+'</b> '+((selP.apps||0)===1?'app':'apps')]; if(selP.g)sx.push('⚽'+selP.g); if(selP.a)sx.push('🥾'+selP.a); if(selP.sv)sx.push('🧤'+selP.sv); if(selP.y)sx.push('🟨'+selP.y); if(selP.r)sx.push('🟥'+selP.r); const pic=picById(selP.id);
-    return '<div class="sqPbAv">'+(pic?'<img src="'+pic+'?&io=transform:fill,aspectratio:1x1,width:120,gravity:top&quality=88" alt="">':'<span>'+selP.n+'</span>')+'</div><div class="sqPbTxt"><div class="sqPbName"><b>'+selP.n+'</b> '+selP.sur+'</div><div class="sqPbStat">'+sx.join('<span class="sep">·</span>')+'</div></div>'; })():'';
+    return '<div class="sqPbAv">'+(pic?'<img src="'+pic+'?&io=transform:fill,aspectratio:1x1,width:120,gravity:top&quality=88" alt="">':'<span>'+selP.n+'</span>')+'</div><div class="sqPbName"><b>'+selP.n+'</b> '+selP.sur+'</div><div class="sqPbStat">'+sx.join('<span class="sep">·</span>')+'</div>'; })():'';
   return { name:R.name, iso:R.iso, players:R.players, html:
     '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div></div>'+
     '<div class="sqView'+(squadTab==='matrix'?' on':'')+'" id="sqv-matrix"><div class="sqScroll"><table class="sqTable">'+mh+'</table></div>'+
