@@ -493,8 +493,8 @@ function renderVals(P, DATA) {
       // Played: keep the two teams and a "Third place" label alongside the score
       // (resolveMatch orients the goals to a/b), instead of a bare, contextless scoreline.
       const rm = resolveMatch('third');
-      innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', match:'third', ta:rm.a, tb:rm.b, score:rm.aGoals + '–' + rm.bGoals, pens:rm.pens, penScore:rm.penScore }));
-    } else innerCards.push(makeInnerCard(C, C - 108, { phase:'Third Place', date:tp.date, time:tp.time, match:'third', ta:sfLoserOf('R'), tb:sfLoserOf('L') }));
+      innerCards.push(makeInnerCard(C, C - 108, { phase:'3rd Place', match:'third', ta:rm.a, tb:rm.b, score:rm.aGoals + '–' + rm.bGoals, pens:rm.pens, penScore:rm.penScore }));
+    } else innerCards.push(makeInnerCard(C, C - 108, { phase:'3rd Place', date:tp.date, time:tp.time, match:'third', ta:sfLoserOf('R'), tb:sfLoserOf('L') }));
   }
 
   // ---- Group-stage eliminated teams: two outer side arcs, like parentheses.
@@ -838,6 +838,16 @@ function buildBracket(v){
   topCardsBtn.style.cssText = "background:transparent;border:1px solid " + state.accentColor + ';color:' + state.accentColor + ";cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.6px;text-transform:uppercase;padding:3px 11px;border-radius:20px;line-height:1;";
   topCardsBtn.onclick = () => { if (window.wcbCards && window.wcbCards.openTop) window.wcbCards.openTop(wcbLoad('wcb:topcat') || 'topscorer'); };
   row1.appendChild(topCardsBtn);
+  // Tactical — the line-up rotation view; opens on a finalist by default (switchable inside).
+  const tacticalBtn = document.createElement('button'); tacticalBtn.type = 'button';
+  tacticalBtn.textContent = 'Tactical';
+  tacticalBtn.title = 'Line-up rotation across a team’s matches';
+  tacticalBtn.style.cssText = topCardsBtn.style.cssText;
+  tacticalBtn.onclick = () => {   // default to a finalist (resolveMatch is in scope here; wonAt is not)
+    const sfWin = id => { try { const m = resolveMatch(id); return m && m.winner; } catch(e){ return null; } };
+    const def = ((DATA.final || {}).winner) || sfWin('R:4:0') || sfWin('L:4:0') || Object.keys(DATA.squads || {})[0];
+    if (def && window.openSquad) window.openSquad(def); };
+  row1.appendChild(tacticalBtn);
   // Controversy Tracker film — same pill as Top Cards, sits just before Film.
   const controBtn = document.createElement('button'); controBtn.type = 'button';
   controBtn.textContent = 'Controversies';
