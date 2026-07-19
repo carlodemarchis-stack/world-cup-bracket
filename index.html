@@ -3418,7 +3418,7 @@ function buildSquadRun(code){
     subsD.push(subs.map(s=>({in:sur(s[0]),out:sur(s[1]),m:s[2]})));
     // Substitutes as pitch markers: an incoming player takes the slot of whoever he replaced (chains included).
     const slot={}; pos.forEach(p=>slot[p.id]={x:+p.x.toFixed(3),y:+p.y.toFixed(3)});
-    subsOnD.push(subs.map(s=>{ const sp=slot[s[1]]||null; if(sp) slot[s[0]]=sp; return {inId:s[0],inSur:sur(s[0]),inNum:nn(s[0]),outSur:sur(s[1]),min:s[2],x:sp?sp.x:null,y:sp?sp.y:null}; }));
+    subsOnD.push(subs.map(s=>{ const sp=slot[s[1]]||null; if(sp) slot[s[0]]=sp; return {inId:s[0],inSur:sur(s[0]),inNum:nn(s[0]),outId:s[1],outSur:sur(s[1]),min:s[2],x:sp?sp.x:null,y:sp?sp.y:null}; }));
     xi.forEach(pid=>{ feat[pid]=feat[pid]||{id:pid,sur:sur(pid),n:nn(pid),pos:po(pid),cells:[]}; });
     subs.forEach(s=>{ feat[s[0]]=feat[s[0]]||{id:s[0],sur:sur(s[0]),n:nn(s[0]),pos:po(s[0]),cells:[]}; });
   });
@@ -3534,7 +3534,12 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #wcSquad .sqField2{border-top:1px solid rgba(255,255,255,.14)}
 #wcSquad .sqNumIn{border-color:#2f9e57}
 #wcSquad .sqOn{position:absolute;right:-5px;bottom:-4px;width:13px;height:13px;border-radius:50%;background:#2f9e57;color:#fff;font-size:9px;line-height:12px;font-weight:900;text-align:center;border:1.5px solid #268247}
-#wcSquad .sqMin{margin-top:1px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:9px;color:#ffe08a;text-shadow:0 1px 2px rgba(0,0,0,.6);line-height:1}`;
+#wcSquad .sqMin{margin-top:1px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:9px;color:#ffe08a;text-shadow:0 1px 2px rgba(0,0,0,.6);line-height:1}
+#wcSquad .sqPl.sqGhost{opacity:.3}
+#wcSquad .sqPl.sqGhost .sqNum{background:#eef0ec;color:#5c6b5f;box-shadow:none;border-color:rgba(255,255,255,.55)}
+#wcSquad .sqPl.sqGhost.hl{opacity:1}
+#wcSquad .sqRepl{margin-top:1px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:7.5px;line-height:1;color:rgba(255,255,255,.82);text-shadow:0 1px 2px rgba(0,0,0,.7);white-space:nowrap}
+#wcSquad .sqMin .sqFor{color:rgba(255,255,255,.72);font-weight:700}`;
 function squadBodyHTML(code){
   const R=buildSquadRun(code);
   const rescol=r=>r==='W'?STY.GREEN:r==='L'?STY.RED:STY.SUB;
@@ -3542,11 +3547,15 @@ function squadBodyHTML(code){
   const n=R.matches.length, basis='flex:0 1 calc((100% - '+((n-1)*12+10)+'px)/'+n+');max-width:210px';
   const invTxt=iv=>!iv||iv.kind==='na'?'Did not feature':iv.kind==='full'?'Played the full match':iv.kind==='off'?'Started · off '+(iv.min||'?')+'’ for '+iv.other:iv.kind==='on'?'On '+(iv.min||'?')+'’ for '+iv.other:'';
   const pitchHTML=R.matches.map((m,i)=>{ const pos=R.pitches[i]; let st=''; for(let s=0;s<8;s++) st+='<div class="sqStripe" style="top:'+(s*12.5)+'%"></div>';
-    const dots=pos.map(p=>{ const hl=selP&&p.id===selP.id, dim=selP&&p.id!==selP.id; return '<div class="sqPl'+(hl?' hl':'')+(dim?' dim':'')+'" data-id="'+p.id+'" style="left:'+(p.x*100)+'%;top:'+(p.y*100)+'%"><div class="sqNum'+(p.cap?' cap':'')+'"'+(p.off?' title="Subbed off '+p.off+'"':'')+'>'+p.n+(p.off?'<span class="sqOff">▾</span>':'')+'</div><div class="sqLab">'+p.sur+'</div></div>'; }).join('');
-    // Lower pitch: only the substitutes who came on, placed at the slot of the player they replaced.
     const son=(R.subsOn[i]||[]).filter(s=>s.x!=null);
-    const subMarks=son.map(s=>{ const hl=selP&&s.inId===selP.id, dim=selP&&s.inId!==selP.id; return '<div class="sqPl sqPlIn'+(hl?' hl':'')+(dim?' dim':'')+'" data-id="'+s.inId+'" title="On '+s.min+'’ for '+s.outSur+'" style="left:'+(s.x*100)+'%;top:'+(s.y*100)+'%"><div class="sqNum sqNumIn">'+s.inNum+'<span class="sqOn">▲</span></div><div class="sqLab">'+s.inSur+'</div><div class="sqMin">'+s.min+'</div></div>'; }).join('');
-    const lower=son.length?'<div class="sqSt2">On from the bench</div><div class="sqField sqField2">'+st+subMarks+'</div>':'<div class="sqSubs"><div class="sqNone">No substitutions</div></div>';
+    const inForOut={}; son.forEach(s=>{ if(s.outId) inForOut[s.outId]=s.inSur; });   // who replaced each subbed-off starter
+    // Top pitch: starting XI; a subbed-off player shows the red ▾ and a faint "▸ replacement".
+    const dots=pos.map(p=>{ const hl=selP&&p.id===selP.id, dim=selP&&p.id!==selP.id; const rep=(p.off&&inForOut[p.id])?'<div class="sqRepl">▸ '+inForOut[p.id]+'</div>':''; return '<div class="sqPl'+(hl?' hl':'')+(dim?' dim':'')+'" data-id="'+p.id+'" style="left:'+(p.x*100)+'%;top:'+(p.y*100)+'%"><div class="sqNum'+(p.cap?' cap':'')+'"'+(p.off?' title="Subbed off '+p.off+'"':'')+'>'+p.n+(p.off?'<span class="sqOff">▾</span>':'')+'</div><div class="sqLab">'+p.sur+'</div>'+rep+'</div>'; }).join('');
+    // Bottom pitch: the whole XI as dim ghosts (those who stayed on) + the substitutes bright at the slot they filled.
+    const offIds=new Set(pos.filter(p=>p.off).map(p=>p.id));
+    const ghosts=pos.filter(p=>!offIds.has(p.id)).map(p=>{ const hl=selP&&p.id===selP.id; return '<div class="sqPl sqGhost'+(hl?' hl':'')+'" data-id="'+p.id+'" title="'+p.sur+'" style="left:'+(p.x*100)+'%;top:'+(p.y*100)+'%"><div class="sqNum">'+p.n+'</div></div>'; }).join('');
+    const subMarks=son.map(s=>{ const hl=selP&&s.inId===selP.id, dim=selP&&s.inId!==selP.id; return '<div class="sqPl sqPlIn'+(hl?' hl':'')+(dim?' dim':'')+'" data-id="'+s.inId+'" title="On '+s.min+'’ for '+s.outSur+'" style="left:'+(s.x*100)+'%;top:'+(s.y*100)+'%"><div class="sqNum sqNumIn">'+s.inNum+'<span class="sqOn">▲</span></div><div class="sqLab">'+s.inSur+'</div><div class="sqMin">'+(s.min?s.min+' ':'')+'<span class="sqFor">for '+s.outSur+'</span></div></div>'; }).join('');
+    const lower=son.length?'<div class="sqSt2">On from the bench</div><div class="sqField sqField2">'+st+ghosts+subMarks+'</div>':'<div class="sqSubs"><div class="sqNone">No substitutions</div></div>';
     const na=selP&&selP.inv[i].kind==='na'; const invBar=selP?'<div class="sqInv'+(na?' na':'')+'">'+invTxt(selP.inv[i])+'</div>':'';
     return '<div class="sqPitch'+(na?' sqPna':'')+'" style="'+basis+'"><div class="sqPh"><div class="sqOp">v <img src="'+sflag(m.oppIso)+'">'+m.opp+'</div><div class="sqMeta"><span>'+m.round+'</span><span style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</span></div><div class="sqMeta"><span>'+m.form+'</span></div></div><div class="sqField">'+st+dots+'</div>'+invBar+lower+'</div>'; }).join('');
   let mh='<thead><tr><th class="sqPn">Player</th>';
@@ -3559,7 +3568,7 @@ function squadBodyHTML(code){
       let box; if(c.t==='full'){ box='<span class="sqPip full">Full match</span>'; }
       else { const pct=Math.max(10,Math.min(90,Math.round((parseInt(c.m)||0)/90*100)));   // green = time on the pitch, red = time off it
         const bg=c.t==='off'?'linear-gradient(90deg,#2f9e57 '+pct+'%,#d0322a '+pct+'%)':'linear-gradient(90deg,#d0322a '+pct+'%,#2f9e57 '+pct+'%)';
-        box='<span class="sqPip split" style="background:'+bg+'">'+c.m+'</span>'; }
+        box='<span class="sqPip split" style="background:'+bg+'">'+(c.t==='off'?'out':'in')+(c.m?' '+c.m:'')+'</span>'; }
       mh+='<td class="sqCell">'+box+cc+'</td>'; });
     mh+='</tr>'; }); mh+='</tbody>';
   const hero=selP?(function(){ const sx=['<b>'+(selP.apps||0)+'</b> '+((selP.apps||0)===1?'app':'apps')]; if(selP.g)sx.push('⚽'+selP.g); if(selP.a)sx.push('🥾'+selP.a); if(selP.sv)sx.push('🧤'+selP.sv); if(selP.y)sx.push('🟨'+selP.y); if(selP.r)sx.push('🟥'+selP.r); const pic=picById(selP.id);
