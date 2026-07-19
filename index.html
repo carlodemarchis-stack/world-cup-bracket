@@ -3545,11 +3545,17 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #wcSquad .sqPl.hi .sqLab{font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.85)}
 #wcSquad .sqRepl{margin-top:1px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:7.5px;line-height:1;color:rgba(255,255,255,.82);text-shadow:0 1px 2px rgba(0,0,0,.7);white-space:nowrap}
 #wcSquad .sqMin .sqFor{color:rgba(255,255,255,.72);font-weight:700}
-#wcSquad .sqBody{display:flex;flex-direction:row;align-items:stretch;overflow:hidden;padding:0}
-#sqViews{flex:1;min-width:0;min-height:0;overflow:auto;padding:18px 18px 96px}
-#sqHeroDock{flex:0 0 0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
-#sqHeroDock.on{flex:0 0 216px;padding:0 0 96px 16px}
-#sqHero{position:static;left:auto;bottom:auto;z-index:auto;width:184px}`;
+#wcSquad .sqBody{padding-bottom:96px}
+#sqPlayerBar{display:none}
+#sqPlayerBar.on{display:flex;align-items:center;gap:9px;margin-left:14px}
+#sqPlayerBar .sqPbAv{width:44px;height:44px;border-radius:50%;overflow:hidden;flex:none;background:#e9e2d3;box-shadow:0 2px 7px rgba(0,0,0,.22);border:2px solid #fff}
+#sqPlayerBar .sqPbAv img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+#sqPlayerBar .sqPbAv span{display:flex;align-items:center;justify-content:center;height:100%;font-family:'Barlow Condensed',sans-serif;font-weight:800;color:#6f6656;font-size:16px}
+#sqPlayerBar .sqPbName{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;color:#1c1813;line-height:1.05}
+#sqPlayerBar .sqPbName b{color:#6f6656;font-size:13px;margin-right:2px}
+#sqPlayerBar .sqPbStat{margin-top:3px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:12.5px;color:#6f6656}
+#sqPlayerBar .sqPbStat b{color:#1c1813;font-weight:800}
+#sqPlayerBar .sqPbStat .sep{opacity:.35}`;
 function squadBodyHTML(code){
   const R=buildSquadRun(code);
   const rescol=r=>r==='W'?STY.GREEN:r==='L'?STY.RED:STY.SUB;
@@ -3590,7 +3596,7 @@ function squadBodyHTML(code){
       mh+='<td class="sqCell">'+box+cc+'</td>'; });
     mh+='</tr>'; }); mh+='</tbody>';
   const hero=selP?(function(){ const sx=['<b>'+(selP.apps||0)+'</b> '+((selP.apps||0)===1?'app':'apps')]; if(selP.g)sx.push('⚽'+selP.g); if(selP.a)sx.push('🥾'+selP.a); if(selP.sv)sx.push('🧤'+selP.sv); if(selP.y)sx.push('🟨'+selP.y); if(selP.r)sx.push('🟥'+selP.r); const pic=picById(selP.id);
-    return '<div id="sqHero"><div class="sqHImg">'+(pic?'<img src="'+shero(pic,360)+'" alt="">':'')+'</div><div class="sqHInfo"><div class="sqHName"><span class="sqHNum">'+selP.n+'</span>'+selP.sur+'</div><div class="sqHStat">'+sx.join('<span class="sep">·</span>')+'</div></div></div>'; })():'';
+    return '<div class="sqPbAv">'+(pic?'<img src="'+pic+'?&io=transform:fill,aspectratio:1x1,width:120,gravity:top&quality=88" alt="">':'<span>'+selP.n+'</span>')+'</div><div class="sqPbTxt"><div class="sqPbName"><b>'+selP.n+'</b> '+selP.sur+'</div><div class="sqPbStat">'+sx.join('<span class="sep">·</span>')+'</div></div>'; })():'';
   return { name:R.name, iso:R.iso, players:R.players, html:
     '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div></div>'+
     '<div class="sqView'+(squadTab==='matrix'?' on':'')+'" id="sqv-matrix"><div class="sqScroll"><table class="sqTable">'+mh+'</table></div>'+
@@ -3607,10 +3613,10 @@ function openSquad(code){
     const teamOpts=squadSeq.map(c=>'<option value="'+c+'">'+tin(c).name+'</option>').join('');
     const ov=el('div',''); ov.id='wcSquad';
     ov.innerHTML='<style>'+SQUAD_CSS+SQUAD_BAR_CSS+'</style>'+
-      '<div class="sqBar"><div class="sqTitle" id="sqTitle"></div>'+
+      '<div class="sqBar"><div class="sqTitle" id="sqTitle"></div><div id="sqPlayerBar"></div>'+
         '<div class="sqTabs"><button class="sqTab on" data-v="pitch">Pitches</button><button class="sqTab" data-v="matrix">Matrix</button></div>'+
         '<button id="sqX" title="Close">✕</button></div>'+
-      '<div class="sqBody" id="sqBody"><div id="sqHeroDock"></div><div id="sqViews"></div></div>'+
+      '<div class="sqBody" id="sqBody"><div id="sqViews"></div></div>'+
       '<div id="sqCtl"><button id="sqClose" title="Close">✕</button><button id="sqFirst" title="Back to the first team">↺</button><button id="sqPrev" title="Previous team (←)">◀</button><button id="sqPlay" title="Auto-play through teams">▶</button><button id="sqNext" title="Next team (→)">▶</button><div id="sqLbl"></div><select id="sqPlayerSel" title="Highlight a player across every match"></select><select id="sqSeqSel" title="Jump to a team">'+teamOpts+'</select></div>';
     document.body.appendChild(ov); squadOv=ov; modalEl=ov;
     document.getElementById('sqX').onclick=closeSquad;
@@ -3635,18 +3641,18 @@ function squadShow(code){
   squadIdx=Math.max(0,squadSeq.indexOf(code));
   const b=squadBodyHTML(code);
   document.getElementById('sqViews').innerHTML=b.html;
-  const hd=document.getElementById('sqHeroDock'); hd.innerHTML=b.hero||''; hd.classList.toggle('on',!!b.hero);
+  const pbar=document.getElementById('sqPlayerBar'); pbar.innerHTML=b.hero||''; pbar.classList.toggle('on',!!b.hero);
   document.getElementById('sqTitle').innerHTML='<img src="'+sflag(b.iso)+'">'+b.name+' <b>· Rotation</b>';
   const sel=document.getElementById('sqSeqSel'); if(sel&&sel.value!==code) sel.value=code;
   const psel=document.getElementById('sqPlayerSel'); if(psel){ psel.innerHTML='<option value="">Highlight a player…</option>'+b.players.map(p=>'<option value="'+p.id+'">'+p.n+' · '+p.sur+'</option>').join(''); psel.value=''; }
   document.getElementById('sqLbl').innerHTML='<b>'+(squadIdx+1)+'/'+squadSeq.length+'</b> · '+b.name;
   const pb=document.getElementById('sqPlay'); if(pb) pb.textContent=squadPlaying?'❚❚':'▶';
-  const bd=document.getElementById('sqViews'); if(bd) bd.scrollTop=0;
+  const bd=document.getElementById('sqBody'); if(bd) bd.scrollTop=0;
   try{ history.replaceState(null,'',location.pathname+'?squad='+code); }catch(e){}
   squadSched();
 }
-// Re-render only the body (pitches/matrix + hero dock) for the current team — used when a player is (de)selected.
-function squadRenderBody(){ if(!squadOv||!squadCode) return; const b=squadBodyHTML(squadCode); const bd=document.getElementById('sqViews'); const top=bd?bd.scrollTop:0; document.getElementById('sqViews').innerHTML=b.html; const hd=document.getElementById('sqHeroDock'); hd.innerHTML=b.hero||''; hd.classList.toggle('on',!!b.hero); if(bd) bd.scrollTop=top; }
+// Re-render only the views + top-bar player card for the current team — used when a player is (de)selected.
+function squadRenderBody(){ if(!squadOv||!squadCode) return; const b=squadBodyHTML(squadCode); const bd=document.getElementById('sqBody'); const top=bd?bd.scrollTop:0; document.getElementById('sqViews').innerHTML=b.html; const pbar=document.getElementById('sqPlayerBar'); pbar.innerHTML=b.hero||''; pbar.classList.toggle('on',!!b.hero); if(bd) bd.scrollTop=top; }
 function squadSelectPlayer(id){ if(!squadOv) return; squadPlayer=id||null; squadRenderBody(); }
 function squadGo(d){ if(!squadOv) return; const n=squadIdx+d; if(n<0||n>=squadSeq.length){ if(d>0&&squadPlaying)squadToggle(); return; } squadShow(squadSeq[n]); }
 function squadToggle(){ if(!squadOv) return; squadPlaying=!squadPlaying; const pb=document.getElementById('sqPlay'); if(pb) pb.textContent=squadPlaying?'❚❚':'▶'; squadSched(); }
