@@ -3478,13 +3478,16 @@ const SQUAD_CSS=`#wcSquad{position:fixed;inset:0;z-index:350;background:#f1ece2;
 #wcSquad .sqDot{width:6px;height:6px;border-radius:50%;background:#ded7c8;display:inline-block}
 #wcSquad .sqLeg{display:flex;gap:18px;flex-wrap:wrap;margin:14px 2px 0;font-size:12.5px;color:#6f6656;align-items:center;font-family:'Barlow Condensed',sans-serif}
 #wcSquad .sqLeg span{display:inline-flex;align-items:center;gap:7px}#wcSquad .sqLeg i{width:22px;height:14px;border-radius:4px;display:inline-block}#wcSquad .sqLeg b.sqDot{width:8px;height:8px}`;
-let squadOv=null;
-function openSquad(code){
-  if(!DATA||!code) return;
-  const already=!!squadOv; if(already){ squadOv.remove(); squadOv=null; }
+let squadOv=null, squadTab='pitch', squadPlaying=false, squadTimer=null, squadSeq=[], squadIdx=0;
+const SQUAD_MS=5000;   // auto-advance dwell per team
+const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
+#sqCtl{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:360;display:flex;align-items:center;gap:5px;background:#1c1813;border-radius:40px;padding:8px 12px;font-family:'Barlow Condensed',sans-serif;color:#f0ebdd;box-shadow:0 10px 34px rgba(0,0,0,.45);max-width:94vw}
+#sqCtl button{background:transparent;border:none;color:#f0ebdd;cursor:pointer;font:inherit;font-size:17px;padding:6px 11px;border-radius:20px;line-height:1}
+#sqCtl button:hover{background:rgba(255,255,255,.12)}
+#sqLbl{min-width:128px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;white-space:nowrap}#sqLbl b{color:#cf9c1e}
+#sqSeqSel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f0ebdd;font:inherit;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:20px;padding:6px 10px;cursor:pointer;max-width:140px}#sqSeqSel option{color:#1c1813;text-transform:none}`;
+function squadBodyHTML(code){
   const R=buildSquadRun(code);
-  const teams=[...new Set(storyMatches().flatMap(m=>[m.a,m.b]))].filter(Boolean).sort((a,b)=>tin(a).name.localeCompare(tin(b).name));
-  const teamOpts=teams.map(c=>'<option value="'+c+'"'+(c===code?' selected':'')+'>'+tin(c).name+'</option>').join('');
   const rescol=r=>r==='W'?STY.GREEN:r==='L'?STY.RED:STY.SUB;
   const pitchHTML=R.matches.map((m,i)=>{ const pos=R.pitches[i]; let st=''; for(let s=0;s<8;s++) st+='<div class="sqStripe" style="top:'+(s*12.5)+'%"></div>';
     const dots=pos.map(p=>'<div class="sqPl" style="left:'+(p.x*100)+'%;top:'+(p.y*100)+'%"><div class="sqNum'+(p.cap?' cap':'')+'"'+(p.off?' title="Subbed off '+p.off+'"':'')+'>'+p.n+(p.off?'<span class="sqOff">▾</span>':'')+'</div><div class="sqLab">'+p.sur+'</div></div>').join('');
@@ -3498,23 +3501,58 @@ function openSquad(code){
     p.cells.forEach(c=>{ if(!c){ mh+='<td class="sqCell"><span class="sqDot"></span></td>'; return; } const cc=c.cap?'<span class="sqCc">C</span>':'';
       mh+='<td class="sqCell"><span class="sqPip '+c.t+'">'+(c.t==='full'?'90’':c.m)+'</span>'+cc+'</td>'; });
     mh+='</tr>'; }); mh+='</tbody>';
-  const ov=el('div',''); ov.id='wcSquad';
-  ov.innerHTML='<style>'+SQUAD_CSS+'</style>'+
-    '<div class="sqBar"><div class="sqTitle"><img src="'+sflag(R.iso)+'">'+R.name+' <b>· Rotation</b></div>'+
-      '<select id="sqTeam" title="Switch team">'+teamOpts+'</select>'+
-      '<div class="sqTabs"><button class="sqTab on" data-v="pitch">Pitches</button><button class="sqTab" data-v="matrix">Matrix</button></div>'+
-      '<button id="sqX" title="Close">✕</button></div>'+
-    '<div class="sqBody"><div class="sqView on" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div></div>'+
-      '<div class="sqView" id="sqv-matrix"><div class="sqScroll"><table class="sqTable">'+mh+'</table></div>'+
-      '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 55%,'+STY.GOLD+' 55%)"></i>Subbed off</span><span><i style="background:'+STY.BLUE+'"></i>Came on</span><span><b class="sqDot"></b>Didn’t feature</span></div></div></div>';
-  document.body.appendChild(ov); squadOv=ov; modalEl=ov;
-  document.getElementById('sqX').onclick=closeSquad;
-  document.getElementById('sqTeam').onchange=e=>openSquad(e.target.value);
-  ov.querySelector('.sqTabs').addEventListener('click',e=>{ const b=e.target.closest('.sqTab'); if(!b)return; ov.querySelectorAll('.sqTab').forEach(t=>t.classList.toggle('on',t===b)); ov.querySelectorAll('.sqView').forEach(v=>v.classList.toggle('on',v.id==='sqv-'+b.dataset.v)); });
-  if(!already){ ov._key=e=>{ if(e.key==='Escape')closeSquad(); }; addEventListener('keydown',ov._key); }else{ ov._key=squadOv&&squadOv._key; }
-  try{ history.replaceState(null,'',location.pathname+'?squad='+code); }catch(e){}
+  return { name:R.name, iso:R.iso, html:
+    '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div></div>'+
+    '<div class="sqView'+(squadTab==='matrix'?' on':'')+'" id="sqv-matrix"><div class="sqScroll"><table class="sqTable">'+mh+'</table></div>'+
+    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 55%,'+STY.GOLD+' 55%)"></i>Subbed off</span><span><i style="background:'+STY.BLUE+'"></i>Came on</span><span><b class="sqDot"></b>Didn’t feature</span></div></div>' };
 }
-function closeSquad(){ if(!squadOv)return; if(squadOv._key)removeEventListener('keydown',squadOv._key); squadOv.remove(); squadOv=null; if(modalEl&&modalEl.id==='wcSquad')modalEl=null; try{ history.replaceState(null,'',location.pathname); }catch(e){} }
+// Film-style rotation: one team per slide, a control bar below steps / auto-plays through the field.
+function openSquad(code){
+  if(!DATA||!code) return;
+  squadSeq=[...new Set(storyMatches().flatMap(m=>[m.a,m.b]))].filter(Boolean).sort((a,b)=>tin(a).name.localeCompare(tin(b).name));
+  if(!squadSeq.length) return;
+  if(!squadSeq.includes(code)) code=squadSeq[0];
+  if(!squadOv){
+    const teamOpts=squadSeq.map(c=>'<option value="'+c+'">'+tin(c).name+'</option>').join('');
+    const ov=el('div',''); ov.id='wcSquad';
+    ov.innerHTML='<style>'+SQUAD_CSS+SQUAD_BAR_CSS+'</style>'+
+      '<div class="sqBar"><div class="sqTitle" id="sqTitle"></div>'+
+        '<div class="sqTabs"><button class="sqTab on" data-v="pitch">Pitches</button><button class="sqTab" data-v="matrix">Matrix</button></div>'+
+        '<button id="sqX" title="Close">✕</button></div>'+
+      '<div class="sqBody" id="sqBody"></div>'+
+      '<div id="sqCtl"><button id="sqClose" title="Close">✕</button><button id="sqFirst" title="Back to the first team">↺</button><button id="sqPrev" title="Previous team (←)">◀</button><button id="sqPlay" title="Auto-play through teams">▶</button><button id="sqNext" title="Next team (→)">▶</button><div id="sqLbl"></div><select id="sqSeqSel" title="Jump to a team">'+teamOpts+'</select></div>';
+    document.body.appendChild(ov); squadOv=ov; modalEl=ov;
+    document.getElementById('sqX').onclick=closeSquad;
+    document.getElementById('sqClose').onclick=closeSquad;
+    document.getElementById('sqFirst').onclick=()=>squadShow(squadSeq[0]);
+    document.getElementById('sqPrev').onclick=()=>squadGo(-1);
+    document.getElementById('sqNext').onclick=()=>squadGo(1);
+    document.getElementById('sqPlay').onclick=squadToggle;
+    document.getElementById('sqSeqSel').onchange=e=>squadShow(e.target.value);
+    ov.querySelector('.sqTabs').addEventListener('click',e=>{ const b=e.target.closest('.sqTab'); if(!b)return; squadTab=b.dataset.v; ov.querySelectorAll('.sqTab').forEach(t=>t.classList.toggle('on',t===b)); ov.querySelectorAll('.sqView').forEach(v=>v.classList.toggle('on',v.id==='sqv-'+squadTab)); });
+    ov.addEventListener('click',()=>{ if(squadPlaying) squadSched(); });   // any interaction resets the auto-advance timer
+    ov._key=e=>{ if(e.key==='Escape')closeSquad(); else if(e.key==='ArrowRight')squadGo(1); else if(e.key==='ArrowLeft')squadGo(-1); else if(e.key===' '){ e.preventDefault(); squadToggle(); } };
+    addEventListener('keydown',ov._key);
+  }
+  squadShow(code);
+}
+function squadShow(code){
+  if(!squadOv) return;
+  squadIdx=Math.max(0,squadSeq.indexOf(code));
+  const b=squadBodyHTML(code);
+  document.getElementById('sqBody').innerHTML=b.html;
+  document.getElementById('sqTitle').innerHTML='<img src="'+sflag(b.iso)+'">'+b.name+' <b>· Rotation</b>';
+  const sel=document.getElementById('sqSeqSel'); if(sel&&sel.value!==code) sel.value=code;
+  document.getElementById('sqLbl').innerHTML='<b>'+(squadIdx+1)+'/'+squadSeq.length+'</b> · '+b.name;
+  const pb=document.getElementById('sqPlay'); if(pb) pb.textContent=squadPlaying?'❚❚':'▶';
+  const bd=document.getElementById('sqBody'); if(bd) bd.scrollTop=0;
+  try{ history.replaceState(null,'',location.pathname+'?squad='+code); }catch(e){}
+  squadSched();
+}
+function squadGo(d){ if(!squadOv) return; const n=squadIdx+d; if(n<0||n>=squadSeq.length){ if(d>0&&squadPlaying)squadToggle(); return; } squadShow(squadSeq[n]); }
+function squadToggle(){ if(!squadOv) return; squadPlaying=!squadPlaying; const pb=document.getElementById('sqPlay'); if(pb) pb.textContent=squadPlaying?'❚❚':'▶'; squadSched(); }
+function squadSched(){ clearTimeout(squadTimer); if(squadPlaying) squadTimer=setTimeout(()=>squadGo(1), SQUAD_MS); }
+function closeSquad(){ if(!squadOv)return; clearTimeout(squadTimer); squadPlaying=false; if(squadOv._key)removeEventListener('keydown',squadOv._key); squadOv.remove(); squadOv=null; if(modalEl&&modalEl.id==='wcSquad')modalEl=null; try{ history.replaceState(null,'',location.pathname); }catch(e){} }
 window.openSquad=openSquad;
 // Deep-link: ?film=N opens the movie at beat N; ?team=CODE opens that team's cut;
 // ?team=film (or ?film with no value) auto-plays the full film straight away.
