@@ -3501,11 +3501,14 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #sqCtl button:hover{background:rgba(255,255,255,.12)}
 #sqLbl{min-width:128px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;white-space:nowrap}#sqLbl b{color:#cf9c1e}
 #sqSeqSel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f0ebdd;font:inherit;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:20px;padding:6px 10px;cursor:pointer;max-width:140px}#sqSeqSel option{color:#1c1813;text-transform:none}
-#wcSquad .sqPn{min-width:176px}
-#wcSquad .sqCell{height:44px}
-#wcSquad .sqStat{margin-top:3px;display:flex;flex-wrap:wrap;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:10.5px;line-height:1.1;color:#6f6656}
+#wcSquad .sqPn{min-width:236px}
+#wcSquad .sqCell{height:34px}
+#wcSquad .sqPnRow{display:flex;align-items:baseline;gap:8px}
+#wcSquad .sqStat{margin-left:auto;display:inline-flex;flex-wrap:nowrap;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:11px;line-height:1.1;color:#6f6656;white-space:nowrap}
 #wcSquad .sqStat b{color:#1c1813;font-weight:800}
 #wcSquad .sqStat .sep{opacity:.35}
+#wcSquad .sqPip{width:auto;min-width:44px;max-width:66px;padding:0 5px;font-size:9.5px;letter-spacing:.2px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);white-space:nowrap;overflow:hidden}
+#wcSquad .sqPip.full{background:#2f9e57}
 #wcSquad .sqPr.sqUnused td{opacity:.5}
 #wcSquad .sqPitch{min-width:150px;box-sizing:border-box}
 #wcSquad .sqField{height:252px}
@@ -3551,16 +3554,20 @@ function squadBodyHTML(code){
   mh+='</tr></thead><tbody>'; let cur=-1; const POSN={0:'Goalkeeper',1:'Defenders',2:'Midfielders',3:'Forwards'};
   R.players.forEach(p=>{ if(p.pos!==cur){ cur=p.pos; mh+='<tr class="sqGrp"><td class="sqPn" style="position:sticky;left:0">'+(POSN[p.pos]||'')+'</td>'+R.matches.map(()=>'<td class="sqGrp"></td>').join('')+'</tr>'; }
     const stx=['<b>'+(p.apps||0)+'</b> '+((p.apps||0)===1?'app':'apps')]; if(p.g)stx.push('⚽'+p.g); if(p.a)stx.push('🥾'+p.a); if(p.sv)stx.push('🧤'+p.sv); if(p.y)stx.push('🟨'+p.y); if(p.r)stx.push('🟥'+p.r);
-    mh+='<tr class="sqPr'+(p.apps?'':' sqUnused')+'"><td class="sqPn"><span class="n">'+p.n+'</span><span class="s">'+p.sur+'</span><div class="sqStat">'+stx.join('<span class="sep">·</span>')+'</div></td>';
+    mh+='<tr class="sqPr'+(p.apps?'':' sqUnused')+'"><td class="sqPn"><div class="sqPnRow"><span class="n">'+p.n+'</span><span class="s">'+p.sur+'</span><span class="sqStat">'+stx.join('<span class="sep">·</span>')+'</span></div></td>';
     p.cells.forEach(c=>{ if(!c){ mh+='<td class="sqCell"><span class="sqDot"></span></td>'; return; } const cc=c.cap?'<span class="sqCc">C</span>':'';
-      mh+='<td class="sqCell"><span class="sqPip '+c.t+'">'+(c.t==='full'?'90’':c.m)+'</span>'+cc+'</td>'; });
+      let box; if(c.t==='full'){ box='<span class="sqPip full">Full match</span>'; }
+      else { const pct=Math.max(10,Math.min(90,Math.round((parseInt(c.m)||0)/90*100)));   // green = time on the pitch, red = time off it
+        const bg=c.t==='off'?'linear-gradient(90deg,#2f9e57 '+pct+'%,#d0322a '+pct+'%)':'linear-gradient(90deg,#d0322a '+pct+'%,#2f9e57 '+pct+'%)';
+        box='<span class="sqPip split" style="background:'+bg+'">'+c.m+'</span>'; }
+      mh+='<td class="sqCell">'+box+cc+'</td>'; });
     mh+='</tr>'; }); mh+='</tbody>';
   const hero=selP?(function(){ const sx=['<b>'+(selP.apps||0)+'</b> '+((selP.apps||0)===1?'app':'apps')]; if(selP.g)sx.push('⚽'+selP.g); if(selP.a)sx.push('🥾'+selP.a); if(selP.sv)sx.push('🧤'+selP.sv); if(selP.y)sx.push('🟨'+selP.y); if(selP.r)sx.push('🟥'+selP.r); const pic=picById(selP.id);
     return '<div id="sqHero"><div class="sqHImg">'+(pic?'<img src="'+shero(pic,360)+'" alt="">':'')+'</div><div class="sqHInfo"><div class="sqHName"><span class="sqHNum">'+selP.n+'</span>'+selP.sur+'</div><div class="sqHStat">'+sx.join('<span class="sep">·</span>')+'</div></div></div>'; })():'';
   return { name:R.name, iso:R.iso, players:R.players, html:
     '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div></div>'+
     '<div class="sqView'+(squadTab==='matrix'?' on':'')+'" id="sqv-matrix"><div class="sqScroll"><table class="sqTable">'+mh+'</table></div>'+
-    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 55%,'+STY.GOLD+' 55%)"></i>Subbed off</span><span><i style="background:'+STY.BLUE+'"></i>Came on</span><span><b class="sqDot"></b>Didn’t feature</span></div></div>'+hero };
+    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 60%,'+STY.RED+' 60%)"></i>Subbed off (min)</span><span><i style="background:linear-gradient(90deg,'+STY.RED+' 60%,'+STY.GREEN+' 60%)"></i>Came on (min)</span><span><b class="sqDot"></b>Didn’t feature</span></div></div>'+hero };
 }
 // Film-style rotation: one team per slide, a control bar below steps / auto-plays through the field.
 function openSquad(code){
