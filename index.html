@@ -3404,13 +3404,14 @@ function buildSquadRun(code){
   const RL={'Round of 32':'R32','Round of 16':'R16','Quarter-final':'QF','Quarter-finals':'QF','Semi-final':'SF','Semi-finals':'SF','Final':'FINAL','Third Place':'3RD','Third-place play-off':'3RD'};
   const rlabel=m=>{ const r=m.round||''; return /group/i.test(r)?'GROUP':(RL[r]||r.toUpperCase()); };
   const ms=storyMatches().filter(m=>m.a===code||m.b===code).sort((a,b)=>(a.num||0)-(b.num||0));
-  const matches=[],pitches=[],subsD=[],subsOnD=[],feat={};
+  const matches=[],pitches=[],subsD=[],subsOnD=[],evD=[],feat={};
   ms.forEach(m=>{
     const opp=m.a===code?m.b:m.a, oi=tin(opp);
     const line=(m.line||{})[code]||{}, xi=line.xi||[], subs=line.subs||[], form=(m.form||{})[code]||'';
     const gf=m.a===code?m.aGoals:m.bGoals, ga=m.a===code?m.bGoals:m.aGoals;
     const res=m.winner?(m.winner===code?'W':'L'):(gf>ga?'W':gf<ga?'L':'D');
     matches.push({opp,oppIso:oi.iso,round:rlabel(m),res,score:gf+'-'+ga,form});
+    evD.push({goals:m.goals||[],cards:m.cards||[]});   // per-match events, filtered by the selected player later
     const offm={}; subs.forEach(s=>offm[s[1]]=s[2]);
     const lines=(form||'4-4-2').split('-').map(x=>+x); const pos=[{x:0.5,y:0.9,id:xi[0]}]; let idx=1;
     lines.forEach((cnt,li)=>{ const y=0.72-(li/lines.length)*0.64; for(let j=0;j<cnt;j++){ if(idx<xi.length){ pos.push({x:(j+1)/(cnt+1),y,id:xi[idx]}); idx++; } } });
@@ -3441,7 +3442,7 @@ function buildSquadRun(code){
   });
   const starts=p=>p.cells.filter(c=>c&&(c.t==='full'||c.t==='off')).length;
   const players=Object.values(feat).sort((a,b)=>a.pos-b.pos||starts(b)-starts(a)||(a.n||0)-(b.n||0));
-  return {code,name:tin(code).name,iso:tin(code).iso,matches,players,pitches,subs:subsD,subsOn:subsOnD};
+  return {code,name:tin(code).name,iso:tin(code).iso,matches,players,pitches,subs:subsD,subsOn:subsOnD,events:evD};
 }
 const SQUAD_CSS=`#wcSquad{position:fixed;inset:0;z-index:350;background:#f1ece2;color:#1c1813;font-family:'Barlow',system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
 #wcSquad .sqBar{flex:none;display:flex;align-items:center;gap:13px;flex-wrap:wrap;padding:11px 16px;border-bottom:1px solid #e4ddce;background:#fbf9f4}
@@ -3555,13 +3556,16 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #sqPlayerBar .sqPbName b{color:#6f6656;font-size:13px;margin-right:2px}
 #sqPlayerBar .sqPbStat{margin-top:3px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:12.5px;color:#6f6656}
 #sqPlayerBar .sqPbStat b{color:#1c1813;font-weight:800}
-#sqPlayerBar .sqPbStat .sep{opacity:.35}`;
+#sqPlayerBar .sqPbStat .sep{opacity:.35}
+#wcSquad .sqEv{padding:0 10px 6px;background:#f3eddf;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#1c1813;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 8px;line-height:1.15}
+#wcSquad .sqEv .d{opacity:.35}
+#wcSquad .sqInv:has(+ .sqEv){padding-bottom:2px}`;
 function squadBodyHTML(code){
   const R=buildSquadRun(code);
   const rescol=r=>r==='W'?STY.GREEN:r==='L'?STY.RED:STY.SUB;
   const selP=squadPlayer?R.players.find(p=>p.id===squadPlayer):null;
   const n=R.matches.length, basis='flex:0 1 calc((100% - '+((n-1)*12+10)+'px)/'+n+');max-width:210px';
-  const invTxt=iv=>!iv||iv.kind==='na'?'Did not feature':iv.kind==='full'?'Played the full match':iv.kind==='off'?'Started · off '+(iv.min||'?')+'’ for '+iv.other:iv.kind==='on'?'On '+(iv.min||'?')+'’ for '+iv.other:'';
+  const invTxt=iv=>!iv||iv.kind==='na'?'Did not feature':iv.kind==='full'?'Played the full match':iv.kind==='off'?'Started · off'+(iv.min?' '+iv.min:'')+' for '+iv.other:iv.kind==='on'?'On'+(iv.min?' '+iv.min:'')+' for '+iv.other:'';
   const pitchHTML=R.matches.map((m,i)=>{ const pos=R.pitches[i]; let st=''; for(let s=0;s<8;s++) st+='<div class="sqStripe" style="top:'+(s*12.5)+'%"></div>';
     const son=(R.subsOn[i]||[]).filter(s=>s.x!=null);
     const inForOut={}; son.forEach(s=>{ if(s.outId) inForOut[s.outId]=s.inSur; });   // who replaced each subbed-off starter
@@ -3580,7 +3584,17 @@ function squadBodyHTML(code){
     const ghosts=pos.filter(p=>!offIds.has(p.id)).map(p=>'<div class="sqPl sqGhost'+hiCls(p.id,botFull)+'" data-id="'+p.id+'" title="'+p.sur+'" style="left:'+(p.x*100)+'%;top:'+(p.y*100)+'%"><div class="sqNum">'+p.n+'</div></div>').join('');
     const subMarks=son.map(s=>{ const dim=selP&&!(botFull&&botFull.id===s.inId)&&s.inId!==botNorm; return '<div class="sqPl sqPlIn'+hiCls(s.inId,botFull)+(dim?' dim':'')+'" data-id="'+s.inId+'" title="On '+s.min+'’ for '+s.outSur+'" style="left:'+(s.x*100)+'%;top:'+(s.y*100)+'%"><div class="sqNum sqNumIn">'+s.inNum+'<span class="sqOn">▲</span></div><div class="sqLab">'+s.inSur+'</div><div class="sqMin">'+(s.min?s.min+' ':'')+'<span class="sqFor">for '+s.outSur+'</span></div></div>'; }).join('');
     const lower=son.length?'<div class="sqSt2">On from the bench</div><div class="sqField sqField2">'+st+ghosts+subMarks+'</div>':'<div class="sqSubs"><div class="sqNone">No substitutions</div></div>';
-    const na=selP&&selP.inv[i].kind==='na'; const invBar=selP?'<div class="sqInv'+(na?' na':'')+'">'+invTxt(selP.inv[i])+'</div>':'';
+    const na=selP&&selP.inv[i].kind==='na';
+    const evLine=selP?(function(){ const E=(R.events&&R.events[i])||{goals:[],cards:[]}; const parts=[];
+      const gg=(E.goals||[]).filter(g=>g.id===selP.id&&String(g.p||'').indexOf('(o.g.)')<0);
+      const aa=(E.goals||[]).filter(g=>g.aid===selP.id);
+      const yy=(E.cards||[]).filter(c=>c.id===selP.id&&c.c!=='R'), rr=(E.cards||[]).filter(c=>c.id===selP.id&&c.c==='R');
+      if(gg.length) parts.push('⚽ '+gg.map(g=>g.m+(g.pen?' (pen)':'')).join(', '));
+      if(aa.length) parts.push('🥾 '+aa.map(g=>g.m).join(', '));
+      if(yy.length) parts.push('🟨 '+yy.map(c=>c.m).join(', '));
+      if(rr.length) parts.push('🟥 '+rr.map(c=>c.m).join(', '));
+      return parts.length?'<div class="sqEv">'+parts.join('<span class="d">·</span>')+'</div>':''; })():'';
+    const invBar=selP?'<div class="sqInv'+(na?' na':'')+'">'+invTxt(selP.inv[i])+'</div>'+evLine:'';
     return '<div class="sqPitch'+(na?' sqPna':'')+'" style="'+basis+'"><div class="sqPh"><div class="sqOp">v <img src="'+sflag(m.oppIso)+'">'+m.opp+'</div><div class="sqMeta"><span>'+m.round+'</span><span style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</span></div><div class="sqMeta"><span>'+m.form+'</span></div></div><div class="sqField">'+st+dots+'</div>'+invBar+lower+'</div>'; }).join('');
   let mh='<thead><tr><th class="sqPn">Player</th>';
   R.matches.forEach(m=>{ mh+='<th class="sqMh"><div class="rd">'+m.round+'</div><div class="op">v <img src="'+sflag(m.oppIso)+'">'+m.opp+'</div><div class="sc" style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</div><div class="fm">'+m.form+'</div></th>'; });
