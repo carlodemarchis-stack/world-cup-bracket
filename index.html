@@ -3565,20 +3565,20 @@ function squadBodyHTML(code){
   const pitchHTML=R.matches.map((m,i)=>{ const pos=R.pitches[i]; let st=''; for(let s=0;s<8;s++) st+='<div class="sqStripe" style="top:'+(s*12.5)+'%"></div>';
     const son=(R.subsOn[i]||[]).filter(s=>s.x!=null);
     const inForOut={}; son.forEach(s=>{ if(s.outId) inForOut[s.outId]=s.inSur; });   // who replaced each subbed-off starter
-    // Selected-player highlight, colour-coded by role; the counterpart lights up on the opposite pitch.
-    let topHi=null, botHi=null;
+    // Selected player gets the big colour-coded ring; the paired player shows at NORMAL size (not dimmed); everyone else dims.
+    let topFull=null, botFull=null, topNorm=null, botNorm=null;
     if(selP){ const iv=selP.inv[i];
-      if(iv.kind==='full'){ topHi={id:selP.id,c:'g'}; }                                                                       // green on top, nothing below
-      else if(iv.kind==='off'){ topHi={id:selP.id,c:'r'}; const inc=son.find(s=>s.outId===selP.id); if(inc) botHi={id:inc.inId,c:'g'}; }   // red on top, the player who came on green below
-      else if(iv.kind==='on'){ botHi={id:selP.id,c:'g'}; const out=son.find(s=>s.inId===selP.id); if(out) topHi={id:out.outId,c:'r'}; }     // green below, the player who went off red on top
+      if(iv.kind==='full'){ topFull={id:selP.id,c:'g'}; }                                                                        // green on top, nothing below
+      else if(iv.kind==='off'){ topFull={id:selP.id,c:'r'}; const inc=son.find(s=>s.outId===selP.id); if(inc) botNorm=inc.inId; } // red on top, the man who came on stays normal below
+      else if(iv.kind==='on'){ botFull={id:selP.id,c:'g'}; const out=son.find(s=>s.inId===selP.id); if(out) topNorm=out.outId; }   // green below, the man who went off stays normal on top
     }
-    const hiCls=(id,hi)=>hi&&hi.id===id?' hi '+(hi.c==='r'?'hiR':'hiG'):'';
+    const hiCls=(id,full)=>full&&full.id===id?' hi '+(full.c==='r'?'hiR':'hiG'):'';
     // Top pitch: starting XI; a subbed-off player shows the red ▾ and a faint "▸ replacement".
-    const dots=pos.map(p=>{ const off=p.off!=null; const dim=selP&&!(topHi&&topHi.id===p.id); const rep=(off&&inForOut[p.id])?'<div class="sqRepl">▸ '+inForOut[p.id]+'</div>':''; return '<div class="sqPl'+hiCls(p.id,topHi)+(dim?' dim':'')+'" data-id="'+p.id+'" style="left:'+(p.x*100)+'%;top:'+(p.y*100)+'%"><div class="sqNum'+(p.cap?' cap':'')+'"'+(off?' title="Subbed off '+(p.off||'')+'"':'')+'>'+p.n+(off?'<span class="sqOff">▾</span>':'')+'</div><div class="sqLab">'+p.sur+'</div>'+rep+'</div>'; }).join('');
+    const dots=pos.map(p=>{ const off=p.off!=null; const dim=selP&&!(topFull&&topFull.id===p.id)&&p.id!==topNorm; const rep=(off&&inForOut[p.id])?'<div class="sqRepl">▸ '+inForOut[p.id]+'</div>':''; return '<div class="sqPl'+hiCls(p.id,topFull)+(dim?' dim':'')+'" data-id="'+p.id+'" style="left:'+(p.x*100)+'%;top:'+(p.y*100)+'%"><div class="sqNum'+(p.cap?' cap':'')+'"'+(off?' title="Subbed off '+(p.off||'')+'"':'')+'>'+p.n+(off?'<span class="sqOff">▾</span>':'')+'</div><div class="sqLab">'+p.sur+'</div>'+rep+'</div>'; }).join('');
     // Bottom pitch: the whole XI as dim ghosts (those who stayed on) + the substitutes bright at the slot they filled.
     const offIds=new Set(pos.filter(p=>p.off!=null).map(p=>p.id));
-    const ghosts=pos.filter(p=>!offIds.has(p.id)).map(p=>'<div class="sqPl sqGhost'+hiCls(p.id,botHi)+'" data-id="'+p.id+'" title="'+p.sur+'" style="left:'+(p.x*100)+'%;top:'+(p.y*100)+'%"><div class="sqNum">'+p.n+'</div></div>').join('');
-    const subMarks=son.map(s=>{ const dim=selP&&!(botHi&&botHi.id===s.inId); return '<div class="sqPl sqPlIn'+hiCls(s.inId,botHi)+(dim?' dim':'')+'" data-id="'+s.inId+'" title="On '+s.min+'’ for '+s.outSur+'" style="left:'+(s.x*100)+'%;top:'+(s.y*100)+'%"><div class="sqNum sqNumIn">'+s.inNum+'<span class="sqOn">▲</span></div><div class="sqLab">'+s.inSur+'</div><div class="sqMin">'+(s.min?s.min+' ':'')+'<span class="sqFor">for '+s.outSur+'</span></div></div>'; }).join('');
+    const ghosts=pos.filter(p=>!offIds.has(p.id)).map(p=>'<div class="sqPl sqGhost'+hiCls(p.id,botFull)+'" data-id="'+p.id+'" title="'+p.sur+'" style="left:'+(p.x*100)+'%;top:'+(p.y*100)+'%"><div class="sqNum">'+p.n+'</div></div>').join('');
+    const subMarks=son.map(s=>{ const dim=selP&&!(botFull&&botFull.id===s.inId)&&s.inId!==botNorm; return '<div class="sqPl sqPlIn'+hiCls(s.inId,botFull)+(dim?' dim':'')+'" data-id="'+s.inId+'" title="On '+s.min+'’ for '+s.outSur+'" style="left:'+(s.x*100)+'%;top:'+(s.y*100)+'%"><div class="sqNum sqNumIn">'+s.inNum+'<span class="sqOn">▲</span></div><div class="sqLab">'+s.inSur+'</div><div class="sqMin">'+(s.min?s.min+' ':'')+'<span class="sqFor">for '+s.outSur+'</span></div></div>'; }).join('');
     const lower=son.length?'<div class="sqSt2">On from the bench</div><div class="sqField sqField2">'+st+ghosts+subMarks+'</div>':'<div class="sqSubs"><div class="sqNone">No substitutions</div></div>';
     const na=selP&&selP.inv[i].kind==='na'; const invBar=selP?'<div class="sqInv'+(na?' na':'')+'">'+invTxt(selP.inv[i])+'</div>':'';
     return '<div class="sqPitch'+(na?' sqPna':'')+'" style="'+basis+'"><div class="sqPh"><div class="sqOp">v <img src="'+sflag(m.oppIso)+'">'+m.opp+'</div><div class="sqMeta"><span>'+m.round+'</span><span style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</span></div><div class="sqMeta"><span>'+m.form+'</span></div></div><div class="sqField">'+st+dots+'</div>'+invBar+lower+'</div>'; }).join('');
