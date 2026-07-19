@@ -3560,6 +3560,12 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #sqPlayerBar .sqPbStat .sep{opacity:.35}
 #wcSquad .sqEv{padding:0 10px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#1c1813;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:4px 8px;line-height:1.15;white-space:nowrap;overflow:hidden;max-width:100%}
 #wcSquad .sqEv .d{opacity:.35}
+#wcSquad .sqSummary{margin:18px 4px 4px;display:flex;flex-direction:column;gap:0;font-family:'Barlow Condensed',sans-serif;font-size:13.5px;color:#1c1813}
+#wcSquad .sqSumRow{display:flex;gap:12px;align-items:baseline;line-height:1.35;border-top:1px solid #e4ddce;padding:7px 0}
+#wcSquad .sqSumRow .lbl{flex:0 0 168px;font-weight:800;text-transform:uppercase;font-size:10px;letter-spacing:.8px;color:#6f6656;white-space:nowrap}
+#wcSquad .sqSumRow .lbl b{color:#1c1813}
+#wcSquad .sqSumRow .nm{flex:1;min-width:0}
+#wcSquad .sqSumN{color:#a49a86;font-weight:700;font-size:11px}
 #wcSquad .sqOp .sqRes{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:.3px}
 `;
 function squadBodyHTML(code){
@@ -3613,8 +3619,14 @@ function squadBodyHTML(code){
     mh+='</tr>'; }); mh+='</tbody>';
   const hero=selP?(function(){ const sx=['<b>'+(selP.apps||0)+'</b> '+((selP.apps||0)===1?'app':'apps')]; if(selP.g)sx.push('⚽'+selP.g); if(selP.a)sx.push('🥾'+selP.a); if(selP.sv)sx.push('🧤'+selP.sv); if(selP.y)sx.push('🟨'+selP.y); if(selP.r)sx.push('🟥'+selP.r); const pic=picById(selP.id);
     return '<div class="sqPbAv">'+(pic?'<img src="'+pic+'?&io=transform:fill,aspectratio:1x1,width:120,gravity:top&quality=88" alt="">':'<span>'+selP.n+'</span>')+'</div><div class="sqPbName"><b>'+selP.n+'</b> '+selP.sur+'</div><div class="sqPbStat">'+sx.join('<span class="sep">·</span>')+'</div>'; })():'';
+  // Participation summary under the pitches.
+  const N=R.matches.length, fullN=p=>p.cells.filter(c=>c&&c.t==='full').length;
+  const nm=p=>'<b class="sqSumN">'+p.n+'</b> '+p.sur;
+  const g1=[],g2=[],g3=[],g4=[]; R.players.forEach(p=>{ const a=p.apps||0; if(a===0)g4.push(nm(p)); else if(a<N)g3.push(nm(p)); else if(fullN(p)===N)g1.push(nm(p)); else g2.push(nm(p)); });
+  const sumRow=(lbl,arr)=>arr.length?'<div class="sqSumRow"><span class="lbl">'+lbl+' <b>'+arr.length+'</b></span><span class="nm">'+arr.join(', ')+'</span></div>':'';
+  const summary='<div class="sqSummary">'+sumRow('Every match · full 90',g1)+sumRow('Every match',g2)+sumRow('Some matches',g3)+sumRow('No matches',g4)+'</div>';
   return { name:R.name, iso:R.iso, players:R.players, html:
-    '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div></div>'+
+    '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div>'+summary+'</div>'+
     '<div class="sqView'+(squadTab==='matrix'?' on':'')+'" id="sqv-matrix"><div class="sqScroll"><table class="sqTable">'+mh+'</table></div>'+
     '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 60%,'+STY.RED+' 60%)"></i>Subbed off (min)</span><span><i style="background:linear-gradient(90deg,'+STY.RED+' 60%,'+STY.GREEN+' 60%)"></i>Came on (min)</span><span><b class="sqDot"></b>Didn’t feature</span></div></div>', hero:hero };
 }
