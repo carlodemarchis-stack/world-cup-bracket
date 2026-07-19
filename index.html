@@ -3559,6 +3559,7 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #sqPlayerBar .sqPbStat .sep{opacity:.35}
 #wcSquad .sqEv{padding:0 10px 6px;background:#f3eddf;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#1c1813;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 8px;line-height:1.15}
 #wcSquad .sqEv .d{opacity:.35}
+#wcSquad .sqOp .sqRes{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:.3px}
 #wcSquad .sqInv:has(+ .sqEv){padding-bottom:2px}`;
 function squadBodyHTML(code){
   const R=buildSquadRun(code);
@@ -3595,7 +3596,7 @@ function squadBodyHTML(code){
       if(rr.length) parts.push('🟥 '+rr.map(c=>c.m).join(', '));
       return parts.length?'<div class="sqEv">'+parts.join('<span class="d">·</span>')+'</div>':''; })():'';
     const invBar=selP?'<div class="sqInv'+(na?' na':'')+'">'+invTxt(selP.inv[i])+'</div>'+evLine:'';
-    return '<div class="sqPitch'+(na?' sqPna':'')+'" style="'+basis+'"><div class="sqPh"><div class="sqOp">v <img src="'+sflag(m.oppIso)+'">'+m.opp+'</div><div class="sqMeta"><span>'+m.round+'</span><span style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</span></div><div class="sqMeta"><span>'+m.form+'</span></div></div><div class="sqField">'+st+dots+'</div>'+invBar+lower+'</div>'; }).join('');
+    return '<div class="sqPitch'+(na?' sqPna':'')+'" style="'+basis+'"><div class="sqPh"><div class="sqOp">v <img src="'+sflag(m.oppIso)+'">'+m.opp+'<span class="sqRes" style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</span></div><div class="sqMeta"><span>'+m.round+'</span><span>'+m.form+'</span></div></div><div class="sqField">'+st+dots+'</div>'+invBar+lower+'</div>'; }).join('');
   let mh='<thead><tr><th class="sqPn">Player</th>';
   R.matches.forEach(m=>{ mh+='<th class="sqMh"><div class="rd">'+m.round+'</div><div class="op">v <img src="'+sflag(m.oppIso)+'">'+m.opp+'</div><div class="sc" style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</div><div class="fm">'+m.form+'</div></th>'; });
   mh+='</tr></thead><tbody>'; let cur=-1; const POSN={0:'Goalkeeper',1:'Defenders',2:'Midfielders',3:'Forwards'};
