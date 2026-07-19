@@ -916,5 +916,14 @@
     "away": "ARG",
     "suffix": null,
     "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M102-ENG-V-ARG.pdf"
+  },
+  {
+    "bracketMatchId": null,
+    "num": 103,
+    "stage": "knockout",
+    "home": "FRA",
+    "away": "ENG",
+    "suffix": null,
+    "pdfUrl": "https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M103-FRA-V-ENG.pdf"
   }
 ]
