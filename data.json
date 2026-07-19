@@ -5252,7 +5252,170 @@
   "final": {
     "date": "Jul 19",
     "time": "21:00",
-    "venue": "New York/New Jersey Stadium"
+    "venue": "New York/New Jersey Stadium",
+    "score": "1–0",
+    "winner": "ESP",
+    "et": true,
+    "ref": "Slavko VINCIC",
+    "att": 80663,
+    "form": {
+      "ESP": "4-1-2-3",
+      "ARG": "4-4-2"
+    },
+    "num": 104,
+    "goals": [
+      {
+        "t": "ESP",
+        "p": "Torres",
+        "m": "106'",
+        "id": "405545",
+        "a": "Williams",
+        "aid": "447855",
+        "desc": "Ferran Torres with the goal! Has he just delivered Spain the World Cup?   It's a superb finish from the Barcelona man! Pedro Porro swings over a cross, Nico Williams does brilliantly to head it back into Torres' path, and the forward hammers his strike into the roof of the net. 1-0!",
+        "dp": 0
+      }
+    ],
+    "cards": [
+      {
+        "m": "41'",
+        "p": "Martinez",
+        "t": "ARG",
+        "c": "Y",
+        "id": "402921"
+      },
+      {
+        "m": "52'",
+        "p": "Paredes",
+        "t": "ARG",
+        "c": "Y",
+        "id": "332847"
+      },
+      {
+        "m": "82'",
+        "p": "Fernandez",
+        "t": "ARG",
+        "c": "Y",
+        "id": "448252"
+      },
+      {
+        "m": "90'+2'",
+        "p": "Romero",
+        "t": "ARG",
+        "c": "Y",
+        "id": "431196"
+      },
+      {
+        "m": "105'",
+        "p": "Scaloni",
+        "t": "ARG",
+        "c": "Y"
+      },
+      {
+        "m": "111'",
+        "p": "Mac Allister",
+        "t": "ARG",
+        "c": "Y",
+        "id": "430628"
+      }
+    ],
+    "line": {
+      "ESP": {
+        "xi": [
+          "430753",
+          "430144",
+          "335999",
+          "474973",
+          "430735",
+          "430718",
+          "447860",
+          "411375",
+          "430750",
+          "484320",
+          "430751"
+        ],
+        "subs": [
+          [
+            "405545",
+            "430751",
+            "62'"
+          ],
+          [
+            "423646",
+            "430718",
+            "62'"
+          ],
+          [
+            "447855",
+            "447860",
+            "75'"
+          ],
+          [
+            "430733",
+            "430750",
+            "75'"
+          ],
+          [
+            "430754",
+            "411375",
+            "99'"
+          ],
+          [
+            "405562",
+            "335999",
+            "99'"
+          ]
+        ],
+        "cap": "411375"
+      },
+      "ARG": {
+        "xi": [
+          "308300",
+          "308322",
+          "402926",
+          "402921",
+          "431196",
+          "428882",
+          "430631",
+          "430628",
+          "448252",
+          "416081",
+          "229397"
+        ],
+        "subs": [
+          [
+            "310116",
+            "402921",
+            "44'"
+          ],
+          [
+            "332847",
+            "430631",
+            ""
+          ],
+          [
+            "402925",
+            "402926",
+            "58'"
+          ],
+          [
+            "418963",
+            "431196",
+            "70'"
+          ],
+          [
+            "485595",
+            "428882",
+            "70'"
+          ],
+          [
+            "402934",
+            "416081",
+            "102'"
+          ]
+        ],
+        "cap": "229397"
+      }
+    }
   },
   "thirdPlace": {
     "date": "Jul 18",
@@ -31315,6 +31478,13 @@
         "id": "448332",
         "t": "FRA",
         "n": 4
+      }
+    ],
+    "ARG|ESP": [
+      {
+        "id": "308300",
+        "t": "ARG",
+        "n": 9
       }
     ]
   }
