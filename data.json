@@ -5451,7 +5451,8 @@
         ],
         "cap": "433097"
       }
-    }
+    },
+    "highlights": "https://www.youtube.com/watch?v=4SDvow2ioDw&list=PLBRLtDhTHh5o"
   },
   "highlightsPlaylist": "https://www.youtube.com/playlist?list=PLBRLtDhTHh5o",
   "_groups": "Final group-stage standings (finishing order 1-4) and matches, keyed A-L. Table row: {code,name,iso,w,d,l,gf,ga}; played=w+d+l, pts=3w+d, gd=gf-ga are derived. Match: {d,a,b,s} with score s in a-b order. Qualification (winner/runner-up/best third/eliminated) is derived from position + bracket membership.",
