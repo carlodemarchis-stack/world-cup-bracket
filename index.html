@@ -3539,7 +3539,12 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #wcSquad .sqPl.sqGhost .sqNum{background:#eef0ec;color:#5c6b5f;box-shadow:none;border-color:rgba(255,255,255,.55)}
 #wcSquad .sqPl.sqGhost.hl{opacity:1}
 #wcSquad .sqRepl{margin-top:1px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:7.5px;line-height:1;color:rgba(255,255,255,.82);text-shadow:0 1px 2px rgba(0,0,0,.7);white-space:nowrap}
-#wcSquad .sqMin .sqFor{color:rgba(255,255,255,.72);font-weight:700}`;
+#wcSquad .sqMin .sqFor{color:rgba(255,255,255,.72);font-weight:700}
+#wcSquad .sqBody{display:flex;flex-direction:row;align-items:stretch;overflow:hidden;padding:0}
+#sqViews{flex:1;min-width:0;min-height:0;overflow:auto;padding:18px 18px 96px}
+#sqHeroDock{flex:0 0 0;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+#sqHeroDock.on{flex:0 0 216px;padding:0 0 96px 16px}
+#sqHero{position:static;left:auto;bottom:auto;z-index:auto;width:184px}`;
 function squadBodyHTML(code){
   const R=buildSquadRun(code);
   const rescol=r=>r==='W'?STY.GREEN:r==='L'?STY.RED:STY.SUB;
@@ -3576,7 +3581,7 @@ function squadBodyHTML(code){
   return { name:R.name, iso:R.iso, players:R.players, html:
     '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div></div>'+
     '<div class="sqView'+(squadTab==='matrix'?' on':'')+'" id="sqv-matrix"><div class="sqScroll"><table class="sqTable">'+mh+'</table></div>'+
-    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 60%,'+STY.RED+' 60%)"></i>Subbed off (min)</span><span><i style="background:linear-gradient(90deg,'+STY.RED+' 60%,'+STY.GREEN+' 60%)"></i>Came on (min)</span><span><b class="sqDot"></b>Didn’t feature</span></div></div>'+hero };
+    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 60%,'+STY.RED+' 60%)"></i>Subbed off (min)</span><span><i style="background:linear-gradient(90deg,'+STY.RED+' 60%,'+STY.GREEN+' 60%)"></i>Came on (min)</span><span><b class="sqDot"></b>Didn’t feature</span></div></div>', hero:hero };
 }
 // Film-style rotation: one team per slide, a control bar below steps / auto-plays through the field.
 function openSquad(code){
@@ -3592,7 +3597,7 @@ function openSquad(code){
       '<div class="sqBar"><div class="sqTitle" id="sqTitle"></div>'+
         '<div class="sqTabs"><button class="sqTab on" data-v="pitch">Pitches</button><button class="sqTab" data-v="matrix">Matrix</button></div>'+
         '<button id="sqX" title="Close">✕</button></div>'+
-      '<div class="sqBody" id="sqBody"></div>'+
+      '<div class="sqBody" id="sqBody"><div id="sqHeroDock"></div><div id="sqViews"></div></div>'+
       '<div id="sqCtl"><button id="sqClose" title="Close">✕</button><button id="sqFirst" title="Back to the first team">↺</button><button id="sqPrev" title="Previous team (←)">◀</button><button id="sqPlay" title="Auto-play through teams">▶</button><button id="sqNext" title="Next team (→)">▶</button><div id="sqLbl"></div><select id="sqPlayerSel" title="Highlight a player across every match"></select><select id="sqSeqSel" title="Jump to a team">'+teamOpts+'</select></div>';
     document.body.appendChild(ov); squadOv=ov; modalEl=ov;
     document.getElementById('sqX').onclick=closeSquad;
@@ -3616,18 +3621,19 @@ function squadShow(code){
   squadPlayer=null; squadCode=code;   // team change clears any player highlight
   squadIdx=Math.max(0,squadSeq.indexOf(code));
   const b=squadBodyHTML(code);
-  document.getElementById('sqBody').innerHTML=b.html;
+  document.getElementById('sqViews').innerHTML=b.html;
+  const hd=document.getElementById('sqHeroDock'); hd.innerHTML=b.hero||''; hd.classList.toggle('on',!!b.hero);
   document.getElementById('sqTitle').innerHTML='<img src="'+sflag(b.iso)+'">'+b.name+' <b>· Rotation</b>';
   const sel=document.getElementById('sqSeqSel'); if(sel&&sel.value!==code) sel.value=code;
   const psel=document.getElementById('sqPlayerSel'); if(psel){ psel.innerHTML='<option value="">Highlight a player…</option>'+b.players.map(p=>'<option value="'+p.id+'">'+p.n+' · '+p.sur+'</option>').join(''); psel.value=''; }
   document.getElementById('sqLbl').innerHTML='<b>'+(squadIdx+1)+'/'+squadSeq.length+'</b> · '+b.name;
   const pb=document.getElementById('sqPlay'); if(pb) pb.textContent=squadPlaying?'❚❚':'▶';
-  const bd=document.getElementById('sqBody'); if(bd) bd.scrollTop=0;
+  const bd=document.getElementById('sqViews'); if(bd) bd.scrollTop=0;
   try{ history.replaceState(null,'',location.pathname+'?squad='+code); }catch(e){}
   squadSched();
 }
-// Re-render only the body (pitches/matrix + hero) for the current team — used when a player is (de)selected.
-function squadRenderBody(){ if(!squadOv||!squadCode) return; const b=squadBodyHTML(squadCode); const bd=document.getElementById('sqBody'); const top=bd?bd.scrollTop:0; document.getElementById('sqBody').innerHTML=b.html; if(bd) bd.scrollTop=top; }
+// Re-render only the body (pitches/matrix + hero dock) for the current team — used when a player is (de)selected.
+function squadRenderBody(){ if(!squadOv||!squadCode) return; const b=squadBodyHTML(squadCode); const bd=document.getElementById('sqViews'); const top=bd?bd.scrollTop:0; document.getElementById('sqViews').innerHTML=b.html; const hd=document.getElementById('sqHeroDock'); hd.innerHTML=b.hero||''; hd.classList.toggle('on',!!b.hero); if(bd) bd.scrollTop=top; }
 function squadSelectPlayer(id){ if(!squadOv) return; squadPlayer=id||null; squadRenderBody(); }
 function squadGo(d){ if(!squadOv) return; const n=squadIdx+d; if(n<0||n>=squadSeq.length){ if(d>0&&squadPlaying)squadToggle(); return; } squadShow(squadSeq[n]); }
 function squadToggle(){ if(!squadOv) return; squadPlaying=!squadPlaying; const pb=document.getElementById('sqPlay'); if(pb) pb.textContent=squadPlaying?'❚❚':'▶'; squadSched(); }
