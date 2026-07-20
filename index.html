@@ -3605,9 +3605,13 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:78px}
 #wcSquad .sqEv{padding:0 10px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#1c1813;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:4px 8px;line-height:1.15;white-space:nowrap;overflow:hidden;max-width:100%}
 #wcSquad .sqEv .d{opacity:.35}
 #wcSquad .sqSummary{margin:10px 4px 4px;display:flex;flex-direction:column;gap:0;font-family:'Barlow Condensed',sans-serif;font-size:13.5px;color:#1c1813}
-#wcSquad .sqSumRow{display:flex;gap:12px;align-items:baseline;line-height:1.3;border-top:1px solid #e4ddce;padding:4px 0}
-#wcSquad .sqSumRow .lbl{flex:0 0 168px;font-weight:800;text-transform:uppercase;font-size:10px;letter-spacing:.8px;color:#6f6656;white-space:nowrap}
-#wcSquad .sqSumRow .lbl b{color:#1c1813}
+#wcSquad .sqSumRow{display:flex;gap:14px;align-items:center;line-height:1.3;border-top:1px solid #e4ddce;padding:6px 0}
+#wcSquad .sqSumRow .lbl{flex:0 0 214px;font-weight:800;text-transform:uppercase;font-size:10px;letter-spacing:.4px;line-height:1.25;padding:5px 10px;border-radius:7px;white-space:normal}
+#wcSquad .sqSumRow .lbl b{font-weight:900;margin-left:3px}
+#wcSquad .sqSumRow .lbl.t1{background:#cfead9;color:#15703f}
+#wcSquad .sqSumRow .lbl.t2{background:#e3f0d6;color:#4d7a24}
+#wcSquad .sqSumRow .lbl.t3{background:#f8e9cd;color:#9c6f14}
+#wcSquad .sqSumRow .lbl.t4{background:#e9e5dc;color:#83796a}
 #wcSquad .sqSumRow .nm{flex:1;min-width:0}
 #wcSquad .sqSumN{color:#a49a86;font-weight:700;font-size:11px}
 #wcSquad .sqOp .sqRes{margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:.3px}
@@ -3674,8 +3678,8 @@ function squadBodyHTML(code){
   const N=R.matches.length, fullN=p=>p.cells.filter(c=>c&&c.t==='full').length;
   const nm=p=>'<b class="sqSumN">'+p.n+'</b> '+p.sur;
   const g1=[],g2=[],g3=[],g4=[]; R.players.forEach(p=>{ const a=p.apps||0; if(a===0)g4.push(p); else if(a<N)g3.push(p); else if(fullN(p)===N)g1.push(p); else g2.push(p); });
-  const sumRow=(lbl,arr)=>arr.length?'<div class="sqSumRow"><span class="lbl">'+lbl+' <b>'+arr.length+'</b></span><span class="nm">'+arr.map(nm).join(', ')+'</span></div>':'';
-  const summary='<div class="sqSummary">'+sumRow('Every match · full 90',g1)+sumRow('Every match',g2)+sumRow('Some matches',g3)+sumRow('No matches',g4)+'</div>';
+  const sumRow=(lbl,arr,cls)=>arr.length?'<div class="sqSumRow"><span class="lbl '+cls+'">'+lbl+' <b>'+arr.length+'</b></span><span class="nm">'+arr.map(nm).join(', ')+'</span></div>':'';
+  const summary='<div class="sqSummary">'+sumRow('Played every match, full 90',g1,'t1')+sumRow('Played in every match',g2,'t2')+sumRow('Played in some matches',g3,'t3')+sumRow('Did not feature',g4,'t4')+'</div>';
   // Squad gallery — the same four involvement groups, shown with full-body player photos.
   const gcell=p=>{ const pic=picById(p.id); return '<div class="sqGcell"><div class="sqGimg">'+(pic?'<img src="'+shero(pic,300)+'" alt="">':'<div class="sqGph"></div>')+'</div><div class="sqGname"><b>'+p.n+'</b> '+p.sur+'</div></div>'; };
   const gband=(lbl,arr)=>arr.length?'<div class="sqGband"><div class="sqGhead">'+lbl+' <b>'+arr.length+'</b></div><div class="sqGrow">'+arr.map(gcell).join('')+'</div></div>':'';
