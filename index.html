@@ -3196,10 +3196,28 @@ function beatHTML(b){
       '<div style="max-width:660px;margin-top:16px;font-size:18px;color:'+STY.INK+';line-height:1.48;text-align:center;">'+c.summary+'</div>'+
       (pick.length?'<div style="display:flex;gap:13px;justify-content:center;margin-top:18px;max-width:680px;flex-wrap:wrap;">'+pick.map(prCard).join('')+'</div>':'')+
       (vfoot?'<div style="margin-top:15px;font-family:\'Barlow Condensed\',sans-serif;font-size:12px;letter-spacing:.5px;color:'+STY.SUB+';opacity:.72;"><span style="color:'+vfoot[1]+';">●</span> '+vfoot[0]+'</div>':'')); }
-  if(b.k==='champ'){ const c=tin(b.code); return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
-    '<div class="sk" style="color:'+STY.GOLD+';letter-spacing:8px;">World Champions</div>'+
-    '<img class="sfl" style="height:auto;width:150px;margin-top:14px;" src="'+sflag(c.iso,640)+'">'+
-    '<div class="sc" style="font-weight:900;font-size:120px;color:'+STY.GOLD+';line-height:.86;margin-top:12px;">'+c.name.toUpperCase()+'</div>'); }
+  if(b.k==='champ'){ const c=tin(b.code), code=b.code;
+    const ms=storyMatches().filter(m=>m.a===code||m.b===code).sort((x,y)=>(x.num||0)-(y.num||0));
+    const abbr=r=>/group/i.test(r)?'GROUP':({'Round of 32':'R32','Round of 16':'R16','Quarter-final':'QF','Semi-final':'SF','Final':'FINAL','Third-place play-off':'3RD'})[r]||r;
+    let gs=0,gc=0,w=0,dr=0,l=0;
+    const cards=ms.map(m=>{ const opp=m.a===code?m.b:m.a, oi=tin(opp);
+      const gf=+(m.a===code?m.aGoals:m.bGoals)||0, ga=+(m.a===code?m.bGoals:m.aGoals)||0; gs+=gf; gc+=ga;
+      const res=m.winner?(m.winner===code?'W':'L'):(gf>ga?'W':gf<ga?'L':'D'); if(res==='W')w++;else if(res==='L')l++;else dr++;
+      const rc=res==='W'?STY.GREEN:res==='L'?STY.RED:STY.SUB;
+      return '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:none;">'+
+        '<div class="sk" style="font-size:10px;letter-spacing:1px;color:'+STY.SUB+';">'+abbr(m.round)+'</div>'+
+        '<img class="sfl" style="height:26px;" src="'+sflag(oi.iso)+'">'+
+        '<div class="sc" style="font-weight:800;font-size:13px;color:'+STY.INK+';">'+opp+'</div>'+
+        '<div class="sc" style="font-weight:900;font-size:20px;color:'+rc+';">'+gf+'–'+ga+'</div>'+
+        (m.pens?'<div class="sk" style="font-size:8px;color:'+STY.SUB+';">pens</div>':'')+
+      '</div>'; }).join('');
+    const stat=(v,lb)=>'<div style="display:flex;flex-direction:column;align-items:center;"><div class="sc" style="font-weight:900;font-size:32px;color:'+STY.INK+';line-height:1;">'+v+'</div><div class="sk" style="font-size:10px;color:'+STY.SUB+';margin-top:3px;">'+lb+'</div></div>';
+    return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
+      '<div class="sk" style="color:'+STY.GOLD+';letter-spacing:8px;">World Champions</div>'+
+      '<img class="sfl" style="height:auto;width:104px;margin-top:10px;" src="'+sflag(c.iso,640)+'">'+
+      '<div class="sc" style="font-weight:900;font-size:76px;color:'+STY.GOLD+';line-height:.9;margin-top:6px;">'+c.name.toUpperCase()+'</div>'+
+      '<div style="display:flex;gap:16px;margin-top:22px;align-items:flex-end;">'+cards+'</div>'+
+      '<div style="display:flex;gap:30px;margin-top:24px;">'+stat(ms.length,'Played')+stat(w+'–'+dr+'–'+l,'W–D–L')+stat(gs,'Scored')+stat(gc,'Conceded')+'</div>'); }
   if(b.k==='champsquad'){ const c=tin(b.team);
     // Full-body player photos in rows, name + tally beneath each.
     const cell=p=>{ const pic=p.id?picById(p.id):null;
