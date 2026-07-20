@@ -3539,8 +3539,12 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:78px}
 #wcSquad #sqv-pitch .sqField{flex:1;height:auto;min-height:150px}
 #wcSquad #sqv-gallery.on{display:flex;flex-direction:column;gap:8px;height:calc(100vh - 164px);overflow:hidden}
 #wcSquad .sqGband{flex:1;min-height:0;display:flex;flex-direction:column}
-#wcSquad .sqGhead{flex:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:12px;letter-spacing:1.2px;color:#6f6656;padding:0 2px 5px;border-bottom:1px solid #e4ddce;margin-bottom:4px}
-#wcSquad .sqGhead b{color:#1c1813}
+#wcSquad .sqGhead{flex:none;align-self:flex-start;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:13px;letter-spacing:.7px;color:#1c1813;padding:5px 13px;border-radius:8px;margin-bottom:6px}
+#wcSquad .sqGhead b{font-weight:900;margin-left:4px}
+#wcSquad .sqGhead.t1{background:#cfead9;color:#15703f}
+#wcSquad .sqGhead.t2{background:#e3f0d6;color:#4d7a24}
+#wcSquad .sqGhead.t3{background:#f8e9cd;color:#9c6f14}
+#wcSquad .sqGhead.t4{background:#e9e5dc;color:#83796a}
 #wcSquad .sqGrow{flex:1;min-height:0;display:flex;flex-wrap:nowrap;align-items:flex-end;justify-content:center;gap:8px;overflow:hidden}
 #wcSquad .sqGcell{height:100%;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
 #wcSquad .sqGimg{flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
@@ -3676,18 +3680,15 @@ function squadBodyHTML(code){
     return '<div class="sqPbAv">'+(pic?'<img src="'+pic+'?&io=transform:fill,aspectratio:1x1,width:120,gravity:top&quality=88" alt="">':'<span>'+selP.n+'</span>')+'</div><div class="sqPbName"><b>'+selP.n+'</b> '+selP.sur+'</div><div class="sqPbStat">'+sx.join('<span class="sep">·</span>')+'</div>'; })():teamHero;
   // Participation summary under the pitches.
   const N=R.matches.length, fullN=p=>p.cells.filter(c=>c&&c.t==='full').length;
-  const nm=p=>'<b class="sqSumN">'+p.n+'</b> '+p.sur;
   const g1=[],g2=[],g3=[],g4=[]; R.players.forEach(p=>{ const a=p.apps||0; if(a===0)g4.push(p); else if(a<N)g3.push(p); else if(fullN(p)===N)g1.push(p); else g2.push(p); });
-  const sumRow=(lbl,arr,cls)=>arr.length?'<div class="sqSumRow"><span class="lbl '+cls+'">'+lbl+' <b>'+arr.length+'</b></span><span class="nm">'+arr.map(nm).join(', ')+'</span></div>':'';
-  const summary='<div class="sqSummary">'+sumRow('Played every match, full 90',g1,'t1')+sumRow('Played in every match',g2,'t2')+sumRow('Played in some matches',g3,'t3')+sumRow('Did not feature',g4,'t4')+'</div>';
-  // Squad gallery — the same four involvement groups, shown with full-body player photos.
+  // Squad gallery — the four involvement groups, shown with full-body player photos.
   const gcell=p=>{ const pic=picById(p.id); return '<div class="sqGcell"><div class="sqGimg">'+(pic?'<img src="'+shero(pic,300)+'" alt="">':'<div class="sqGph"></div>')+'</div><div class="sqGname"><b>'+p.n+'</b> '+p.sur+'</div></div>'; };
-  const gband=(lbl,arr)=>arr.length?'<div class="sqGband"><div class="sqGhead">'+lbl+' <b>'+arr.length+'</b></div><div class="sqGrow">'+arr.map(gcell).join('')+'</div></div>':'';
-  const gallery=gband('Every match · full 90',g1)+gband('Every match',g2)+gband('Some matches',g3)+gband('No matches',g4);
+  const gband=(lbl,arr,cls)=>arr.length?'<div class="sqGband"><div class="sqGhead '+cls+'">'+lbl+' <b>'+arr.length+'</b></div><div class="sqGrow">'+arr.map(gcell).join('')+'</div></div>':'';
+  const gallery=gband('Played every match, the whole match',g1,'t1')+gband('Played in every match',g2,'t2')+gband('Played in some matches',g3,'t3')+gband('Did not feature',g4,'t4');
   return { name:R.name, iso:R.iso, players:R.players, html:
     '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div></div>'+
     '<div class="sqView'+(squadTab==='matrix'?' on':'')+'" id="sqv-matrix"><div class="sqScroll"><table class="sqTable">'+mh+'</table></div>'+
-    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 60%,'+STY.RED+' 60%)"></i>Subbed off (min)</span><span><i style="background:linear-gradient(90deg,'+STY.RED+' 60%,'+STY.GREEN+' 60%)"></i>Came on (min)</span><span><b class="sqDot"></b>Didn’t feature</span></div>'+summary+'</div>'+
+    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 60%,'+STY.RED+' 60%)"></i>Subbed off (min)</span><span><i style="background:linear-gradient(90deg,'+STY.RED+' 60%,'+STY.GREEN+' 60%)"></i>Came on (min)</span><span><b class="sqDot"></b>Didn’t feature</span></div></div>'+
     '<div class="sqView'+(squadTab==='gallery'?' on':'')+'" id="sqv-gallery">'+gallery+'</div>', hero:hero };
 }
 // Film-style rotation: one team per slide, a control bar below steps / auto-plays through the field.
