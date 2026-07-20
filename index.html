@@ -3535,6 +3535,17 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:78px}
 #wcSquad #sqv-pitch .sqStrip{flex:1;align-items:stretch}
 #wcSquad #sqv-pitch .sqPitch{display:flex;flex-direction:column}
 #wcSquad #sqv-pitch .sqField{flex:1;height:auto;min-height:150px}
+#wcSquad #sqv-gallery.on{display:flex;flex-direction:column;gap:8px;height:calc(100vh - 164px);overflow:hidden}
+#wcSquad .sqGband{flex:1;min-height:0;display:flex;flex-direction:column}
+#wcSquad .sqGhead{flex:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;font-size:12px;letter-spacing:1.2px;color:#6f6656;padding:0 2px 5px;border-bottom:1px solid #e4ddce;margin-bottom:4px}
+#wcSquad .sqGhead b{color:#1c1813}
+#wcSquad .sqGrow{flex:1;min-height:0;display:flex;flex-wrap:nowrap;align-items:flex-end;justify-content:center;gap:8px;overflow:hidden}
+#wcSquad .sqGcell{height:100%;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+#wcSquad .sqGimg{flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+#wcSquad .sqGimg img{height:100%;width:auto;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 4px 9px rgba(0,0,0,.22))}
+#wcSquad .sqGimg .sqGph{width:42px;height:72%;border-radius:8px;background:#eee6d6}
+#wcSquad .sqGname{flex:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;color:#1c1813;white-space:nowrap;margin-top:4px;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#wcSquad .sqGname b{color:#6f6656;font-weight:700;font-size:11px;margin-right:2px}
 #sqPlayerSel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f0ebdd;font:inherit;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:20px;padding:6px 10px;cursor:pointer;max-width:150px}#sqPlayerSel option{color:#1c1813;text-transform:none}
 #wcSquad .sqPl.dim{opacity:.26}
 #wcSquad .sqPl.hl{z-index:3}
@@ -3657,13 +3668,18 @@ function squadBodyHTML(code){
   // Participation summary under the pitches.
   const N=R.matches.length, fullN=p=>p.cells.filter(c=>c&&c.t==='full').length;
   const nm=p=>'<b class="sqSumN">'+p.n+'</b> '+p.sur;
-  const g1=[],g2=[],g3=[],g4=[]; R.players.forEach(p=>{ const a=p.apps||0; if(a===0)g4.push(nm(p)); else if(a<N)g3.push(nm(p)); else if(fullN(p)===N)g1.push(nm(p)); else g2.push(nm(p)); });
-  const sumRow=(lbl,arr)=>arr.length?'<div class="sqSumRow"><span class="lbl">'+lbl+' <b>'+arr.length+'</b></span><span class="nm">'+arr.join(', ')+'</span></div>':'';
+  const g1=[],g2=[],g3=[],g4=[]; R.players.forEach(p=>{ const a=p.apps||0; if(a===0)g4.push(p); else if(a<N)g3.push(p); else if(fullN(p)===N)g1.push(p); else g2.push(p); });
+  const sumRow=(lbl,arr)=>arr.length?'<div class="sqSumRow"><span class="lbl">'+lbl+' <b>'+arr.length+'</b></span><span class="nm">'+arr.map(nm).join(', ')+'</span></div>':'';
   const summary='<div class="sqSummary">'+sumRow('Every match · full 90',g1)+sumRow('Every match',g2)+sumRow('Some matches',g3)+sumRow('No matches',g4)+'</div>';
+  // Squad gallery — the same four involvement groups, shown with full-body player photos.
+  const gcell=p=>{ const pic=picById(p.id); return '<div class="sqGcell"><div class="sqGimg">'+(pic?'<img src="'+shero(pic,300)+'" alt="">':'<div class="sqGph"></div>')+'</div><div class="sqGname"><b>'+p.n+'</b> '+p.sur+'</div></div>'; };
+  const gband=(lbl,arr)=>arr.length?'<div class="sqGband"><div class="sqGhead">'+lbl+' <b>'+arr.length+'</b></div><div class="sqGrow">'+arr.map(gcell).join('')+'</div></div>':'';
+  const gallery=gband('Every match · full 90',g1)+gband('Every match',g2)+gband('Some matches',g3)+gband('No matches',g4);
   return { name:R.name, iso:R.iso, players:R.players, html:
     '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div></div>'+
     '<div class="sqView'+(squadTab==='matrix'?' on':'')+'" id="sqv-matrix"><div class="sqScroll"><table class="sqTable">'+mh+'</table></div>'+
-    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 60%,'+STY.RED+' 60%)"></i>Subbed off (min)</span><span><i style="background:linear-gradient(90deg,'+STY.RED+' 60%,'+STY.GREEN+' 60%)"></i>Came on (min)</span><span><b class="sqDot"></b>Didn’t feature</span></div>'+summary+'</div>', hero:hero };
+    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 60%,'+STY.RED+' 60%)"></i>Subbed off (min)</span><span><i style="background:linear-gradient(90deg,'+STY.RED+' 60%,'+STY.GREEN+' 60%)"></i>Came on (min)</span><span><b class="sqDot"></b>Didn’t feature</span></div>'+summary+'</div>'+
+    '<div class="sqView'+(squadTab==='gallery'?' on':'')+'" id="sqv-gallery">'+gallery+'</div>', hero:hero };
 }
 // Film-style rotation: one team per slide, a control bar below steps / auto-plays through the field.
 function openSquad(code){
@@ -3677,7 +3693,7 @@ function openSquad(code){
     const ov=el('div',''); ov.id='wcSquad';
     ov.innerHTML='<style>'+SQUAD_CSS+SQUAD_BAR_CSS+'</style>'+
       '<div class="sqBar"><div class="sqTitle" id="sqTitle"></div><div id="sqPlayerBar"></div>'+
-        '<div class="sqTabs"><button class="sqTab on" data-v="pitch">Pitches</button><button class="sqTab" data-v="matrix">Matrix</button></div>'+
+        '<div class="sqTabs"><button class="sqTab on" data-v="pitch">Pitches</button><button class="sqTab" data-v="matrix">Matrix</button><button class="sqTab" data-v="gallery">Squad</button></div>'+
         '<button id="sqX" title="Close">✕</button></div>'+
       '<div class="sqBody" id="sqBody"><div id="sqViews"></div></div>'+
       '<div id="sqCtl"><button id="sqClose" title="Close">✕</button><button id="sqFirst" title="Back to the first team">↺</button><button id="sqPrev" title="Previous team (←)">◀</button><button id="sqPlay" title="Auto-play through teams">▶</button><button id="sqNext" title="Next team (→)">▶</button><div id="sqLbl"></div><select id="sqPlayerSel" title="Highlight a player across every match"></select><select id="sqSeqSel" title="Jump to a team">'+teamOpts+'</select></div>';
