@@ -3201,17 +3201,17 @@ function beatHTML(b){
     '<img class="sfl" style="height:auto;width:150px;margin-top:14px;" src="'+sflag(c.iso,640)+'">'+
     '<div class="sc" style="font-weight:900;font-size:120px;color:'+STY.GOLD+';line-height:.86;margin-top:12px;">'+c.name.toUpperCase()+'</div>'); }
   if(b.k==='champsquad'){ const c=tin(b.team);
+    // Full-body player photos in rows, name + tally beneath each.
     const cell=p=>{ const pic=p.id?picById(p.id):null;
-      return '<div style="display:flex;align-items:center;gap:9px;min-width:0;overflow:hidden;background:#fff;border-radius:11px;padding:6px 10px;box-shadow:0 4px 12px rgba(0,0,0,.09);">'+
-        '<div style="width:40px;height:40px;flex:none;border-radius:50%;overflow:hidden;background:#eee6d6;border:2px solid '+STY.GOLD+';">'+(pic?'<img src="'+sface(pic)+'" style="width:100%;height:100%;object-fit:cover;">':'')+'</div>'+
-        '<div style="min-width:0;text-align:left;">'+
-          '<div class="sc" style="font-weight:700;font-size:15px;color:'+STY.INK+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;">'+(p.num!=null?'<span style="color:'+STY.SUB+';">'+p.num+'</span> ':'')+p.name.split(' ').slice(-1)[0]+'</div>'+
-          '<div class="sc" style="font-size:12px;color:'+STY.SUB+';white-space:nowrap;">'+p.apps+' apps · '+p.g+'⚽ · '+p.a+'◎</div>'+
-        '</div></div>'; };
+      return '<div style="display:flex;flex-direction:column;align-items:center;min-width:0;">'+
+        '<div style="width:100%;height:104px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;">'+(pic?'<img src="'+shero(pic,300)+'" style="height:122px;width:auto;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 5px 10px rgba(0,0,0,.22));">':'<div style="width:56px;height:78px;border-radius:8px;background:#eee6d6;"></div>')+'</div>'+
+        '<div class="sc" style="font-weight:800;font-size:14px;color:'+STY.INK+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;margin-top:3px;line-height:1;"><span style="color:'+STY.SUB+';font-size:12px;">'+(p.num!=null?p.num+' ':'')+'</span>'+p.name.split(' ').slice(-1)[0]+'</div>'+
+        '<div class="sc" style="font-size:11px;color:'+STY.SUB+';white-space:nowrap;margin-top:1px;">'+p.apps+' apps'+(p.g?' · '+p.g+'⚽':'')+(p.a?' · '+p.a+'🥾':'')+'</div>'+
+      '</div>'; };
     return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
       '<div class="sk" style="color:'+STY.GOLD+';letter-spacing:7px;">🏆 World Champions</div>'+
-      '<div style="display:flex;align-items:center;gap:14px;margin:8px 0 18px;"><img class="sfl" style="height:42px;" src="'+sflag(c.iso)+'"><div class="sc" style="font-weight:900;font-size:52px;color:'+STY.INK+';">'+c.name.toUpperCase()+'</div></div>'+
-      '<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;width:1180px;">'+b.players.map(cell).join('')+'</div>'); }
+      '<div style="display:flex;align-items:center;gap:14px;margin:6px 0 14px;"><img class="sfl" style="height:38px;" src="'+sflag(c.iso)+'"><div class="sc" style="font-weight:900;font-size:46px;color:'+STY.INK+';">'+c.name.toUpperCase()+'</div></div>'+
+      '<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px 6px;width:1200px;">'+b.players.map(cell).join('')+'</div>'); }
   if(b.k==='end') return '<div style="position:absolute;inset:0;'+sBg(STY.VIOLET)+'"></div>'+sCentre(
     '<div class="sc" style="font-weight:800;font-size:90px;color:'+STY.INK+';line-height:.9;">TO BE<br>CONTINUED</div>'+
     '<div class="sk" style="color:'+STY.SUB+';margin-top:18px;">The story updates as the tournament unfolds</div>');
