@@ -3222,9 +3222,9 @@ function beatHTML(b){
     // Full-body player photos in rows, name + tally beneath each.
     const cell=p=>{ const pic=p.id?picById(p.id):null;
       return '<div style="display:flex;flex-direction:column;align-items:center;min-width:0;">'+
-        '<div style="width:100%;height:110px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;">'+(pic?'<img src="'+shero(pic,300)+'" style="height:100%;width:auto;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 5px 10px rgba(0,0,0,.22));">':'<div style="width:56px;height:84px;border-radius:8px;background:#eee6d6;"></div>')+'</div>'+
-        '<div class="sc" style="font-weight:800;font-size:14px;color:'+STY.INK+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;margin-top:3px;line-height:1;"><span style="color:'+STY.SUB+';font-size:12px;">'+(p.num!=null?p.num+' ':'')+'</span>'+p.name.split(' ').slice(-1)[0]+'</div>'+
-        '<div class="sc" style="font-size:11px;color:'+STY.SUB+';white-space:nowrap;margin-top:1px;">'+p.apps+' apps'+(p.g?' · '+p.g+'⚽':'')+(p.a?' · '+p.a+'🥾':'')+'</div>'+
+        '<div style="width:100%;height:86px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;">'+(pic?'<img src="'+shero(pic,300)+'" style="height:100%;width:auto;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 4px 8px rgba(0,0,0,.22));">':'<div style="width:50px;height:70px;border-radius:8px;background:#eee6d6;"></div>')+'</div>'+
+        '<div class="sc" style="font-weight:800;font-size:13px;color:'+STY.INK+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;margin-top:3px;line-height:1;"><span style="color:'+STY.SUB+';font-size:11px;">'+(p.num!=null?p.num+' ':'')+'</span>'+p.name.split(' ').slice(-1)[0]+'</div>'+
+        '<div class="sc" style="font-size:10.5px;color:'+STY.SUB+';white-space:nowrap;margin-top:1px;">'+p.apps+' apps'+(p.g?' · '+p.g+'⚽':'')+(p.a?' · '+p.a+'🥾':'')+'</div>'+
       '</div>'; };
     return '<div style="position:absolute;inset:0;'+sBg(STY.GOLD)+'"></div>'+sCentre(
       '<div class="sk" style="color:'+STY.GOLD+';letter-spacing:7px;">🏆 World Champions</div>'+
@@ -3514,8 +3514,8 @@ const SQUAD_CSS=`#wcSquad{position:fixed;inset:0;z-index:350;background:#f1ece2;
 #wcSquad .sqLeg span{display:inline-flex;align-items:center;gap:7px}#wcSquad .sqLeg i{width:22px;height:14px;border-radius:4px;display:inline-block}#wcSquad .sqLeg b.sqDot{width:8px;height:8px}`;
 let squadOv=null, squadTab='pitch', squadPlaying=false, squadTimer=null, squadSeq=[], squadIdx=0, squadPlayer=null, squadCode=null;
 const SQUAD_MS=5000;   // auto-advance dwell per team
-const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
-#sqCtl{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:360;display:flex;align-items:center;gap:5px;background:#1c1813;border-radius:40px;padding:8px 12px;font-family:'Barlow Condensed',sans-serif;color:#f0ebdd;box-shadow:0 10px 34px rgba(0,0,0,.45);max-width:94vw}
+const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:14px}
+#sqCtl{flex:none;align-self:center;margin:10px auto 14px;z-index:360;display:flex;align-items:center;gap:5px;background:#1c1813;border-radius:40px;padding:8px 12px;font-family:'Barlow Condensed',sans-serif;color:#f0ebdd;box-shadow:0 10px 34px rgba(0,0,0,.45);max-width:94vw}
 #sqCtl button{background:transparent;border:none;color:#f0ebdd;cursor:pointer;font:inherit;font-size:17px;padding:6px 11px;border-radius:20px;line-height:1}
 #sqCtl button:hover{background:rgba(255,255,255,.12)}
 #sqLbl{min-width:128px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;white-space:nowrap}#sqLbl b{color:#cf9c1e}
@@ -3565,7 +3565,7 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:94px}
 #wcSquad .sqPl.hi .sqLab{font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.85)}
 #wcSquad .sqRepl{margin-top:1px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:7.5px;line-height:1;color:rgba(255,255,255,.82);text-shadow:0 1px 2px rgba(0,0,0,.7);white-space:nowrap}
 #wcSquad .sqMin .sqFor{color:rgba(255,255,255,.72);font-weight:700}
-#wcSquad .sqBody{padding-bottom:96px}
+#wcSquad .sqBody{padding-bottom:14px}
 #sqPlayerBar{display:none}
 #sqPlayerBar.on{display:flex;align-items:center;gap:9px;margin-left:14px}
 #sqPlayerBar .sqPbAv{width:44px;height:44px;border-radius:50%;overflow:hidden;flex:none;background:#e9e2d3;box-shadow:0 2px 7px rgba(0,0,0,.22);border:2px solid #fff}
