@@ -3531,6 +3531,10 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:78px}
 #wcSquad .sqPr.sqUnused td{opacity:.5}
 #wcSquad .sqPitch{min-width:150px;box-sizing:border-box}
 #wcSquad .sqField{height:220px}
+#wcSquad #sqv-pitch.on{display:flex;flex-direction:column;min-height:calc(100vh - 164px)}
+#wcSquad #sqv-pitch .sqStrip{flex:1;align-items:stretch}
+#wcSquad #sqv-pitch .sqPitch{display:flex;flex-direction:column}
+#wcSquad #sqv-pitch .sqField{flex:1;height:auto;min-height:150px}
 #sqPlayerSel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f0ebdd;font:inherit;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:20px;padding:6px 10px;cursor:pointer;max-width:150px}#sqPlayerSel option{color:#1c1813;text-transform:none}
 #wcSquad .sqPl.dim{opacity:.26}
 #wcSquad .sqPl.hl{z-index:3}
@@ -3657,9 +3661,9 @@ function squadBodyHTML(code){
   const sumRow=(lbl,arr)=>arr.length?'<div class="sqSumRow"><span class="lbl">'+lbl+' <b>'+arr.length+'</b></span><span class="nm">'+arr.join(', ')+'</span></div>':'';
   const summary='<div class="sqSummary">'+sumRow('Every match · full 90',g1)+sumRow('Every match',g2)+sumRow('Some matches',g3)+sumRow('No matches',g4)+'</div>';
   return { name:R.name, iso:R.iso, players:R.players, html:
-    '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div>'+summary+'</div>'+
+    '<div class="sqView'+(squadTab==='pitch'?' on':'')+'" id="sqv-pitch"><div class="sqStrip">'+pitchHTML+'</div></div>'+
     '<div class="sqView'+(squadTab==='matrix'?' on':'')+'" id="sqv-matrix"><div class="sqScroll"><table class="sqTable">'+mh+'</table></div>'+
-    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 60%,'+STY.RED+' 60%)"></i>Subbed off (min)</span><span><i style="background:linear-gradient(90deg,'+STY.RED+' 60%,'+STY.GREEN+' 60%)"></i>Came on (min)</span><span><b class="sqDot"></b>Didn’t feature</span></div></div>', hero:hero };
+    '<div class="sqLeg"><span><i style="background:'+STY.GREEN+'"></i>Full match</span><span><i style="background:linear-gradient(90deg,'+STY.GREEN+' 60%,'+STY.RED+' 60%)"></i>Subbed off (min)</span><span><i style="background:linear-gradient(90deg,'+STY.RED+' 60%,'+STY.GREEN+' 60%)"></i>Came on (min)</span><span><b class="sqDot"></b>Didn’t feature</span></div>'+summary+'</div>', hero:hero };
 }
 // Film-style rotation: one team per slide, a control bar below steps / auto-plays through the field.
 function openSquad(code){
