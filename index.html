@@ -3222,7 +3222,7 @@ function beatHTML(b){
     // Full-body player photos in rows, name + tally beneath each.
     const cell=p=>{ const pic=p.id?picById(p.id):null;
       return '<div style="display:flex;flex-direction:column;align-items:center;min-width:0;">'+
-        '<div style="width:100%;height:104px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;">'+(pic?'<img src="'+shero(pic,300)+'" style="height:122px;width:auto;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 5px 10px rgba(0,0,0,.22));">':'<div style="width:56px;height:78px;border-radius:8px;background:#eee6d6;"></div>')+'</div>'+
+        '<div style="width:100%;height:110px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;">'+(pic?'<img src="'+shero(pic,300)+'" style="height:100%;width:auto;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 5px 10px rgba(0,0,0,.22));">':'<div style="width:56px;height:84px;border-radius:8px;background:#eee6d6;"></div>')+'</div>'+
         '<div class="sc" style="font-weight:800;font-size:14px;color:'+STY.INK+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;margin-top:3px;line-height:1;"><span style="color:'+STY.SUB+';font-size:12px;">'+(p.num!=null?p.num+' ':'')+'</span>'+p.name.split(' ').slice(-1)[0]+'</div>'+
         '<div class="sc" style="font-size:11px;color:'+STY.SUB+';white-space:nowrap;margin-top:1px;">'+p.apps+' apps'+(p.g?' · '+p.g+'⚽':'')+(p.a?' · '+p.a+'🥾':'')+'</div>'+
       '</div>'; };
