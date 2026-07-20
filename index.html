@@ -3576,6 +3576,15 @@ const SQUAD_BAR_CSS=`#wcSquad .sqBody{padding-bottom:78px}
 #sqPlayerBar .sqPbStat{margin-left:6px;display:flex;flex-wrap:nowrap;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:14px;color:#6f6656;white-space:nowrap}
 #sqPlayerBar .sqPbStat b{color:#1c1813;font-weight:800}
 #sqPlayerBar .sqPbStat .sep{opacity:.35}
+#sqPlayerBar .sqTbSum{display:flex;align-items:center;gap:12px;font-family:'Barlow Condensed',sans-serif;font-size:15px;color:#6f6656;white-space:nowrap}
+#sqPlayerBar .sqTbSum .sqTbBar{width:1px;height:17px;background:#d9d1c0}
+#sqPlayerBar .sqTbSum .c{font-weight:700}#sqPlayerBar .sqTbSum .c b{color:#1c1813;font-weight:800;font-size:16px}
+#sqPlayerBar .sqTbSum .wdl{display:inline-flex;align-items:baseline;gap:10px}
+#sqPlayerBar .sqTbSum .wdl span{font-size:11px;font-weight:700;letter-spacing:.5px}
+#sqPlayerBar .sqTbSum .wdl b{font-size:17px;margin-right:1px}
+#sqPlayerBar .sqTbSum .wdl .w{color:#2f9e57}#sqPlayerBar .sqTbSum .wdl .d{color:#cf9c1e}#sqPlayerBar .sqTbSum .wdl .l{color:#d0322a}
+#sqPlayerBar .sqTbSum .gd b{color:#1c1813;font-weight:800;font-size:16px}#sqPlayerBar .sqTbSum .gd i{font-style:normal;margin:0 3px;color:#6f6656}
+#sqPlayerBar .sqTbSum .gd .lb{font-size:10px;letter-spacing:.6px;text-transform:uppercase;font-weight:700;margin-left:5px}
 #wcSquad .sqEv{padding:0 10px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:#1c1813;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:4px 8px;line-height:1.15;white-space:nowrap;overflow:hidden;max-width:100%}
 #wcSquad .sqEv .d{opacity:.35}
 #wcSquad .sqSummary{margin:10px 4px 4px;display:flex;flex-direction:column;gap:0;font-family:'Barlow Condensed',sans-serif;font-size:13.5px;color:#1c1813}
@@ -3635,8 +3644,12 @@ function squadBodyHTML(code){
         box='<span class="sqPip split" style="background:'+bg+'">'+(c.t==='off'?'out':'in')+(c.m?' '+c.m:'')+'</span>'; }
       mh+='<td class="sqCell">'+box+cc+'</td>'; });
     mh+='</tr>'; }); mh+='</tbody>';
+  const totals=(function(){ let W=0,D=0,L=0,GF=0,GA=0; R.matches.forEach(m=>{ if(m.res==='W')W++; else if(m.res==='D')D++; else if(m.res==='L')L++; const s=String(m.score).split('-'); GF+=+s[0]||0; GA+=+s[1]||0; }); return {P:R.matches.length,W,D,L,GF,GA}; })();
+  const teamHero='<div class="sqTbSum"><span class="c"><b>'+totals.P+'</b> played</span><span class="sqTbBar"></span>'+
+    '<span class="wdl"><span class="w"><b>'+totals.W+'</b>W</span><span class="d"><b>'+totals.D+'</b>D</span><span class="l"><b>'+totals.L+'</b>L</span></span><span class="sqTbBar"></span>'+
+    '<span class="gd"><b>'+totals.GF+'</b><i>–</i><b>'+totals.GA+'</b><span class="lb">scored–conceded</span></span></div>';
   const hero=selP?(function(){ const sx=['<b>'+(selP.apps||0)+'</b> '+((selP.apps||0)===1?'app':'apps')]; if(selP.g)sx.push('⚽'+selP.g); if(selP.a)sx.push('🥾'+selP.a); if(selP.sv)sx.push('🧤'+selP.sv); if(selP.y)sx.push('🟨'+selP.y); if(selP.r)sx.push('🟥'+selP.r); const pic=picById(selP.id);
-    return '<div class="sqPbAv">'+(pic?'<img src="'+pic+'?&io=transform:fill,aspectratio:1x1,width:120,gravity:top&quality=88" alt="">':'<span>'+selP.n+'</span>')+'</div><div class="sqPbName"><b>'+selP.n+'</b> '+selP.sur+'</div><div class="sqPbStat">'+sx.join('<span class="sep">·</span>')+'</div>'; })():'';
+    return '<div class="sqPbAv">'+(pic?'<img src="'+pic+'?&io=transform:fill,aspectratio:1x1,width:120,gravity:top&quality=88" alt="">':'<span>'+selP.n+'</span>')+'</div><div class="sqPbName"><b>'+selP.n+'</b> '+selP.sur+'</div><div class="sqPbStat">'+sx.join('<span class="sep">·</span>')+'</div>'; })():teamHero;
   // Participation summary under the pitches.
   const N=R.matches.length, fullN=p=>p.cells.filter(c=>c&&c.t==='full').length;
   const nm=p=>'<b class="sqSumN">'+p.n+'</b> '+p.sur;
