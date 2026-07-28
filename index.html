@@ -3464,9 +3464,13 @@ function buildNumberBeats(D){
   const byId={}; D.sections.forEach(s=>(s.groups||[]).forEach(g=>(g.stats||[]).forEach(st=>byId[st.id]=st)));
   beats.push({t:'cover',T});
   beats.push({t:'honours',T});
+  // Derived: how many host cities each nation ranked in the top-3 travelling fans (chart).
+  const travel={}; (D.hostCities||[]).forEach(c=>(c.topTicketNations||[]).forEach(n=>{ travel[n]=(travel[n]||0)+1; }));
+  const travelRows=Object.keys(travel).map(n=>({name:n,count:travel[n]})).sort((a,b)=>b.count-a.count).slice(0,12);
   D.sections.filter(s=>s.id!=='host-cities').forEach(s=>{
     const acc=NB_ACC[s.id]||STY.GOLD;
     beats.push({t:'divider',section:s,acc});
+    if(s.id==='fan-experience') beats.push({t:'chart_travelled',rows:travelRows});
     (s.heroStats||[]).forEach(id=>{ const st=byId[id]; if(!st||st.display==null)return;
       beats.push({t:(st.comparison?'comparison':'hero'), st, acc, section:s.title}); });
     // Every group's remaining stats become tile-grid cards (paginated) so all the data is surfaced.
@@ -3480,6 +3484,7 @@ function buildNumberBeats(D){
   const enzo=byId['milestone-3000th-goal']; if(enzo) beats.push({t:'milestone',st:enzo,acc:STY.GREEN});
   const hc=D.sections.find(s=>s.id==='host-cities');
   beats.push({t:'divider',section:{title:'Host cities',standfirst:hc?hc.standfirst:''},acc:STY.GOLD});
+  beats.push({t:'chart_attendance',cities:(D.hostCities||[]).slice().sort((a,b)=>(b.attendance||0)-(a.attendance||0))});
   (D.hostCities||[]).forEach(c=>beats.push({t:'city',c}));
   beats.push({t:'funfacts',D});
   const gaps=((D.dataGaps||{}).items)||[];
@@ -3566,6 +3571,22 @@ function nbBeatHTML(b){
         row('📈','8× the video views of Qatar 2022','though intercepted harmful posts grew roughly 19×')+
         row('🎟️','99.7% average occupancy','across all 16 host-city stadiums')+
       '</div>'); }
+  if(b.t==='chart_attendance'){ const cities=b.cities, max=Math.max.apply(0,cities.map(c=>c.attendance||0))||1;
+    const short=n=>({'New York/New Jersey':'New York NJ','San Francisco Bay Area':'SF Bay Area'})[n]||n;
+    const col=ct=>ct==='United States'?STY.BLUE:ct==='Mexico'?STY.GREEN:STY.RED;
+    const rows=cities.map(c=>'<div class="nbCbar"><div class="nbCbarN">'+short(c.name)+'</div><div class="nbCbarT"><div class="nbCbarF" style="width:'+((c.attendance||0)/max*100).toFixed(1)+'%;background:'+col(c.country)+';"></div></div><div class="nbCbarV">'+Number(c.attendance||0).toLocaleString()+'</div></div>').join('');
+    return '<div style="position:absolute;inset:0;'+nbBg(STY.GOLD)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+STY.GOLD+';">Host cities</div>'+
+      '<div class="nbGridT" style="margin-bottom:6px;">Fans through the gates, by city</div>'+
+      '<div class="nbLegend"><span><i style="background:'+STY.BLUE+';"></i>United States</span><span><i style="background:'+STY.GREEN+';"></i>Mexico</span><span><i style="background:'+STY.RED+';"></i>Canada</span></div>'+
+      '<div class="nbCbars">'+rows+'</div>'); }
+  if(b.t==='chart_travelled'){ const rows=b.rows, max=rows.length?rows[0].count:1;
+    const bars=rows.map(r=>'<div class="nbCbar"><div class="nbCbarN">'+nbFlagImg(r.name,14)+'&nbsp;'+r.name+'</div><div class="nbCbarT"><div class="nbCbarF" style="width:'+(r.count/max*100).toFixed(1)+'%;background:'+STY.ORANGE+';"></div></div><div class="nbCbarV">'+r.count+(r.count===1?' city':' cities')+'</div></div>').join('');
+    return '<div style="position:absolute;inset:0;'+nbBg(STY.ORANGE)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+STY.ORANGE+';">Fan experience</div>'+
+      '<div class="nbGridT" style="margin-bottom:14px;">Who travelled the most</div>'+
+      '<div class="nbCbars nbCbarsWide">'+bars+'</div>'+
+      '<div class="nbNote" style="font-size:14px;margin-top:16px;max-width:900px;">Derived · number of host cities where each nation ranked among the top-3 travelling supporters</div>'); }
   if(b.t==='gaps'){
     const rows=b.items.map(it=>'<div class="nbGapRow"><div class="nbGapL">'+it.label+'</div><div class="nbGapD">'+it.detail+'</div></div>').join('');
     return '<div style="position:absolute;inset:0;'+nbBg(STY.SUB)+'"></div>'+nbLeft(
@@ -3622,6 +3643,15 @@ const NB_CSS='#wcNumbers{position:fixed;inset:0;z-index:400;background:#0c0b07;d
  '#wcNumbers .nbFunList{display:flex;flex-direction:column;gap:22px;margin-top:22px;max-width:900px;text-align:left;}'+
  '#wcNumbers .nbFunRow{display:flex;align-items:center;gap:20px;}#wcNumbers .nbFunE{font-size:52px;line-height:1;flex:none;}#wcNumbers .nbFunB{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:38px;color:'+NB_CREAM+';line-height:1;}'+
  '#wcNumbers .nbOutro{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:86px;color:'+NB_CREAM+';line-height:.9;}'+
+ '#wcNumbers .nbCbars{display:flex;flex-direction:column;gap:5px;max-width:1080px;margin-top:14px;}'+
+ '#wcNumbers .nbCbarsWide{gap:9px;}'+
+ '#wcNumbers .nbCbar{display:flex;align-items:center;gap:14px;}'+
+ '#wcNumbers .nbCbarN{width:220px;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:16px;color:'+NB_CREAM+';text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none;}'+
+ '#wcNumbers .nbCbarT{flex:1;height:19px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden;}#wcNumbers .nbCbarsWide .nbCbarT{height:26px;}'+
+ '#wcNumbers .nbCbarF{height:100%;border-radius:5px;}'+
+ '#wcNumbers .nbCbarV{width:120px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:16px;color:'+NB_CREAM+';font-variant-numeric:tabular-nums;flex:none;}'+
+ '#wcNumbers .nbLegend{display:flex;gap:18px;margin:2px 0 4px;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:13px;color:'+NB_SUB+';}'+
+ '#wcNumbers .nbLegend span{display:inline-flex;align-items:center;gap:6px;}#wcNumbers .nbLegend i{width:13px;height:13px;border-radius:3px;display:inline-block;}'+
  '#wcNumbers .nbGaps{display:flex;flex-direction:column;gap:14px;max-width:1060px;}'+
  '#wcNumbers .nbGapRow{border-left:3px solid rgba(255,255,255,.2);padding-left:15px;}'+
  '#wcNumbers .nbGapL{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px;color:'+NB_CREAM+';text-transform:uppercase;letter-spacing:.5px;line-height:1;}'+
