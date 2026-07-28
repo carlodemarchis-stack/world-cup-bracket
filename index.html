@@ -3430,10 +3430,13 @@ function buildNumberBeats(D){
     beats.push({t:'divider',section:s,acc});
     (s.heroStats||[]).forEach(id=>{ const st=byId[id]; if(!st||st.display==null)return;
       beats.push({t:(st.comparison?'comparison':'hero'), st, acc, section:s.title}); });
-    const heroSet=new Set(s.heroStats||[]);
-    const grids=(s.groups||[]).map(g=>({g,rest:(g.stats||[]).filter(x=>!heroSet.has(x.id)&&x.display!=null)})).filter(x=>x.rest.length>=3);
-    if(grids.length){ const pick=grids.sort((a,b)=>b.rest.length-a.rest.length)[0];
-      beats.push({t:'grid',title:pick.g.title,stats:pick.rest.slice(0,6),acc,section:s.title}); }
+    // Every group's remaining stats become tile-grid cards (paginated) so all the data is surfaced.
+    const heroSet=new Set(s.heroStats||[]); const per=9, spill=[];
+    (s.groups||[]).forEach(g=>{ const rest=(g.stats||[]).filter(x=>!heroSet.has(x.id)&&x.id!=='milestone-3000th-goal'&&x.display!=null); if(!rest.length)return;
+      if(rest.length<3){ spill.push.apply(spill,rest); return; }              // tiny groups pooled into a "More" card
+      const pages=Math.ceil(rest.length/per);
+      for(let p=0;p<pages;p++) beats.push({t:'grid',title:g.title+(pages>1?' · '+(p+1)+'/'+pages:''),stats:rest.slice(p*per,p*per+per),acc,section:s.title}); });
+    for(let p=0;p<spill.length;p+=per) beats.push({t:'grid',title:'More numbers',stats:spill.slice(p,p+per),acc,section:s.title});
   });
   const enzo=byId['milestone-3000th-goal']; if(enzo) beats.push({t:'milestone',st:enzo,acc:STY.GREEN});
   const hc=D.sections.find(s=>s.id==='host-cities');
@@ -3487,11 +3490,13 @@ function nbBeatHTML(b){
       '</div>'+bars+
       (st.note?'<div class="nbNote" style="margin-top:26px;max-width:940px;">'+st.note+'</div>':'')); }
   if(b.t==='grid'){
-    const tiles=b.stats.map(st=>'<div class="nbTile"><div class="nbTileV">'+st.display+'</div><div class="nbTileL">'+st.label+'</div></div>').join('');
+    const n=b.stats.length, cols=n<=4?2:3;
+    const tiles=b.stats.map(st=>{ const L=String(st.display).length, fs=L>14?24:L>8?32:44;
+      return '<div class="nbTile"><div class="nbTileV" style="font-size:'+fs+'px;">'+st.display+'</div><div class="nbTileL">'+st.label+'</div>'+(st.note&&n<=4?'<div class="nbTileN">'+st.note+'</div>':'')+'</div>'; }).join('');
     return '<div style="position:absolute;inset:0;'+nbBg(b.acc)+'"></div>'+nbLeft(
       '<div class="nbEy" style="color:'+b.acc+';">'+b.section+'</div>'+
       '<div class="nbGridT">'+b.title+'</div>'+
-      '<div class="nbTiles">'+tiles+'</div>'); }
+      '<div class="nbTiles" style="grid-template-columns:repeat('+cols+',1fr);">'+tiles+'</div>'); }
   if(b.t==='milestone'){ const st=b.st;
     return '<div style="position:absolute;inset:0;'+nbBg(b.acc)+'"></div>'+nbCentre(
       '<div class="nbEy" style="color:'+b.acc+';">'+st.label+'</div>'+
@@ -3552,7 +3557,9 @@ const NB_CSS='#wcNumbers{position:fixed;inset:0;z-index:400;background:#0c0b07;d
  '#wcNumbers .nbTiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1040px;}'+
  '#wcNumbers .nbTile{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px 20px;}'+
  '#wcNumbers .nbTileV{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:44px;color:'+NB_CREAM+';line-height:1;}'+
- '#wcNumbers .nbTileL{font-family:Barlow,sans-serif;font-weight:600;font-size:15px;color:'+NB_SUB+';margin-top:6px;line-height:1.25;}'+
+ '#wcNumbers .nbTileL{font-family:Barlow,sans-serif;font-weight:700;font-size:15px;color:'+NB_CREAM+';margin-top:6px;line-height:1.2;}'+
+ '#wcNumbers .nbTileN{font-family:Barlow,sans-serif;font-weight:600;font-size:12px;color:'+NB_SUB+';margin-top:4px;line-height:1.3;}'+
+ '#wcNumbers .nbTiles{align-content:start;}'+
  '#wcNumbers .nbMile{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:92px;color:'+NB_CREAM+';margin:14px 0 12px;line-height:.9;}'+
  '#wcNumbers .nbCityN{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:78px;color:'+NB_CREAM+';line-height:.9;margin:6px 0 4px;}'+
  '#wcNumbers .nbCityStats{display:flex;gap:0;}#wcNumbers .nbCS{padding:0 40px;border-left:1px solid rgba(255,255,255,.1);}#wcNumbers .nbCS:first-child{padding-left:0;border-left:none;}'+
