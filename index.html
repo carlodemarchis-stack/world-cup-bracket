@@ -3430,19 +3430,20 @@ const NB_ISO={'Spain':'es','Argentina':'ar','England':'gb-eng','France':'fr','Ca
 const NB_CREAM='#f4efe2', NB_SUB='#a99f8c', NB_DARK='#141109';
 // Real stadium coordinates [lat,lng] for the 16 host cities — powers the locator map on each city card.
 const NB_CITY_LL={atlanta:[33.75,-84.40],boston:[42.09,-71.26],dallas:[32.75,-97.09],houston:[29.68,-95.41],'kansas-city':[39.05,-94.48],'los-angeles':[33.95,-118.34],miami:[25.96,-80.24],'new-york-new-jersey':[40.81,-74.07],philadelphia:[39.90,-75.17],'san-francisco-bay-area':[37.40,-121.97],seattle:[47.59,-122.33],guadalajara:[20.68,-103.46],'mexico-city':[19.30,-99.15],monterrey:[25.67,-100.24],toronto:[43.63,-79.42],vancouver:[49.28,-123.11]};
+// Simplified North America outline (US + Mexico + southern Canada) as [lat,lng] — a faint locator landmass.
+const NB_NA=[[49.0,-123.1],[48.4,-124.7],[46.9,-124.1],[43.4,-124.4],[40.4,-124.4],[38.0,-122.9],[36.6,-121.9],[34.4,-120.5],[32.7,-117.2],[31.9,-116.6],[28.0,-114.3],[24.4,-111.6],[23.0,-109.9],[22.9,-106.0],[20.6,-105.7],[18.0,-102.5],[16.2,-98.2],[15.7,-96.5],[16.1,-92.5],[17.8,-90.0],[18.5,-88.0],[21.5,-87.0],[21.3,-90.4],[19.6,-91.0],[19.2,-95.9],[22.2,-97.9],[25.9,-97.4],[29.7,-93.8],[29.1,-89.3],[30.3,-88.1],[29.7,-84.0],[27.8,-82.6],[25.8,-80.1],[28.5,-80.5],[31.3,-81.3],[33.9,-77.9],[36.9,-76.0],[38.9,-75.0],[40.5,-74.0],[41.4,-71.4],[43.7,-70.1],[44.8,-66.9],[47.0,-69.0],[45.0,-74.7],[43.3,-79.2],[46.5,-84.5],[48.1,-89.2],[49.0,-95.2],[49.0,-114.0],[49.0,-123.1]];
 function nbLocator(curId,curName){
-  const cos=0.826, W=320,H=236,pad=28;
-  const ids=Object.keys(NB_CITY_LL);
-  const xs=ids.map(id=>NB_CITY_LL[id][1]*cos), ys=ids.map(id=>NB_CITY_LL[id][0]);
-  const xMin=Math.min.apply(0,xs),xMax=Math.max.apply(0,xs),yMin=Math.min.apply(0,ys),yMax=Math.max.apply(0,ys);
-  const PX=ll=>pad+(ll[1]*cos-xMin)/(xMax-xMin)*(W-2*pad), PY=ll=>pad+(yMax-ll[0])/(yMax-yMin)*(H-2*pad);
+  const W=320,H=236,pad=20, laMin=13.5,laMax=51,loMin=-125,loMax=-66;
+  const PX=ll=>pad+(ll[1]-loMin)/(loMax-loMin)*(W-2*pad), PY=ll=>pad+(laMax-ll[0])/(laMax-laMin)*(H-2*pad);
+  const path='M'+NB_NA.map(p=>PX(p).toFixed(1)+' '+PY(p).toFixed(1)).join(' L')+' Z';
   let dots='',cx=0,cy=0;
-  ids.forEach(id=>{ const ll=NB_CITY_LL[id],x=PX(ll),y=PY(ll),on=id===curId; if(on){cx=x;cy=y;}
-    dots+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(on?7:3.4)+'" fill="'+(on?STY.GOLD:'rgba(244,239,226,.26)')+'"'+(on?' stroke="#fff" stroke-width="2"':'')+'/>'; });
-  const lx=Math.max(30,Math.min(W-30,cx));
+  Object.keys(NB_CITY_LL).forEach(id=>{ const ll=NB_CITY_LL[id],x=PX(ll),y=PY(ll),on=id===curId; if(on){cx=x;cy=y;}
+    dots+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(on?6.5:3)+'" fill="'+(on?STY.GOLD:'rgba(244,239,226,.5)')+'"'+(on?' stroke="#fff" stroke-width="2"':'')+'/>'; });
+  const lx=Math.max(34,Math.min(W-34,cx));
   return '<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" style="overflow:visible;">'+
-    '<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="13" fill="none" stroke="'+STY.GOLD+'" stroke-width="1.5" opacity=".45"/>'+dots+
-    '<text x="'+lx.toFixed(1)+'" y="'+(cy-15).toFixed(1)+'" text-anchor="middle" fill="'+NB_CREAM+'" font-family="Barlow Condensed" font-weight="800" font-size="16">'+(curName||'').toUpperCase()+'</text></svg>';
+    '<path d="'+path+'" fill="rgba(244,239,226,.05)" stroke="rgba(244,239,226,.34)" stroke-width="1.4" stroke-linejoin="round"/>'+
+    '<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="12" fill="none" stroke="'+STY.GOLD+'" stroke-width="1.5" opacity=".55"/>'+dots+
+    '<text x="'+lx.toFixed(1)+'" y="'+(cy-14).toFixed(1)+'" text-anchor="middle" fill="'+NB_CREAM+'" font-family="Barlow Condensed" font-weight="800" font-size="16">'+(curName||'').toUpperCase()+'</text></svg>';
 }
 const nbBg=acc=>'background:radial-gradient(130% 120% at 50% -12%,'+acc+'26,'+NB_DARK+' 60%);';
 const nbCentre=inner=>'<div style="position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 80px;">'+inner+'</div>';
