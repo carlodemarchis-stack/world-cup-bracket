@@ -875,7 +875,7 @@ function buildBracket(v){
   playersBtn.textContent = '◉ Players';
   playersBtn.title = 'Every player, by position';
   playersBtn.style.cssText = topCardsBtn.style.cssText;
-  playersBtn.onclick = () => { if (window.launchPlayers) window.launchPlayers(); };
+  playersBtn.onclick = () => { Promise.all([ensureFantasy().catch(()=>{}), ensurePower().catch(()=>{})]).then(() => { if (window.launchPlayers) window.launchPlayers(); }); };
   row1.appendChild(playersBtn);
   playRow.insertBefore(confedSel, playRow.firstChild);
   row2.appendChild(tzSel);
@@ -3768,10 +3768,25 @@ function buildPlayerBeats(){
         card:{id:p.id,pic:picById(p.id),name:nameById[p.id]||p.sur,num:p.n,teamName:tn.name,iso:tn.iso,rank:rank[c]||null,pos,
           apps:p.apps||0,mins,g:p.g||0,a:p.a||0,sv:p.sv||0,y:p.y||0,r:p.r||0,log}});
     }); });
-  // Tournament-wide scorer & assist ranks (ties share a rank); badge only the top 10 of each.
-  all.forEach(it=>{ const g=it.card.g, a=it.card.a;
-    if(g>0){ const rk=1+all.filter(z=>z.card.g>g).length; if(rk<=10) it.card.scorerRank=rk; }
-    if(a>0){ const rk=1+all.filter(z=>z.card.a>a).length; if(rk<=10) it.card.assistRank=rk; } });
+  // ---- Leaderboard ranks → badges, mirroring the six Top Cards boards ----
+  const shotsRk={};   // shots on target (shots.json)
+  if(SHOTS){ const arr=Object.keys(SHOTS).map(id=>({id:String(id),on:(SHOTS[id]||[])[1]||0})).filter(x=>x.on>0).sort((a,b)=>b.on-a.on);
+    let rk=0,pv=null; arr.forEach((x,i)=>{ if(x.on!==pv){rk=i+1;pv=x.on;} shotsRk[x.id]=rk; }); }
+  const powerRk={};   // power rankings — best category rank per player (≤15 outfield / ≤10 GK)
+  if(POWER_DATA){ const of=POWER_DATA.of||[],gk=POWER_DATA.gk||[];
+    const rankOf=(a,k)=>{const m={};a.filter(p=>p[k]!=null).slice().sort((x,y)=>y[k]-x[k]).forEach((p,i)=>m[p.i]=i+1);return m;};
+    const R={a:rankOf(of,'a'),c:rankOf(of,'c'),d:rankOf(of,'d')},LB={a:'Attacking',c:'Creativity',d:'Defending'};
+    of.forEach(p=>{ let best=null; ['a','c','d'].forEach(k=>{const r=R[k][p.i]; if(r&&(!best||r<best.rank))best={cat:LB[k],rank:r};}); if(best&&best.rank<=15)powerRk[String(p.i)]=best; });
+    const gr=rankOf(gk,'dg'); gk.forEach(p=>{ if(gr[p.i]&&gr[p.i]<=10)powerRk[String(p.i)]={cat:'Goalkeeper',rank:gr[p.i]}; }); }
+  const fantRk={};    // fantasy points (fantasy.json)
+  if(FANTASY_DATA&&FANTASY_DATA.players){ const arr=FANTASY_DATA.players.slice().sort((a,b)=>b.pts-a.pts); let rk=0,pv=null; arr.forEach((p,i)=>{ if(p.pts!==pv){rk=i+1;pv=p.pts;} fantRk[String(p.fid)]=rk; }); }
+  all.forEach(it=>{ const c=it.card, id=String(c.id), g=c.g, a=c.a, sv=c.sv;
+    if(g>0){ const rk=1+all.filter(z=>z.card.g>g).length; if(rk<=10)c.scorerRank=rk; }
+    if(a>0){ const rk=1+all.filter(z=>z.card.a>a).length; if(rk<=10)c.assistRank=rk; }
+    if(sv>0){ const rk=1+all.filter(z=>z.card.sv>sv).length; if(rk<=10)c.savesRank=rk; }
+    if(shotsRk[id]&&shotsRk[id]<=10) c.shotsRank=shotsRk[id];
+    if(powerRk[id]){ c.powerRank=powerRk[id].rank; c.powerCat=powerRk[id].cat; }
+    if(fantRk[id]&&fantRk[id]<=10) c.fantasyRank=fantRk[id]; });
   all.sort((x,y)=>x.pos-y.pos||x.rank-y.rank||y.apps-x.apps||(x.num||0)-(y.num||0));
   const beats=[{t:'plcover',total:all.length}]; let cur=-1;
   all.forEach(it=>{ if(it.pos!==cur){ cur=it.pos; beats.push({t:'plrole',pos:cur,n:all.filter(z=>z.pos===cur).length}); } beats.push({t:'player',c:it.card}); });
@@ -3791,9 +3806,14 @@ function plBeatHTML(b){
     let kpis=kpi(c.apps,'Apps')+kpi(c.mins+"'",'Minutes');
     kpis+= c.pos===0 ? kpi(c.sv,'Saves')+kpi(c.g,'Goals') : kpi(c.g,'Goals')+kpi(c.a,'Assists');
     if(c.y||c.r) kpis+=kpi((c.y||0)+' / '+(c.r||0),'Y / R');
+    const bdg=(cls,txt)=>'<span class="plBadge '+cls+'">'+txt+'</span>';
     let badges='';
-    if(c.scorerRank) badges+='<span class="plBadge plBg">'+(c.scorerRank===1?'🥇 Golden Boot':'⚽ #'+c.scorerRank+' scorer')+'</span>';
-    if(c.assistRank) badges+='<span class="plBadge plBa">'+(c.assistRank===1?'🅰 Most assists':'🅰 #'+c.assistRank+' assists')+'</span>';
+    if(c.scorerRank) badges+=bdg('plBg',c.scorerRank===1?'🥇 Golden Boot':'⚽ #'+c.scorerRank+' scorer');
+    if(c.savesRank) badges+=bdg('plBk',c.savesRank===1?'🧤 Golden Glove':'🧤 #'+c.savesRank+' saves');
+    if(c.assistRank) badges+=bdg('plBa',c.assistRank===1?'🅰 Most assists':'🅰 #'+c.assistRank+' assists');
+    if(c.shotsRank) badges+=bdg('plBs','🎯 #'+c.shotsRank+' on target');
+    if(c.powerRank) badges+=bdg('plBp','⚡ #'+c.powerRank+' '+c.powerCat);
+    if(c.fantasyRank) badges+=bdg('plBf','🎮 #'+c.fantasyRank+' fantasy');
     const rescol=r=>r==='W'?STY.GREEN:r==='L'?STY.RED:STY.SUB;
     const rows=c.log.map(m=>{ let ev=''; if(m.g)ev+='⚽'.repeat(Math.min(m.g,3)); if(m.a)ev+=' 🅰'; if(m.rc)ev+=' 🟥'; else if(m.yc)ev+=' 🟨';
       return '<div class="plRow'+(m.inv==='—'?' plDim':'')+'"><span class="plOpp"><img src="'+sflag(m.oppIso,40)+'">'+m.opp+'</span><span class="plScore" style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</span><span class="plInv">'+m.inv+(m.cap?' · C':'')+'</span><span class="plEv">'+ev+'</span></div>'; }).join('');
@@ -3830,7 +3850,11 @@ const PL_CSS='#wcPlayers{position:fixed;inset:0;z-index:400;background:#c9c4ba;d
  '#wcPlayers .plBadges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}'+
  '#wcPlayers .plBadge{display:inline-flex;align-items:center;gap:5px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:14px;letter-spacing:.5px;text-transform:uppercase;padding:5px 12px;border-radius:30px;}'+
  '#wcPlayers .plBg{background:rgba(207,156,30,.16);color:#9a6d0c;}'+
- '#wcPlayers .plBa{background:rgba(20,153,214,.14);color:#0e6fa0;}'+
+ '#wcPlayers .plBa{background:rgba(239,138,52,.16);color:#b0570d;}'+
+ '#wcPlayers .plBs{background:rgba(226,59,59,.14);color:#b02a2a;}'+
+ '#wcPlayers .plBk{background:rgba(15,163,163,.16);color:#0a7070;}'+
+ '#wcPlayers .plBp{background:rgba(34,176,240,.15);color:#0e77a8;}'+
+ '#wcPlayers .plBf{background:rgba(124,77,255,.14);color:#5a34c0;}'+
  '#wcPlayers .plKpis{display:flex;gap:0;margin-bottom:22px;flex-wrap:wrap;}'+
  '#wcPlayers .plK{padding:0 22px;border-left:1px solid rgba(0,0,0,.12);}#wcPlayers .plK:first-child{padding-left:0;border-left:none;}'+
  '#wcPlayers .plKv{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:38px;color:'+STY.INK+';line-height:1;}'+
@@ -3883,7 +3907,8 @@ function closePlayers(){ if(!plOv)return; clearTimeout(plTimer); removeEventList
 window.launchPlayers=launchPlayers; window.plGo=plGo; window.plToggle=plToggle; window.plCycleSpeed=plCycleSpeed; window.plChapters=plChapters; window.plRestart=plRestart; window.closePlayers=closePlayers;
 // Deep-link: ?players=<beat> resumes the Players film on that card.
 (function(){ const pp=new URLSearchParams(location.search).get('players'); if(pp===null)return;
-  const t=setInterval(()=>{ if(DATA&&DATA.squads&&document.querySelector('#app [data-confed]')){ clearInterval(t); launchPlayers(); const n=parseInt(pp,10)||0; if(n>0)plJump(n); } },200);
+  const t=setInterval(()=>{ if(DATA&&DATA.squads&&document.querySelector('#app [data-confed]')){ clearInterval(t);
+    Promise.all([ensureFantasy().catch(()=>{}),ensurePower().catch(()=>{})]).then(()=>{ launchPlayers(); const n=parseInt(pp,10)||0; if(n>0)plJump(n); }); } },200);
   setTimeout(()=>clearInterval(t),9000); })();
 // ——— Persistence: preferences (localStorage), scroll (sessionStorage), film resume ———
 function wcbLoad(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
