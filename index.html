@@ -3443,7 +3443,9 @@ function buildNumberBeats(D){
   beats.push({t:'divider',section:{title:'Host cities',standfirst:hc?hc.standfirst:''},acc:STY.GOLD});
   (D.hostCities||[]).forEach(c=>beats.push({t:'city',c}));
   beats.push({t:'funfacts',D});
-  beats.push({t:'outro'});
+  const gaps=((D.dataGaps||{}).items)||[];
+  for(let p=0;p<gaps.length;p+=6) beats.push({t:'gaps',items:gaps.slice(p,p+6),page:Math.floor(p/6)+1,pages:Math.ceil(gaps.length/6)});
+  beats.push({t:'outro',D});
   return beats;
 }
 
@@ -3519,10 +3521,16 @@ function nbBeatHTML(b){
         row('📈','8× the video views of Qatar 2022','though intercepted harmful posts grew roughly 19×')+
         row('🎟️','99.7% average occupancy','across all 16 host-city stadiums')+
       '</div>'); }
-  if(b.t==='outro'){
+  if(b.t==='gaps'){
+    const rows=b.items.map(it=>'<div class="nbGapRow"><div class="nbGapL">'+it.label+'</div><div class="nbGapD">'+it.detail+'</div></div>').join('');
+    return '<div style="position:absolute;inset:0;'+nbBg(STY.SUB)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+STY.GOLD+';">The honest footnote'+(b.pages>1?' · '+b.page+'/'+b.pages:'')+'</div>'+
+      '<div class="nbGridT">What FIFA didn’t put a number on</div>'+
+      '<div class="nbGaps">'+rows+'</div>'); }
+  if(b.t==='outro'){ const m=(b.D&&b.D.meta)||{}, ns=((b.D&&b.D.sources)||[]).length;
     return '<div style="position:absolute;inset:0;'+nbBg(STY.VIOLET)+'"></div>'+nbCentre(
       '<div class="nbOutro">THAT WAS<br>WORLD CUP 2026</div>'+
-      '<div class="nbNote" style="margin-top:24px;font-size:17px;letter-spacing:.5px;">Source · FIFA — “FIFA World Cup 2026 by the numbers”</div>'); }
+      '<div class="nbNote" style="margin-top:26px;font-size:16px;letter-spacing:.4px;line-height:1.6;">Every figure from '+(m.publisher||'FIFA')+' — “'+(m.title||'FIFA World Cup 2026 by the numbers')+'”<br>'+ns+' official sources · inside.fifa.com'+(m.extractedAt?' · read '+nbDate(m.extractedAt)+' 2026':'')+'</div>'); }
   return '';
 }
 
@@ -3567,6 +3575,10 @@ const NB_CSS='#wcNumbers{position:fixed;inset:0;z-index:400;background:#0c0b07;d
  '#wcNumbers .nbFunList{display:flex;flex-direction:column;gap:22px;margin-top:22px;max-width:900px;text-align:left;}'+
  '#wcNumbers .nbFunRow{display:flex;align-items:center;gap:20px;}#wcNumbers .nbFunE{font-size:52px;line-height:1;flex:none;}#wcNumbers .nbFunB{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:38px;color:'+NB_CREAM+';line-height:1;}'+
  '#wcNumbers .nbOutro{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:86px;color:'+NB_CREAM+';line-height:.9;}'+
+ '#wcNumbers .nbGaps{display:flex;flex-direction:column;gap:14px;max-width:1060px;}'+
+ '#wcNumbers .nbGapRow{border-left:3px solid rgba(255,255,255,.2);padding-left:15px;}'+
+ '#wcNumbers .nbGapL{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px;color:'+NB_CREAM+';text-transform:uppercase;letter-spacing:.5px;line-height:1;}'+
+ '#wcNumbers .nbGapD{font-family:Barlow,sans-serif;font-weight:600;font-size:15px;color:'+NB_SUB+';margin-top:4px;line-height:1.3;max-width:920px;}'+
  '#nbCtl{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:401;display:flex;align-items:center;gap:8px;background:#1c1813;border-radius:40px;padding:8px 12px;font-family:"Barlow Condensed",sans-serif;color:#f0ebdd;}'+
  '#nbCtl button{background:transparent;border:none;color:#f0ebdd;cursor:pointer;font:inherit;font-size:17px;padding:6px 11px;border-radius:20px;}#nbCtl button:hover{background:rgba(255,255,255,.12);}'+
  '#nbLbl{min-width:200px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;}#nbLbl b{color:'+STY.GOLD+';}';
@@ -3586,10 +3598,16 @@ function launchNumbers(){ if(nbOv) return; if(!NUMBERS_DATA) return; nbBeats=bui
   ni=0; nbPlaying=true; nbRender(); nbSched();
 }
 function nbRender(){ if(!nbOv)return; const st=document.getElementById('nbStage'); st.innerHTML=nbBeatHTML(nbBeats[ni]);
-  const chap=[...nbBeats].slice(0,ni+1).reverse().find(x=>x.t==='divider'||x.t==='cover');
-  const lbl=chap?(chap.t==='cover'?'Overview':chap.section.title):'—';
+  const cur=nbBeats[ni];
+  let lbl;
+  if(cur.t==='funfacts') lbl='For fun';
+  else if(cur.t==='gaps') lbl='The footnote';
+  else if(cur.t==='outro') lbl='Finale';
+  else { const chap=[...nbBeats].slice(0,ni+1).reverse().find(x=>x.t==='divider'||x.t==='cover'); lbl=chap?(chap.t==='cover'?'Overview':chap.section.title):'—'; }
   document.getElementById('nbLbl').innerHTML='<b>'+(ni+1)+'/'+nbBeats.length+'</b> · '+lbl;
-  document.getElementById('nbPlay').textContent=nbPlaying?'❚❚':'▶'; }
+  document.getElementById('nbPlay').textContent=nbPlaying?'❚❚':'▶'; nbSyncUrl(); }
+// Keep the address bar in sync so a reload / shared link resumes on this exact card.
+function nbSyncUrl(){ try{ history.replaceState(null,'',location.pathname+'?numbers='+ni); }catch(e){} }
 function nbSched(){ clearTimeout(nbTimer); if(!nbPlaying)return; nbTimer=setTimeout(()=>nbGo(1), NB_MS/nbSpeed); }
 function nbGo(d){ if(!nbOv)return; const n=ni+d; if(n<0||n>=nbBeats.length){ if(d>0)nbToggle(); return; } ni=n; nbRender(); nbSched(); }
 function nbJump(n){ if(!nbOv)return; ni=Math.max(0,Math.min(nbBeats.length-1,n)); nbRender(); nbSched(); }
@@ -3606,7 +3624,7 @@ function nbChapters(){ const chs=nbBeats.map((b,i)=>({b,i})).filter(x=>x.b.t==='
   menu.onclick=e=>{ const r=e.target.closest('.nbChapRow'); if(r){ ni=+r.dataset.i; menu.remove(); nbPlaying=wasPlaying; nbRender(); nbSched(); } else if(e.target===menu){ menu.remove(); nbPlaying=wasPlaying; if(wasPlaying)nbSched(); } };
   [...menu.querySelectorAll('.nbChapRow')].forEach(r=>{ r.onmouseenter=()=>r.style.background='rgba(255,255,255,.08)'; r.onmouseleave=()=>r.style.background=''; });
   document.body.appendChild(menu); }
-function closeNumbers(){ if(!nbOv)return; clearTimeout(nbTimer); removeEventListener('resize',nbOv._fit); removeEventListener('keydown',nbOv._key); nbOv.remove(); nbOv=null; if(modalEl&&modalEl.id==='wcNumbers')modalEl=null; const c=document.getElementById('nbChap'); if(c)c.remove(); }
+function closeNumbers(){ if(!nbOv)return; clearTimeout(nbTimer); removeEventListener('resize',nbOv._fit); removeEventListener('keydown',nbOv._key); nbOv.remove(); nbOv=null; if(modalEl&&modalEl.id==='wcNumbers')modalEl=null; const c=document.getElementById('nbChap'); if(c)c.remove(); try{ history.replaceState(null,'',location.pathname); }catch(e){} }
 window.launchNumbers=launchNumbers; window.nbGo=nbGo; window.nbToggle=nbToggle; window.nbCycleSpeed=nbCycleSpeed; window.nbChapters=nbChapters; window.nbRestart=nbRestart; window.closeNumbers=closeNumbers;
 // ——— Persistence: preferences (localStorage), scroll (sessionStorage), film resume ———
 function wcbLoad(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
@@ -3983,6 +4001,11 @@ window.openSquad=openSquad;
 // Deep-link: ?squad=CODE opens that team's lineup-rotation view (so a reload restores it).
 (function(){ const code=new URLSearchParams(location.search).get('squad'); if(!code)return;
   const t=setInterval(()=>{ if(DATA&&DATA.squads&&document.querySelector('#app [data-confed]')){ clearInterval(t); openSquad(code.toUpperCase()); } },200);
+  setTimeout(()=>clearInterval(t),9000); })();
+// Deep-link: ?numbers=<beat> resumes the "By the Numbers" film on that exact card (shareable / reloadable).
+(function(){ const np=new URLSearchParams(location.search).get('numbers'); if(np===null)return;
+  const t=setInterval(()=>{ if(DATA&&document.querySelector('#app [data-confed]')){ clearInterval(t);
+    ensureNumbers().then(()=>{ launchNumbers(); const n=parseInt(np,10)||0; if(n>0){ nbToggle(); nbJump(n); } }).catch(()=>{}); } },200);
   setTimeout(()=>clearInterval(t),9000); })();
 
 // ---- Ambient side-gutter bubbles --------------------------------------------
