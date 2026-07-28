@@ -3768,66 +3768,78 @@ function buildPlayerBeats(){
         card:{id:p.id,pic:picById(p.id),name:nameById[p.id]||p.sur,num:p.n,teamName:tn.name,iso:tn.iso,rank:rank[c]||null,pos,
           apps:p.apps||0,mins,g:p.g||0,a:p.a||0,sv:p.sv||0,y:p.y||0,r:p.r||0,log}});
     }); });
+  // Tournament-wide scorer & assist ranks (ties share a rank); badge only the top 10 of each.
+  all.forEach(it=>{ const g=it.card.g, a=it.card.a;
+    if(g>0){ const rk=1+all.filter(z=>z.card.g>g).length; if(rk<=10) it.card.scorerRank=rk; }
+    if(a>0){ const rk=1+all.filter(z=>z.card.a>a).length; if(rk<=10) it.card.assistRank=rk; } });
   all.sort((x,y)=>x.pos-y.pos||x.rank-y.rank||y.apps-x.apps||(x.num||0)-(y.num||0));
   const beats=[{t:'plcover',total:all.length}]; let cur=-1;
   all.forEach(it=>{ if(it.pos!==cur){ cur=it.pos; beats.push({t:'plrole',pos:cur,n:all.filter(z=>z.pos===cur).length}); } beats.push({t:'player',c:it.card}); });
   beats.push({t:'ploutro'}); return beats;
 }
 function plBeatHTML(b){
-  if(b.t==='plcover') return '<div style="position:absolute;inset:0;'+nbBg(STY.GREEN)+'"></div>'+nbCentre(
+  if(b.t==='plcover') return '<div style="position:absolute;inset:0;'+sBg(STY.GREEN)+'"></div>'+nbCentre(
     '<div class="nbKick" style="color:'+STY.GREEN+'">FIFA World Cup 2026</div>'+
     '<div class="nbTitle">The <span style="color:'+STY.GREEN+'">Players</span></div>'+
-    '<div class="nbNote" style="font-size:24px;margin-top:14px;"><b style="color:'+NB_CREAM+'">'+(b.total||0).toLocaleString()+'</b> players · every squad · by position, best teams first</div>');
-  if(b.t==='plrole') return '<div style="position:absolute;inset:0;'+nbBg(PL_ACC[b.pos])+'"></div><div style="position:absolute;left:0;top:0;bottom:0;width:9px;background:'+PL_ACC[b.pos]+';z-index:2;"></div>'+nbLeft(
+    '<div class="nbNote" style="font-size:24px;margin-top:14px;"><b style="color:'+STY.INK+'">'+(b.total||0).toLocaleString()+'</b> players · every squad · by position, best teams first</div>');
+  if(b.t==='plrole') return '<div style="position:absolute;inset:0;'+sBg(PL_ACC[b.pos])+'"></div><div style="position:absolute;left:0;top:0;bottom:0;width:9px;background:'+PL_ACC[b.pos]+';z-index:2;"></div>'+nbLeft(
     '<div class="nbEy" style="color:'+PL_ACC[b.pos]+';font-size:16px;">The squads · by position</div>'+
-    '<div style="font-family:\'Barlow Condensed\';font-weight:900;font-size:120px;line-height:.9;color:'+NB_CREAM+';margin:8px 0 4px;">'+PL_ROLE[b.pos]+'</div>'+
-    '<div class="nbNote" style="font-size:24px;"><b style="color:'+NB_CREAM+'">'+b.n+'</b> players · Spain, Argentina, England… in ranking order</div>');
+    '<div style="font-family:\'Barlow Condensed\';font-weight:900;font-size:120px;line-height:.9;color:'+STY.INK+';margin:8px 0 4px;">'+PL_ROLE[b.pos]+'</div>'+
+    '<div class="nbNote" style="font-size:24px;"><b style="color:'+STY.INK+'">'+b.n+'</b> players · Spain, Argentina, England… in ranking order</div>');
   if(b.t==='player'){ const c=b.c, acc=PL_ACC[c.pos];
     const kpi=(v,l)=>'<div class="plK"><div class="plKv">'+v+'</div><div class="plKl">'+l+'</div></div>';
     let kpis=kpi(c.apps,'Apps')+kpi(c.mins+"'",'Minutes');
     kpis+= c.pos===0 ? kpi(c.sv,'Saves')+kpi(c.g,'Goals') : kpi(c.g,'Goals')+kpi(c.a,'Assists');
     if(c.y||c.r) kpis+=kpi((c.y||0)+' / '+(c.r||0),'Y / R');
-    const rescol=r=>r==='W'?STY.GREEN:r==='L'?STY.RED:NB_SUB;
+    let badges='';
+    if(c.scorerRank) badges+='<span class="plBadge plBg">'+(c.scorerRank===1?'🥇 Golden Boot':'⚽ #'+c.scorerRank+' scorer')+'</span>';
+    if(c.assistRank) badges+='<span class="plBadge plBa">'+(c.assistRank===1?'🅰 Most assists':'🅰 #'+c.assistRank+' assists')+'</span>';
+    const rescol=r=>r==='W'?STY.GREEN:r==='L'?STY.RED:STY.SUB;
     const rows=c.log.map(m=>{ let ev=''; if(m.g)ev+='⚽'.repeat(Math.min(m.g,3)); if(m.a)ev+=' 🅰'; if(m.rc)ev+=' 🟥'; else if(m.yc)ev+=' 🟨';
       return '<div class="plRow'+(m.inv==='—'?' plDim':'')+'"><span class="plOpp"><img src="'+sflag(m.oppIso,40)+'">'+m.opp+'</span><span class="plScore" style="color:'+rescol(m.res)+'">'+m.res+' '+m.score+'</span><span class="plInv">'+m.inv+(m.cap?' · C':'')+'</span><span class="plEv">'+ev+'</span></div>'; }).join('');
-    return '<div style="position:absolute;inset:0;'+nbBg(acc)+'"></div>'+
+    return '<div style="position:absolute;inset:0;'+sBg(acc)+'"></div>'+
       (c.pic?'<img src="'+shero(c.pic,760)+'" class="plPhoto" alt="">':'')+
       '<div class="plRight">'+
         '<div class="plHead"><span class="plRank" style="color:'+acc+'">'+(c.rank?'#'+c.rank:'')+'</span><img class="plFlag" src="'+sflag(c.iso,80)+'"><span class="plTeam">'+c.teamName+'</span><span class="plRole">'+PL_ROLE1[c.pos]+'</span></div>'+
         '<div class="plName"><b>'+c.num+'</b> '+c.name+'</div>'+
+        (badges?'<div class="plBadges">'+badges+'</div>':'')+
         '<div class="plKpis">'+kpis+'</div>'+
         '<div class="plLog">'+rows+'</div>'+
       '</div>'; }
-  if(b.t==='ploutro') return '<div style="position:absolute;inset:0;'+nbBg(STY.VIOLET)+'"></div>'+nbCentre(
+  if(b.t==='ploutro') return '<div style="position:absolute;inset:0;'+sBg(STY.VIOLET)+'"></div>'+nbCentre(
     '<div class="nbOutro">THAT WAS<br>THE SQUAD</div>'+
-    '<div class="nbNote" style="margin-top:22px;font-size:17px;">Every player from all 48 teams</div>'+wcHintsBar(true));
+    '<div class="nbNote" style="margin-top:22px;font-size:17px;">Every player from all 48 teams</div>'+wcHintsBar(false));
   return '';
 }
-const PL_CSS='#wcPlayers{position:fixed;inset:0;z-index:400;background:#0c0b07;display:flex;align-items:center;justify-content:center;font-family:Barlow,system-ui,sans-serif;}'+
- '#plStage{width:1280px;height:720px;flex:none;position:relative;overflow:hidden;background:'+NB_DARK+';color:'+NB_CREAM+';box-shadow:0 30px 90px rgba(0,0,0,.6);}'+
+const PL_CSS='#wcPlayers{position:fixed;inset:0;z-index:400;background:#c9c4ba;display:flex;align-items:center;justify-content:center;font-family:Barlow,system-ui,sans-serif;}'+
+ '#plStage{width:1280px;height:720px;flex:none;position:relative;overflow:hidden;background:#faf7f0;color:'+STY.INK+';box-shadow:0 30px 90px rgba(0,0,0,.55);}'+
  '#wcPlayers .nbKick{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:9px;font-size:20px;text-transform:uppercase;}'+
- '#wcPlayers .nbTitle{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:120px;line-height:.86;}'+
+ '#wcPlayers .nbTitle{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:120px;line-height:.86;color:'+STY.INK+';}'+
  '#wcPlayers .nbEy{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:6px;text-transform:uppercase;}'+
- '#wcPlayers .nbNote{font-family:Barlow,sans-serif;font-weight:600;color:'+NB_SUB+';line-height:1.4;}'+
- '#wcPlayers .nbOutro{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:86px;color:'+NB_CREAM+';line-height:.9;}'+
- '#wcPlayers .plPhoto{position:absolute;left:26px;bottom:0;height:99%;width:auto;max-width:46%;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 12px 30px rgba(0,0,0,.55));z-index:2;}'+
+ '#wcPlayers .nbNote{font-family:Barlow,sans-serif;font-weight:600;color:'+STY.SUB+';line-height:1.4;}'+
+ '#wcPlayers .nbOutro{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:86px;color:'+STY.INK+';line-height:.9;}'+
+ '#wcPlayers .plPhoto{position:absolute;left:26px;bottom:0;height:99%;width:auto;max-width:46%;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 12px 26px rgba(0,0,0,.28));z-index:2;}'+
  '#wcPlayers .plRight{position:absolute;left:52%;right:60px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;z-index:2;}'+
  '#wcPlayers .plHead{display:flex;align-items:center;gap:12px;}'+
  '#wcPlayers .plRank{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:28px;}'+
- '#wcPlayers .plFlag{height:26px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,.5);}'+
- '#wcPlayers .plTeam{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px;color:'+NB_CREAM+';text-transform:uppercase;letter-spacing:1px;}'+
- '#wcPlayers .plRole{margin-left:auto;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:'+NB_SUB+';}'+
- '#wcPlayers .plName{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:60px;color:'+NB_CREAM+';line-height:.95;margin:8px 0 18px;}'+
- '#wcPlayers .plName b{color:'+NB_SUB+';font-size:32px;margin-right:7px;}'+
+ '#wcPlayers .plFlag{height:26px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,.25);}'+
+ '#wcPlayers .plTeam{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px;color:'+STY.INK+';text-transform:uppercase;letter-spacing:1px;}'+
+ '#wcPlayers .plRole{margin-left:auto;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:'+STY.SUB+';}'+
+ '#wcPlayers .plName{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:58px;color:'+STY.INK+';line-height:.95;margin:8px 0 12px;}'+
+ '#wcPlayers .plName b{color:'+STY.SUB+';font-size:32px;margin-right:7px;}'+
+ '#wcPlayers .plBadges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}'+
+ '#wcPlayers .plBadge{display:inline-flex;align-items:center;gap:5px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:14px;letter-spacing:.5px;text-transform:uppercase;padding:5px 12px;border-radius:30px;}'+
+ '#wcPlayers .plBg{background:rgba(207,156,30,.16);color:#9a6d0c;}'+
+ '#wcPlayers .plBa{background:rgba(20,153,214,.14);color:#0e6fa0;}'+
  '#wcPlayers .plKpis{display:flex;gap:0;margin-bottom:22px;flex-wrap:wrap;}'+
- '#wcPlayers .plK{padding:0 22px;border-left:1px solid rgba(255,255,255,.1);}#wcPlayers .plK:first-child{padding-left:0;border-left:none;}'+
- '#wcPlayers .plKv{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:38px;color:'+NB_CREAM+';line-height:1;}'+
- '#wcPlayers .plKl{font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:2px;font-size:12px;color:'+NB_SUB+';text-transform:uppercase;margin-top:4px;}'+
+ '#wcPlayers .plK{padding:0 22px;border-left:1px solid rgba(0,0,0,.12);}#wcPlayers .plK:first-child{padding-left:0;border-left:none;}'+
+ '#wcPlayers .plKv{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:38px;color:'+STY.INK+';line-height:1;}'+
+ '#wcPlayers .plKl{font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:2px;font-size:12px;color:'+STY.SUB+';text-transform:uppercase;margin-top:4px;}'+
  '#wcPlayers .plLog{display:flex;flex-direction:column;}'+
- '#wcPlayers .plRow{display:flex;align-items:center;gap:12px;padding:6px 0;border-top:1px solid rgba(255,255,255,.08);font-family:"Barlow Condensed",sans-serif;font-size:18px;}'+
- '#wcPlayers .plRow.plDim{opacity:.38;}'+
- '#wcPlayers .plOpp{display:flex;align-items:center;gap:7px;font-weight:700;width:150px;color:'+NB_CREAM+';}#wcPlayers .plOpp img{height:13px;border-radius:2px;}'+
- '#wcPlayers .plScore{font-weight:800;width:74px;}#wcPlayers .plInv{flex:1;color:'+NB_SUB+';font-weight:600;}#wcPlayers .plEv{font-size:15px;white-space:nowrap;}'+
+ '#wcPlayers .plRow{display:flex;align-items:center;gap:12px;padding:6px 0;border-top:1px solid rgba(0,0,0,.1);font-family:"Barlow Condensed",sans-serif;font-size:18px;}'+
+ '#wcPlayers .plRow.plDim{opacity:.4;}'+
+ '#wcPlayers .plOpp{display:flex;align-items:center;gap:7px;font-weight:700;width:150px;color:'+STY.INK+';}#wcPlayers .plOpp img{height:13px;border-radius:2px;}'+
+ '#wcPlayers .plScore{font-weight:800;width:74px;}#wcPlayers .plInv{flex:1;color:'+STY.SUB+';font-weight:600;}#wcPlayers .plEv{font-size:15px;white-space:nowrap;}'+
  '#plCtl{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:401;display:flex;align-items:center;gap:8px;background:#1c1813;border-radius:40px;padding:8px 12px;font-family:"Barlow Condensed",sans-serif;color:#f0ebdd;}'+
  '#plCtl button{background:transparent;border:none;color:#f0ebdd;cursor:pointer;font:inherit;font-size:17px;padding:6px 11px;border-radius:20px;}#plCtl button:hover{background:rgba(255,255,255,.12);}'+
  '#plLbl{min-width:210px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;}#plLbl b{color:'+STY.GOLD+';}';
