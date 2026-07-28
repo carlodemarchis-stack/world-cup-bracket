@@ -3411,7 +3411,7 @@ window.launchStory=launchStory; window.storyGo=storyGo; window.storyToggle=story
 let nbOv=null, nbBeats=null, ni=0, nbTimer=null, nbPlaying=true, nbSpeed=1;
 const NB_MS=4600;
 const NB_ACC={'on-the-pitch':STY.GREEN,'fan-experience':STY.ORANGE,'operations':STY.BLUE,'tournament-reach':STY.VIOLET,'impact':STY.RED,'host-cities':STY.GOLD};
-const NB_ISO={'Spain':'es','Argentina':'ar','England':'gb-eng','France':'fr','Canada':'ca','Mexico':'mx','United States':'us','USA':'us','Colombia':'co','Morocco':'ma','Haiti':'ht','Brazil':'br','Portugal':'pt','Germany':'de','Netherlands':'nl','Italy':'it','Croatia':'hr','Uruguay':'uy','Belgium':'be','Japan':'jp','South Africa':'za','Mexico ':'mx'};
+const NB_ISO={'Spain':'es','Argentina':'ar','England':'gb-eng','France':'fr','Canada':'ca','Mexico':'mx','United States':'us','USA':'us','Colombia':'co','Morocco':'ma','Haiti':'ht','Brazil':'br','Portugal':'pt','Germany':'de','Netherlands':'nl','Italy':'it','Croatia':'hr','Uruguay':'uy','Belgium':'be','Japan':'jp','South Africa':'za','Australia':'au','Austria':'at','China PR':'cn','Ecuador':'ec','Guatemala':'gt','Norway':'no','Panama':'pa','Scotland':'gb-sct','South Korea':'kr','Sweden':'se','Switzerland':'ch','Türkiye':'tr'};
 const NB_CREAM='#f4efe2', NB_SUB='#a99f8c', NB_DARK='#141109';
 const nbBg=acc=>'background:radial-gradient(130% 120% at 50% -12%,'+acc+'26,'+NB_DARK+' 60%);';
 const nbCentre=inner=>'<div style="position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 80px;">'+inner+'</div>';
@@ -3504,13 +3504,17 @@ function nbBeatHTML(b){
       '<div class="nbEy" style="color:'+b.acc+';">'+st.label+'</div>'+
       '<div class="nbMile">'+st.display+'</div>'+
       (st.note?'<div class="nbNote" style="font-size:24px;max-width:820px;">'+st.note+'</div>':'')); }
-  if(b.t==='city'){ const c=b.c, fb=c.foodAndBeverage||{};
+  if(b.t==='city'){ const c=b.c, fb=c.foodAndBeverage||{}, hs=(c.highestScoringGames||[])[0];
+    const nations=(c.topTicketNations||[]).map(n=>nbFlagImg(n,15)+'&nbsp;'+n).join('&nbsp;&nbsp;&nbsp;');
     return '<div style="position:absolute;inset:0;'+nbBg(STY.GOLD)+'"></div>'+nbLeft(
       '<div class="nbEy" style="color:'+STY.GOLD+';">Host city · '+c.country+'</div>'+
-      '<div class="nbCityN">'+c.name+'</div>'+
-      '<div class="nbNote" style="font-size:20px;margin-bottom:24px;">'+c.venue+'</div>'+
-      '<div class="nbCityStats">'+nbCityStat(c.matches,'Matches')+nbCityStat(c.goals,'Goals')+nbCityStat(Number(c.attendance).toLocaleString(),'Attendance')+'</div>'+
-      '<div class="nbNote" style="margin-top:26px;font-size:19px;">Most travelling fans: <b style="color:'+NB_CREAM+';">'+(c.topTicketNations||[]).join(' · ')+'</b>'+(fb.favouriteFood?'<br>Local favourite: <b style="color:'+NB_CREAM+';">'+fb.favouriteFood+'</b> &amp; <b style="color:'+NB_CREAM+';">'+fb.favouriteDrink+'</b>':'')+'</div>'); }
+      '<div class="nbCityHead">'+nbFlagImg(c.country,50)+'<div class="nbCityN">'+c.name+'</div></div>'+
+      '<div class="nbNote" style="font-size:20px;margin:2px 0 22px;">'+c.venue+'</div>'+
+      '<div class="nbCityStats">'+nbCityStat(c.matches,'Matches')+nbCityStat(c.goals,'Goals')+(c.teamsVisited?nbCityStat(c.teamsVisited,'Teams hosted'):'')+nbCityStat(Number(c.attendance).toLocaleString(),'Attendance')+'</div>'+
+      (hs?'<div class="nbNote" style="margin-top:22px;font-size:19px;">Biggest game &nbsp;·&nbsp; <b style="color:'+NB_CREAM+';">'+hs.fixture+'</b> <span style="color:'+STY.GOLD+';font-weight:800;">'+hs.goals+' goals</span></div>':'')+
+      '<div class="nbNote" style="margin-top:'+(hs?'8':'22')+'px;font-size:19px;">Most travelling fans &nbsp;·&nbsp; <b style="color:'+NB_CREAM+';">'+nations+'</b></div>'+
+      (fb.favouriteFood?'<div class="nbNote" style="margin-top:8px;font-size:18px;">Local favourite &nbsp;·&nbsp; <b style="color:'+NB_CREAM+';">'+fb.favouriteFood+'</b> &amp; <b style="color:'+NB_CREAM+';">'+fb.favouriteDrink+'</b>'+(fb.beers?' &nbsp;·&nbsp; 🍺 '+Number(fb.beers).toLocaleString()+' beers poured':'')+'</div>':''));
+  }
   if(b.t==='funfacts'){ const d=b.D.derived, byId={}; b.D.sections.forEach(s=>(s.groups||[]).forEach(g=>(g.stats||[]).forEach(st=>byId[st.id]=st)));
     const beers=(byId['beers-sold']||{}).display||'5,515,118';
     const row=(emo,big,sub)=>'<div class="nbFunRow"><div class="nbFunE">'+emo+'</div><div><div class="nbFunB">'+big+'</div><div class="nbNote" style="font-size:18px;">'+sub+'</div></div></div>';
@@ -3569,7 +3573,9 @@ const NB_CSS='#wcNumbers{position:fixed;inset:0;z-index:400;background:#0c0b07;d
  '#wcNumbers .nbTileN{font-family:Barlow,sans-serif;font-weight:600;font-size:12px;color:'+NB_SUB+';margin-top:4px;line-height:1.3;}'+
  '#wcNumbers .nbTiles{align-content:start;}'+
  '#wcNumbers .nbMile{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:92px;color:'+NB_CREAM+';margin:14px 0 12px;line-height:.9;}'+
+ '#wcNumbers .nbCityHead{display:flex;align-items:center;gap:18px;margin:4px 0;}'+
  '#wcNumbers .nbCityN{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:78px;color:'+NB_CREAM+';line-height:.9;margin:6px 0 4px;}'+
+ '#wcNumbers .nbCityHead .nbCityN{margin:0;}'+
  '#wcNumbers .nbCityStats{display:flex;gap:0;}#wcNumbers .nbCS{padding:0 40px;border-left:1px solid rgba(255,255,255,.1);}#wcNumbers .nbCS:first-child{padding-left:0;border-left:none;}'+
  '#wcNumbers .nbCSv{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:52px;color:'+NB_CREAM+';line-height:1;}#wcNumbers .nbCSl{font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:2px;font-size:13px;color:'+NB_SUB+';text-transform:uppercase;margin-top:5px;}'+
  '#wcNumbers .nbFunList{display:flex;flex-direction:column;gap:22px;margin-top:22px;max-width:900px;text-align:left;}'+
@@ -3595,7 +3601,7 @@ function launchNumbers(){ if(nbOv) return; if(!NUMBERS_DATA) return; nbBeats=bui
   ov._key=e=>{ if(e.key==='Escape')closeNumbers(); else if(e.key==='ArrowRight'){e.preventDefault();nbGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();nbGo(-1);} else if(e.key===' '){e.preventDefault();nbToggle();} };
   addEventListener('keydown',ov._key);
   ov.addEventListener('click',()=>{ if(nbOv&&nbPlaying) nbSched(); });
-  ni=0; nbPlaying=true; nbRender(); nbSched();
+  ni=0; nbPlaying=false; nbRender();   // start paused — the viewer presses ▶ (or ← / →) to move
 }
 function nbRender(){ if(!nbOv)return; const st=document.getElementById('nbStage'); st.innerHTML=nbBeatHTML(nbBeats[ni]);
   const cur=nbBeats[ni];
@@ -4005,7 +4011,7 @@ window.openSquad=openSquad;
 // Deep-link: ?numbers=<beat> resumes the "By the Numbers" film on that exact card (shareable / reloadable).
 (function(){ const np=new URLSearchParams(location.search).get('numbers'); if(np===null)return;
   const t=setInterval(()=>{ if(DATA&&document.querySelector('#app [data-confed]')){ clearInterval(t);
-    ensureNumbers().then(()=>{ launchNumbers(); const n=parseInt(np,10)||0; if(n>0){ nbToggle(); nbJump(n); } }).catch(()=>{}); } },200);
+    ensureNumbers().then(()=>{ launchNumbers(); const n=parseInt(np,10)||0; if(n>0) nbJump(n); }).catch(()=>{}); } },200);
   setTimeout(()=>clearInterval(t),9000); })();
 
 // ---- Ambient side-gutter bubbles --------------------------------------------
