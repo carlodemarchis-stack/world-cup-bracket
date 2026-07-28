@@ -3764,9 +3764,10 @@ function buildPlayerBeats(){
         let inv='—'; if(cl){ inv=cl.t==='full'?'Full 90':cl.t==='off'?('off '+(cl.m||'')):cl.t==='on'?('on '+(cl.m||'')):'—'; }
         return {opp:m.opp,oppIso:m.oppIso,res:m.res,score:m.score,inv,g,a,yc,rc,cap:cl&&cl.cap}; });
       const pos=(p.pos>=0&&p.pos<=3)?p.pos:3;
+      const conceded=log.reduce((s,m)=>s+(m.inv!=='—'?(+String(m.score).split('-')[1]||0):0),0);   // opponent goals in matches played
       all.push({pos,rank:rank[c]||999,num:p.n,apps:p.apps||0,
         card:{id:p.id,pic:picById(p.id),name:nameById[p.id]||p.sur,num:p.n,teamName:tn.name,iso:tn.iso,rank:rank[c]||null,pos,
-          apps:p.apps||0,mins,g:p.g||0,a:p.a||0,sv:p.sv||0,y:p.y||0,r:p.r||0,log}});
+          apps:p.apps||0,mins,g:p.g||0,a:p.a||0,sv:p.sv||0,conceded,y:p.y||0,r:p.r||0,log}});
     }); });
   // ---- Leaderboard ranks → badges, mirroring the six Top Cards boards ----
   const shotsRk={};   // shots on target (shots.json)
@@ -3804,7 +3805,7 @@ function plBeatHTML(b){
   if(b.t==='player'){ const c=b.c, acc=PL_ACC[c.pos];
     const kpi=(v,l)=>'<div class="plK"><div class="plKv">'+v+'</div><div class="plKl">'+l+'</div></div>';
     let kpis=kpi(c.apps,'Apps')+kpi(c.mins+"'",'Minutes');
-    kpis+= c.pos===0 ? kpi(c.sv,'Saves')+kpi(c.g,'Goals') : kpi(c.g,'Goals')+kpi(c.a,'Assists');
+    kpis+= c.pos===0 ? kpi(c.sv,'Saves')+kpi(c.conceded,'Conceded') : kpi(c.g,'Goals')+kpi(c.a,'Assists');
     if(c.y||c.r) kpis+=kpi((c.y||0)+' / '+(c.r||0),'Y / R');
     const bdg=(cls,txt)=>'<span class="plBadge '+cls+'">'+txt+'</span>';
     let badges='';
