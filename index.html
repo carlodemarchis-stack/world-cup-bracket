@@ -863,6 +863,13 @@ function buildBracket(v){
   filmBtn.style.cssText = 'background:' + state.accentColor + ';border:1px solid ' + state.accentColor + ";color:#fff;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:.6px;text-transform:uppercase;padding:3px 12px;border-radius:20px;line-height:1;box-shadow:0 2px 8px " + state.accentColor + '44;';
   filmBtn.onclick = () => { storyContro = false; const r = wcbLoad('wcb:resumeFilm') || {}; storyTeam = r.team || null; launchStory(); if (r.beat > 0){ storyToggle(); storyGo(r.beat); } };
   row1.appendChild(filmBtn);
+  // "By the Numbers" — the tournament stats film (dark reel), lazy-loads its own feed.
+  const numbersBtn = document.createElement('button'); numbersBtn.type = 'button';
+  numbersBtn.textContent = '# By the Numbers';
+  numbersBtn.title = 'Play the tournament stats film';
+  numbersBtn.style.cssText = topCardsBtn.style.cssText;
+  numbersBtn.onclick = () => { ensureNumbers().then(() => window.launchNumbers()).catch(() => {}); };
+  row1.appendChild(numbersBtn);
   playRow.insertBefore(confedSel, playRow.firstChild);
   row2.appendChild(tzSel);
   row2.appendChild(mkToggle('Show scores', 'showResults', () => render()));
@@ -916,6 +923,11 @@ fetch('shots.json').then(r => r.ok ? r.json() : {}).then(j => { SHOTS = j || {};
 // Official FIFA per-match team stats — { matchNum: { CODE: {poss,shots,onT,passes,passPct,corners,fouls,off} } } (matchstats.json).
 let MATCHSTATS = {};
 fetch('matchstats.json').then(r => r.ok ? r.json() : {}).then(j => { MATCHSTATS = j || {}; }).catch(() => {});
+// "By the Numbers" stats film — official FIFA recap figures (wc2026-by-the-numbers.json), lazy-loaded on demand.
+let NUMBERS_DATA = null;
+function ensureNumbers(){ if (NUMBERS_DATA) return Promise.resolve(NUMBERS_DATA);
+  if (!ensureNumbers._p) ensureNumbers._p = fetch('wc2026-by-the-numbers.json').then(r => r.json()).then(j => { NUMBERS_DATA = j; return j; });
+  return ensureNumbers._p; }
 let controlsOpen = false; // settings panel starts hidden, toggled by the footer gear
 function setControls(open){
   controlsOpen = open;
@@ -3391,6 +3403,204 @@ function storyChapters(){
 }
 function closeStory(){ if(!storyOv)return; clearTimeout(storyTimer); removeEventListener('resize',storyOv._fit); removeEventListener('keydown',storyOv._key); storyOv.remove(); storyOv=null; if(modalEl&&modalEl.id==='wcStory')modalEl=null; const c=document.getElementById('wcChap'); if(c)c.remove(); wcbClearUrl(); }
 window.launchStory=launchStory; window.storyGo=storyGo; window.storyToggle=storyToggle; window.storyCycleSpeed=storyCycleSpeed; window.storyChapters=storyChapters; window.storyRestart=storyRestart;
+
+// ===========================================================================
+// "By the Numbers" — the tournament stats film. Dark reel, own overlay, reuses
+// the film's stage/scale/control-bar pattern + STY palette, Barlow, sflag.
+// ===========================================================================
+let nbOv=null, nbBeats=null, ni=0, nbTimer=null, nbPlaying=true, nbSpeed=1;
+const NB_MS=4600;
+const NB_ACC={'on-the-pitch':STY.GREEN,'fan-experience':STY.ORANGE,'operations':STY.BLUE,'tournament-reach':STY.VIOLET,'impact':STY.RED,'host-cities':STY.GOLD};
+const NB_ISO={'Spain':'es','Argentina':'ar','England':'gb-eng','France':'fr','Canada':'ca','Mexico':'mx','United States':'us','USA':'us','Colombia':'co','Morocco':'ma','Haiti':'ht','Brazil':'br','Portugal':'pt','Germany':'de','Netherlands':'nl','Italy':'it','Croatia':'hr','Uruguay':'uy','Belgium':'be','Japan':'jp','South Africa':'za','Mexico ':'mx'};
+const NB_CREAM='#f4efe2', NB_SUB='#a99f8c', NB_DARK='#141109';
+const nbBg=acc=>'background:radial-gradient(130% 120% at 50% -12%,'+acc+'26,'+NB_DARK+' 60%);';
+const nbCentre=inner=>'<div style="position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 80px;">'+inner+'</div>';
+const nbLeft=inner=>'<div style="position:relative;z-index:1;height:100%;padding:70px 92px;display:flex;flex-direction:column;justify-content:center;">'+inner+'</div>';
+function nbFit(s){ const n=String(s).replace(/[, ]/g,'').length; if(n<=3)return 300; if(n<=5)return 250; if(n<=7)return 208; if(n<=10)return 168; if(n<=15)return 112; return 84; }
+function nbDate(iso){ const p=String(iso).split('-'); const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][(+p[1]||1)-1]; return (+p[2])+' '+mo; }
+function nbFlagImg(name,h){ const iso=NB_ISO[name]; return iso?'<img src="'+sflag(iso,80)+'" style="height:'+(h||30)+'px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,.45);vertical-align:middle;">':''; }
+
+function buildNumberBeats(D){
+  const beats=[]; const T=D.tournament;
+  const byId={}; D.sections.forEach(s=>(s.groups||[]).forEach(g=>(g.stats||[]).forEach(st=>byId[st.id]=st)));
+  beats.push({t:'cover',T});
+  beats.push({t:'honours',T});
+  D.sections.filter(s=>s.id!=='host-cities').forEach(s=>{
+    const acc=NB_ACC[s.id]||STY.GOLD;
+    beats.push({t:'divider',section:s,acc});
+    (s.heroStats||[]).forEach(id=>{ const st=byId[id]; if(!st||st.display==null)return;
+      beats.push({t:(st.comparison?'comparison':'hero'), st, acc, section:s.title}); });
+    const heroSet=new Set(s.heroStats||[]);
+    const grids=(s.groups||[]).map(g=>({g,rest:(g.stats||[]).filter(x=>!heroSet.has(x.id)&&x.display!=null)})).filter(x=>x.rest.length>=3);
+    if(grids.length){ const pick=grids.sort((a,b)=>b.rest.length-a.rest.length)[0];
+      beats.push({t:'grid',title:pick.g.title,stats:pick.rest.slice(0,6),acc,section:s.title}); }
+  });
+  const enzo=byId['milestone-3000th-goal']; if(enzo) beats.push({t:'milestone',st:enzo,acc:STY.GREEN});
+  const hc=D.sections.find(s=>s.id==='host-cities');
+  beats.push({t:'divider',section:{title:'Host cities',standfirst:hc?hc.standfirst:''},acc:STY.GOLD});
+  (D.hostCities||[]).forEach(c=>beats.push({t:'city',c}));
+  beats.push({t:'funfacts',D});
+  beats.push({t:'outro'});
+  return beats;
+}
+
+function nbBar(name,val,pct,color,dim){ return '<div class="nbBar"><div class="nbBn">'+name+'</div><div class="nbTrack"><div class="nbFill" style="width:'+Math.max(6,pct).toFixed(1)+'%;background:'+color+';color:'+(dim?NB_CREAM:'#141109')+';">'+(val!=null?Number(val).toLocaleString():'')+'</div></div></div>'; }
+function nbFact(v,l){ return '<div class="nbF"><div class="nbFv">'+v+'</div><div class="nbFl">'+l+'</div></div>'; }
+function nbCityStat(v,l){ return '<div class="nbCS"><div class="nbCSv">'+v+'</div><div class="nbCSl">'+l+'</div></div>'; }
+
+function nbBeatHTML(b){
+  if(b.t==='cover'){ const T=b.T;
+    return '<div style="position:absolute;inset:0;'+nbBg(STY.GOLD)+'"></div><div class="nbGlow"></div>'+nbCentre(
+      '<div class="nbKick">FIFA World Cup 2026</div>'+
+      '<div class="nbTitle">By the <span>Numbers</span></div>'+
+      '<div class="nbChamp"><span class="nbChampL">Champions</span>'+nbFlagImg(T.champion,34)+'<span class="nbChampN">'+T.champion.toUpperCase()+'</span></div>'+
+      '<div class="nbFacts">'+nbFact(T.teams,'Teams')+nbFact(T.matches,'Matches')+nbFact('308','Goals')+nbFact(T.durationDays,'Days')+nbFact(T.hostCities,'Host cities')+'</div>'+
+      '<div class="nbFoot">'+nbDate(T.startDate)+' – '+nbDate(T.endDate)+' 2026 &nbsp;·&nbsp; '+(T.hostCountries||[]).join(' · ')+'</div>'); }
+  if(b.t==='honours'){ const T=b.T;
+    const row=(lbl,name,col)=>'<div class="nbHRow"><span class="nbHL">'+lbl+'</span>'+nbFlagImg(name,26)+'<span class="nbHN" style="color:'+(col||NB_CREAM)+';">'+name+'</span></div>';
+    return '<div style="position:absolute;inset:0;'+nbBg(STY.GOLD)+'"></div>'+nbCentre(
+      '<div class="nbEy" style="color:'+STY.GOLD+';">How it finished</div>'+
+      '<div class="nbHList">'+row('1st',T.champion,STY.GOLD)+row('2nd',T.runnerUp)+row('3rd',T.thirdPlace)+row('4th',T.fourthPlace)+'</div>'+
+      '<div class="nbNote" style="margin-top:26px;font-size:23px;">Golden Ball &nbsp;·&nbsp; <b style="color:'+NB_CREAM+';">'+T.goldenBall+'</b></div>'); }
+  if(b.t==='divider'){ const s=b.section;
+    return '<div style="position:absolute;inset:0;'+nbBg(b.acc)+'"></div><div style="position:absolute;left:0;top:0;bottom:0;width:9px;background:'+b.acc+';z-index:2;"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+b.acc+';font-size:16px;">Chapter</div>'+
+      '<div class="nbDivT">'+s.title+'</div>'+
+      '<div class="nbNote" style="font-size:26px;max-width:940px;line-height:1.42;">'+(s.standfirst||'')+'</div>'); }
+  if(b.t==='hero'){ const st=b.st;
+    return '<div style="position:absolute;inset:0;'+nbBg(b.acc)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+b.acc+';">'+b.section+'</div>'+
+      '<div class="nbRule" style="width:64px;background:'+b.acc+';"></div>'+
+      '<div class="nbNum" style="font-size:'+nbFit(st.display)+'px;letter-spacing:-2px;">'+st.display+'</div>'+
+      '<div class="nbLab" style="font-size:40px;margin-top:18px;">'+(st.unit||st.label)+'</div>'+
+      (st.note?'<div class="nbNote" style="margin-top:20px;max-width:860px;">'+st.note+'</div>':''))+
+      '<div class="nbCorner">'+st.label+'</div>'; }
+  if(b.t==='comparison'){ const st=b.st, c=st.comparison; let bars='';
+    if(c.basisValue!=null && st.value!=null){ const mx=Math.max(c.basisValue,st.value)||1;
+      bars='<div class="nbBars">'+nbBar(c.basis.replace('FIFA World Cup ',''),c.basisValue,c.basisValue/mx*100,'#6b6350',true)+nbBar('2026',st.value,st.value/mx*100,b.acc,false)+'</div>'; }
+    return '<div style="position:absolute;inset:0;'+nbBg(b.acc)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+b.acc+';">'+b.section+'</div>'+
+      '<div class="nbCompTop">'+
+        '<div class="nbNum" style="font-size:'+Math.min(nbFit(st.display),200)+'px;">'+st.display+'</div>'+
+        '<div class="nbLab" style="font-size:32px;padding-bottom:22px;">'+(st.unit||'')+'</div>'+
+        '<div class="nbDelta"><div class="nbDv" style="color:'+b.acc+';">'+c.deltaDisplay+'</div><div class="nbDl">vs '+c.basis.replace('FIFA World Cup ','').replace(' full tournament','')+'</div></div>'+
+      '</div>'+bars+
+      (st.note?'<div class="nbNote" style="margin-top:26px;max-width:940px;">'+st.note+'</div>':'')); }
+  if(b.t==='grid'){
+    const tiles=b.stats.map(st=>'<div class="nbTile"><div class="nbTileV">'+st.display+'</div><div class="nbTileL">'+st.label+'</div></div>').join('');
+    return '<div style="position:absolute;inset:0;'+nbBg(b.acc)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+b.acc+';">'+b.section+'</div>'+
+      '<div class="nbGridT">'+b.title+'</div>'+
+      '<div class="nbTiles">'+tiles+'</div>'); }
+  if(b.t==='milestone'){ const st=b.st;
+    return '<div style="position:absolute;inset:0;'+nbBg(b.acc)+'"></div>'+nbCentre(
+      '<div class="nbEy" style="color:'+b.acc+';">'+st.label+'</div>'+
+      '<div class="nbMile">'+st.display+'</div>'+
+      (st.note?'<div class="nbNote" style="font-size:24px;max-width:820px;">'+st.note+'</div>':'')); }
+  if(b.t==='city'){ const c=b.c, fb=c.foodAndBeverage||{};
+    return '<div style="position:absolute;inset:0;'+nbBg(STY.GOLD)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+STY.GOLD+';">Host city · '+c.country+'</div>'+
+      '<div class="nbCityN">'+c.name+'</div>'+
+      '<div class="nbNote" style="font-size:20px;margin-bottom:24px;">'+c.venue+'</div>'+
+      '<div class="nbCityStats">'+nbCityStat(c.matches,'Matches')+nbCityStat(c.goals,'Goals')+nbCityStat(Number(c.attendance).toLocaleString(),'Attendance')+'</div>'+
+      '<div class="nbNote" style="margin-top:26px;font-size:19px;">Most travelling fans: <b style="color:'+NB_CREAM+';">'+(c.topTicketNations||[]).join(' · ')+'</b>'+(fb.favouriteFood?'<br>Local favourite: <b style="color:'+NB_CREAM+';">'+fb.favouriteFood+'</b> &amp; <b style="color:'+NB_CREAM+';">'+fb.favouriteDrink+'</b>':'')+'</div>'); }
+  if(b.t==='funfacts'){ const d=b.D.derived, byId={}; b.D.sections.forEach(s=>(s.groups||[]).forEach(g=>(g.stats||[]).forEach(st=>byId[st.id]=st)));
+    const beers=(byId['beers-sold']||{}).display||'5,515,118';
+    const row=(emo,big,sub)=>'<div class="nbFunRow"><div class="nbFunE">'+emo+'</div><div><div class="nbFunB">'+big+'</div><div class="nbNote" style="font-size:18px;">'+sub+'</div></div></div>';
+    return '<div style="position:absolute;inset:0;'+nbBg(STY.ORANGE)+'"></div>'+nbCentre(
+      '<div class="nbEy" style="color:'+STY.ORANGE+';">And a few for fun</div>'+
+      '<div class="nbFunList">'+
+        row('🍺',beers+' beers','poured across the tournament — about '+d.beerPerFan+' per fan')+
+        row('📈','8× the video views of Qatar 2022','though intercepted harmful posts grew roughly 19×')+
+        row('🎟️','99.7% average occupancy','across all 16 host-city stadiums')+
+      '</div>'); }
+  if(b.t==='outro'){
+    return '<div style="position:absolute;inset:0;'+nbBg(STY.VIOLET)+'"></div>'+nbCentre(
+      '<div class="nbOutro">THAT WAS<br>WORLD CUP 2026</div>'+
+      '<div class="nbNote" style="margin-top:24px;font-size:17px;letter-spacing:.5px;">Source · FIFA — “FIFA World Cup 2026 by the numbers”</div>'); }
+  return '';
+}
+
+const NB_CSS='#wcNumbers{position:fixed;inset:0;z-index:400;background:#0c0b07;display:flex;align-items:center;justify-content:center;font-family:Barlow,system-ui,sans-serif;box-sizing:border-box;}'+
+ '#nbStage{width:1280px;height:720px;flex:none;position:relative;overflow:hidden;background:'+NB_DARK+';color:'+NB_CREAM+';box-shadow:0 30px 90px rgba(0,0,0,.6);}'+
+ '#wcNumbers .nbEy{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:6px;text-transform:uppercase;font-size:19px;}'+
+ '#wcNumbers .nbNum{font-family:"Barlow Condensed",sans-serif;font-weight:900;line-height:.86;color:'+NB_CREAM+';font-variant-numeric:tabular-nums;}'+
+ '#wcNumbers .nbLab{font-family:"Barlow Condensed",sans-serif;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:'+NB_CREAM+';}'+
+ '#wcNumbers .nbNote{font-family:Barlow,sans-serif;font-weight:600;color:'+NB_SUB+';font-size:22px;line-height:1.4;}'+
+ '#wcNumbers .nbRule{height:5px;border-radius:3px;margin:20px 0 12px;}'+
+ '#wcNumbers .nbCorner{position:absolute;right:80px;top:70px;font-family:"Barlow Condensed",sans-serif;font-weight:800;letter-spacing:2px;font-size:15px;color:'+NB_SUB+';text-transform:uppercase;z-index:2;}'+
+ '#wcNumbers .nbGlow{position:absolute;inset:0;background:radial-gradient(60% 42% at 50% 0%,'+STY.GOLD+'33,transparent 70%);}'+
+ '#wcNumbers .nbKick{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:9px;font-size:20px;color:'+STY.GOLD+';text-transform:uppercase;}'+
+ '#wcNumbers .nbTitle{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:120px;line-height:.86;margin:8px 0 4px;}#wcNumbers .nbTitle span{color:'+STY.GOLD+';}'+
+ '#wcNumbers .nbChamp{display:flex;align-items:center;gap:15px;margin:24px 0 4px;padding:11px 24px;border:1px solid '+STY.GOLD+'66;border-radius:100px;background:'+STY.GOLD+'14;}'+
+ '#wcNumbers .nbChampL{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:4px;font-size:16px;color:'+NB_SUB+';text-transform:uppercase;}'+
+ '#wcNumbers .nbChampN{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:40px;color:'+STY.GOLD+';letter-spacing:.5px;}'+
+ '#wcNumbers .nbFacts{display:flex;margin-top:38px;}#wcNumbers .nbF{padding:0 42px;border-left:1px solid rgba(255,255,255,.1);text-align:center;}#wcNumbers .nbF:first-child{border-left:none;}'+
+ '#wcNumbers .nbFv{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:60px;line-height:1;color:'+NB_CREAM+';}'+
+ '#wcNumbers .nbFl{font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:2px;font-size:14px;color:'+NB_SUB+';text-transform:uppercase;margin-top:6px;}'+
+ '#wcNumbers .nbFoot{position:absolute;left:0;right:0;bottom:34px;text-align:center;font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:1px;font-size:17px;color:'+NB_SUB+';z-index:1;}'+
+ '#wcNumbers .nbHList{display:flex;flex-direction:column;gap:11px;margin-top:22px;}'+
+ '#wcNumbers .nbHRow{display:flex;align-items:center;gap:14px;}#wcNumbers .nbHL{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:20px;color:'+NB_SUB+';width:52px;text-align:right;}'+
+ '#wcNumbers .nbHN{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:40px;}'+
+ '#wcNumbers .nbDivT{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:92px;line-height:.9;color:'+NB_CREAM+';margin:8px 0 18px;}'+
+ '#wcNumbers .nbCompTop{display:flex;align-items:flex-end;gap:24px;margin-top:14px;}'+
+ '#wcNumbers .nbDelta{padding-bottom:24px;}#wcNumbers .nbDv{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:60px;line-height:.8;}#wcNumbers .nbDl{font-family:Barlow,sans-serif;font-weight:700;font-size:15px;color:'+NB_SUB+';text-transform:uppercase;letter-spacing:1px;}'+
+ '#wcNumbers .nbBars{margin-top:36px;display:flex;flex-direction:column;gap:15px;max-width:1000px;}'+
+ '#wcNumbers .nbBar{display:flex;align-items:center;gap:16px;}#wcNumbers .nbBn{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:18px;color:'+NB_SUB+';width:200px;text-transform:uppercase;letter-spacing:1px;text-align:right;}'+
+ '#wcNumbers .nbTrack{flex:1;height:34px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden;}#wcNumbers .nbFill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:14px;font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:21px;}'+
+ '#wcNumbers .nbGridT{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:46px;color:'+NB_CREAM+';margin:6px 0 26px;}'+
+ '#wcNumbers .nbTiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1040px;}'+
+ '#wcNumbers .nbTile{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px 20px;}'+
+ '#wcNumbers .nbTileV{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:44px;color:'+NB_CREAM+';line-height:1;}'+
+ '#wcNumbers .nbTileL{font-family:Barlow,sans-serif;font-weight:600;font-size:15px;color:'+NB_SUB+';margin-top:6px;line-height:1.25;}'+
+ '#wcNumbers .nbMile{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:92px;color:'+NB_CREAM+';margin:14px 0 12px;line-height:.9;}'+
+ '#wcNumbers .nbCityN{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:78px;color:'+NB_CREAM+';line-height:.9;margin:6px 0 4px;}'+
+ '#wcNumbers .nbCityStats{display:flex;gap:0;}#wcNumbers .nbCS{padding:0 40px;border-left:1px solid rgba(255,255,255,.1);}#wcNumbers .nbCS:first-child{padding-left:0;border-left:none;}'+
+ '#wcNumbers .nbCSv{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:52px;color:'+NB_CREAM+';line-height:1;}#wcNumbers .nbCSl{font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:2px;font-size:13px;color:'+NB_SUB+';text-transform:uppercase;margin-top:5px;}'+
+ '#wcNumbers .nbFunList{display:flex;flex-direction:column;gap:22px;margin-top:22px;max-width:900px;text-align:left;}'+
+ '#wcNumbers .nbFunRow{display:flex;align-items:center;gap:20px;}#wcNumbers .nbFunE{font-size:52px;line-height:1;flex:none;}#wcNumbers .nbFunB{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:38px;color:'+NB_CREAM+';line-height:1;}'+
+ '#wcNumbers .nbOutro{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:86px;color:'+NB_CREAM+';line-height:.9;}'+
+ '#nbCtl{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:401;display:flex;align-items:center;gap:8px;background:#1c1813;border-radius:40px;padding:8px 12px;font-family:"Barlow Condensed",sans-serif;color:#f0ebdd;}'+
+ '#nbCtl button{background:transparent;border:none;color:#f0ebdd;cursor:pointer;font:inherit;font-size:17px;padding:6px 11px;border-radius:20px;}#nbCtl button:hover{background:rgba(255,255,255,.12);}'+
+ '#nbLbl{min-width:200px;text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;}#nbLbl b{color:'+STY.GOLD+';}';
+
+function launchNumbers(){ if(nbOv) return; if(!NUMBERS_DATA) return; nbBeats=buildNumberBeats(NUMBERS_DATA);
+  const ov=el('div',''); ov.id='wcNumbers';
+  ov.innerHTML='<style>'+NB_CSS+'</style><div id="nbStage"></div>'+
+    '<button id="nbX" title="Close (Esc)" aria-label="Close" style="position:fixed;top:18px;right:18px;z-index:404;width:42px;height:42px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;font-weight:800;color:#fff;background:rgba(20,18,14,.82);box-shadow:0 3px 12px rgba(0,0,0,.35);">✕</button>'+
+    '<div id="nbCtl"><button title="Close" onclick="closeNumbers()">✕</button><button title="Restart" onclick="nbRestart()">↺</button><button onclick="nbGo(-1)">◀</button><button id="nbPlay" onclick="nbToggle()">❚❚</button><button onclick="nbGo(1)">▶</button><div id="nbLbl"></div><button id="nbSpeed" onclick="nbCycleSpeed()">1×</button><button title="Chapters" onclick="nbChapters()">☰</button></div>';
+  document.body.appendChild(ov); nbOv=ov; modalEl=ov;
+  document.getElementById('nbX').onclick=closeNumbers;
+  ov._fit=()=>{ const s=Math.min(window.innerWidth/1280,(window.innerHeight-114)/720); const st=document.getElementById('nbStage'); if(st) st.style.transform='scale('+s.toFixed(3)+')'; };
+  ov._fit(); addEventListener('resize',ov._fit);
+  ov._key=e=>{ if(e.key==='Escape')closeNumbers(); else if(e.key==='ArrowRight'){e.preventDefault();nbGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();nbGo(-1);} else if(e.key===' '){e.preventDefault();nbToggle();} };
+  addEventListener('keydown',ov._key);
+  ov.addEventListener('click',()=>{ if(nbOv&&nbPlaying) nbSched(); });
+  ni=0; nbPlaying=true; nbRender(); nbSched();
+}
+function nbRender(){ if(!nbOv)return; const st=document.getElementById('nbStage'); st.innerHTML=nbBeatHTML(nbBeats[ni]);
+  const chap=[...nbBeats].slice(0,ni+1).reverse().find(x=>x.t==='divider'||x.t==='cover');
+  const lbl=chap?(chap.t==='cover'?'Overview':chap.section.title):'—';
+  document.getElementById('nbLbl').innerHTML='<b>'+(ni+1)+'/'+nbBeats.length+'</b> · '+lbl;
+  document.getElementById('nbPlay').textContent=nbPlaying?'❚❚':'▶'; }
+function nbSched(){ clearTimeout(nbTimer); if(!nbPlaying)return; nbTimer=setTimeout(()=>nbGo(1), NB_MS/nbSpeed); }
+function nbGo(d){ if(!nbOv)return; const n=ni+d; if(n<0||n>=nbBeats.length){ if(d>0)nbToggle(); return; } ni=n; nbRender(); nbSched(); }
+function nbJump(n){ if(!nbOv)return; ni=Math.max(0,Math.min(nbBeats.length-1,n)); nbRender(); nbSched(); }
+function nbRestart(){ if(!nbOv)return; nbPlaying=true; ni=0; nbRender(); nbSched(); }
+function nbToggle(){ nbPlaying=!nbPlaying; document.getElementById('nbPlay').textContent=nbPlaying?'❚❚':'▶'; if(nbPlaying)nbSched(); else clearTimeout(nbTimer); }
+function nbCycleSpeed(){ nbSpeed=({1:1.5,1.5:2,2:3,3:1})[nbSpeed]||1; document.getElementById('nbSpeed').textContent=nbSpeed+'×'; nbSched(); }
+function nbChapters(){ const chs=nbBeats.map((b,i)=>({b,i})).filter(x=>x.b.t==='divider'||x.b.t==='cover'||x.b.t==='outro');
+  const wasPlaying=nbPlaying; nbPlaying=false; clearTimeout(nbTimer);
+  const menu=el('div',''); menu.id='nbChap';
+  menu.style.cssText='position:fixed;inset:0;z-index:410;background:rgba(12,11,7,.8);display:flex;align-items:center;justify-content:center;';
+  menu.innerHTML='<div style="background:'+NB_DARK+';border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:22px;max-height:80vh;overflow:auto;min-width:340px;font-family:\'Barlow Condensed\',sans-serif;">'+
+    '<div style="font-weight:800;font-size:22px;color:'+NB_CREAM+';text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Chapters</div>'+
+    chs.map(x=>'<div class="nbChapRow" data-i="'+x.i+'" style="padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700;font-size:17px;color:'+NB_CREAM+';">'+(x.b.t==='cover'?'Overview':x.b.t==='outro'?'Finale':x.b.section.title)+'</div>').join('')+'</div>';
+  menu.onclick=e=>{ const r=e.target.closest('.nbChapRow'); if(r){ ni=+r.dataset.i; menu.remove(); nbPlaying=wasPlaying; nbRender(); nbSched(); } else if(e.target===menu){ menu.remove(); nbPlaying=wasPlaying; if(wasPlaying)nbSched(); } };
+  [...menu.querySelectorAll('.nbChapRow')].forEach(r=>{ r.onmouseenter=()=>r.style.background='rgba(255,255,255,.08)'; r.onmouseleave=()=>r.style.background=''; });
+  document.body.appendChild(menu); }
+function closeNumbers(){ if(!nbOv)return; clearTimeout(nbTimer); removeEventListener('resize',nbOv._fit); removeEventListener('keydown',nbOv._key); nbOv.remove(); nbOv=null; if(modalEl&&modalEl.id==='wcNumbers')modalEl=null; const c=document.getElementById('nbChap'); if(c)c.remove(); }
+window.launchNumbers=launchNumbers; window.nbGo=nbGo; window.nbToggle=nbToggle; window.nbCycleSpeed=nbCycleSpeed; window.nbChapters=nbChapters; window.nbRestart=nbRestart; window.closeNumbers=closeNumbers;
 // ——— Persistence: preferences (localStorage), scroll (sessionStorage), film resume ———
 function wcbLoad(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
 function wcbSave(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
