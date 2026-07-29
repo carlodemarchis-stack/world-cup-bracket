@@ -3469,17 +3469,38 @@ function buildNumberBeats(D){
   const cbar=(title,valFn,disp,note,eyebrow,acc)=>{ const rows=hcs.map(c=>({name:c.name,country:c.country,val:valFn(c)})).filter(r=>isFinite(r.val)).sort((a,b)=>b.val-a.val); rows.forEach(r=>r.display=disp(r.val)); return {t:'chart_citybar',title,rows,note,eyebrow,acc}; };
   const OP=STY.GREEN, FE=STY.ORANGE;
   const splitRows=hcs.map(c=>{ const fb=c.foodAndBeverage||{},bb=fb.beers||0,ss=fb.softDrinksAndWater||0,tot=bb+ss; return {name:c.name,country:c.country,beerPct:tot?bb/tot*100:0}; }).sort((a,b)=>b.beerPct-a.beerPct);
+  const num=id=>((byId[id]||{}).value)||0;
+  const barsBeat=(eyebrow,acc,title,rows,note,nameW)=>({t:'chart_bars',eyebrow,acc,title,rows:rows.slice().sort((a,b)=>b.val-a.val),note,nameW});
   const SCBG={   // charts attached to the group they belong to, so they sit right by their subject
-    'on-the-pitch':{ 'Goals':[ cbar('Goals per match, by city', c=>c.goals/c.matches, v=>v.toFixed(2), 'Derived · goals ÷ matches hosted, by host city','On the pitch',OP) ] },
+    'on-the-pitch':{
+      'Goals':[ cbar('Goals per match, by city', c=>c.goals/c.matches, v=>v.toFixed(2), 'Derived · goals ÷ matches hosted, by host city','On the pitch',OP) ],
+      'Match officials':[ barsBeat('On the pitch',OP,'The match officials',[
+        {label:'Assistant referees',val:num('assistant-referees')},{label:'Referees',val:num('referees')},{label:'Video match officials',val:num('video-match-officials')}
+      ].map(r=>Object.assign(r,{display:String(r.val)})), 'Officials who worked the tournament', 220) ]
+    },
     'fan-experience':{
       'Stadium attendance':[ {t:'chart_attendance',cities:hcs.slice().sort((a,b)=>(b.attendance||0)-(a.attendance||0)),eyebrow:'Fan experience',acc:FE} ],
       'Ticketing':[ {t:'chart_travelled',rows:travelRows} ],
       'Food and beverage':[
+        barsBeat('Fan experience',FE,'What the fans consumed',[
+          {label:'Beers',val:num('beers-sold')},{label:'Soft drinks & water',val:num('soft-drinks-sold')},{label:'Food items',val:num('food-items-sold')},
+          {label:'Hot dogs',val:num('hot-dogs-sold')},{label:'Canned cocktails',val:num('canned-cocktails-sold')},{label:'Glasses of wine',val:num('wine-glasses-sold')}
+        ].map(r=>Object.assign(r,{display:Number(r.val).toLocaleString()})), 'Total items sold across all 16 host cities', 210),
         cbar('Beers poured per match', c=>((c.foodAndBeverage||{}).beers||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total beers ÷ matches hosted','Fan experience',FE),
         cbar('Beers per fan', c=>((c.foodAndBeverage||{}).beers||0)/c.attendance, v=>v.toFixed(2), 'Derived · total beers ÷ total attendance','Fan experience',FE),
         cbar('Hot dogs per match', c=>((c.foodAndBeverage||{}).hotDogs||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total hot dogs ÷ matches hosted','Fan experience',FE),
         {t:'chart_drinksplit',rows:splitRows,eyebrow:'Fan experience',acc:FE}
       ]
+    },
+    'operations':{
+      'Media operations':[ barsBeat('Operations',STY.BLUE,'Who covered the tournament',[
+        {label:'Written press',val:num('written-press')},{label:'Photo professionals',val:num('photographers')},{label:'Broadcast crew (non-RHB)',val:num('nrh-broadcast')}
+      ].map(r=>Object.assign(r,{display:Number(r.val).toLocaleString()})), 'Accredited media on the ground', 250) ]
+    },
+    'impact':{
+      'FIFA Global Citizen Education Fund':[ {t:'chart_bars',eyebrow:'Impact',acc:STY.RED,title:'Education Fund · raised vs target',nameW:150,note:'60% of the USD 100M fundraising target · 58 organisations funded',rows:[
+        {label:'Target',val:num('education-fund-target'),display:'USD 100M',color:'#6b6350'},{label:'Raised so far',val:num('education-fund-raised'),display:'USD 60M',color:STY.RED}
+      ]} ]
     }
   };
   beats.push({t:'cover',T});
@@ -3610,6 +3631,13 @@ function nbBeatHTML(b){
       '<div class="nbLegend"><span><i style="background:'+STY.BLUE+';"></i>United States</span><span><i style="background:'+STY.GREEN+';"></i>Mexico</span><span><i style="background:'+STY.RED+';"></i>Canada</span></div>'+
       '<div class="nbCbars">'+bars+'</div>'+
       (b.note?'<div class="nbNote" style="font-size:13px;margin-top:12px;">'+b.note+'</div>':'')); }
+  if(b.t==='chart_bars'){ const rows=b.rows, max=Math.max.apply(0,rows.map(r=>r.val))||1, acc=b.acc||STY.GOLD, nw=b.nameW||230;
+    const bars=rows.map(r=>'<div class="nbCbar"><div class="nbCbarN" style="width:'+nw+'px;">'+r.label+'</div><div class="nbCbarT"><div class="nbCbarF" style="width:'+(r.val/max*100).toFixed(1)+'%;background:'+(r.color||acc)+';"></div></div><div class="nbCbarV">'+r.display+'</div></div>').join('');
+    return '<div style="position:absolute;inset:0;'+nbBg(acc)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+acc+';">'+b.eyebrow+'</div>'+
+      '<div class="nbGridT" style="margin-bottom:12px;">'+b.title+'</div>'+
+      '<div class="nbCbars nbCbarsWide">'+bars+'</div>'+
+      (b.note?'<div class="nbNote" style="font-size:14px;margin-top:16px;">'+b.note+'</div>':'')); }
   if(b.t==='chart_drinksplit'){ const rows=b.rows;
     const short=n=>({'New York/New Jersey':'New York NJ','San Francisco Bay Area':'SF Bay Area'})[n]||n;
     const bars=rows.map(r=>'<div class="nbCbar"><div class="nbCbarN">'+short(r.name)+'</div><div class="nbSplitT"><div class="nbSplitB" style="width:'+r.beerPct.toFixed(1)+'%;">'+Math.round(r.beerPct)+'%</div><div class="nbSplitS" style="width:'+(100-r.beerPct).toFixed(1)+'%;"></div></div></div>').join('');
