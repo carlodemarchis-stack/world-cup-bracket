@@ -118,6 +118,10 @@
        pulled up into the square box's ~9.8% empty bottom band. */
     #credit-bar { margin-top: calc(20px - 0.098 * min(94vw, 820px)) !important; }
   }
+  /* Keep the credit links clickable even when group-stage crests overlap them:
+     lift the bar above the nodes, but let clicks fall through everything except the links. */
+  #credit-bar { position: relative; z-index: 50; pointer-events: none; }
+  #credit-bar a { pointer-events: auto; }
 </style>
 </head>
 <body>
