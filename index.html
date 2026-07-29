@@ -3858,6 +3858,8 @@ function wcTeamRankMap(){
   const order=[...teams].sort((a,b)=>sc(b)-sc(a)||info[b].gd-info[a].gd||info[b].gf-info[a].gf||tin(a).name.localeCompare(tin(b).name));
   const rank={}; order.forEach((c,i)=>rank[c]=i+1); return rank;
 }
+// How far a team got, from its 1–48 finish rank (tiers mirror the stage reached).
+function wcOutcomeLabel(r){ if(!r)return ''; if(r===1)return 'Champions'; if(r===2)return 'Runners-up'; if(r===3)return '3rd place'; if(r===4)return '4th place'; if(r<=8)return 'Quarter-finalists'; if(r<=16)return 'Last 16'; if(r<=32)return 'Last 32'; return 'Group stage'; }
 function buildPlayerBeats(){
   const rank=wcTeamRankMap(), codes=Object.keys(DATA.squads||{}), all=[];
   codes.forEach(c=>{ let R; try{ R=buildSquadRun(c); }catch(e){ return; } if(!R)return; const tn=tin(c);
@@ -3873,7 +3875,7 @@ function buildPlayerBeats(){
       const pos=(p.pos>=0&&p.pos<=3)?p.pos:3;
       const conceded=log.reduce((s,m)=>s+(m.inv!=='—'?(+String(m.score).split('-')[1]||0):0),0);   // opponent goals in matches played
       all.push({pos,rank:rank[c]||999,num:p.n,apps:p.apps||0,
-        card:{id:p.id,pic:picById(p.id),name:nameById[p.id]||p.sur,num:p.n,teamName:tn.name,iso:tn.iso,rank:rank[c]||null,pos,
+        card:{id:p.id,pic:picById(p.id),name:nameById[p.id]||p.sur,num:p.n,teamName:tn.name,iso:tn.iso,rank:rank[c]||null,outcome:wcOutcomeLabel(rank[c]),pos,
           apps:p.apps||0,mins,g:p.g||0,a:p.a||0,sv:p.sv||0,conceded,y:p.y||0,r:p.r||0,log}});
     }); });
   // ---- Leaderboard ranks → badges, mirroring the six Top Cards boards ----
@@ -3928,7 +3930,7 @@ function plBeatHTML(b){
     return '<div style="position:absolute;inset:0;'+sBg(acc)+'"></div>'+
       (c.pic?'<img src="'+shero(c.pic,760)+'" class="plPhoto" alt="">':'')+
       '<div class="plRight">'+
-        '<div class="plHead"><span class="plRank" style="color:'+acc+'">'+(c.rank?'#'+c.rank:'')+'</span><img class="plFlag" src="'+sflag(c.iso,80)+'"><span class="plTeam">'+c.teamName+'</span><span class="plRole">'+PL_ROLE1[c.pos]+'</span></div>'+
+        '<div class="plHead"><img class="plFlag" src="'+sflag(c.iso,80)+'"><span class="plTeam">'+c.teamName+'</span>'+(c.outcome?'<span class="plOutcome'+(c.rank<=4?' plOutTop':'')+'">'+c.outcome+'</span>':'')+'<span class="plRole">'+PL_ROLE1[c.pos]+'</span></div>'+
         '<div class="plName"><b>'+c.num+'</b> '+c.name+'</div>'+
         (badges?'<div class="plBadges">'+badges+'</div>':'')+
         '<div class="plKpis">'+kpis+'</div>'+
@@ -3952,6 +3954,8 @@ const PL_CSS='#wcPlayers{position:fixed;inset:0;z-index:400;background:#c9c4ba;d
  '#wcPlayers .plRank{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:28px;}'+
  '#wcPlayers .plFlag{height:26px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,.25);}'+
  '#wcPlayers .plTeam{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px;color:'+STY.INK+';text-transform:uppercase;letter-spacing:1px;}'+
+ '#wcPlayers .plOutcome{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:'+STY.SUB+';background:rgba(0,0,0,.06);border-radius:20px;padding:4px 11px;}'+
+ '#wcPlayers .plOutcome.plOutTop{color:#9a6d0c;background:rgba(207,156,30,.18);}'+
  '#wcPlayers .plRole{margin-left:auto;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:'+STY.SUB+';}'+
  '#wcPlayers .plName{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:58px;color:'+STY.INK+';line-height:.95;margin:8px 0 12px;}'+
  '#wcPlayers .plName b{color:'+STY.SUB+';font-size:32px;margin-right:7px;}'+
@@ -3989,20 +3993,26 @@ function launchPlayers(){ if(plOv) return; if(!DATA||!DATA.squads) return; plBea
   ov.addEventListener('click',()=>{ if(plOv&&plPlaying) plSched(); });
   pli=0; plPlaying=false; plRender();
 }
-function plRender(){ if(!plOv)return; document.getElementById('plStage').innerHTML=plBeatHTML(plBeats[pli]);
-  const cur=plBeats[pli]; let lbl;
-  if(cur.t==='plcover')lbl='Overview'; else if(cur.t==='ploutro')lbl='Finale';
-  else { const chap=[...plBeats].slice(0,pli+1).reverse().find(x=>x.t==='plrole'); lbl=chap?PL_ROLE[chap.pos]:'—'; }
-  document.getElementById('plLbl').innerHTML='<b>'+(pli+1)+'/'+plBeats.length+'</b> · '+lbl;
-  document.getElementById('plPlay').textContent=plPlaying?'❚❚':'▶';
-  try{ history.replaceState(null,'',location.pathname+'?players='+pli); }catch(e){}
-  wcPreloadNext(plBeatHTML, plBeats, pli, 2); }
+function plRender(){ if(!plOv)return; const b=plBeats[pli], tok=plRender._t=(plRender._t||0)+1;
+  // Paint the card, update the chrome, prefetch ahead, then schedule the next advance.
+  const paint=()=>{ if(!plOv||tok!==plRender._t)return; document.getElementById('plStage').innerHTML=plBeatHTML(b);
+    let lbl; if(b.t==='plcover')lbl='Overview'; else if(b.t==='ploutro')lbl='Finale';
+    else { const chap=[...plBeats].slice(0,pli+1).reverse().find(x=>x.t==='plrole'); lbl=chap?PL_ROLE[chap.pos]:'—'; }
+    document.getElementById('plLbl').innerHTML='<b>'+(pli+1)+'/'+plBeats.length+'</b> · '+lbl;
+    document.getElementById('plPlay').textContent=plPlaying?'❚❚':'▶';
+    try{ history.replaceState(null,'',location.pathname+'?players='+pli); }catch(e){}
+    wcPreloadNext(plBeatHTML, plBeats, pli, 3); plSched(); };
+  // A player card only appears once its photo is loaded — hold the current card until then (no empty photo).
+  if(b.t==='player'&&b.c.pic){ const im=new Image(); let done=false; const go=()=>{ if(done)return; done=true; paint(); };
+    im.onload=go; im.onerror=go; im.src=shero(b.c.pic,760);
+    if(im.complete&&im.naturalWidth>0){ go(); } else { setTimeout(go, 6000); } }   // 6s safety cap so a stuck photo never freezes
+  else paint(); }
 function plSched(){ clearTimeout(plTimer); if(!plPlaying)return; const tok=plSched._t=(plSched._t||0)+1;
   if(plSpeed==='fast'){ wcAllLoaded(document.getElementById('plStage'), ()=>{ if(tok!==plSched._t||!plPlaying)return; plTimer=setTimeout(()=>plGo(1), WC_FAST_MS); }); }
   else plTimer=setTimeout(()=>plGo(1), PL_MS/plSpeed); }
-function plGo(d){ if(!plOv)return; const n=pli+d; if(n<0||n>=plBeats.length){ if(d>0)plToggle(); return; } pli=n; plRender(); plSched(); }
-function plJump(n){ if(!plOv)return; pli=Math.max(0,Math.min(plBeats.length-1,n)); plRender(); plSched(); }
-function plRestart(){ if(!plOv)return; plPlaying=true; pli=0; plRender(); plSched(); }
+function plGo(d){ if(!plOv)return; const n=pli+d; if(n<0||n>=plBeats.length){ if(d>0)plToggle(); return; } pli=n; plRender(); }
+function plJump(n){ if(!plOv)return; pli=Math.max(0,Math.min(plBeats.length-1,n)); plRender(); }
+function plRestart(){ if(!plOv)return; plPlaying=true; pli=0; plRender(); }
 function plToggle(){ plPlaying=!plPlaying; document.getElementById('plPlay').textContent=plPlaying?'❚❚':'▶'; if(plPlaying)plSched(); else clearTimeout(plTimer); }
 function plCycleSpeed(){ plSpeed=({1:1.5,1.5:2,2:3,3:'fast','fast':1})[plSpeed]||1; document.getElementById('plSpeed').textContent=plSpeed==='fast'?'Fast':plSpeed+'×'; plSched(); }
 function plChapters(){ const chs=plBeats.map((b,i)=>({b,i})).filter(x=>x.b.t==='plrole'||x.b.t==='plcover');
@@ -4011,7 +4021,7 @@ function plChapters(){ const chs=plBeats.map((b,i)=>({b,i})).filter(x=>x.b.t==='
   menu.innerHTML='<div style="background:'+NB_DARK+';border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:22px;min-width:340px;font-family:\'Barlow Condensed\',sans-serif;">'+
     '<div style="font-weight:800;font-size:22px;color:'+NB_CREAM+';text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Positions</div>'+
     chs.map(x=>'<div class="plChapRow" data-i="'+x.i+'" style="padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700;font-size:17px;color:'+NB_CREAM+';">'+(x.b.t==='plcover'?'Overview':PL_ROLE[x.b.pos])+'</div>').join('')+'</div>';
-  menu.onclick=e=>{ const r=e.target.closest('.plChapRow'); if(r){ pli=+r.dataset.i; menu.remove(); plPlaying=wasP; plRender(); plSched(); } else if(e.target===menu){ menu.remove(); plPlaying=wasP; if(wasP)plSched(); } };
+  menu.onclick=e=>{ const r=e.target.closest('.plChapRow'); if(r){ pli=+r.dataset.i; menu.remove(); plPlaying=wasP; plRender(); } else if(e.target===menu){ menu.remove(); plPlaying=wasP; if(wasP)plSched(); } };
   [...menu.querySelectorAll('.plChapRow')].forEach(r=>{ r.onmouseenter=()=>r.style.background='rgba(255,255,255,.08)'; r.onmouseleave=()=>r.style.background=''; });
   document.body.appendChild(menu); }
 function closePlayers(){ if(!plOv)return; clearTimeout(plTimer); removeEventListener('resize',plOv._fit); removeEventListener('keydown',plOv._key); plOv.remove(); plOv=null; if(modalEl&&modalEl.id==='wcPlayers')modalEl=null; const c=document.getElementById('plChap'); if(c)c.remove(); try{ history.replaceState(null,'',location.pathname); }catch(e){} }
