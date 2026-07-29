@@ -3386,7 +3386,9 @@ function renderStory(){
   document.getElementById('wcPlay').textContent=storyPlaying?'❚❚':'▶';
   prefetchStory(); wcbSaveResume(); wcbSyncUrl();
 }
-function schedNext(){ clearTimeout(storyTimer); if(!storyPlaying)return; storyTimer=setTimeout(()=>storyGo(1), beatDur(storyBeats[si])/storySpeed); }
+function schedNext(){ clearTimeout(storyTimer); if(!storyPlaying)return; const tok=schedNext._t=(schedNext._t||0)+1;
+  if(storySpeed==='fast'){ wcAllLoaded(document.getElementById('wcStage'), ()=>{ if(tok!==schedNext._t||!storyPlaying)return; storyTimer=setTimeout(()=>storyGo(1), WC_FAST_MS); }); }
+  else storyTimer=setTimeout(()=>storyGo(1), beatDur(storyBeats[si])/storySpeed); }
 function storyGo(d){ if(!storyOv)return; const n=si+d; if(n<0||n>=storyBeats.length){ if(d>0)storyToggle(); return; } si=n; renderStory(); schedNext(); }
 function storyJump(n){ if(!storyOv)return; si=Math.max(0,Math.min(storyBeats.length-1,n)); renderStory(); schedNext(); }
 function storyRestart(){ if(!storyOv)return; storyPlaying=true; si=0; renderStory(); schedNext(); }
@@ -3400,7 +3402,7 @@ function rebuildStory(team){ if(!storyOv)return; storyTeam=team||null;
   const sel=document.getElementById('wcTeam'); if(sel&&sel.value!==(storyTeam||'')) sel.value=storyTeam||'';
   si=0; storyPlaying=true; renderStory(); schedNext(); }
 function storyToggle(){ storyPlaying=!storyPlaying; document.getElementById('wcPlay').textContent=storyPlaying?'❚❚':'▶'; if(storyPlaying)schedNext(); else clearTimeout(storyTimer); }
-function storyCycleSpeed(){ storySpeed=({1:1.5,1.5:2,2:3,3:1})[storySpeed]||1; document.getElementById('wcSpeed').textContent=storySpeed+'×'; schedNext(); wcbSavePrefs(); }
+function storyCycleSpeed(){ storySpeed=({1:1.5,1.5:2,2:3,3:'fast','fast':1})[storySpeed]||1; document.getElementById('wcSpeed').textContent=storySpeed==='fast'?'Fast':storySpeed+'×'; schedNext(); wcbSavePrefs(); }
 function storyChapters(){
   // The controversy film has its own beat kinds, so list its title + each controversy; the match film lists chapters.
   let chs, labelOf;
@@ -3756,12 +3758,14 @@ function nbRender(){ if(!nbOv)return; const st=document.getElementById('nbStage'
   document.getElementById('nbPlay').textContent=nbPlaying?'❚❚':'▶'; nbSyncUrl(); }
 // Keep the address bar in sync so a reload / shared link resumes on this exact card.
 function nbSyncUrl(){ try{ history.replaceState(null,'',location.pathname+'?numbers='+ni); }catch(e){} }
-function nbSched(){ clearTimeout(nbTimer); if(!nbPlaying)return; nbTimer=setTimeout(()=>nbGo(1), NB_MS/nbSpeed); }
+function nbSched(){ clearTimeout(nbTimer); if(!nbPlaying)return; const tok=nbSched._t=(nbSched._t||0)+1;
+  if(nbSpeed==='fast'){ wcAllLoaded(document.getElementById('nbStage'), ()=>{ if(tok!==nbSched._t||!nbPlaying)return; nbTimer=setTimeout(()=>nbGo(1), WC_FAST_MS); }); }
+  else nbTimer=setTimeout(()=>nbGo(1), NB_MS/nbSpeed); }
 function nbGo(d){ if(!nbOv)return; const n=ni+d; if(n<0||n>=nbBeats.length){ if(d>0)nbToggle(); return; } ni=n; nbRender(); nbSched(); }
 function nbJump(n){ if(!nbOv)return; ni=Math.max(0,Math.min(nbBeats.length-1,n)); nbRender(); nbSched(); }
 function nbRestart(){ if(!nbOv)return; nbPlaying=true; ni=0; nbRender(); nbSched(); }
 function nbToggle(){ nbPlaying=!nbPlaying; document.getElementById('nbPlay').textContent=nbPlaying?'❚❚':'▶'; if(nbPlaying)nbSched(); else clearTimeout(nbTimer); }
-function nbCycleSpeed(){ nbSpeed=({1:1.5,1.5:2,2:3,3:1})[nbSpeed]||1; document.getElementById('nbSpeed').textContent=nbSpeed+'×'; nbSched(); }
+function nbCycleSpeed(){ nbSpeed=({1:1.5,1.5:2,2:3,3:'fast','fast':1})[nbSpeed]||1; document.getElementById('nbSpeed').textContent=nbSpeed==='fast'?'Fast':nbSpeed+'×'; nbSched(); }
 function nbChapters(){ const chs=nbBeats.map((b,i)=>({b,i})).filter(x=>x.b.t==='divider'||x.b.t==='cover'||x.b.t==='outro');
   const wasPlaying=nbPlaying; nbPlaying=false; clearTimeout(nbTimer);
   const menu=el('div',''); menu.id='nbChap';
@@ -3808,6 +3812,16 @@ function wcIsFull(){ return !!(document.fullscreenElement||document.webkitFullsc
 function wcFsSync(){ const on=wcIsFull(); document.querySelectorAll('.wcFsBtn').forEach(b=>{ b.innerHTML=on?WC_FS_OUT:WC_FS_IN; b.title=on?'Exit fullscreen (Esc)':'Fullscreen'; }); if(modalEl&&modalEl._fit) setTimeout(modalEl._fit,60); }
 document.addEventListener('fullscreenchange',wcFsSync); document.addEventListener('webkitfullscreenchange',wcFsSync);
 window.wcToggleFull=wcToggleFull;
+
+// ---- "Fast" playback: advance once every image on the card has loaded, then a short delay ----
+let WC_FAST_MS=500;   // minimal delay after a card's images finish loading (tweak here)
+function wcAllLoaded(el, cb){ if(!el){ cb(); return; }
+  const imgs=[...el.querySelectorAll('img')].filter(im=>!(im.complete&&im.naturalWidth>0));
+  if(!imgs.length){ cb(); return; }
+  let pending=imgs.length, done=false; const fin=()=>{ if(done)return; done=true; cb(); };
+  imgs.forEach(im=>{ const h=()=>{ im.removeEventListener('load',h); im.removeEventListener('error',h); if(--pending<=0)fin(); }; im.addEventListener('load',h); im.addEventListener('error',h); });
+  setTimeout(fin, 5000);   // safety cap so a stuck image never freezes the reel
+}
 
 // ===========================================================================
 // "The Players" film — every player, grouped by role (GK→DF→MF→FW), teams in
@@ -3971,12 +3985,14 @@ function plRender(){ if(!plOv)return; document.getElementById('plStage').innerHT
   document.getElementById('plLbl').innerHTML='<b>'+(pli+1)+'/'+plBeats.length+'</b> · '+lbl;
   document.getElementById('plPlay').textContent=plPlaying?'❚❚':'▶';
   try{ history.replaceState(null,'',location.pathname+'?players='+pli); }catch(e){} }
-function plSched(){ clearTimeout(plTimer); if(!plPlaying)return; plTimer=setTimeout(()=>plGo(1), PL_MS/plSpeed); }
+function plSched(){ clearTimeout(plTimer); if(!plPlaying)return; const tok=plSched._t=(plSched._t||0)+1;
+  if(plSpeed==='fast'){ wcAllLoaded(document.getElementById('plStage'), ()=>{ if(tok!==plSched._t||!plPlaying)return; plTimer=setTimeout(()=>plGo(1), WC_FAST_MS); }); }
+  else plTimer=setTimeout(()=>plGo(1), PL_MS/plSpeed); }
 function plGo(d){ if(!plOv)return; const n=pli+d; if(n<0||n>=plBeats.length){ if(d>0)plToggle(); return; } pli=n; plRender(); plSched(); }
 function plJump(n){ if(!plOv)return; pli=Math.max(0,Math.min(plBeats.length-1,n)); plRender(); plSched(); }
 function plRestart(){ if(!plOv)return; plPlaying=true; pli=0; plRender(); plSched(); }
 function plToggle(){ plPlaying=!plPlaying; document.getElementById('plPlay').textContent=plPlaying?'❚❚':'▶'; if(plPlaying)plSched(); else clearTimeout(plTimer); }
-function plCycleSpeed(){ plSpeed=({1:1.5,1.5:2,2:3,3:1})[plSpeed]||1; document.getElementById('plSpeed').textContent=plSpeed+'×'; plSched(); }
+function plCycleSpeed(){ plSpeed=({1:1.5,1.5:2,2:3,3:'fast','fast':1})[plSpeed]||1; document.getElementById('plSpeed').textContent=plSpeed==='fast'?'Fast':plSpeed+'×'; plSched(); }
 function plChapters(){ const chs=plBeats.map((b,i)=>({b,i})).filter(x=>x.b.t==='plrole'||x.b.t==='plcover');
   const wasP=plPlaying; plPlaying=false; clearTimeout(plTimer);
   const menu=el('div',''); menu.id='plChap'; menu.style.cssText='position:fixed;inset:0;z-index:410;background:rgba(12,11,7,.8);display:flex;align-items:center;justify-content:center;';
