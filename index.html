@@ -3491,6 +3491,10 @@ function buildNumberBeats(D){
   cbar('Beers poured per match', c=>((c.foodAndBeverage||{}).beers||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total beers ÷ matches hosted');
   cbar('Beers per fan', c=>((c.foodAndBeverage||{}).beers||0)/c.attendance, v=>v.toFixed(2), 'Derived · total beers ÷ total attendance');
   cbar('Goals per match, by city', c=>c.goals/c.matches, v=>v.toFixed(2), 'Derived · goals ÷ matches hosted');
+  cbar('Hot dogs per match', c=>((c.foodAndBeverage||{}).hotDogs||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total hot dogs ÷ matches hosted');
+  cbar('Teams hosted per city', c=>c.teamsVisited||0, v=>String(Math.round(v)), 'Derived · distinct teams that played in each city');
+  const splitRows=hcs.map(c=>{ const fb=c.foodAndBeverage||{},bb=fb.beers||0,ss=fb.softDrinksAndWater||0,tot=bb+ss; return {name:c.name,country:c.country,beerPct:tot?bb/tot*100:0}; }).sort((a,b)=>b.beerPct-a.beerPct);
+  beats.push({t:'chart_drinksplit',rows:splitRows});
   (D.hostCities||[]).forEach(c=>beats.push({t:'city',c}));
   beats.push({t:'funfacts',D});
   const gaps=((D.dataGaps||{}).items)||[];
@@ -3596,6 +3600,15 @@ function nbBeatHTML(b){
       '<div class="nbLegend"><span><i style="background:'+STY.BLUE+';"></i>United States</span><span><i style="background:'+STY.GREEN+';"></i>Mexico</span><span><i style="background:'+STY.RED+';"></i>Canada</span></div>'+
       '<div class="nbCbars">'+bars+'</div>'+
       (b.note?'<div class="nbNote" style="font-size:13px;margin-top:12px;">'+b.note+'</div>':'')); }
+  if(b.t==='chart_drinksplit'){ const rows=b.rows;
+    const short=n=>({'New York/New Jersey':'New York NJ','San Francisco Bay Area':'SF Bay Area'})[n]||n;
+    const bars=rows.map(r=>'<div class="nbCbar"><div class="nbCbarN">'+short(r.name)+'</div><div class="nbSplitT"><div class="nbSplitB" style="width:'+r.beerPct.toFixed(1)+'%;">'+Math.round(r.beerPct)+'%</div><div class="nbSplitS" style="width:'+(100-r.beerPct).toFixed(1)+'%;"></div></div></div>').join('');
+    return '<div style="position:absolute;inset:0;'+nbBg(STY.GOLD)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+STY.GOLD+';">Host cities</div>'+
+      '<div class="nbGridT" style="margin-bottom:6px;">Beer vs soft drinks, by city</div>'+
+      '<div class="nbLegend"><span><i style="background:'+STY.ORANGE+';"></i>Beer</span><span><i style="background:'+STY.BLUE+';"></i>Soft drinks &amp; water</span></div>'+
+      '<div class="nbCbars">'+bars+'</div>'+
+      '<div class="nbNote" style="font-size:13px;margin-top:12px;">Derived · beer as a share of beer + soft drinks &amp; water sold</div>'); }
   if(b.t==='chart_travelled'){ const rows=b.rows, max=rows.length?rows[0].count:1;
     const bars=rows.map(r=>'<div class="nbCbar"><div class="nbCbarN">'+nbFlagImg(r.name,14)+'&nbsp;'+r.name+'</div><div class="nbCbarT"><div class="nbCbarF" style="width:'+(r.count/max*100).toFixed(1)+'%;background:'+STY.ORANGE+';"></div></div><div class="nbCbarV">'+r.count+(r.count===1?' city':' cities')+'</div></div>').join('');
     return '<div style="position:absolute;inset:0;'+nbBg(STY.ORANGE)+'"></div>'+nbLeft(
@@ -3665,6 +3678,9 @@ const NB_CSS='#wcNumbers{position:fixed;inset:0;z-index:400;background:#0c0b07;d
  '#wcNumbers .nbCbarN{width:220px;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:16px;color:'+NB_CREAM+';text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none;}'+
  '#wcNumbers .nbCbarT{flex:1;height:19px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden;}#wcNumbers .nbCbarsWide .nbCbarT{height:26px;}'+
  '#wcNumbers .nbCbarF{height:100%;border-radius:5px;}'+
+ '#wcNumbers .nbSplitT{flex:1;height:22px;border-radius:5px;overflow:hidden;display:flex;}'+
+ '#wcNumbers .nbSplitB{height:100%;background:'+STY.ORANGE+';display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:13px;color:#141109;}'+
+ '#wcNumbers .nbSplitS{height:100%;background:'+STY.BLUE+';}'+
  '#wcNumbers .nbCbarV{width:120px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:16px;color:'+NB_CREAM+';font-variant-numeric:tabular-nums;flex:none;}'+
  '#wcNumbers .nbLegend{display:flex;gap:18px;margin:2px 0 4px;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:13px;color:'+NB_SUB+';}'+
  '#wcNumbers .nbLegend span{display:inline-flex;align-items:center;gap:6px;}#wcNumbers .nbLegend i{width:13px;height:13px;border-radius:3px;display:inline-block;}'+
