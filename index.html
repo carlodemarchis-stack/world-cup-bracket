@@ -3469,16 +3469,18 @@ function buildNumberBeats(D){
   const cbar=(title,valFn,disp,note,eyebrow,acc)=>{ const rows=hcs.map(c=>({name:c.name,country:c.country,val:valFn(c)})).filter(r=>isFinite(r.val)).sort((a,b)=>b.val-a.val); rows.forEach(r=>r.display=disp(r.val)); return {t:'chart_citybar',title,rows,note,eyebrow,acc}; };
   const OP=STY.GREEN, FE=STY.ORANGE;
   const splitRows=hcs.map(c=>{ const fb=c.foodAndBeverage||{},bb=fb.beers||0,ss=fb.softDrinksAndWater||0,tot=bb+ss; return {name:c.name,country:c.country,beerPct:tot?bb/tot*100:0}; }).sort((a,b)=>b.beerPct-a.beerPct);
-  const SECTION_CHARTS={
-    'on-the-pitch':[ cbar('Goals per match, by city', c=>c.goals/c.matches, v=>v.toFixed(2), 'Derived · goals ÷ matches hosted, by host city','On the pitch',OP) ],
-    'fan-experience':[
-      {t:'chart_attendance',cities:hcs.slice().sort((a,b)=>(b.attendance||0)-(a.attendance||0)),eyebrow:'Fan experience',acc:FE},
-      {t:'chart_travelled',rows:travelRows},
-      cbar('Beers poured per match', c=>((c.foodAndBeverage||{}).beers||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total beers ÷ matches hosted','Fan experience',FE),
-      cbar('Beers per fan', c=>((c.foodAndBeverage||{}).beers||0)/c.attendance, v=>v.toFixed(2), 'Derived · total beers ÷ total attendance','Fan experience',FE),
-      cbar('Hot dogs per match', c=>((c.foodAndBeverage||{}).hotDogs||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total hot dogs ÷ matches hosted','Fan experience',FE),
-      {t:'chart_drinksplit',rows:splitRows,eyebrow:'Fan experience',acc:FE}
-    ]
+  const SCBG={   // charts attached to the group they belong to, so they sit right by their subject
+    'on-the-pitch':{ 'Goals':[ cbar('Goals per match, by city', c=>c.goals/c.matches, v=>v.toFixed(2), 'Derived · goals ÷ matches hosted, by host city','On the pitch',OP) ] },
+    'fan-experience':{
+      'Stadium attendance':[ {t:'chart_attendance',cities:hcs.slice().sort((a,b)=>(b.attendance||0)-(a.attendance||0)),eyebrow:'Fan experience',acc:FE} ],
+      'Ticketing':[ {t:'chart_travelled',rows:travelRows} ],
+      'Food and beverage':[
+        cbar('Beers poured per match', c=>((c.foodAndBeverage||{}).beers||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total beers ÷ matches hosted','Fan experience',FE),
+        cbar('Beers per fan', c=>((c.foodAndBeverage||{}).beers||0)/c.attendance, v=>v.toFixed(2), 'Derived · total beers ÷ total attendance','Fan experience',FE),
+        cbar('Hot dogs per match', c=>((c.foodAndBeverage||{}).hotDogs||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total hot dogs ÷ matches hosted','Fan experience',FE),
+        {t:'chart_drinksplit',rows:splitRows,eyebrow:'Fan experience',acc:FE}
+      ]
+    }
   };
   beats.push({t:'cover',T});
   beats.push({t:'honours',T});
@@ -3487,14 +3489,15 @@ function buildNumberBeats(D){
     beats.push({t:'divider',section:s,acc});
     (s.heroStats||[]).forEach(id=>{ const st=byId[id]; if(!st||st.display==null)return;
       beats.push({t:(st.comparison?'comparison':'hero'), st, acc, section:s.title}); });
-    // Every group's remaining stats become tile-grid cards (paginated) so all the data is surfaced.
-    const heroSet=new Set(s.heroStats||[]); const per=9, spill=[];
-    (s.groups||[]).forEach(g=>{ const rest=(g.stats||[]).filter(x=>!heroSet.has(x.id)&&x.id!=='milestone-3000th-goal'&&x.display!=null); if(!rest.length)return;
-      if(rest.length<3){ spill.push.apply(spill,rest); return; }              // tiny groups pooled into a "More" card
-      const pages=Math.ceil(rest.length/per);
-      for(let p=0;p<pages;p++) beats.push({t:'grid',title:g.title+(pages>1?' · '+(p+1)+'/'+pages:''),stats:rest.slice(p*per,p*per+per),acc,section:s.title}); });
+    // Every group's remaining stats become tile-grid cards; its chart (if any) follows right after.
+    const heroSet=new Set(s.heroStats||[]); const per=9, spill=[]; const gcharts=SCBG[s.id]||{};
+    (s.groups||[]).forEach(g=>{ const rest=(g.stats||[]).filter(x=>!heroSet.has(x.id)&&x.id!=='milestone-3000th-goal'&&x.display!=null);
+      if(rest.length>=3){ const pages=Math.ceil(rest.length/per);
+        for(let p=0;p<pages;p++) beats.push({t:'grid',title:g.title+(pages>1?' · '+(p+1)+'/'+pages:''),stats:rest.slice(p*per,p*per+per),acc,section:s.title}); }
+      else if(rest.length){ spill.push.apply(spill,rest); }                    // tiny groups pooled into a "More" card
+      (gcharts[g.title]||[]).forEach(cb=>beats.push(cb));                       // chart sits right by its subject group
+    });
     for(let p=0;p<spill.length;p+=per) beats.push({t:'grid',title:'More numbers',stats:spill.slice(p,p+per),acc,section:s.title});
-    (SECTION_CHARTS[s.id]||[]).forEach(cb=>beats.push(cb));   // category charts close the chapter
   });
   const enzo=byId['milestone-3000th-goal']; if(enzo) beats.push({t:'milestone',st:enzo,acc:STY.GREEN});
   const hc=D.sections.find(s=>s.id==='host-cities');
