@@ -3755,7 +3755,7 @@ function nbRender(){ if(!nbOv)return; const st=document.getElementById('nbStage'
   else if(cur.t==='outro') lbl='Finale';
   else { const chap=[...nbBeats].slice(0,ni+1).reverse().find(x=>x.t==='divider'||x.t==='cover'); lbl=chap?(chap.t==='cover'?'Overview':chap.section.title):'—'; }
   document.getElementById('nbLbl').innerHTML='<b>'+(ni+1)+'/'+nbBeats.length+'</b> · '+lbl;
-  document.getElementById('nbPlay').textContent=nbPlaying?'❚❚':'▶'; nbSyncUrl(); }
+  document.getElementById('nbPlay').textContent=nbPlaying?'❚❚':'▶'; nbSyncUrl(); wcPreloadNext(nbBeatHTML, nbBeats, ni, 2); }
 // Keep the address bar in sync so a reload / shared link resumes on this exact card.
 function nbSyncUrl(){ try{ history.replaceState(null,'',location.pathname+'?numbers='+ni); }catch(e){} }
 function nbSched(){ clearTimeout(nbTimer); if(!nbPlaying)return; const tok=nbSched._t=(nbSched._t||0)+1;
@@ -3821,6 +3821,13 @@ function wcAllLoaded(el, cb){ if(!el){ cb(); return; }
   let pending=imgs.length, done=false; const fin=()=>{ if(done)return; done=true; cb(); };
   imgs.forEach(im=>{ const h=()=>{ im.removeEventListener('load',h); im.removeEventListener('error',h); if(--pending<=0)fin(); }; im.addEventListener('load',h); im.addEventListener('error',h); });
   setTimeout(fin, 5000);   // safety cap so a stuck image never freezes the reel
+}
+// Preload the images of the next few cards (renders their HTML off-screen and warms each src).
+function wcPreloadNext(beatHtmlFn, beats, curIdx, n){
+  for(let k=curIdx+1;k<Math.min(curIdx+1+(n||1),(beats||[]).length);k++){
+    try{ const d=document.createElement('div'); d.innerHTML=beatHtmlFn(beats[k]);
+      d.querySelectorAll('img').forEach(im=>{ const s=im.getAttribute('src'); if(s){ const p=new Image(); p.src=s; } }); }catch(e){}
+  }
 }
 
 // ===========================================================================
@@ -3984,7 +3991,8 @@ function plRender(){ if(!plOv)return; document.getElementById('plStage').innerHT
   else { const chap=[...plBeats].slice(0,pli+1).reverse().find(x=>x.t==='plrole'); lbl=chap?PL_ROLE[chap.pos]:'—'; }
   document.getElementById('plLbl').innerHTML='<b>'+(pli+1)+'/'+plBeats.length+'</b> · '+lbl;
   document.getElementById('plPlay').textContent=plPlaying?'❚❚':'▶';
-  try{ history.replaceState(null,'',location.pathname+'?players='+pli); }catch(e){} }
+  try{ history.replaceState(null,'',location.pathname+'?players='+pli); }catch(e){}
+  wcPreloadNext(plBeatHTML, plBeats, pli, 2); }
 function plSched(){ clearTimeout(plTimer); if(!plPlaying)return; const tok=plSched._t=(plSched._t||0)+1;
   if(plSpeed==='fast'){ wcAllLoaded(document.getElementById('plStage'), ()=>{ if(tok!==plSched._t||!plPlaying)return; plTimer=setTimeout(()=>plGo(1), WC_FAST_MS); }); }
   else plTimer=setTimeout(()=>plGo(1), PL_MS/plSpeed); }
