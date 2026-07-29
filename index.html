@@ -3342,7 +3342,7 @@ function launchStory(){
     '<div id="wcStage"></div>'+daysBar+
     '<button id="wcX" title="Close (Esc)" aria-label="Close" style="position:fixed;top:46px;right:18px;z-index:404;width:42px;height:42px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;font-weight:800;line-height:1;color:#fff;background:rgba(20,18,14,.82);box-shadow:0 3px 12px rgba(0,0,0,.35);">✕</button>'+
     '<div id="wcCtl"><button id="wcClose" title="Close">✕</button><button title="Restart from the beginning" onclick="storyRestart()">↺</button><button onclick="storyGo(-1)">◀</button><button id="wcPlay" onclick="storyToggle()">❚❚</button><button onclick="storyGo(1)">▶</button>'+
-    '<div id="wcLbl"></div>'+(storyContro?'':'<select id="wcTeam" title="Watch one team">'+teamOpts+'</select><button id="wcRot" title="Line-up rotation for the selected team">▦</button>')+'<button id="wcSpeed" onclick="storyCycleSpeed()">1×</button><button onclick="storyChapters()">☰</button></div>';
+    '<div id="wcLbl"></div>'+(storyContro?'':'<select id="wcTeam" title="Watch one team">'+teamOpts+'</select><button id="wcRot" title="Line-up rotation for the selected team">▦</button>')+'<button id="wcSpeed" onclick="storyCycleSpeed()">1×</button><button onclick="storyChapters()">☰</button>'+wcFsBtnHTML()+'</div>';
   document.body.appendChild(ov); storyOv=ov; modalEl=ov;
   document.getElementById('wcClose').onclick=closeStory;
   document.getElementById('wcX').onclick=closeStory;
@@ -3355,7 +3355,7 @@ function launchStory(){
       const idx=storyBeatDay.indexOf(d); if(idx>=0) storyJump(idx); }; }
   ov._fit=()=>{ const s=Math.min(window.innerWidth/1280,(window.innerHeight-114)/720); document.getElementById('wcStage').style.transform='scale('+s.toFixed(3)+')'; };
   ov._fit(); addEventListener('resize',ov._fit);
-  ov._key=e=>{ if(e.key==='Escape')closeStory(); else if(e.key==='ArrowRight'){e.preventDefault();storyGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();storyGo(-1);} else if(e.key===' '){e.preventDefault();storyToggle();} };
+  ov._key=e=>{ if(e.key==='Escape'){ if(wcIsFull())return; closeStory(); } else if(e.key==='ArrowRight'){e.preventDefault();storyGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();storyGo(-1);} else if(e.key===' '){e.preventDefault();storyToggle();} };
   addEventListener('keydown',ov._key);
   // Any interaction with a card (tab switch, link, day jump…) restarts the auto-advance countdown,
   // so the beat won't flip away mid-click. Only re-arms while playing; leaves a paused film paused.
@@ -3735,12 +3735,12 @@ function launchNumbers(){ if(nbOv) return; if(!NUMBERS_DATA) return; nbBeats=bui
   const ov=el('div',''); ov.id='wcNumbers';
   ov.innerHTML='<style>'+NB_CSS+'</style><div id="nbStage"></div>'+
     '<button id="nbX" title="Close (Esc)" aria-label="Close" style="position:fixed;top:18px;right:18px;z-index:404;width:42px;height:42px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;font-weight:800;color:#fff;background:rgba(20,18,14,.82);box-shadow:0 3px 12px rgba(0,0,0,.35);">✕</button>'+
-    '<div id="nbCtl"><button title="Close" onclick="closeNumbers()">✕</button><button title="Restart" onclick="nbRestart()">↺</button><button onclick="nbGo(-1)">◀</button><button id="nbPlay" onclick="nbToggle()">❚❚</button><button onclick="nbGo(1)">▶</button><div id="nbLbl"></div><button id="nbSpeed" onclick="nbCycleSpeed()">1×</button><button title="Chapters" onclick="nbChapters()">☰</button></div>';
+    '<div id="nbCtl"><button title="Close" onclick="closeNumbers()">✕</button><button title="Restart" onclick="nbRestart()">↺</button><button onclick="nbGo(-1)">◀</button><button id="nbPlay" onclick="nbToggle()">❚❚</button><button onclick="nbGo(1)">▶</button><div id="nbLbl"></div><button id="nbSpeed" onclick="nbCycleSpeed()">1×</button><button title="Chapters" onclick="nbChapters()">☰</button>'+wcFsBtnHTML()+'</div>';
   document.body.appendChild(ov); nbOv=ov; modalEl=ov;
   document.getElementById('nbX').onclick=closeNumbers;
   ov._fit=()=>{ const s=Math.min(window.innerWidth/1280,(window.innerHeight-114)/720); const st=document.getElementById('nbStage'); if(st) st.style.transform='scale('+s.toFixed(3)+')'; };
   ov._fit(); addEventListener('resize',ov._fit);
-  ov._key=e=>{ if(e.key==='Escape')closeNumbers(); else if(e.key==='ArrowRight'){e.preventDefault();nbGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();nbGo(-1);} else if(e.key===' '){e.preventDefault();nbToggle();} };
+  ov._key=e=>{ if(e.key==='Escape'){ if(wcIsFull())return; closeNumbers(); } else if(e.key==='ArrowRight'){e.preventDefault();nbGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();nbGo(-1);} else if(e.key===' '){e.preventDefault();nbToggle();} };
   addEventListener('keydown',ov._key);
   ov.addEventListener('click',()=>{ if(nbOv&&nbPlaying) nbSched(); });
   ni=0; nbPlaying=false; nbRender();   // start paused — the viewer presses ▶ (or ← / →) to move
@@ -3797,6 +3797,17 @@ function wcHintsBar(dark){
     items.map(it=>'<button onclick="wcGoto(\''+it[0]+'\')" style="cursor:pointer;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:13px;letter-spacing:.4px;color:'+fg+';background:'+bg+';border:1px solid '+bd+';border-radius:30px;padding:7px 14px;">'+it[1]+'</button>').join('')+'</div>';
 }
 window.wcHintsBar=wcHintsBar;
+
+// ---- Shared fullscreen toggle for the film-style overlays (Esc exits fullscreen, not the film) ----
+const WC_FS_IN='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+const WC_FS_OUT='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+function wcFsBtnHTML(){ return '<button class="wcFsBtn" title="Fullscreen" style="display:inline-flex;align-items:center;" onclick="wcToggleFull()">'+WC_FS_IN+'</button>'; }
+function wcToggleFull(){ const d=document, fsEl=d.fullscreenElement||d.webkitFullscreenElement;
+  try{ if(fsEl){ (d.exitFullscreen||d.webkitExitFullscreen).call(d); } else { const t=modalEl||d.documentElement; (t.requestFullscreen||t.webkitRequestFullscreen).call(t); } }catch(e){} }
+function wcIsFull(){ return !!(document.fullscreenElement||document.webkitFullscreenElement); }
+function wcFsSync(){ const on=wcIsFull(); document.querySelectorAll('.wcFsBtn').forEach(b=>{ b.innerHTML=on?WC_FS_OUT:WC_FS_IN; b.title=on?'Exit fullscreen (Esc)':'Fullscreen'; }); if(modalEl&&modalEl._fit) setTimeout(modalEl._fit,60); }
+document.addEventListener('fullscreenchange',wcFsSync); document.addEventListener('webkitfullscreenchange',wcFsSync);
+window.wcToggleFull=wcToggleFull;
 
 // ===========================================================================
 // "The Players" film — every player, grouped by role (GK→DF→MF→FW), teams in
@@ -3943,12 +3954,12 @@ function launchPlayers(){ if(plOv) return; if(!DATA||!DATA.squads) return; plBea
   const ov=el('div',''); ov.id='wcPlayers';
   ov.innerHTML='<style>'+PL_CSS+'</style><div id="plStage"></div>'+
     '<button id="plX" title="Close (Esc)" style="position:fixed;top:18px;right:18px;z-index:404;width:42px;height:42px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;font-weight:800;color:#fff;background:rgba(20,18,14,.82);box-shadow:0 3px 12px rgba(0,0,0,.35);">✕</button>'+
-    '<div id="plCtl"><button title="Close" onclick="closePlayers()">✕</button><button title="Restart" onclick="plRestart()">↺</button><button onclick="plGo(-1)">◀</button><button id="plPlay" onclick="plToggle()">▶</button><button onclick="plGo(1)">▶</button><div id="plLbl"></div><button id="plSpeed" onclick="plCycleSpeed()">1×</button><button title="Positions" onclick="plChapters()">☰</button></div>';
+    '<div id="plCtl"><button title="Close" onclick="closePlayers()">✕</button><button title="Restart" onclick="plRestart()">↺</button><button onclick="plGo(-1)">◀</button><button id="plPlay" onclick="plToggle()">▶</button><button onclick="plGo(1)">▶</button><div id="plLbl"></div><button id="plSpeed" onclick="plCycleSpeed()">1×</button><button title="Positions" onclick="plChapters()">☰</button>'+wcFsBtnHTML()+'</div>';
   document.body.appendChild(ov); plOv=ov; modalEl=ov;
   document.getElementById('plX').onclick=closePlayers;
   ov._fit=()=>{ const s=Math.min(window.innerWidth/1280,(window.innerHeight-114)/720); const st=document.getElementById('plStage'); if(st) st.style.transform='scale('+s.toFixed(3)+')'; };
   ov._fit(); addEventListener('resize',ov._fit);
-  ov._key=e=>{ if(e.key==='Escape')closePlayers(); else if(e.key==='ArrowRight'){e.preventDefault();plGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();plGo(-1);} else if(e.key===' '){e.preventDefault();plToggle();} };
+  ov._key=e=>{ if(e.key==='Escape'){ if(wcIsFull())return; closePlayers(); } else if(e.key==='ArrowRight'){e.preventDefault();plGo(1);} else if(e.key==='ArrowLeft'){e.preventDefault();plGo(-1);} else if(e.key===' '){e.preventDefault();plToggle();} };
   addEventListener('keydown',ov._key);
   ov.addEventListener('click',()=>{ if(plOv&&plPlaying) plSched(); });
   pli=0; plPlaying=false; plRender();
@@ -4297,7 +4308,7 @@ function openSquad(code){
         '<div class="sqTabs"><button class="sqTab on" data-v="pitch">Pitches</button><button class="sqTab" data-v="matrix">Matrix</button><button class="sqTab" data-v="gallery">Squad</button></div>'+
         '<button id="sqX" title="Close">✕</button></div>'+
       '<div class="sqBody" id="sqBody"><div id="sqViews"></div></div>'+
-      '<div id="sqCtl"><button id="sqClose" title="Close">✕</button><button id="sqFirst" title="Back to the first team">↺</button><button id="sqPrev" title="Previous team (←)">◀</button><button id="sqPlay" title="Auto-play through teams">▶</button><button id="sqNext" title="Next team (→)">▶</button><div id="sqLbl"></div><select id="sqPlayerSel" title="Highlight a player across every match"></select><select id="sqSeqSel" title="Jump to a team">'+teamOpts+'</select></div>';
+      '<div id="sqCtl"><button id="sqClose" title="Close">✕</button><button id="sqFirst" title="Back to the first team">↺</button><button id="sqPrev" title="Previous team (←)">◀</button><button id="sqPlay" title="Auto-play through teams">▶</button><button id="sqNext" title="Next team (→)">▶</button><div id="sqLbl"></div><select id="sqPlayerSel" title="Highlight a player across every match"></select><select id="sqSeqSel" title="Jump to a team">'+teamOpts+'</select>'+wcFsBtnHTML()+'</div>';
     document.body.appendChild(ov); squadOv=ov; modalEl=ov;
     document.getElementById('sqX').onclick=closeSquad;
     document.getElementById('sqClose').onclick=closeSquad;
@@ -4310,7 +4321,7 @@ function openSquad(code){
     document.getElementById('sqBody').addEventListener('click',e=>{ const pl=e.target.closest('.sqPl'); if(!pl||!pl.dataset.id)return; squadSelectPlayer(squadPlayer===pl.dataset.id?'':pl.dataset.id); const ps=document.getElementById('sqPlayerSel'); if(ps)ps.value=squadPlayer||''; });
     ov.querySelector('.sqTabs').addEventListener('click',e=>{ const b=e.target.closest('.sqTab'); if(!b)return; squadTab=b.dataset.v; ov.querySelectorAll('.sqTab').forEach(t=>t.classList.toggle('on',t===b)); ov.querySelectorAll('.sqView').forEach(v=>v.classList.toggle('on',v.id==='sqv-'+squadTab)); });
     ov.addEventListener('click',()=>{ if(squadPlaying) squadSched(); });   // any interaction resets the auto-advance timer
-    ov._key=e=>{ if(e.key==='Escape')closeSquad(); else if(e.key==='ArrowRight')squadGo(1); else if(e.key==='ArrowLeft')squadGo(-1); else if(e.key===' '){ e.preventDefault(); squadToggle(); } };
+    ov._key=e=>{ if(e.key==='Escape'){ if(wcIsFull())return; closeSquad(); } else if(e.key==='ArrowRight')squadGo(1); else if(e.key==='ArrowLeft')squadGo(-1); else if(e.key===' '){ e.preventDefault(); squadToggle(); } };
     addEventListener('keydown',ov._key);
   }
   squadShow(code);
