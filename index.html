@@ -3462,15 +3462,29 @@ function nbFlagImg(name,h){ const iso=NB_ISO[name]; return iso?'<img src="'+sfla
 function buildNumberBeats(D){
   const beats=[]; const T=D.tournament;
   const byId={}; D.sections.forEach(s=>(s.groups||[]).forEach(g=>(g.stats||[]).forEach(st=>byId[st.id]=st)));
+  const hcs=(D.hostCities||[]);
+  // ---- Derived chart beats, each filed under the chapter its metric belongs to ----
+  const travel={}; hcs.forEach(c=>(c.topTicketNations||[]).forEach(n=>{ travel[n]=(travel[n]||0)+1; }));
+  const travelRows=Object.keys(travel).map(n=>({name:n,count:travel[n]})).sort((a,b)=>b.count-a.count).slice(0,12);
+  const cbar=(title,valFn,disp,note,eyebrow,acc)=>{ const rows=hcs.map(c=>({name:c.name,country:c.country,val:valFn(c)})).filter(r=>isFinite(r.val)).sort((a,b)=>b.val-a.val); rows.forEach(r=>r.display=disp(r.val)); return {t:'chart_citybar',title,rows,note,eyebrow,acc}; };
+  const OP=STY.GREEN, FE=STY.ORANGE;
+  const splitRows=hcs.map(c=>{ const fb=c.foodAndBeverage||{},bb=fb.beers||0,ss=fb.softDrinksAndWater||0,tot=bb+ss; return {name:c.name,country:c.country,beerPct:tot?bb/tot*100:0}; }).sort((a,b)=>b.beerPct-a.beerPct);
+  const SECTION_CHARTS={
+    'on-the-pitch':[ cbar('Goals per match, by city', c=>c.goals/c.matches, v=>v.toFixed(2), 'Derived · goals ÷ matches hosted, by host city','On the pitch',OP) ],
+    'fan-experience':[
+      {t:'chart_attendance',cities:hcs.slice().sort((a,b)=>(b.attendance||0)-(a.attendance||0)),eyebrow:'Fan experience',acc:FE},
+      {t:'chart_travelled',rows:travelRows},
+      cbar('Beers poured per match', c=>((c.foodAndBeverage||{}).beers||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total beers ÷ matches hosted','Fan experience',FE),
+      cbar('Beers per fan', c=>((c.foodAndBeverage||{}).beers||0)/c.attendance, v=>v.toFixed(2), 'Derived · total beers ÷ total attendance','Fan experience',FE),
+      cbar('Hot dogs per match', c=>((c.foodAndBeverage||{}).hotDogs||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total hot dogs ÷ matches hosted','Fan experience',FE),
+      {t:'chart_drinksplit',rows:splitRows,eyebrow:'Fan experience',acc:FE}
+    ]
+  };
   beats.push({t:'cover',T});
   beats.push({t:'honours',T});
-  // Derived: how many host cities each nation ranked in the top-3 travelling fans (chart).
-  const travel={}; (D.hostCities||[]).forEach(c=>(c.topTicketNations||[]).forEach(n=>{ travel[n]=(travel[n]||0)+1; }));
-  const travelRows=Object.keys(travel).map(n=>({name:n,count:travel[n]})).sort((a,b)=>b.count-a.count).slice(0,12);
   D.sections.filter(s=>s.id!=='host-cities').forEach(s=>{
     const acc=NB_ACC[s.id]||STY.GOLD;
     beats.push({t:'divider',section:s,acc});
-    if(s.id==='fan-experience') beats.push({t:'chart_travelled',rows:travelRows});
     (s.heroStats||[]).forEach(id=>{ const st=byId[id]; if(!st||st.display==null)return;
       beats.push({t:(st.comparison?'comparison':'hero'), st, acc, section:s.title}); });
     // Every group's remaining stats become tile-grid cards (paginated) so all the data is surfaced.
@@ -3480,22 +3494,13 @@ function buildNumberBeats(D){
       const pages=Math.ceil(rest.length/per);
       for(let p=0;p<pages;p++) beats.push({t:'grid',title:g.title+(pages>1?' · '+(p+1)+'/'+pages:''),stats:rest.slice(p*per,p*per+per),acc,section:s.title}); });
     for(let p=0;p<spill.length;p+=per) beats.push({t:'grid',title:'More numbers',stats:spill.slice(p,p+per),acc,section:s.title});
+    (SECTION_CHARTS[s.id]||[]).forEach(cb=>beats.push(cb));   // category charts close the chapter
   });
   const enzo=byId['milestone-3000th-goal']; if(enzo) beats.push({t:'milestone',st:enzo,acc:STY.GREEN});
   const hc=D.sections.find(s=>s.id==='host-cities');
   beats.push({t:'divider',section:{title:'Host cities',standfirst:hc?hc.standfirst:''},acc:STY.GOLD});
-  beats.push({t:'chart_attendance',cities:(D.hostCities||[]).slice().sort((a,b)=>(b.attendance||0)-(a.attendance||0))});
-  // Derived per-city rates (colored by country).
-  const hcs=(D.hostCities||[]);
-  const cbar=(title,valFn,disp,note)=>{ const rows=hcs.map(c=>({name:c.name,country:c.country,val:valFn(c)})).filter(r=>isFinite(r.val)).sort((a,b)=>b.val-a.val); rows.forEach(r=>r.display=disp(r.val)); beats.push({t:'chart_citybar',title,rows,note}); };
-  cbar('Beers poured per match', c=>((c.foodAndBeverage||{}).beers||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total beers ÷ matches hosted');
-  cbar('Beers per fan', c=>((c.foodAndBeverage||{}).beers||0)/c.attendance, v=>v.toFixed(2), 'Derived · total beers ÷ total attendance');
-  cbar('Goals per match, by city', c=>c.goals/c.matches, v=>v.toFixed(2), 'Derived · goals ÷ matches hosted');
-  cbar('Hot dogs per match', c=>((c.foodAndBeverage||{}).hotDogs||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total hot dogs ÷ matches hosted');
-  cbar('Teams hosted per city', c=>c.teamsVisited||0, v=>String(Math.round(v)), 'Derived · distinct teams that played in each city');
-  const splitRows=hcs.map(c=>{ const fb=c.foodAndBeverage||{},bb=fb.beers||0,ss=fb.softDrinksAndWater||0,tot=bb+ss; return {name:c.name,country:c.country,beerPct:tot?bb/tot*100:0}; }).sort((a,b)=>b.beerPct-a.beerPct);
-  beats.push({t:'chart_drinksplit',rows:splitRows});
-  (D.hostCities||[]).forEach(c=>beats.push({t:'city',c}));
+  beats.push(cbar('Teams hosted per city', c=>c.teamsVisited||0, v=>String(Math.round(v)), 'Derived · distinct teams that played in each city','Host cities',STY.GOLD));
+  hcs.forEach(c=>beats.push({t:'city',c}));
   beats.push({t:'funfacts',D});
   const gaps=((D.dataGaps||{}).items)||[];
   for(let p=0;p<gaps.length;p+=6) beats.push({t:'gaps',items:gaps.slice(p,p+6),page:Math.floor(p/6)+1,pages:Math.ceil(gaps.length/6)});
@@ -3585,8 +3590,9 @@ function nbBeatHTML(b){
     const short=n=>({'New York/New Jersey':'New York NJ','San Francisco Bay Area':'SF Bay Area'})[n]||n;
     const col=ct=>ct==='United States'?STY.BLUE:ct==='Mexico'?STY.GREEN:STY.RED;
     const rows=cities.map(c=>'<div class="nbCbar"><div class="nbCbarN">'+short(c.name)+'</div><div class="nbCbarT"><div class="nbCbarF" style="width:'+((c.attendance||0)/max*100).toFixed(1)+'%;background:'+col(c.country)+';"></div></div><div class="nbCbarV">'+Number(c.attendance||0).toLocaleString()+'</div></div>').join('');
-    return '<div style="position:absolute;inset:0;'+nbBg(STY.GOLD)+'"></div>'+nbLeft(
-      '<div class="nbEy" style="color:'+STY.GOLD+';">Host cities</div>'+
+    const acc=b.acc||STY.GOLD;
+    return '<div style="position:absolute;inset:0;'+nbBg(acc)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+acc+';">'+(b.eyebrow||'Host cities')+'</div>'+
       '<div class="nbGridT" style="margin-bottom:6px;">Fans through the gates, by city</div>'+
       '<div class="nbLegend"><span><i style="background:'+STY.BLUE+';"></i>United States</span><span><i style="background:'+STY.GREEN+';"></i>Mexico</span><span><i style="background:'+STY.RED+';"></i>Canada</span></div>'+
       '<div class="nbCbars">'+rows+'</div>'); }
@@ -3594,8 +3600,9 @@ function nbBeatHTML(b){
     const short=n=>({'New York/New Jersey':'New York NJ','San Francisco Bay Area':'SF Bay Area'})[n]||n;
     const col=ct=>ct==='United States'?STY.BLUE:ct==='Mexico'?STY.GREEN:STY.RED;
     const bars=rows.map(r=>'<div class="nbCbar"><div class="nbCbarN">'+short(r.name)+'</div><div class="nbCbarT"><div class="nbCbarF" style="width:'+(r.val/max*100).toFixed(1)+'%;background:'+col(r.country)+';"></div></div><div class="nbCbarV">'+r.display+'</div></div>').join('');
-    return '<div style="position:absolute;inset:0;'+nbBg(STY.GOLD)+'"></div>'+nbLeft(
-      '<div class="nbEy" style="color:'+STY.GOLD+';">Host cities</div>'+
+    const acc=b.acc||STY.GOLD;
+    return '<div style="position:absolute;inset:0;'+nbBg(acc)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+acc+';">'+(b.eyebrow||'Host cities')+'</div>'+
       '<div class="nbGridT" style="margin-bottom:6px;">'+b.title+'</div>'+
       '<div class="nbLegend"><span><i style="background:'+STY.BLUE+';"></i>United States</span><span><i style="background:'+STY.GREEN+';"></i>Mexico</span><span><i style="background:'+STY.RED+';"></i>Canada</span></div>'+
       '<div class="nbCbars">'+bars+'</div>'+
@@ -3603,8 +3610,9 @@ function nbBeatHTML(b){
   if(b.t==='chart_drinksplit'){ const rows=b.rows;
     const short=n=>({'New York/New Jersey':'New York NJ','San Francisco Bay Area':'SF Bay Area'})[n]||n;
     const bars=rows.map(r=>'<div class="nbCbar"><div class="nbCbarN">'+short(r.name)+'</div><div class="nbSplitT"><div class="nbSplitB" style="width:'+r.beerPct.toFixed(1)+'%;">'+Math.round(r.beerPct)+'%</div><div class="nbSplitS" style="width:'+(100-r.beerPct).toFixed(1)+'%;"></div></div></div>').join('');
-    return '<div style="position:absolute;inset:0;'+nbBg(STY.GOLD)+'"></div>'+nbLeft(
-      '<div class="nbEy" style="color:'+STY.GOLD+';">Host cities</div>'+
+    const acc=b.acc||STY.GOLD;
+    return '<div style="position:absolute;inset:0;'+nbBg(acc)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+acc+';">'+(b.eyebrow||'Host cities')+'</div>'+
       '<div class="nbGridT" style="margin-bottom:6px;">Beer vs soft drinks, by city</div>'+
       '<div class="nbLegend"><span><i style="background:'+STY.ORANGE+';"></i>Beer</span><span><i style="background:'+STY.BLUE+';"></i>Soft drinks &amp; water</span></div>'+
       '<div class="nbCbars">'+bars+'</div>'+
