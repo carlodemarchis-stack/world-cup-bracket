@@ -3485,6 +3485,12 @@ function buildNumberBeats(D){
   const hc=D.sections.find(s=>s.id==='host-cities');
   beats.push({t:'divider',section:{title:'Host cities',standfirst:hc?hc.standfirst:''},acc:STY.GOLD});
   beats.push({t:'chart_attendance',cities:(D.hostCities||[]).slice().sort((a,b)=>(b.attendance||0)-(a.attendance||0))});
+  // Derived per-city rates (colored by country).
+  const hcs=(D.hostCities||[]);
+  const cbar=(title,valFn,disp,note)=>{ const rows=hcs.map(c=>({name:c.name,country:c.country,val:valFn(c)})).filter(r=>isFinite(r.val)).sort((a,b)=>b.val-a.val); rows.forEach(r=>r.display=disp(r.val)); beats.push({t:'chart_citybar',title,rows,note}); };
+  cbar('Beers poured per match', c=>((c.foodAndBeverage||{}).beers||0)/c.matches, v=>Math.round(v).toLocaleString(), 'Derived · total beers ÷ matches hosted');
+  cbar('Beers per fan', c=>((c.foodAndBeverage||{}).beers||0)/c.attendance, v=>v.toFixed(2), 'Derived · total beers ÷ total attendance');
+  cbar('Goals per match, by city', c=>c.goals/c.matches, v=>v.toFixed(2), 'Derived · goals ÷ matches hosted');
   (D.hostCities||[]).forEach(c=>beats.push({t:'city',c}));
   beats.push({t:'funfacts',D});
   const gaps=((D.dataGaps||{}).items)||[];
@@ -3580,6 +3586,16 @@ function nbBeatHTML(b){
       '<div class="nbGridT" style="margin-bottom:6px;">Fans through the gates, by city</div>'+
       '<div class="nbLegend"><span><i style="background:'+STY.BLUE+';"></i>United States</span><span><i style="background:'+STY.GREEN+';"></i>Mexico</span><span><i style="background:'+STY.RED+';"></i>Canada</span></div>'+
       '<div class="nbCbars">'+rows+'</div>'); }
+  if(b.t==='chart_citybar'){ const rows=b.rows, max=Math.max.apply(0,rows.map(r=>r.val))||1;
+    const short=n=>({'New York/New Jersey':'New York NJ','San Francisco Bay Area':'SF Bay Area'})[n]||n;
+    const col=ct=>ct==='United States'?STY.BLUE:ct==='Mexico'?STY.GREEN:STY.RED;
+    const bars=rows.map(r=>'<div class="nbCbar"><div class="nbCbarN">'+short(r.name)+'</div><div class="nbCbarT"><div class="nbCbarF" style="width:'+(r.val/max*100).toFixed(1)+'%;background:'+col(r.country)+';"></div></div><div class="nbCbarV">'+r.display+'</div></div>').join('');
+    return '<div style="position:absolute;inset:0;'+nbBg(STY.GOLD)+'"></div>'+nbLeft(
+      '<div class="nbEy" style="color:'+STY.GOLD+';">Host cities</div>'+
+      '<div class="nbGridT" style="margin-bottom:6px;">'+b.title+'</div>'+
+      '<div class="nbLegend"><span><i style="background:'+STY.BLUE+';"></i>United States</span><span><i style="background:'+STY.GREEN+';"></i>Mexico</span><span><i style="background:'+STY.RED+';"></i>Canada</span></div>'+
+      '<div class="nbCbars">'+bars+'</div>'+
+      (b.note?'<div class="nbNote" style="font-size:13px;margin-top:12px;">'+b.note+'</div>':'')); }
   if(b.t==='chart_travelled'){ const rows=b.rows, max=rows.length?rows[0].count:1;
     const bars=rows.map(r=>'<div class="nbCbar"><div class="nbCbarN">'+nbFlagImg(r.name,14)+'&nbsp;'+r.name+'</div><div class="nbCbarT"><div class="nbCbarF" style="width:'+(r.count/max*100).toFixed(1)+'%;background:'+STY.ORANGE+';"></div></div><div class="nbCbarV">'+r.count+(r.count===1?' city':' cities')+'</div></div>').join('');
     return '<div style="position:absolute;inset:0;'+nbBg(STY.ORANGE)+'"></div>'+nbLeft(
